@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 27849</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="27805.html">27805</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#27849">Map</a></td>
+<td class="next">
+Next: <a href="27886.html">27886</a>
+</td>
+</tr>
+</table>
+<div class="description">27849: Draw Ship</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="29385.html">29385</a>.
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="ship" src="../../images/scr/ship.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">DrawShip</td>
+<td class="address-2"><span id="27849"></span>27849</td>
+<td class="instruction">LD HL,24654</td>
+<td class="comment-1" rowspan="1">Point <span class="register">HL</span> to the ship graphic: <a href="24571.html#24654">Graphics_Ship</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27852"></span>27852</td>
+<td class="instruction">LD DE,20687</td>
+<td class="comment-1" rowspan="1">Set the screen buffer location 20687.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27855"></span>27855</td>
+<td class="instruction">LD B,2</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 2 rows.</td>
+</tr>
+<tr>
+<td class="asm-label">DrawShip_RowLoop</td>
+<td class="address-2"><span id="27857"></span>27857</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash the row counter on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27858"></span>27858</td>
+<td class="instruction">LD B,2</td>
+<td class="comment-1" rowspan="1">And a counter in <span class="register">C</span> for 2 columns.</td>
+</tr>
+<tr>
+<td class="asm-label">DrawShip_ColumnLoop</td>
+<td class="address-2"><span id="27860"></span>27860</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash the column counter and the screen position on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27861"></span>27861</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27862"></span>27862</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">DrawShip_LineLoop</td>
+<td class="address-2"><span id="27864"></span>27864</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27865"></span>27865</td>
+<td class="instruction">LD (DE),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27866"></span>27866</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27867"></span>27867</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27868"></span>27868</td>
+<td class="instruction">DJNZ <a href="27849.html#27864">DrawShip_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="27849.html#27864">DrawShip_LineLoop</a> until all 8 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27870"></span>27870</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the starting screen position from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27871"></span>27871</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">DE</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27872"></span>27872</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the column counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27873"></span>27873</td>
+<td class="instruction">DJNZ <a href="27849.html#27860">DrawShip_ColumnLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the column counter by one and loop back to <a href="27849.html#27860">DrawShip_ColumnLoop</a> until both columns have been drawn to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27875"></span>27875</td>
+<td class="instruction">LD DE,20719</td>
+<td class="comment-1" rowspan="1">Update the screen buffer pointer in <span class="register">DE</span> to 20719.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27878"></span>27878</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the row counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27879"></span>27879</td>
+<td class="instruction">DJNZ <a href="27849.html#27857">DrawShip_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="27849.html#27857">DrawShip_RowLoop</a> until both rows have been drawn to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27881"></span>27881</td>
+<td class="instruction">LD L,206</td>
+<td class="comment-1" rowspan="1"><span class="register">L</span>=206.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="27883"></span>27883</td>
+<td class="instruction">JP <a href="27886.html#28563">28563</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="27886.html#28563">28563</a>.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="27805.html">27805</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#27849">Map</a></td>
+<td class="next">
+Next: <a href="27886.html">27886</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/6CC9.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 26652</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26614.html">26614</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26652">Map</a></td>
+<td class="next">
+Next: <a href="26693.html">26693</a>
+</td>
+</tr>
+</table>
+<div class="description">26652: Print Lives</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="26614.html">PrintHeader</a>, <a href="29184.html">29184</a>, <a href="29385.html">29385</a> and <a href="31154.html">31154</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PrintLives</td>
+<td class="address-2"><span id="26652"></span>26652</td>
+<td class="instruction">LD DE,16392</td>
+<td class="comment-1" rowspan="1">Set the screen buffer position to 16392 (where the life icons start being displayed).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26655"></span>26655</td>
+<td class="instruction">LD A,(26352)</td>
+<td class="comment-1" rowspan="3">Load the number of lives from *<a href="26352.html">Player_Lives</a>, subtract one and store the result in <span class="register">C</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26658"></span>26658</td>
+<td class="instruction">DEC A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26659"></span>26659</td>
+<td class="instruction">LD C,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26660"></span>26660</td>
+<td class="instruction">LD B,5</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 5 icon positions.</td>
+</tr>
+<tr>
+<td class="asm-label">PrintLives_Loop</td>
+<td class="address-2"><span id="26662"></span>26662</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Decrease the lives counter by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26663"></span>26663</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash the loop counters and screen buffer position on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26664"></span>26664</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26665"></span>26665</td>
+<td class="instruction">LD A,5</td>
+<td class="comment-1" rowspan="3">Jump to <a href="26652.html#26675">PrintLifeIcon</a> if the position should show a life icon.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26667"></span>26667</td>
+<td class="instruction">CP C</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26668"></span>26668</td>
+<td class="instruction">JR NC,<a href="26652.html#26675">PrintLifeIcon</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26670"></span>26670</td>
+<td class="instruction">LD HL,24893</td>
+<td class="comment-1" rowspan="1">Point <span class="register">HL</span> to the blank mask graphic at <a href="24571.html#24893">Mask_LivesIcon</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26673"></span>26673</td>
+<td class="instruction">JR <a href="26652.html#26678">PrintLives_DrawIcon</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="26652.html#26678">PrintLives_DrawIcon</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26675"></span>
+<div class="comments">
+<div class="paragraph">
+Print a "life" icon.
+</div>
+<div class="paragraph">
+<img alt="udg24614_66x4" src="../../images/udgs/udg24614_66x4.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PrintLifeIcon</td>
+<td class="address-2"><span id="26675"></span>26675</td>
+<td class="instruction">LD HL,24614</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24571.html#24614">Graphics_LivesIcon</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">PrintLives_DrawIcon</td>
+<td class="address-2"><span id="26678"></span>26678</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">PrintLives_LineLoop</td>
+<td class="address-2"><span id="26680"></span>26680</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26681"></span>26681</td>
+<td class="instruction">LD (DE),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26682"></span>26682</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26683"></span>26683</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26684"></span>26684</td>
+<td class="instruction">DJNZ <a href="26652.html#26680">PrintLives_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="26652.html#26680">PrintLives_LineLoop</a> until all 8 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26686"></span>26686</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the original screen buffer position from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26687"></span>26687</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="2">Move right two character blocks, ready for printing the next life icon.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26688"></span>26688</td>
+<td class="instruction">INC DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26689"></span>26689</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the lives counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26690"></span>26690</td>
+<td class="instruction">DJNZ <a href="26652.html#26662">PrintLives_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the lives counter by one and loop back to <a href="26652.html#26662">PrintLives_Loop</a> until all the remaining lives have an icon displayed in the header.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26692"></span>26692</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26614.html">26614</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26652">Map</a></td>
+<td class="next">
+Next: <a href="26693.html">26693</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/681C.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

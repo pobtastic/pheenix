@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 26400</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26382.html">26382</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26400">Map</a></td>
+<td class="next">
+Next: <a href="26414.html">26414</a>
+</td>
+</tr>
+</table>
+<div class="description">26400: Clear Screen</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="26808.html">TransitionEffect</a>, <a href="27471.html">Print_ControlMenu</a>, <a href="27545.html">Print_InstructionsMenu</a>, <a href="29385.html">29385</a>, <a href="29860.html">GameIntro</a> and <a href="31874.html">TitleScreen</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">ClearScreen</td>
+<td class="address-2"><span id="26400"></span>26400</td>
+<td class="instruction">LD HL,23295</td>
+<td class="comment-1" rowspan="5">Clear 6912 bytes of screen and attribute buffer memory by setting all the bytes to 0.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26403"></span>26403</td>
+<td class="instruction">LD DE,23294</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26406"></span>26406</td>
+<td class="instruction">LD BC,6911</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26409"></span>26409</td>
+<td class="instruction">LD (HL),0</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26411"></span>26411</td>
+<td class="instruction">LDDR</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26413"></span>26413</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26382.html">26382</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26400">Map</a></td>
+<td class="next">
+Next: <a href="26414.html">26414</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/6720.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

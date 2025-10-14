@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 7C82</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="7B67.html">7B67</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#7c82">Map</a></td>
+<td class="next">
+Next: <a href="7DD9.html">7DD9</a>
+</td>
+</tr>
+</table>
+<div class="description">7C82: Title Screen</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="7599.html">GameEntryPoint</a> and <a href="7DD9.html">Handler_ControlMenu</a>.
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="title-screen-animation" src="../images/udgs/title-screen-animation.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">TitleScreen</td>
+<td class="address-2"><span id="7c82"></span>7C82</td>
+<td class="instruction">DI</td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c83"></span>7C83</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="2">Set border to BLACK.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c84"></span>7C84</td>
+<td class="instruction">OUT ($FE),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c86"></span>7C86</td>
+<td class="instruction">LD ($5C48),A</td>
+<td class="comment-1" rowspan="1">Write BLACK to *<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/5C48.html">BORDCR</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c89"></span>7C89</td>
+<td class="instruction">CALL <a href="6720.html">ClearScreen</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6720.html">ClearScreen</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7c8c"></span>
+<div class="comments">
+<div class="paragraph">
+More copy protection/ copyright checks.
+</div>
+<div class="paragraph">
+Checks "MEGADODO SOFTWARE 1983" starts with an "&#77;".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c8c"></span>7C8C</td>
+<td class="instruction">LD A,($6435)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7C82.html#7c98">RestartSpectum</a> if *<a href="6433.html#6435">Messaging_MegadodoSoftware</a> is not equal to 4D (ASCII "&#77;").</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c8f"></span>7C8F</td>
+<td class="instruction">CP $4D</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c91"></span>7C91</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7c98">RestartSpectum</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7c93"></span>
+<div class="comments">
+<div class="paragraph">
+Checks "M.W.Ward" starts with an "&#77;".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c93"></span>7C93</td>
+<td class="instruction">LD A,($6456)</td>
+<td class="comment-1" rowspan="2">Compare *<a href="644B.html#6456">Messaging_Author</a> with 4D (ASCII "&#77;").</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c96"></span>7C96</td>
+<td class="instruction">CP $4D</td>
+</tr>
+<tr>
+<td class="asm-label">RestartSpectum</td>
+<td class="address-2"><span id="7c98"></span>7C98</td>
+<td class="instruction">JP NZ,$0000</td>
+<td class="comment-1" rowspan="1">Restart the Spectrum if either string doesn't start with an "&#77;".</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7c9b"></span>
+<div class="comments">
+<div class="paragraph">
+Draw a MegaDodo!
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="megadodo-logo" src="../images/scr/megadodo-logo.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c9b"></span>7C9B</td>
+<td class="instruction">LD HL,$404F</td>
+<td class="comment-1" rowspan="1">Set the screen buffer location 404F.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7c9e"></span>7C9E</td>
+<td class="instruction">LD DE,$61BB</td>
+<td class="comment-1" rowspan="1">Point <span class="register">DE</span> to the MegaDodo graphic: <a href="5FFB.html#61bb">Graphics_MegaDodo</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ca1"></span>7CA1</td>
+<td class="instruction">LD B,$02</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 02 rows.</td>
+</tr>
+<tr>
+<td class="asm-label">DrawMegaDodo_RowLoop</td>
+<td class="address-2"><span id="7ca3"></span>7CA3</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash the row counter on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ca4"></span>7CA4</td>
+<td class="instruction">LD C,$02</td>
+<td class="comment-1" rowspan="1">And a counter in <span class="register">C</span> for 02 columns.</td>
+</tr>
+<tr>
+<td class="asm-label">DrawMegaDodo_ColumnLoop</td>
+<td class="address-2"><span id="7ca6"></span>7CA6</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1">Stash the screen position on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ca7"></span>7CA7</td>
+<td class="instruction">LD B,$08</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (08 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">DrawMegaDodo_LineLoop</td>
+<td class="address-2"><span id="7ca9"></span>7CA9</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7caa"></span>7CAA</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cab"></span>7CAB</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cac"></span>7CAC</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cad"></span>7CAD</td>
+<td class="instruction">DJNZ <a href="7C82.html#7ca9">DrawMegaDodo_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="7C82.html#7ca9">DrawMegaDodo_LineLoop</a> until all 08 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7caf"></span>7CAF</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore the starting screen position from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb0"></span>7CB0</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move right one character block.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb1"></span>7CB1</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Decrease the column counter by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb2"></span>7CB2</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7ca6">DrawMegaDodo_ColumnLoop</a></td>
+<td class="comment-1" rowspan="1">Jump to back <a href="7C82.html#7ca6">DrawMegaDodo_ColumnLoop</a> until the row has been populated.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb4"></span>7CB4</td>
+<td class="instruction">LD L,$6F</td>
+<td class="comment-1" rowspan="1">Update the screen position.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb6"></span>7CB6</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the row counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb7"></span>7CB7</td>
+<td class="instruction">DJNZ <a href="7C82.html#7ca3">DrawMegaDodo_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="7C82.html#7ca3">DrawMegaDodo_RowLoop</a> until both rows have been drawn to the screen buffer.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7cb9"></span>
+<div class="comments">
+<div class="paragraph">
+Colour the MegaDodo graphic.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cb9"></span>7CB9</td>
+<td class="instruction">LD H,$58</td>
+<td class="comment-1" rowspan="1">Update <span class="register">HL</span> to the MegaDodo position in the attribute buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cbb"></span>7CBB</td>
+<td class="instruction">LD A,$04</td>
+<td class="comment-1" rowspan="4">Write INK:GREEN,
+PAPER:BLACK to the top two blocks.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cbd"></span>7CBD</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cbe"></span>7CBE</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cbf"></span>7CBF</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cc0"></span>7CC0</td>
+<td class="instruction">LD L,$4F</td>
+<td class="comment-1" rowspan="1">Update the attribute buffer positioning.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cc2"></span>7CC2</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="3">Write the attribute to the bottom two blocks.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cc3"></span>7CC3</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cc4"></span>7CC4</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7cc5"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="megadodo" src="../images/font/megadodo.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cc5"></span>7CC5</td>
+<td class="instruction">LD HL,$6435</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6433.html#6435">Messaging_MegadodoSoftware</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cc8"></span>7CC8</td>
+<td class="instruction">LD DE,$40A7</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=40A7 (screen buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ccb"></span>7CCB</td>
+<td class="instruction">LD BC,$0905</td>
+<td class="comment-1" rowspan="1">Set to print 09 characters in CYAN.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cce"></span>7CCE</td>
+<td class="instruction">CALL <a href="676F.html">Configurable_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html">Configurable_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7cd1"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="software" src="../images/font/software.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cd1"></span>7CD1</td>
+<td class="instruction">LD B,$08</td>
+<td class="comment-1" rowspan="1">Printing 08 characters.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cd3"></span>7CD3</td>
+<td class="instruction">LD E,$B1</td>
+<td class="comment-1" rowspan="1">Update the screen buffer address.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cd5"></span>7CD5</td>
+<td class="instruction">CALL <a href="676F.html">Configurable_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html">Configurable_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7cd8"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="presents" src="../images/font/presents.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cd8"></span>7CD8</td>
+<td class="instruction">LD HL,$642B</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="642B.html">Messaging_Presents</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cdb"></span>7CDB</td>
+<td class="instruction">LD DE,$40EC</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=40EC (screen buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cde"></span>7CDE</td>
+<td class="instruction">LD BC,$0843</td>
+<td class="comment-1" rowspan="1">Set to print 08 characters in INK:MAGENTA,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ce1"></span>7CE1</td>
+<td class="instruction">CALL <a href="676F.html#6775">SpectrumFont_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html#6775">SpectrumFont_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7ce4"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="megadodo-software" src="../images/font/megadodo-software.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ce4"></span>7CE4</td>
+<td class="instruction">LD DE,$5023</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=5023 (screen buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ce7"></span>7CE7</td>
+<td class="instruction">LD BC,$1842</td>
+<td class="comment-1" rowspan="1">Set to print 18 characters in INK:RED,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cea"></span>7CEA</td>
+<td class="instruction">CALL <a href="676F.html#6775">SpectrumFont_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html#6775">SpectrumFont_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7ced"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="written-by" src="../images/font/written-by.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7ced"></span>7CED</td>
+<td class="instruction">LD E,$66</td>
+<td class="comment-1" rowspan="1">Update the screen buffer address.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cef"></span>7CEF</td>
+<td class="instruction">LD BC,$1304</td>
+<td class="comment-1" rowspan="1">Set to print 13 characters in GREEN.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cf2"></span>7CF2</td>
+<td class="instruction">CALL <a href="676F.html#6775">SpectrumFont_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html#6775">SpectrumFont_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7cf5"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="s-to-start" src="../images/font/s-to-start.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cf5"></span>7CF5</td>
+<td class="instruction">LD E,$E7</td>
+<td class="comment-1" rowspan="1">Update the screen buffer address.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cf7"></span>7CF7</td>
+<td class="instruction">LD BC,$1007</td>
+<td class="comment-1" rowspan="1">Set to print 10 characters in WHITE.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cfa"></span>7CFA</td>
+<td class="instruction">CALL <a href="676F.html#6775">SpectrumFont_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html#6775">SpectrumFont_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7cfd"></span>
+<div class="comments">
+<div class="paragraph">
+Colour the area where "PHEENIX" will be displayed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7cfd"></span>7CFD</td>
+<td class="instruction">LD HL,$5900</td>
+<td class="comment-1" rowspan="5">Write YELLOW to 0100 bytes from 5900 to 5A00 in the attribute buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d00"></span>7D00</td>
+<td class="instruction">LD DE,$5901</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d03"></span>7D03</td>
+<td class="instruction">LD BC,$00FF</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d06"></span>7D06</td>
+<td class="instruction">LD (HL),$06</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d08"></span>7D08</td>
+<td class="instruction">LDIR</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d0a"></span>
+<div class="comments">
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="pheenix" src="../images/scr/pheenix.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Write "PHEENIX" using the box graphic.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d0a"></span>7D0A</td>
+<td class="instruction">LD B,$51</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 51 boxes.</td>
+</tr>
+<tr>
+<td class="asm-label">DrawBox_Loop</td>
+<td class="address-2"><span id="7d0c"></span>7D0C</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash the box counter on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d0d"></span>7D0D</td>
+<td class="instruction">LD DE,$658A</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="658A.html">Table_PheenixLogoPositionData</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d10"></span>
+<div class="comments">
+<div class="paragraph">
+Calculate the current position byte.
+</div>
+<div class="paragraph">
+This is the position table + the total bytes - the counter (which counts down from 51). Which just means, the table data is evaluated in order, from start-to-finish.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d10"></span>7D10</td>
+<td class="instruction">LD A,$51</td>
+<td class="comment-1" rowspan="5"><span class="register">HL</span>=<a href="658A.html">Table_PheenixLogoPositionData</a>+(51-<span class="register">B</span>).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d12"></span>7D12</td>
+<td class="instruction">SUB B</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d13"></span>7D13</td>
+<td class="instruction">LD L,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d14"></span>7D14</td>
+<td class="instruction">LD H,$00</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d16"></span>7D16</td>
+<td class="instruction">ADD HL,DE</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d17"></span>
+<div class="comments">
+<div class="paragraph">
+Set the screen position to draw the box.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d17"></span>7D17</td>
+<td class="instruction">LD L,(HL)</td>
+<td class="comment-1" rowspan="1"><span class="register">L</span>=*<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d18"></span>7D18</td>
+<td class="instruction">LD H,$48</td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=48.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d1a"></span>
+<div class="comments">
+<div class="paragraph">
+Now draw the box.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d1a"></span>7D1A</td>
+<td class="instruction">LD DE,$61E3</td>
+<td class="comment-1" rowspan="1">Point <span class="register">DE</span> to the box graphic: <a href="5FFB.html#61e3">Graphics_Box</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d1d"></span>7D1D</td>
+<td class="instruction">LD B,$08</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (08 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">DrawBox_LineLoop</td>
+<td class="address-2"><span id="7d1f"></span>7D1F</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d20"></span>7D20</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d21"></span>7D21</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte..</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d22"></span>7D22</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d23"></span>7D23</td>
+<td class="instruction">DJNZ <a href="7C82.html#7d1f">DrawBox_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="7C82.html#7d1f">DrawBox_LineLoop</a> until all 08 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d25"></span>
+<div class="comments">
+<div class="paragraph">
+Check a few times for the player pressing "S" to start the game.
+</div>
+<div class="paragraph">
+This has the effect of slowing the drawing down, so "PHEENIX" doesn't just appear instantly - rather it's drawn, one box at a time.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d25"></span>7D25</td>
+<td class="instruction">LD BC,$000A</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">BC</span> for 000A loops.</td>
+</tr>
+<tr>
+<td class="asm-label">Input_StartGame_Loop</td>
+<td class="address-2"><span id="7d28"></span>7D28</td>
+<td class="instruction">CALL <a href="7E47.html">Input_StartGame</a></td>
+<td class="comment-1" rowspan="1">Call <a href="7E47.html">Input_StartGame</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d2b"></span>7D2B</td>
+<td class="instruction">DJNZ <a href="7C82.html#7d28">Input_StartGame_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the loop counter by one and loop back to <a href="7C82.html#7d28">Input_StartGame_Loop</a> until the counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d2d"></span>7D2D</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d2e"></span>7D2E</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7d28">Input_StartGame_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="7C82.html#7d28">Input_StartGame_Loop</a> until <span class="register">C</span> is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d30"></span>7D30</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the box counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d31"></span>7D31</td>
+<td class="instruction">LD HL,$66F2</td>
+<td class="comment-1" rowspan="3">Evaluate <a href="66F2.html">Flag_TitleScreenStart</a>...</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d34"></span>7D34</td>
+<td class="instruction">LD A,(HL)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d35"></span>7D35</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d36"></span>7D36</td>
+<td class="instruction">LD (HL),$00</td>
+<td class="comment-1" rowspan="1">Write 00 to *<a href="66F2.html">Flag_TitleScreenStart</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d38"></span>7D38</td>
+<td class="instruction">JP NZ,<a href="7DD9.html">Handler_ControlMenu</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html">Handler_ControlMenu</a> if the player has pressed "S" to start.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d3b"></span>7D3B</td>
+<td class="instruction">DJNZ <a href="7C82.html#7d0c">DrawBox_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the box counter by one and loop back to <a href="7C82.html#7d0c">DrawBox_Loop</a> until all all the game name has been drawn out in boxes.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d3d"></span>
+<div class="comments">
+<div class="paragraph">
+Flash the "PHEENIX" logo.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d3d"></span>7D3D</td>
+<td class="instruction">LD B,$38</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 38 colour loops.</td>
+</tr>
+<tr>
+<td class="asm-label">PheenixLogoFlash_Loop</td>
+<td class="address-2"><span id="7d3f"></span>7D3F</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash the colour loop counter on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d40"></span>7D40</td>
+<td class="instruction">LD HL,$5900</td>
+<td class="comment-1" rowspan="2">Fetch the attribute for the first byte in the attribute buffer where the "PHEENIX" logo is displayed. Store this in <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d43"></span>7D43</td>
+<td class="instruction">LD A,(HL)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d44"></span>7D44</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="1">Increment the attribute byte by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d45"></span>7D45</td>
+<td class="instruction">AND %00000111</td>
+<td class="comment-1" rowspan="1">Keep only the INK bits (0-2).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d47"></span>7D47</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7d4a">PheenixLogoFlash_WriteAttributeByte</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7C82.html#7d4a">PheenixLogoFlash_WriteAttributeByte</a> if the result is not zero (checking for BLACK).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d49"></span>
+<div class="comments">
+<div class="paragraph">
+Don't use INK: BLACK...
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d49"></span>7D49</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">A</span> containing the attribute byte by one - to BLUE.</td>
+</tr>
+<tr>
+<td class="asm-label">PheenixLogoFlash_WriteAttributeByte</td>
+<td class="address-2"><span id="7d4a"></span>7D4A</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write the attribute byte back to the attribute buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d4b"></span>7D4B</td>
+<td class="instruction">LD DE,$5901</td>
+<td class="comment-1" rowspan="3">Copy the attribute byte to the rest of the attribute buffer section containing the "PHEENIX" logo. This is 00FF bytes, from 5901 to 5A00.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d4e"></span>7D4E</td>
+<td class="instruction">LD BC,$00FF</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d51"></span>7D51</td>
+<td class="instruction">LDIR</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d53"></span>
+<div class="comments">
+<div class="paragraph">
+Check a few times for the player pressing "S" to start the game.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d53"></span>7D53</td>
+<td class="instruction">LD BC,$0010</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">BC</span> for 0010 loops.</td>
+</tr>
+<tr>
+<td class="asm-label">Input_StartGameColourFlash_Loop</td>
+<td class="address-2"><span id="7d56"></span>7D56</td>
+<td class="instruction">CALL <a href="7E47.html">Input_StartGame</a></td>
+<td class="comment-1" rowspan="1">Call <a href="7E47.html">Input_StartGame</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d59"></span>7D59</td>
+<td class="instruction">DJNZ <a href="7C82.html#7d56">Input_StartGameColourFlash_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the loop counter by one and loop back to <a href="7C82.html#7d56">Input_StartGameColourFlash_Loop</a> until the counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d5b"></span>7D5B</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d5c"></span>7D5C</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7d56">Input_StartGameColourFlash_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7C82.html#7d56">Input_StartGameColourFlash_Loop</a> until <span class="register">C</span> is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d5e"></span>7D5E</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the colour loop counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d5f"></span>7D5F</td>
+<td class="instruction">LD HL,$66F2</td>
+<td class="comment-1" rowspan="3">Evaluate <a href="66F2.html">Flag_TitleScreenStart</a>...</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d62"></span>7D62</td>
+<td class="instruction">LD A,(HL)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d63"></span>7D63</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d64"></span>7D64</td>
+<td class="instruction">LD (HL),$00</td>
+<td class="comment-1" rowspan="1">Write 00 to *<a href="66F2.html">Flag_TitleScreenStart</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d66"></span>7D66</td>
+<td class="instruction">JR NZ,<a href="7DD9.html">Handler_ControlMenu</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html">Handler_ControlMenu</a> if the player has pressed "S" to start.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d68"></span>7D68</td>
+<td class="instruction">DJNZ <a href="7C82.html#7d3f">PheenixLogoFlash_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7C82.html#7d3f">PheenixLogoFlash_Loop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d6a"></span>
+<div class="comments">
+<div class="paragraph">
+Start "Demo Mode".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d6a"></span>7D6A</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="2">Write 00 to *<a href="66F5.html">66F5</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d6b"></span>7D6B</td>
+<td class="instruction">LD ($66F5),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d6e"></span>7D6E</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="3">Write 01 to; <ul class="">
+<li>*<a href="66F3.html">66F3</a></li>
+<li>*<a href="66EF.html">66EF</a></li>
+</ul></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d6f"></span>7D6F</td>
+<td class="instruction">LD ($66F3),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d72"></span>7D72</td>
+<td class="instruction">LD ($66EF),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d75"></span>7D75</td>
+<td class="instruction">LD A,$04</td>
+<td class="comment-1" rowspan="2">Write 04 to *<a href="66F0.html#66f1">66F1</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d77"></span>7D77</td>
+<td class="instruction">LD ($66F1),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d7a"></span>7D7A</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="2">Write 05 to *<a href="66F0.html">Player_Lives</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d7b"></span>7D7B</td>
+<td class="instruction">LD ($66F0),A</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d7e"></span>
+<div class="comments">
+<div class="paragraph">
+Set the level text in the header.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d7e"></span>7D7E</td>
+<td class="instruction">LD A,$32</td>
+<td class="comment-1" rowspan="2">Write 32 (ASCII "&#50;") to *<a href="6514.html#6527">Messaging_Header_LevelNumber</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d80"></span>7D80</td>
+<td class="instruction">LD ($6527),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d83"></span>7D83</td>
+<td class="instruction">LD A,$06</td>
+<td class="comment-1" rowspan="2">Write 06 to *<a href="6890.html#6897">6898</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d85"></span>7D85</td>
+<td class="instruction">LD ($6898),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d88"></span>7D88</td>
+<td class="instruction">CALL <a href="68B8.html">TransitionEffect</a></td>
+<td class="comment-1" rowspan="1">Call <a href="68B8.html">TransitionEffect</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d8b"></span>7D8B</td>
+<td class="instruction">CALL <a href="72C9.html#740c">$740C</a></td>
+<td class="comment-1" rowspan="1">Call <a href="72C9.html#740c">740C</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Demo_Loop</td>
+<td class="address-2"><span id="7d8e"></span>7D8E</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d8f"></span>7D8F</td>
+<td class="instruction">LD A,B</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">B</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d90"></span>7D90</td>
+<td class="instruction">AND %00001111</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-3.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d92"></span>7D92</td>
+<td class="instruction">PUSH AF</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d93"></span>7D93</td>
+<td class="instruction">LD A,B</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">B</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d94"></span>7D94</td>
+<td class="instruction">RRCA</td>
+<td class="comment-1" rowspan="1">RRCA.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d95"></span>7D95</td>
+<td class="instruction">RRCA</td>
+<td class="comment-1" rowspan="1">RRCA.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d96"></span>7D96</td>
+<td class="instruction">AND %00000111</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-2.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d98"></span>7D98</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7d9b">TitleScreen_0</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7C82.html#7d9b">TitleScreen_0</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d9a"></span>7D9A</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label">TitleScreen_0</td>
+<td class="address-2"><span id="7d9b"></span>7D9B</td>
+<td class="instruction">LD C,A</td>
+<td class="comment-1" rowspan="1"><span class="register">C</span>=<span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d9c"></span>7D9C</td>
+<td class="instruction">LD B,$10</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> to print 10 characters.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7d9e"></span>
+<div class="comments">
+<div class="paragraph">
+Prints <img alt="s-to-start" src="../images/font/s-to-start.png" />
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7d9e"></span>7D9E</td>
+<td class="instruction">LD HL,$645E</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="645E.html">Messaging_PressSToStart</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7da1"></span>7DA1</td>
+<td class="instruction">LD DE,$4027</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=4027 (screen buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7da4"></span>7DA4</td>
+<td class="instruction">CALL <a href="676F.html#6775">SpectrumFont_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html#6775">SpectrumFont_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7da7"></span>7DA7</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7da8"></span>7DA8</td>
+<td class="instruction">JR NZ,<a href="7C82.html#7db0">TitleScreen_1</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7C82.html#7db0">TitleScreen_1</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7daa"></span>7DAA</td>
+<td class="instruction">CALL <a href="670E.html">$670E</a></td>
+<td class="comment-1" rowspan="1">Call <a href="670E.html">670E</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dad"></span>7DAD</td>
+<td class="instruction">LD ($66F4),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="66F4.html">66F4</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">TitleScreen_1</td>
+<td class="address-2"><span id="7db0"></span>7DB0</td>
+<td class="instruction">CALL <a href="6CEE.html">$6CEE</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6CEE.html">6CEE</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7db3"></span>7DB3</td>
+<td class="instruction">CALL <a href="7616.html">$7616</a></td>
+<td class="comment-1" rowspan="1">Call <a href="7616.html">7616</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7db6"></span>7DB6</td>
+<td class="instruction">CALL <a href="7B67.html">$7B67</a></td>
+<td class="comment-1" rowspan="1">Call <a href="7B67.html">7B67</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7db9"></span>7DB9</td>
+<td class="instruction">CALL <a href="79B2.html">$79B2</a></td>
+<td class="comment-1" rowspan="1">Call <a href="79B2.html">79B2</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dbc"></span>7DBC</td>
+<td class="instruction">CALL <a href="7254.html">$7254</a></td>
+<td class="comment-1" rowspan="1">Call <a href="7254.html">7254</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dbf"></span>7DBF</td>
+<td class="instruction">CALL <a href="6890.html">$6890</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6890.html">6890</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dc2"></span>7DC2</td>
+<td class="instruction">CALL <a href="7E47.html">Input_StartGame</a></td>
+<td class="comment-1" rowspan="1">Call <a href="7E47.html">Input_StartGame</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dc5"></span>7DC5</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dc6"></span>7DC6</td>
+<td class="instruction">LD HL,$66F2</td>
+<td class="comment-1" rowspan="3">Evaluate <a href="66F2.html">Flag_TitleScreenStart</a>...</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dc9"></span>7DC9</td>
+<td class="instruction">LD A,(HL)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dca"></span>7DCA</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dcb"></span>7DCB</td>
+<td class="instruction">LD (HL),$00</td>
+<td class="comment-1" rowspan="1">Write 00 to *<a href="66F2.html">Flag_TitleScreenStart</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dcd"></span>7DCD</td>
+<td class="instruction">JR NZ,<a href="7DD9.html">Handler_ControlMenu</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html">Handler_ControlMenu</a> if the player has pressed "S" to start.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dcf"></span>7DCF</td>
+<td class="instruction">LD A,($66F5)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7C82.html">TitleScreen</a> if *<a href="66F5.html">66F5</a> is not zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dd2"></span>7DD2</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dd3"></span>7DD3</td>
+<td class="instruction">JP NZ,<a href="7C82.html#7c82">TitleScreen</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dd6"></span>7DD6</td>
+<td class="instruction">INC B</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">B</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7dd7"></span>7DD7</td>
+<td class="instruction">JR <a href="7C82.html#7d8e">Demo_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7C82.html#7d8e">Demo_Loop</a>.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="7B67.html">7B67</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#7c82">Map</a></td>
+<td class="next">
+Next: <a href="7DD9.html">7DD9</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/31874.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

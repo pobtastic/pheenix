@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 27441</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="27171.html">27171</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#27441">Map</a></td>
+<td class="next">
+Next: <a href="27471.html">27471</a>
+</td>
+</tr>
+</table>
+<div class="description">27441: Routine at 6B31</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="29385.html">29385</a>.
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="tegfdgd" src="../../images/scr/tegfdgd.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="address-2"><span id="27441"></span>27441</td>
+<td class="instruction">LD HL,16384</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=16384.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27444"></span>27444</td>
+<td class="instruction">LD B,L</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">L</span>.</td>
+</tr>
+<tr>
+<td class="address-2"><span id="27445"></span>27445</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="3">Stash <span class="register">BC</span>, <span class="register">HL</span> and <span class="register">DE</span> on the stack.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27446"></span>27446</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27447"></span>27447</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27448"></span>27448</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="address-2"><span id="27450"></span>27450</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27451"></span>27451</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27452"></span>27452</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27453"></span>27453</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27454"></span>27454</td>
+<td class="instruction">DJNZ <a href="27441.html#27450">27450</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="27441.html#27450">27450</a> until all 8 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27456"></span>27456</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="2">Restore <span class="register">DE</span> and <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27457"></span>27457</td>
+<td class="instruction">POP HL</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27458"></span>27458</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27459"></span>27459</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27460"></span>27460</td>
+<td class="instruction">DJNZ <a href="27441.html#27445">27445</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="27441.html#27445">27445</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27462"></span>27462</td>
+<td class="instruction">LD A,H</td>
+<td class="comment-1" rowspan="3"><span class="register">H</span>+=7.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27463"></span>27463</td>
+<td class="instruction">ADD A,7</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27465"></span>27465</td>
+<td class="instruction">LD H,A</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27466"></span>27466</td>
+<td class="instruction">CP 88</td>
+<td class="comment-1" rowspan="2">Jump to <a href="27441.html#27445">27445</a> if <span class="register">H</span> is not equal to 88.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="27468"></span>27468</td>
+<td class="instruction">JR NZ,<a href="27441.html#27445">27445</a></td>
+</tr>
+<tr>
+<td class="address-1"><span id="27470"></span>27470</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="27171.html">27171</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#27441">Map</a></td>
+<td class="next">
+Next: <a href="27471.html">27471</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/6B31.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

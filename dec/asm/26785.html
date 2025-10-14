@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 26785</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26768.html">26768</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26785">Map</a></td>
+<td class="next">
+Next: <a href="26808.html">26808</a>
+</td>
+</tr>
+</table>
+<div class="description">26785: Print Asterisk</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="26808.html">TransitionEffect</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Print_Asterisk</td>
+<td class="address-2"><span id="26785"></span>26785</td>
+<td class="instruction">PUSH AF</td>
+<td class="comment-1" rowspan="4">Stash <span class="register">AF</span>, <span class="register">BC</span>, <span class="register">DE</span> and <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26786"></span>26786</td>
+<td class="instruction">PUSH BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26787"></span>26787</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26788"></span>26788</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26789"></span>26789</td>
+<td class="instruction">CALL <a href="26372.html">ConvertScreenToAttributeAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26372.html">ConvertScreenToAttributeAddress</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26792"></span>
+<div class="comments">
+<div class="paragraph">
+Point to an asterisk in the ZX Spectrum font UDG data.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26792"></span>26792</td>
+<td class="instruction">LD DE,15696</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html#3D50">CHARSET+80</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26795"></span>26795</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
+</tr>
+<tr>
+<td class="asm-label">Print_Asterisk_Loop</td>
+<td class="address-2"><span id="26797"></span>26797</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26798"></span>26798</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26799"></span>26799</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26800"></span>26800</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">DE</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26801"></span>26801</td>
+<td class="instruction">DJNZ <a href="26785.html#26797">Print_Asterisk_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26785.html#26797">Print_Asterisk_Loop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26803"></span>26803</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="4">Restore <span class="register">HL</span>, <span class="register">DE</span>, <span class="register">BC</span> and <span class="register">AF</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26804"></span>26804</td>
+<td class="instruction">POP DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26805"></span>26805</td>
+<td class="instruction">POP BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26806"></span>26806</td>
+<td class="instruction">POP AF</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26807"></span>26807</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26768.html">26768</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26785">Map</a></td>
+<td class="next">
+Next: <a href="26808.html">26808</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/68A1.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

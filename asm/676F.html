@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 676F</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="672E.html">672E</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#676f">Map</a></td>
+<td class="next">
+Next: <a href="67A9.html">67A9</a>
+</td>
+</tr>
+</table>
+<div class="description">676F: Print String</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="67A9.html">PrintScore</a>, <a href="67F6.html">PrintHeader</a>, <a href="6B4F.html">Print_ControlMenu</a>, <a href="6B99.html">Print_InstructionsMenu</a>, <a href="6CEE.html">6CEE</a>, <a href="72C9.html">72C9</a>, <a href="79B2.html">79B2</a> and <a href="7C82.html">TitleScreen</a>.
+</div>
+</div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">B</td>
+<td class="register-desc">String length</td>
+</tr>
+<tr>
+<td class="register">C</td>
+<td class="register-desc">Attribute value of string</td>
+</tr>
+<tr>
+<td class="register">DE</td>
+<td class="register-desc">Screen buffer address</td>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Pointer to string data</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Configurable_PrintString</td>
+<td class="address-2"><span id="676f"></span>676F</td>
+<td class="instruction">LD IX,$6153</td>
+<td class="comment-1" rowspan="1"><span class="register">IX</span>=<a href="5FFB.html#6253">6153</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6773"></span>6773</td>
+<td class="instruction">JR <a href="676F.html#677f">PrintString</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="676F.html#677f">PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="6775"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routines at <a href="696A.html">696A</a>, <a href="6B4F.html">Print_ControlMenu</a>, <a href="79B2.html">79B2</a> and <a href="7C82.html">TitleScreen</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">SpectrumFont_PrintString</td>
+<td class="address-2"><span id="6775"></span>6775</td>
+<td class="instruction">LD IX,$3C00</td>
+<td class="comment-1" rowspan="1"><span class="register">IX</span>=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">3C00</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6779"></span>6779</td>
+<td class="instruction">JR <a href="676F.html#677f">PrintString</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="676F.html#677f">PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="677b"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routines at <a href="696A.html">696A</a>, <a href="6A23.html">6A23</a> and <a href="79B2.html">79B2</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">CustomFont_PrintString</td>
+<td class="address-2"><span id="677b"></span>677B</td>
+<td class="instruction">LD IX,$6153</td>
+<td class="comment-1" rowspan="1"><span class="register">IX</span>=<a href="5FFB.html#6253">6153</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">PrintString</td>
+<td class="address-2"><span id="677f"></span>677F</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-1" rowspan="5">Stash <span class="register">DE</span>, <span class="register">BC</span>, <span class="register">BC</span>, <span class="register">DE</span> and <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6780"></span>6780</td>
+<td class="instruction">PUSH BC</td>
+</tr>
+<tr>
+<td class="asm-label">Configurable_PrintString_0</td>
+<td class="address-2"><span id="6781"></span>6781</td>
+<td class="instruction">PUSH BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6782"></span>6782</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6783"></span>6783</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6784"></span>6784</td>
+<td class="instruction">LD L,(HL)</td>
+<td class="comment-1" rowspan="2">Store the offset for the UDG data look-up in <span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6785"></span>6785</td>
+<td class="instruction">LD H,$00</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6787"></span>6787</td>
+<td class="instruction">ADD HL,HL</td>
+<td class="comment-1" rowspan="3">Multiply <span class="register">HL</span> by 08.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6788"></span>6788</td>
+<td class="instruction">ADD HL,HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6789"></span>6789</td>
+<td class="instruction">ADD HL,HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="678a"></span>678A</td>
+<td class="instruction">PUSH IX</td>
+<td class="comment-1" rowspan="2"><span class="register">BC</span>=<span class="register">IX</span> (using the stack).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="678c"></span>678C</td>
+<td class="instruction">POP BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="678d"></span>678D</td>
+<td class="instruction">ADD HL,BC</td>
+<td class="comment-1" rowspan="1">Add <span class="register">BC</span> to <span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="678e"></span>678E</td>
+<td class="instruction">LD B,$08</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 08 rows.</td>
+</tr>
+<tr>
+<td class="asm-label">PrintString_Loop</td>
+<td class="address-2"><span id="6790"></span>6790</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="2">Copy one row of graphics data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6791"></span>6791</td>
+<td class="instruction">LD (DE),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6792"></span>6792</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move to the next byte of graphics data.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6793"></span>6793</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel row.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6794"></span>6794</td>
+<td class="instruction">DJNZ <a href="676F.html#6790">PrintString_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="676F.html#6790">PrintString_Loop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6796"></span>6796</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="2">Restore <span class="register">HL</span> and <span class="register">DE</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6797"></span>6797</td>
+<td class="instruction">POP DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6798"></span>6798</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">DE</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6799"></span>6799</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="679a"></span>679A</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="679b"></span>679B</td>
+<td class="instruction">DJNZ <a href="676F.html#6781">Configurable_PrintString_0</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="676F.html#6781">Configurable_PrintString_0</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="679d"></span>679D</td>
+<td class="instruction">DEC DE</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">DE</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="679e"></span>679E</td>
+<td class="instruction">CALL <a href="66F7.html">$66F7</a></td>
+<td class="comment-1" rowspan="1">Call <a href="66F7.html">66F7</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67a1"></span>67A1</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67a2"></span>67A2</td>
+<td class="instruction">LD A,C</td>
+<td class="comment-1" rowspan="1">Fetch the attribute colour.</td>
+</tr>
+<tr>
+<td class="asm-label">ColourPrintString_Loop</td>
+<td class="address-2"><span id="67a3"></span>67A3</td>
+<td class="instruction">LD (DE),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to the attribute buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67a4"></span>67A4</td>
+<td class="instruction">DEC DE</td>
+<td class="comment-1" rowspan="1">Move backwards one attribute block.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67a5"></span>67A5</td>
+<td class="instruction">DJNZ <a href="676F.html#67a3">ColourPrintString_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="676F.html#67a3">ColourPrintString_Loop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67a7"></span>67A7</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">DE</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67a8"></span>67A8</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="672E.html">672E</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#676f">Map</a></td>
+<td class="next">
+Next: <a href="67A9.html">67A9</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/26479.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 67F6</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="67B6.html">67B6</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#67f6">Map</a></td>
+<td class="next">
+Next: <a href="681C.html">681C</a>
+</td>
+</tr>
+</table>
+<div class="description">67F6: Print Header</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="72C9.html">72C9</a>.
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="header" src="../images/scr/header.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PrintHeader</td>
+<td class="address-2"><span id="67f6"></span>67F6</td>
+<td class="instruction">CALL <a href="67A9.html">PrintScore</a></td>
+<td class="comment-1" rowspan="1">Call <a href="67A9.html">PrintScore</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="67f9"></span>
+<div class="comments">
+<div class="paragraph">
+Prints "<img alt="high-score" src="../images/font/high-score.png" />".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67f9"></span>67F9</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Set the print attribute to YELLOW.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67fa"></span>67FA</td>
+<td class="instruction">LD B,$0B</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> for printing 0B characters.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67fc"></span>67FC</td>
+<td class="instruction">LD E,$12</td>
+<td class="comment-1" rowspan="1">Update the screen buffer printing position to 4012.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="67fe"></span>67FE</td>
+<td class="instruction">CALL <a href="676F.html">Configurable_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html">Configurable_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="6801"></span>
+<div class="comments">
+<div class="paragraph">
+Prints "<img alt="header-level" src="../images/font/header-level.png" />".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6801"></span>6801</td>
+<td class="instruction">LD BC,$0344</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> for printing 03 characters and the print attribute to INK:GREEN,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6804"></span>6804</td>
+<td class="instruction">LD E,$1D</td>
+<td class="comment-1" rowspan="1">Update the screen buffer printing position to 401D.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6806"></span>6806</td>
+<td class="instruction">CALL <a href="676F.html">Configurable_PrintString</a></td>
+<td class="comment-1" rowspan="1">Call <a href="676F.html">Configurable_PrintString</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6809"></span>6809</td>
+<td class="instruction">CALL <a href="681C.html">PrintLives</a></td>
+<td class="comment-1" rowspan="1">Call <a href="681C.html">PrintLives</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="680c"></span>
+<div class="comments">
+<div class="paragraph">
+Colour the lives icons.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="680c"></span>680C</td>
+<td class="instruction">LD HL,$5806</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=5806 (attribute buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="680f"></span>680F</td>
+<td class="instruction">LD DE,$5807</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=5807 (attribute buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6812"></span>6812</td>
+<td class="instruction">LD C,$0B</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">C</span> for 0B characters.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6814"></span>6814</td>
+<td class="instruction">LD (HL),$42</td>
+<td class="comment-1" rowspan="1">Write INK:RED,
+PAPER:BLACK(BRIGHT) to the attribute buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6816"></span>6816</td>
+<td class="instruction">LDIR</td>
+<td class="comment-1" rowspan="1">Copy the attribute byte across the rest of the lives icons.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6818"></span>6818</td>
+<td class="instruction">CALL <a href="672E.html">$672E</a></td>
+<td class="comment-1" rowspan="1">Call <a href="672E.html">672E</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="681b"></span>681B</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="67B6.html">67B6</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#67f6">Map</a></td>
+<td class="next">
+Next: <a href="681C.html">681C</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/26614.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

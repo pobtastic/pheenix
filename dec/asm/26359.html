@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 26359</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26358.html">26358</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26359">Map</a></td>
+<td class="next">
+Next: <a href="26372.html">26372</a>
+</td>
+</tr>
+</table>
+<div class="description">26359: Routine at 66F7</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="26479.html">Configurable_PrintString</a>, <a href="28903.html">28903</a>, <a href="30052.html">30052</a>, <a href="30143.html">30143</a>, <a href="30230.html">30230</a> and <a href="31591.html">31591</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="address-2"><span id="26359"></span>26359</td>
+<td class="instruction">LD A,D</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">D</span>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26360"></span>26360</td>
+<td class="instruction">AND %00011000</td>
+<td class="comment-1" rowspan="1">Keep only bits 3-4.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26362"></span>26362</td>
+<td class="instruction">SRA A</td>
+<td class="comment-1" rowspan="3">Shift <span class="register">A</span> right three positions (with carry).</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26364"></span>26364</td>
+<td class="instruction">SRA A</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26366"></span>26366</td>
+<td class="instruction">SRA A</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26368"></span>26368</td>
+<td class="instruction">ADD A,88</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>+=88.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26370"></span>26370</td>
+<td class="instruction">LD D,A</td>
+<td class="comment-1" rowspan="1"><span class="register">D</span>=<span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26371"></span>26371</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26358.html">26358</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26359">Map</a></td>
+<td class="next">
+Next: <a href="26372.html">26372</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/66F7.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

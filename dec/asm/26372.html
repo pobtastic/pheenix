@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 26372</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26359.html">26359</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26372">Map</a></td>
+<td class="next">
+Next: <a href="26382.html">26382</a>
+</td>
+</tr>
+</table>
+<div class="description">26372: Convert Screen Address To Attribute Address</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="26707.html">26707</a>, <a href="26785.html">Print_Asterisk</a>, <a href="26918.html">26918</a>, <a href="27171.html">27171</a>, <a href="28777.html">28777</a>, <a href="28903.html">28903</a>, <a href="29385.html">29385</a>, <a href="30052.html">30052</a>, <a href="30143.html">30143</a>, <a href="30230.html">30230</a>, <a href="31154.html">31154</a> and <a href="31591.html">31591</a>.
+</div>
+<div class="paragraph">
+Converts a screen buffer address to its corresponding attribute buffer address.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">ConvertScreenToAttributeAddress</td>
+<td class="address-2"><span id="26372"></span>26372</td>
+<td class="instruction">LD A,H</td>
+<td class="comment-1" rowspan="1">Copy the screen address high byte to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26373"></span>26373</td>
+<td class="instruction">SUB 88</td>
+<td class="comment-1" rowspan="1">Subtract 88 (start of attribute area offset).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26375"></span>26375</td>
+<td class="instruction">ADD A,A</td>
+<td class="comment-1" rowspan="3">Multiply by 8.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26376"></span>26376</td>
+<td class="instruction">ADD A,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26377"></span>26377</td>
+<td class="instruction">ADD A,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26378"></span>26378</td>
+<td class="instruction">ADD A,64</td>
+<td class="comment-1" rowspan="1">Add 64 to set the base attribute area.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26380"></span>26380</td>
+<td class="instruction">LD H,A</td>
+<td class="comment-1" rowspan="1">Update the high byte of the address.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26381"></span>26381</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26359.html">26359</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26372">Map</a></td>
+<td class="next">
+Next: <a href="26382.html">26382</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/6704.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

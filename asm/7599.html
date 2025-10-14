@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 7599</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="7592.html">7592</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#7599">Map</a></td>
+<td class="next">
+Next: <a href="75AD.html">75AD</a>
+</td>
+</tr>
+</table>
+<div class="description">7599: Game Entry Point</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">GameEntryPoint</td>
+<td class="address-2"><span id="7599"></span>7599</td>
+<td class="instruction">DI</td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="759a"></span>759A</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="7599.html#759e">GameEntryPoint_TimingCheck</a> (copy protection?)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="759b"></span>759B</td>
+<td class="instruction">JR Z,<a href="7599.html#759e">GameEntryPoint_TimingCheck</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="759d"></span>759D</td>
+<td class="instruction">RST $00</td>
+<td class="comment-1" rowspan="1">Reset the machine (never reached in normal operation).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="759e"></span>
+<div class="comments">
+<div class="paragraph">
+Run a copy protection timing check.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">GameEntryPoint_TimingCheck</td>
+<td class="address-2"><span id="759e"></span>759E</td>
+<td class="instruction">LD HL,($5C78)</td>
+<td class="comment-1" rowspan="3">Add <a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/5C78.html">FRAMES</a> to EEBE.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="75a1"></span>75A1</td>
+<td class="instruction">LD BC,$EEBE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="75a4"></span>75A4</td>
+<td class="instruction">ADC HL,BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="75a6"></span>75A6</td>
+<td class="instruction">JP Z,<a href="7C82.html">TitleScreen</a></td>
+<td class="comment-1" rowspan="1">If the if the result is zero, jump to <a href="7C82.html">TitleScreen</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="75a9"></span>
+<div class="comments">
+<div class="paragraph">
+The copy protection timing check failed ...
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="75a9"></span>75A9</td>
+<td class="instruction">CALL <a href="68B8.html">TransitionEffect</a></td>
+<td class="comment-1" rowspan="2">Display the transition effect and reset the machine.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="75ac"></span>75AC</td>
+<td class="instruction">RST $00</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="7592.html">7592</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#7599">Map</a></td>
+<td class="next">
+Next: <a href="75AD.html">75AD</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/30105.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

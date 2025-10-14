@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 29268</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="29184.html">29184</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#29268">Map</a></td>
+<td class="next">
+Next: <a href="29385.html">29385</a>
+</td>
+</tr>
+</table>
+<div class="description">29268: Routine at 7254</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.html">Handler_ControlMenu</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="address-2"><span id="29268"></span>29268</td>
+<td class="instruction">LD A,(26276)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29271"></span>29271</td>
+<td class="instruction">CP 2</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29273"></span>29273</td>
+<td class="instruction">JP NZ,<a href="29385.html#29453">29453</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29276"></span>29276</td>
+<td class="instruction">LD A,(26353)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29279"></span>29279</td>
+<td class="instruction">CP 4</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29281"></span>29281</td>
+<td class="instruction">JR NZ,<a href="29268.html#29303">29303</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29283"></span>29283</td>
+<td class="instruction">LD HL,26077</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29286"></span>29286</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-2"><span id="29288"></span>29288</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29289"></span>29289</td>
+<td class="instruction">LD E,(HL)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29290"></span>29290</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29291"></span>29291</td>
+<td class="instruction">LD D,(HL)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29292"></span>29292</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29293"></span>29293</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29294"></span>29294</td>
+<td class="instruction">BIT 6,D</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29296"></span>29296</td>
+<td class="instruction">CALL NZ,<a href="30052.html">30052</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29299"></span>29299</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29300"></span>29300</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29301"></span>29301</td>
+<td class="instruction">DJNZ <a href="29268.html#29288">29288</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-2"><span id="29303"></span>29303</td>
+<td class="instruction">LD HL,26240</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29306"></span>29306</td>
+<td class="instruction">LD DE,26241</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29309"></span>29309</td>
+<td class="instruction">LD BC,108</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29312"></span>29312</td>
+<td class="instruction">LD (HL),B</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29313"></span>29313</td>
+<td class="instruction">LDIR</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29315"></span>29315</td>
+<td class="instruction">LD HL,26077</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29318"></span>29318</td>
+<td class="instruction">LD DE,26078</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29321"></span>29321</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29322"></span>29322</td>
+<td class="instruction">LD C,29</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29324"></span>29324</td>
+<td class="instruction">LD (HL),B</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29325"></span>29325</td>
+<td class="instruction">LDIR</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29327"></span>29327</td>
+<td class="instruction">LD HL,26167</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29330"></span>29330</td>
+<td class="instruction">LD A,(26353)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29333"></span>29333</td>
+<td class="instruction">OR A</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29334"></span>29334</td>
+<td class="instruction">JR NZ,<a href="29268.html#29341">29341</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29336"></span>29336</td>
+<td class="instruction">LD HL,26107</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29339"></span>29339</td>
+<td class="instruction">JR <a href="29268.html#29357">29357</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-2"><span id="29341"></span>29341</td>
+<td class="instruction">CP 1</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29343"></span>29343</td>
+<td class="instruction">JR NZ,<a href="29268.html#29350">29350</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29345"></span>29345</td>
+<td class="instruction">LD HL,26137</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29348"></span>29348</td>
+<td class="instruction">JR <a href="29268.html#29357">29357</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-2"><span id="29350"></span>29350</td>
+<td class="instruction">CP 4</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29352"></span>29352</td>
+<td class="instruction">JR NZ,<a href="29268.html#29357">29357</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29354"></span>29354</td>
+<td class="instruction">LD HL,26183</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-2"><span id="29357"></span>29357</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29358"></span>29358</td>
+<td class="instruction">LD A,(26239)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29361"></span>29361</td>
+<td class="instruction">ADD A,A</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29362"></span>29362</td>
+<td class="instruction">JR Z,<a href="29268.html#29367">29367</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29364"></span>29364</td>
+<td class="instruction">LD C,A</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29365"></span>29365</td>
+<td class="instruction">LDIR</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-2"><span id="29367"></span>29367</td>
+<td class="instruction">LD HL,26349</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29370"></span>29370</td>
+<td class="instruction">LD (HL),206</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29372"></span>29372</td>
+<td class="instruction">LD HL,26352</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26352.html">Player_Lives</a>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="29375"></span>29375</td>
+<td class="instruction">DEC (HL)</td>
+<td class="comment-1" rowspan="1">Decrease <a href="26352.html">Player_Lives</a> by one.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="29376"></span>29376</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29377"></span>29377</td>
+<td class="instruction">OR A</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29378"></span>29378</td>
+<td class="instruction">JR NZ,<a href="29385.html">29385</a></td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29380"></span>29380</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29381"></span>29381</td>
+<td class="instruction">LD (26357),A</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+<tr>
+<td class="address-1"><span id="29384"></span>29384</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1"></td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="29184.html">29184</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#29268">Map</a></td>
+<td class="next">
+Next: <a href="29385.html">29385</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/7254.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

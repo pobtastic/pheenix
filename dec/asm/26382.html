@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 26382</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26372.html">26372</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26382">Map</a></td>
+<td class="next">
+Next: <a href="26400.html">26400</a>
+</td>
+</tr>
+</table>
+<div class="description">26382: Routine at 670E</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="27171.html">27171</a>, <a href="27886.html">27886</a>, <a href="29860.html">GameIntro</a>, <a href="30230.html">30230</a> and <a href="31874.html">TitleScreen</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="address-2"><span id="26382"></span>26382</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="2">Stash <span class="register">HL</span> and <span class="register">BC</span> on the stack.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26383"></span>26383</td>
+<td class="instruction">PUSH BC</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26384"></span>26384</td>
+<td class="instruction">LD HL,(26075)</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=*<a href="26075.html">26075</a>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26387"></span>26387</td>
+<td class="instruction">LD B,(HL)</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=*<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26388"></span>26388</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26389"></span>26389</td>
+<td class="instruction">LD A,56</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=56.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26391"></span>26391</td>
+<td class="instruction">AND H</td>
+<td class="comment-1" rowspan="1">Merge the bits from <span class="register">H</span>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26392"></span>26392</td>
+<td class="instruction">LD H,A</td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=<span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26393"></span>26393</td>
+<td class="instruction">LD A,B</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">B</span>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26394"></span>26394</td>
+<td class="instruction">LD (26075),HL</td>
+<td class="comment-1" rowspan="1">Write <span class="register">HL</span> to *<a href="26075.html">26075</a>.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26397"></span>26397</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="2">Restore <span class="register">BC</span> and <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26398"></span>26398</td>
+<td class="instruction">POP HL</td>
+</tr>
+<tr>
+<td class="address-1"><span id="26399"></span>26399</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="26372.html">26372</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#26382">Map</a></td>
+<td class="next">
+Next: <a href="26400.html">26400</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/670E.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 68B8</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="68A1.html">68A1</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#68b8">Map</a></td>
+<td class="next">
+Next: <a href="6926.html">6926</a>
+</td>
+</tr>
+</table>
+<div class="description">68B8: Transition Effect</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="72C9.html">72C9</a>, <a href="7599.html">GameEntryPoint</a> and <a href="7C82.html">TitleScreen</a>.
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="asterisk" src="../images/scr/asterisk.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect</td>
+<td class="address-2"><span id="68b8"></span>68B8</td>
+<td class="instruction">LD B,$02</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=02.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_0</td>
+<td class="address-2"><span id="68ba"></span>68BA</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68bb"></span>68BB</td>
+<td class="instruction">LD DE,$0109</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=0109.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68be"></span>68BE</td>
+<td class="instruction">LD HL,$596B</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=596B (attribute buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68c1"></span>68C1</td>
+<td class="instruction">LD A,B</td>
+<td class="comment-1" rowspan="2">Compare <span class="register">B</span> with 01.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68c2"></span>68C2</td>
+<td class="instruction">CP $01</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68c4"></span>68C4</td>
+<td class="instruction">LD A,$00</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=BLACK.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68c6"></span>68C6</td>
+<td class="instruction">JR Z,<a href="68B8.html#68d3">TransitionEffect_1</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="68B8.html#68d3">TransitionEffect_1</a> if <span class="register">B</span> was equal to 01.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68c8"></span>68C8</td>
+<td class="instruction">LD A,($66F1)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F0.html#66f1">66F1</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68cb"></span>68CB</td>
+<td class="instruction">ADD A,$03</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>+=03.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68cd"></span>68CD</td>
+<td class="instruction">CP $07</td>
+<td class="comment-1" rowspan="2">Jump to <a href="68B8.html#68d3">TransitionEffect_1</a> if <span class="register">A</span> is not equal to 07.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68cf"></span>68CF</td>
+<td class="instruction">JR NZ,<a href="68B8.html#68d3">TransitionEffect_1</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68d1"></span>68D1</td>
+<td class="instruction">LD A,$43</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=INK:MAGENTA,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_1</td>
+<td class="address-2"><span id="68d3"></span>68D3</td>
+<td class="instruction">LD B,$0C</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=0C.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_2</td>
+<td class="address-2"><span id="68d5"></span>68D5</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68d6"></span>68D6</td>
+<td class="instruction">LD B,E</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">E</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_3</td>
+<td class="address-2"><span id="68d7"></span>68D7</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68d8"></span>68D8</td>
+<td class="instruction">CALL <a href="68A1.html">Print_Asterisk</a></td>
+<td class="comment-1" rowspan="1">Call <a href="68A1.html">Print_Asterisk</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68db"></span>68DB</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68dc"></span>68DC</td>
+<td class="instruction">DJNZ <a href="68B8.html#68d7">TransitionEffect_3</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#68d7">TransitionEffect_3</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68de"></span>68DE</td>
+<td class="instruction">LD B,D</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">D</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_4</td>
+<td class="address-2"><span id="68df"></span>68DF</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68e0"></span>68E0</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68e1"></span>68E1</td>
+<td class="instruction">CALL <a href="68A1.html">Print_Asterisk</a></td>
+<td class="comment-1" rowspan="1">Call <a href="68A1.html">Print_Asterisk</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68e4"></span>68E4</td>
+<td class="instruction">LD BC,$0020</td>
+<td class="comment-1" rowspan="2"><span class="register">HL</span>+=0020.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68e7"></span>68E7</td>
+<td class="instruction">ADD HL,BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68e8"></span>68E8</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68e9"></span>68E9</td>
+<td class="instruction">DJNZ <a href="68B8.html#68df">TransitionEffect_4</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#68df">TransitionEffect_4</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68eb"></span>68EB</td>
+<td class="instruction">LD B,E</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">E</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_5</td>
+<td class="address-2"><span id="68ec"></span>68EC</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68ed"></span>68ED</td>
+<td class="instruction">CALL <a href="68A1.html">Print_Asterisk</a></td>
+<td class="comment-1" rowspan="1">Call <a href="68A1.html">Print_Asterisk</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68f0"></span>68F0</td>
+<td class="instruction">DEC HL</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68f1"></span>68F1</td>
+<td class="instruction">DJNZ <a href="68B8.html#68ec">TransitionEffect_5</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#68ec">TransitionEffect_5</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68f3"></span>68F3</td>
+<td class="instruction">LD B,D</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">D</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_6</td>
+<td class="address-2"><span id="68f4"></span>68F4</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68f5"></span>68F5</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68f6"></span>68F6</td>
+<td class="instruction">CALL <a href="68A1.html">Print_Asterisk</a></td>
+<td class="comment-1" rowspan="1">Call <a href="68A1.html">Print_Asterisk</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68f9"></span>68F9</td>
+<td class="instruction">LD BC,$0020</td>
+<td class="comment-1" rowspan="3"><span class="register">HL</span>-=0020.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68fc"></span>68FC</td>
+<td class="instruction">AND A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68fd"></span>68FD</td>
+<td class="instruction">SBC HL,BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="68ff"></span>68FF</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6900"></span>6900</td>
+<td class="instruction">DJNZ <a href="68B8.html#68f4">TransitionEffect_6</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#68f4">TransitionEffect_6</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6902"></span>6902</td>
+<td class="instruction">LD C,$21</td>
+<td class="comment-1" rowspan="1"><span class="register">C</span>=21.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6904"></span>6904</td>
+<td class="instruction">SBC HL,BC</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>-=<span class="register">BC</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6906"></span>6906</td>
+<td class="instruction">INC E</td>
+<td class="comment-1" rowspan="2">Increment <span class="register">E</span> by two.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6907"></span>6907</td>
+<td class="instruction">INC E</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6908"></span>6908</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="2">Increment <span class="register">D</span> by two.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6909"></span>6909</td>
+<td class="instruction">INC D</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="690a"></span>690A</td>
+<td class="instruction">PUSH AF</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="690b"></span>690B</td>
+<td class="instruction">LD BC,$000A</td>
+<td class="comment-1" rowspan="1"><span class="register">BC</span>=000A.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_7</td>
+<td class="address-2"><span id="690e"></span>690E</td>
+<td class="instruction">DJNZ <a href="68B8.html#690e">TransitionEffect_7</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#690e">TransitionEffect_7</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6910"></span>6910</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6911"></span>6911</td>
+<td class="instruction">JR NZ,<a href="68B8.html#690e">TransitionEffect_7</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="68B8.html#690e">TransitionEffect_7</a> if <span class="register">C</span> is not equal to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6913"></span>6913</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="2">Restore <span class="register">AF</span> and <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6914"></span>6914</td>
+<td class="instruction">POP BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6915"></span>6915</td>
+<td class="instruction">DJNZ <a href="68B8.html#68d5">TransitionEffect_2</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#68d5">TransitionEffect_2</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6917"></span>6917</td>
+<td class="instruction">LD BC,$0032</td>
+<td class="comment-1" rowspan="1"><span class="register">BC</span>=0032.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_8</td>
+<td class="address-2"><span id="691a"></span>691A</td>
+<td class="instruction">DJNZ <a href="68B8.html#691a">TransitionEffect_8</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#691a">TransitionEffect_8</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="691c"></span>691C</td>
+<td class="instruction">DEC C</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="691d"></span>691D</td>
+<td class="instruction">JR NZ,<a href="68B8.html#691a">TransitionEffect_8</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="68B8.html#691a">TransitionEffect_8</a> until <span class="register">C</span> is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="691f"></span>691F</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6920"></span>6920</td>
+<td class="instruction">DJNZ <a href="68B8.html#68ba">TransitionEffect_0</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="68B8.html#68ba">TransitionEffect_0</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6922"></span>6922</td>
+<td class="instruction">CALL <a href="6720.html">ClearScreen</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6720.html">ClearScreen</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6925"></span>6925</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="68A1.html">68A1</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#68b8">Map</a></td>
+<td class="next">
+Next: <a href="6926.html">6926</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/26808.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>
