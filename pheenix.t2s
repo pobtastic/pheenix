@@ -1,0 +1,12 @@
+; tap2sna.py file for Pheenix. Run
+;
+;   $ tap2sna.py @pheenix.t2s
+;
+; to create a Z80 snapshot.
+
+https://tzxvault.org/Spectrum/TZX/Pheenix.zip
+Pheenix.z80
+
+--tape-name "Pheenix.tzx"
+--tape-sum f8308895de5ad5d920641db554007c0e
+--start 0x7599

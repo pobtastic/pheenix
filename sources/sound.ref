@@ -1,0 +1,5 @@
+; Copyright 2025 Paul Maddern (paul@arcadegeek.co.uk)
+
+[Audio:intro:Intro Theme]
+
+#AUDIO(intro.wav)(#INCLUDE(Intro))

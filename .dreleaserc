@@ -1,0 +1,4 @@
+GAME=pheenix
+SRCFILES=$(echo pheenix.skool {pheenix,analytics,bases,changelog,data,pokes,sound}.ref {dark,wide}.css)
+SKOOL2BINOPTS="-i 30105"
+WAVCONVERT="intro.wav"

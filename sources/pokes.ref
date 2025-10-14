@@ -1,0 +1,47 @@
+; Copyright 2025 Paul Maddern (paul@arcadegeek.co.uk)
+
+[Poke:Infinite Lives]
+POKE #R$72BF,#N$00
+
+This removes the command;
+
+<table>
+  <tbody>
+    <tr>
+      <td class="address-1">#R$72BF(#N$72BF)</td>
+      <td class="instruction">DEC (#REGhl)</td>
+    </tr>
+  </tbody>
+</table>
+
+Which is used to decrease the player life counter held at #R$66F0(#N$66F0).
+
+[Poke:Aliens Don't Fire]
+POKE #R$7B67,#N$C9
+
+Just RETurn immediately from the alien subroutine.
+
+<table>
+  <tbody>
+    <tr>
+      <td class="address-1">#R$7B67(#N$7B67)</td>
+      <td class="instruction">RET</td>
+    </tr>
+  </tbody>
+</table>
+
+[Poke:Immunity]
+POKE #R$6CB7(#N$6CB8),#N$00
+
+<table>
+  <tbody>
+    <tr>
+      <td class="address-1">#R$6CB7(#N$6CB7)</td>
+      <td class="instruction">LD #REGa,#N$01</td>
+    </tr>
+    <tr>
+      <td class="address-1">#R$6CB9(#N$6CB9)</td>
+      <td class="instruction">LD (#R$66A4(#N$66A4)),#REGa</td>
+    </tr>
+  </tbody>
+</table>
