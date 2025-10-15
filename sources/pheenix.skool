@@ -2567,7 +2567,8 @@ g$66F0 DEFB $05      ; {Life counter.
 @label=Flag_TitleScreenStart
 g$66F2 DEFB $00
 
-; Game status buffer entry at 66F3
+; Flag: Demo Mode Active?
+@label=Flag_ActiveDemoMode
 g$66F3 DEFB $01
 
 ; Game status buffer entry at 66F4
@@ -2600,14 +2601,17 @@ c$66F7 LD A,D        ; #REGa=#REGd.
  $6702 LD D,A        ; #REGd=#REGa.
  $6703 RET           ; Return.
 
-; Convert Screen Address To Attribute Address
+; Convert Attribute Address To Screen Buffer Address
 ;
 ; Used by the routines at #R$6853, #R$68A1, #R$6926, #R$6A23, #R$7069, #R$70E7,
 ; #R$72C9, #R$7564, #R$75BF, #R$7616, #R$79B2 and #R$7B67.
 ; .
-; Converts a screen buffer address to its corresponding attribute buffer
+; Converts an attribute buffer address to its corresponding screen buffer
 ; address.
-@label=ConvertScreenToAttributeAddress
+;
+;   HL Attribute buffer address
+; O:HL Screen buffer address
+@label=ConvertAttributeToScreenBufferAddress
 c$6704 LD A,H        ; Copy the screen address high byte to #REGa.
  $6705 SUB $58       ; Subtract #N$58 (start of attribute area offset).
  $6707 ADD A,A       ; {Multiply by #N$08.
@@ -2966,14 +2970,13 @@ c$68A1 PUSH AF       ; {Stash #REGaf, #REGbc, #REGde and #REGhl on the stack.
 ; Point to an asterisk in the ZX Spectrum font UDG data.
  $68A8 LD DE,$3D50   ; #HTML(#REGde=<a rel="noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html#3D50">CHARSET+#N$50</a>.)
- $68AB LD B,$08      ; #REGb=#N$08.
-@label=Print_Asterisk_Loop
-*$68AD LD A,(DE)     ; #REGa=*#REGde.
- $68AE LD (HL),A     ; Write #REGa to *#REGhl.
- $68AF INC H         ; Increment #REGh by one.
- $68B0 INC DE        ; Increment #REGde by one.
- $68B1 DJNZ $68AD    ; Decrease counter by one and loop back to #R$68AD until
-                     ; counter is zero.
+ $68AB LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+*$68AD LD A,(DE)     ; {Copy the UDG data to the screen buffer.
+ $68AE LD (HL),A     ; }
+ $68AF INC H         ; Move down one pixel line in the screen buffer.
+ $68B0 INC DE        ; Move to the next UDG graphic data byte.
+ $68B1 DJNZ $68AD    ; Decrease the line counter by one and loop back to #R$6962 until all
+                     ; #N$08 lines of the UDG character have been drawn.
  $68B3 POP HL        ; {Restore #REGhl, #REGde, #REGbc and #REGaf from the
  $68B4 POP DE        ; stack.
  $68B5 POP BC        ;
@@ -3369,36 +3372,46 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6B2D JP NZ,$6AA1   ; Jump to #R$6AA1 if #REGl is not equal to #REGa.
  $6B30 RET           ; Return.
 
-; Routine at 6B31
+; Fill Screen With UDG
 ;
 ; Used by the routine at #R$72C9.
 ; .
-; #PUSHS #UDGTABLE {
-;   #SIM(start=$7323,stop=$6B4E)#SCR$02(tegfdgd)
-; } TABLE# #POPS
-c$6B31 LD HL,$4000   ; #REGhl=#N$4000.
+; #PUSHS #CLS($45)#SIM(start=$7323,stop=$6B35)
+; #UDGTABLE(default,centre,centre) { =h Loop Index | =h Screen Output }
+;   #FOR$01,$03(x,{ #Nx | #SIM(start=$6B35,stop=$6B4A)#SCR$01(fill-x) })
+; TABLE# #POPS
+;
+; DE Pointer to UDG graphic data
+@label=FillScreenWithUDG
+c$6B31 LD HL,$4000   ; Point #REGhl to the start of the screen buffer
+                     ; (#N$4000).
  $6B34 LD B,L        ; #REGb=#REGl.
-*$6B35 PUSH BC       ; {Stash #REGbc, #REGhl and #REGde on the stack.
- $6B36 PUSH HL       ;
+; Draw one character block.
+@label=FillScreenWithUDG_Loop
+*$6B35 PUSH BC       ; {Stash the position counter, screen address and graphic pointer on
+ $6B36 PUSH HL       ; the stack.
  $6B37 PUSH DE       ; }
  $6B38 LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+@label=FillScreenWithUDG_LineLoop
 *$6B3A LD A,(DE)     ; {Copy the UDG data to the screen buffer.
  $6B3B LD (HL),A     ; }
  $6B3C INC H         ; Move down one pixel line in the screen buffer.
  $6B3D INC DE        ; Move to the next UDG graphic data byte.
  $6B3E DJNZ $6B3A    ; Decrease the line counter by one and loop back to #R$6B3A until all
                      ; #N$08 lines of the UDG character have been drawn.
- $6B40 POP DE        ; {Restore #REGde and #REGhl from the stack.
- $6B41 POP HL        ; }
- $6B42 INC HL        ; Increment #REGhl by one.
- $6B43 POP BC        ; Restore #REGbc from the stack.
- $6B44 DJNZ $6B35    ; Decrease counter by one and loop back to #R$6B35 until
-                     ; counter is zero.
- $6B46 LD A,H        ; {#REGh+=#N$07.
- $6B47 ADD A,$07     ;
+; Move to the next character position in the row.
+ $6B40 POP DE        ; {Restore the graphic pointer and original screen address from the
+ $6B41 POP HL        ; stack.}
+ $6B42 INC HL        ; Move right one character block.
+ $6B43 POP BC        ; Restore the position counter from the stack.
+ $6B44 DJNZ $6B35    ; Decrease the position counter by one and loop back to #R$6B35 until
+                     ; the current screen third is filled with the sprite.
+; Move to the next screen third.
+ $6B46 LD A,H        ; {Add #N$07 to #REGh to move down to the next screen
+ $6B47 ADD A,$07     ; third.
  $6B49 LD H,A        ; }
- $6B4A CP $58        ; {Jump to #R$6B35 if #REGh is not equal to #N$58.
- $6B4C JR NZ,$6B35   ; }
+ $6B4A CP $58        ; {Jump back to #R$6B35 until #REGhl reaches the attribute buffer at
+ $6B4C JR NZ,$6B35   ; #N$5800.}
  $6B4E RET           ; Return.
 
 ; Print Control Menu
@@ -3537,19 +3550,24 @@ c$6B99 CALL $6720    ; Call #R$6720.
 @label=Input_SelectLevel_Store
 *$6BFD LD HL,$6527   ; {Write #REGc to *#R$6527.
  $6C00 LD (HL),C     ; }
- $6C01 LD A,C        ; #REGa=#REGc.
- $6C02 SUB $30       ; #REGa-=#N$30.
- $6C04 ADD A,A       ; #REGa+=#REGa.
- $6C05 LD C,A        ; #REGc=#REGa.
- $6C06 LD A,$0A      ; #REGa=#N$0A.
- $6C08 SUB C         ; #REGa-=#REGc.
- $6C09 LD ($6898),A  ; Write #REGa to *#R$6897(#N$6898).
+ $6C01 LD A,C        ; {Convert the ASCII digit to a numeric value by, subtracting #N$30,
+ $6C02 SUB $30       ; multiply by #N$02, and subtracting the result from #N$0A, e.g.
+ $6C04 ADD A,A       ; #TABLE(default,centre,centre)
+ $6C05 LD C,A        ; { =h ASCII | =h Byte | =h Result }
+ $6C06 LD A,$0A      ; #FOR$31,$35(x,{ "#CHRx" | #Nx | #EVAL($0A-((x-$30)*$02)) })
+ $6C08 SUB C         ; TABLE#
+ $6C09 LD ($6898),A  ;
+                     ; Write the result to *#R$6897(#N$6898).}
  $6C0C RET           ; Return.
 
 ; Data block at 6C0D
 b$6C0D DEFB $00,$00,$00,$00,$00,$00
 
 ; Table: Music Data
+;
+; See #R$74A4.
+; .
+; #HTML(#AUDIO(intro.wav)(#INCLUDE(Intro)))
 @label=Table_MusicData
 g$6C13 DEFB $84,$01,$64
  $6C16 DEFB $84,$01,$64
@@ -4605,6 +4623,9 @@ c$72C9 LD A,($66F3)  ;
  $731B LD A,($66D3)  ;
  $731E OR A          ;
  $731F RET Z         ;
+; #PUSHS #UDGTABLE {
+;   #SIM(start=$7320,stop=$737D)#SCR$01(fgkjfdg)
+; } TABLE# #POPS
  $7320 CALL $6720    ; Call #R$6720.
  $7323 LD DE,$61DB   ; #REGde=#R$61DB.
  $7326 CALL $6B31    ; Call #R$6B31.

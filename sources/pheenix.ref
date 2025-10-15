@@ -68,3 +68,9 @@ SectionPrefix=Audio
   5:CYAN,
   6:YELLOW,
   7:WHITE))#IF({bright}>$00)( (BRIGHT))#IF({flash}>$00)( (FLASH: ON)))
+
+#DEF(#CLS(attr)
+  #POKES$74B6,$attr
+  #SIM(start=$6720,stop=$672D)
+  #SIM(start=$74AC,stop=$74B9)
+)
