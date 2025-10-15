@@ -33,7 +33,7 @@ Next: <a href="26382.html">26382</a>
 </td>
 </tr>
 </table>
-<div class="description">26372: Convert Screen Address To Attribute Address</div>
+<div class="description">26372: Convert Attribute Address To Screen Buffer Address</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -42,13 +42,31 @@ Next: <a href="26382.html">26382</a>
 Used by the routines at <a href="26707.html">26707</a>, <a href="26785.html">Print_Asterisk</a>, <a href="26918.html">26918</a>, <a href="27171.html">27171</a>, <a href="28777.html">28777</a>, <a href="28903.html">28903</a>, <a href="29385.html">29385</a>, <a href="30052.html">30052</a>, <a href="30143.html">30143</a>, <a href="30230.html">30230</a>, <a href="31154.html">31154</a> and <a href="31591.html">31591</a>.
 </div>
 <div class="paragraph">
-Converts a screen buffer address to its corresponding attribute buffer address.
+Converts an attribute buffer address to its corresponding screen buffer address.
 </div>
 </div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Attribute buffer address</td>
+</tr>
+</table>
+<table class="output">
+<tr class="asm-output-header">
+<th colspan="2">Output</th>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Screen buffer address</td>
+</tr>
+</table>
 </td>
 </tr>
 <tr>
-<td class="asm-label">ConvertScreenToAttributeAddress</td>
+<td class="asm-label">ConvertAttributeToScreenBufferAddress</td>
 <td class="address-2"><span id="26372"></span>26372</td>
 <td class="instruction">LD A,H</td>
 <td class="comment-1" rowspan="1">Copy the screen address high byte to <span class="register">A</span>.</td>

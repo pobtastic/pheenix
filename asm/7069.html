@@ -265,7 +265,7 @@ This entry point is used by the routine at <a href="6CEE.html">6CEE</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7095"></span>7095</td>
 <td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7069.html#70b8">70B8</a> if *<a href="66F3.html">66F3</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7069.html#70b8">70B8</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -436,8 +436,8 @@ PAPER:BLACK(BRIGHT) to *<span class="register">HL</span>.</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70c7"></span>70C7</td>
-<td class="instruction">CALL <a href="6704.html">ConvertScreenToAttributeAddress</a></td>
-<td class="comment-1" rowspan="1">Call <a href="6704.html">ConvertScreenToAttributeAddress</a>.</td>
+<td class="instruction">CALL <a href="6704.html">ConvertAttributeToScreenBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6704.html">ConvertAttributeToScreenBufferAddress</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
