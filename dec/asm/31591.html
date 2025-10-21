@@ -45,6 +45,16 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 </td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="31591"></span>
+<div class="comments">
+<div class="paragraph">
+See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label">Handler_Aliens</td>
 <td class="address-2"><span id="31591"></span>31591</td>
 <td class="instruction">LD A,(26257)</td>
@@ -383,13 +393,12 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <td class="asm-label">Handler_Aliens_5</td>
 <td class="address-2"><span id="31692"></span>31692</td>
 <td class="instruction">CP 8</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 8.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="31591.html#31765">Handler_Aliens_11</a> if <span class="register">A</span> is greater than or equal to 8.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31694"></span>31694</td>
 <td class="instruction">JR NC,<a href="31591.html#31765">Handler_Aliens_11</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="31591.html#31765">Handler_Aliens_11</a> if <span class="register">A</span> is greater than or equal to 8.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -579,13 +588,12 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31752"></span>31752</td>
 <td class="instruction">XOR A</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=0.</td>
+<td class="comment-1" rowspan="2">Write 0 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31753"></span>31753</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_Aliens_10</td>
@@ -783,13 +791,12 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31803"></span>31803</td>
 <td class="instruction">AND A</td>
-<td class="comment-1" rowspan="1">Set flags.</td>
+<td class="comment-1" rowspan="2"><span class="register">HL</span>-=<span class="register">BC</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31804"></span>31804</td>
 <td class="instruction">SBC HL,BC</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>-=<span class="register">BC</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -807,55 +814,49 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <td class="asm-label">Handler_Aliens_14</td>
 <td class="address-2"><span id="31809"></span>31809</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31828">Handler_Aliens_16</a> if *<span class="register">HL</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31810"></span>31810</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31811"></span>31811</td>
 <td class="instruction">JR Z,<a href="31591.html#31828">Handler_Aliens_16</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="31591.html#31828">Handler_Aliens_16</a> if <span class="register">H</span> is equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31813"></span>31813</td>
 <td class="instruction">LD A,(26259)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26259.html">26259</a>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31824">Handler_Aliens_15</a> if *<a href="26259.html">26259</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31816"></span>31816</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31817"></span>31817</td>
 <td class="instruction">JR NZ,<a href="31591.html#31824">Handler_Aliens_15</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="31591.html#31824">Handler_Aliens_15</a> if <span class="register">H</span> is not equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31819"></span>31819</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31828">Handler_Aliens_16</a> if *<span class="register">HL</span> is equal to 70.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31820"></span>31820</td>
 <td class="instruction">CP 70</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 70.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31822"></span>31822</td>
 <td class="instruction">JR Z,<a href="31591.html#31828">Handler_Aliens_16</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="31591.html#31828">Handler_Aliens_16</a> if <span class="register">A</span> is equal to 70.</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_Aliens_15</td>
@@ -897,13 +898,12 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31837"></span>31837</td>
 <td class="instruction">LD A,6</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=6.</td>
+<td class="comment-1" rowspan="2">Write 6 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_Aliens_17</td>
 <td class="address-2"><span id="31839"></span>31839</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -951,37 +951,36 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31853"></span>31853</td>
 <td class="instruction">LD B,8</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_Aliens_18</td>
 <td class="address-2"><span id="31855"></span>31855</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31856"></span>31856</td>
 <td class="instruction">LD (DE),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">DE</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31857"></span>31857</td>
 <td class="instruction">INC D</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">D</span> by one.</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31858"></span>31858</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="31859"></span>31859</td>
 <td class="instruction">DJNZ <a href="31591.html#31855">Handler_Aliens_18</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="31591.html#31855">Handler_Aliens_18</a> until counter is zero.</td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="31591.html#31855">Handler_Aliens_18</a> until all 8 lines of the UDG character have been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

@@ -957,7 +957,7 @@ Start "Demo Mode".
 <td class="asm-label"></td>
 <td class="address-1"><span id="7d6a"></span>7D6A</td>
 <td class="instruction">XOR A</td>
-<td class="comment-1" rowspan="2">Write 00 to *<a href="66F5.html">66F5</a>.</td>
+<td class="comment-1" rowspan="2">Write 00 to *<a href="66F5.html">Flag_GameOver</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1253,7 +1253,7 @@ Prints <img alt="s-to-start" src="../images/font/s-to-start.png" />
 <td class="asm-label"></td>
 <td class="address-1"><span id="7dcf"></span>7DCF</td>
 <td class="instruction">LD A,($66F5)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7C82.html">TitleScreen</a> if *<a href="66F5.html">66F5</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7C82.html">TitleScreen</a> if *<a href="66F5.html">Flag_GameOver</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

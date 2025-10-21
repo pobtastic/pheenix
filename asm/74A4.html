@@ -58,10 +58,20 @@ Used by the routine at <a href="72C9.html">72C9</a>.
 <td class="comment-1" rowspan="1">Call <a href="6720.html">ClearScreen</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="74a7"></span>
+<div class="comments">
+<div class="paragraph">
+Don't bother with the animation if this is the demo mode.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="74a7"></span>74A7</td>
 <td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="66F3.html">Flag_ActiveDemoMode</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Return if *<a href="66F3.html">Flag_ActiveDemoMode</a> is set.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -72,6 +82,16 @@ Used by the routine at <a href="72C9.html">72C9</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="74ab"></span>74AB</td>
 <td class="instruction">RET NZ</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="74ac"></span>
+<div class="comments">
+<div class="paragraph">
+Set the attribute buffer to all cyan.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
