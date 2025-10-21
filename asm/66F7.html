@@ -33,51 +33,59 @@ Next: <a href="6704.html">6704</a>
 </td>
 </tr>
 </table>
-<div class="description">66F7: Routine at 66F7</div>
+<div class="description">66F7: Convert Screen Address To Attribute Buffer Address</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
 <div class="details">
 <div class="paragraph">
-Used by the routines at <a href="676F.html">Configurable_PrintString</a>, <a href="70E7.html">70E7</a>, <a href="7564.html">7564</a>, <a href="75BF.html">75BF</a>, <a href="7616.html">7616</a> and <a href="7B67.html">7B67</a>.
+Used by the routines at <a href="676F.html">Configurable_PrintString</a>, <a href="70E7.html">70E7</a>, <a href="7564.html">7564</a>, <a href="75BF.html">75BF</a>, <a href="7616.html">7616</a> and <a href="7B67.html">Handler_Aliens</a>.
 </div>
 </div>
 </td>
 </tr>
 <tr>
+<td class="asm-label">ConvertScreenToAttributeBufferAddress</td>
 <td class="address-2"><span id="66f7"></span>66F7</td>
 <td class="instruction">LD A,D</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">D</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="66f8"></span>66F8</td>
 <td class="instruction">AND %00011000</td>
 <td class="comment-1" rowspan="1">Keep only bits 3-4.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="66fa"></span>66FA</td>
 <td class="instruction">SRA A</td>
 <td class="comment-1" rowspan="3">Shift <span class="register">A</span> right three positions (with carry).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="66fc"></span>66FC</td>
 <td class="instruction">SRA A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="66fe"></span>66FE</td>
 <td class="instruction">SRA A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6700"></span>6700</td>
 <td class="instruction">ADD A,$58</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>+=58.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6702"></span>6702</td>
 <td class="instruction">LD D,A</td>
 <td class="comment-1" rowspan="1"><span class="register">D</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6703"></span>6703</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>

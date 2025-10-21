@@ -33,7 +33,7 @@ Next: <a href="67F6.html">67F6</a>
 </td>
 </tr>
 </table>
-<div class="description">67B6: Routine at 67B6</div>
+<div class="description">67B6: Handler: Score</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,194 +45,255 @@ Used by the routines at <a href="7200.html">7200</a>, <a href="72C9.html">72C9</
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_Score</td>
 <td class="address-2"><span id="67b6"></span>67B6</td>
 <td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="67B6.html#67c3">67C3</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="67B6.html#67c3">AddToScore</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is not active.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67b9"></span>67B9</td>
 <td class="instruction">OR A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67ba"></span>67BA</td>
-<td class="instruction">JR Z,<a href="67B6.html#67c3">$67C3</a></td>
+<td class="instruction">JR Z,<a href="67B6.html#67c3">AddToScore</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="67bc"></span>
+<div class="comments">
+<div class="paragraph">
+Demo mode is active, so just reset the score.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67bc"></span>67BC</td>
 <td class="instruction">LD DE,$6528</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6528.html">6528</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6528.html">ScoreBuffer</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67bf"></span>67BF</td>
 <td class="instruction">LD B,$00</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=00.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67c1"></span>67C1</td>
-<td class="instruction">JR <a href="67B6.html#67dd">$67DD</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="67B6.html#67dd">67DD</a>.</td>
+<td class="instruction">JR <a href="67B6.html#67dd">Reset_ScoreBuffer</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="67B6.html#67dd">Reset_ScoreBuffer</a>.</td>
 </tr>
 <tr>
+<td class="asm-label">AddToScore</td>
 <td class="address-2"><span id="67c3"></span>67C3</td>
 <td class="instruction">LD HL,$6519</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6514.html">6519</a>.</td>
+<td class="comment-1" rowspan="1">Point <span class="register">HL</span> at <a href="6514.html">6519</a> (the current score).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67c6"></span>67C6</td>
 <td class="instruction">LD DE,$652E</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6514.html#6525">652E</a>.</td>
+<td class="comment-1" rowspan="1">Point <span class="register">DE</span> at <a href="6528.html">652E</a> (the points to add).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67c9"></span>67C9</td>
 <td class="instruction">LD B,$06</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=06.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 06 score digits.</td>
 </tr>
 <tr>
+<td class="asm-label">AddToScore_Loop</td>
 <td class="address-2"><span id="67cb"></span>67CB</td>
 <td class="instruction">LD A,(DE)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">DE</span>.</td>
+<td class="comment-1" rowspan="2">Fetch the points digit and add it to the corresponding score digit.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67cc"></span>67CC</td>
 <td class="instruction">ADD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67cd"></span>67CD</td>
 <td class="instruction">SUB $30</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>-=30.</td>
+<td class="comment-1" rowspan="1">Convert the value from ASCII by subtracing 30.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67cf"></span>67CF</td>
 <td class="instruction">CP $3A</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 3A.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="67B6.html#67d8">AddToScore_Store</a> if <span class="register">A</span> is less than 3A.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67d1"></span>67D1</td>
-<td class="instruction">JR C,<a href="67B6.html#67d8">$67D8</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="67B6.html#67d8">67D8</a> if <span class="register">A</span> is less than 3A.</td>
+<td class="instruction">JR C,<a href="67B6.html#67d8">AddToScore_Store</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67d3"></span>67D3</td>
 <td class="instruction">SUB $0A</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>-=0A.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67d5"></span>67D5</td>
 <td class="instruction">DEC HL</td>
 <td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67d6"></span>67D6</td>
 <td class="instruction">INC (HL)</td>
 <td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67d7"></span>67D7</td>
 <td class="instruction">INC HL</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label">AddToScore_Store</td>
 <td class="address-2"><span id="67d8"></span>67D8</td>
 <td class="instruction">LD (HL),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67d9"></span>67D9</td>
 <td class="instruction">DEC DE</td>
 <td class="comment-1" rowspan="1">Decrease <span class="register">DE</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67da"></span>67DA</td>
 <td class="instruction">DEC HL</td>
 <td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67db"></span>67DB</td>
-<td class="instruction">DJNZ <a href="67B6.html#67cb">$67CB</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="67B6.html#67cb">67CB</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="67B6.html#67cb">AddToScore_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="67B6.html#67cb">AddToScore_Loop</a> until counter is zero.</td>
 </tr>
 <tr>
+<td class="asm-label">Reset_ScoreBuffer</td>
 <td class="address-2"><span id="67dd"></span>67DD</td>
 <td class="instruction">PUSH DE</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">DE</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Copy the score buffer pointer to <span class="register">HL</span> (using the stack).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67de"></span>67DE</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67df"></span>67DF</td>
 <td class="instruction">INC DE</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">DE</span> by one.</td>
+<td class="comment-1" rowspan="1">Increment the score buffer destination pointer by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67e0"></span>67E0</td>
 <td class="instruction">LD C,$06</td>
-<td class="comment-1" rowspan="1"><span class="register">C</span>=06.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">C</span> for 06 score digits.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67e2"></span>67E2</td>
 <td class="instruction">LD (HL),$30</td>
-<td class="comment-1" rowspan="1">Write 30 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write 30 ("&#48;") to the score buffer.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67e4"></span>67E4</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
+<td class="comment-1" rowspan="1">Copy 30 ("&#48;") across the remaining five score buffer digits.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="67e6"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the score is at least "10,000".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67e6"></span>67E6</td>
 <td class="instruction">LD A,($6515)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="6514.html">6515</a>.</td>
+<td class="comment-1" rowspan="3">Return if *<a href="6514.html">6515</a> is not equal to 31 ("&#49;").</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67e9"></span>67E9</td>
 <td class="instruction">CP $31</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 31.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67eb"></span>67EB</td>
 <td class="instruction">RET NZ</td>
-<td class="comment-1" rowspan="1">Return if <span class="register">A</span> is not equal to 31.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67ec"></span>67EC</td>
 <td class="instruction">LD HL,$66EF</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="66EF.html">66EF</a>.</td>
+<td class="comment-1" rowspan="4">Return if <a href="66EF.html">Flag_ExtraLife</a> says that no extra life should be awarded.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67ef"></span>67EF</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67f0"></span>67F0</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67f1"></span>67F1</td>
 <td class="instruction">RET Z</td>
-<td class="comment-1" rowspan="1">Return if <span class="register">A</span> is equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="67f2"></span>
+<div class="comments">
+<div class="paragraph">
+Award an extra life to the player.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67f2"></span>67F2</td>
 <td class="instruction">DEC (HL)</td>
-<td class="comment-1" rowspan="1">Decrease *<span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Reset <a href="66EF.html">Flag_ExtraLife</a> as an extra life has been "awarded".</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67f3"></span>67F3</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the lives counter at <a href="66F0.html">Player_Lives</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67f4"></span>67F4</td>
 <td class="instruction">INC (HL)</td>
-<td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Award one extra life.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="67f5"></span>67F5</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>

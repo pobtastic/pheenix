@@ -33,7 +33,7 @@ Next: <a href="26479.html">26479</a>
 </td>
 </tr>
 </table>
-<div class="description">26414: Routine at 672E</div>
+<div class="description">26414: Clear Play-Area</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,183 +45,200 @@ Used by the routine at <a href="26614.html">PrintHeader</a>.
 </td>
 </tr>
 <tr>
+<td class="asm-label">ClearPlayArea</td>
 <td class="address-2"><span id="26414"></span>26414</td>
 <td class="instruction">LD HL,22560</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=22560 (attribute buffer location).</td>
+<td class="comment-1" rowspan="5">Clear 736 bytes of the attribute buffer from 22560 to 23295.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26417"></span>26417</td>
 <td class="instruction">LD DE,22561</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=22561 (attribute buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26420"></span>26420</td>
 <td class="instruction">LD BC,735</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=735.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26423"></span>26423</td>
 <td class="instruction">LD (HL),0</td>
-<td class="comment-1" rowspan="1">Write 0 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26425"></span>26425</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26427"></span>26427</td>
 <td class="instruction">LD HL,18432</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=18432 (screen buffer location).</td>
+<td class="comment-1" rowspan="5">Clear 4096 bytes of the screen buffer from 18432 to 22527.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26430"></span>26430</td>
 <td class="instruction">LD DE,18433</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=18433 (screen buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26433"></span>26433</td>
 <td class="instruction">LD BC,4095</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=4095.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26436"></span>26436</td>
 <td class="instruction">LD (HL),L</td>
-<td class="comment-1" rowspan="1">Write <span class="register">L</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26437"></span>26437</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26439"></span>26439</td>
 <td class="instruction">LD HL,16416</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=16416 (screen buffer location).</td>
+<td class="comment-1" rowspan="2">Point <span class="register">HL</span> to screen buffer position 16416 and <span class="register">DE</span> to screen buffer position 16417.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26442"></span>26442</td>
 <td class="instruction">LD DE,16417</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=16417 (screen buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26445"></span>26445</td>
 <td class="instruction">LD B,7</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=7.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 7 character rows.</td>
 </tr>
 <tr>
+<td class="asm-label">ClearPlayArea_RowLoop</td>
 <td class="address-2"><span id="26447"></span>26447</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Save the row counter on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26448"></span>26448</td>
 <td class="instruction">LD B,8</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 8 pixel lines.</td>
 </tr>
 <tr>
+<td class="asm-label">ClearPlayArea_LineLoop</td>
 <td class="address-2"><span id="26450"></span>26450</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="3">Stash <span class="register">BC</span>, <span class="register">DE</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="3">Stash the row counter and screen position pointers on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26451"></span>26451</td>
 <td class="instruction">PUSH DE</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26452"></span>26452</td>
 <td class="instruction">PUSH HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26453"></span>26453</td>
 <td class="instruction">LD BC,31</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=31.</td>
+<td class="comment-1" rowspan="3">Clear 31 bytes across the line.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26456"></span>26456</td>
 <td class="instruction">LD (HL),B</td>
-<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26457"></span>26457</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26459"></span>26459</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="2">Restore <span class="register">HL</span> and <span class="register">DE</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the screen position pointers.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26460"></span>26460</td>
 <td class="instruction">POP DE</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26461"></span>26461</td>
 <td class="instruction">INC H</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
+<td class="comment-1" rowspan="2">Move down one pixel line.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26462"></span>26462</td>
 <td class="instruction">INC D</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">D</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26463"></span>26463</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the line counter and loop back to <a href="26414.html#26450">ClearPlayArea_LineLoop</a> until all 8 lines are cleared.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26464"></span>26464</td>
-<td class="instruction">DJNZ <a href="26414.html#26450">26450</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26414.html#26450">26450</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26414.html#26450">ClearPlayArea_LineLoop</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26466"></span>26466</td>
 <td class="instruction">LD H,64</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=64.</td>
+<td class="comment-1" rowspan="7">Move to the next character row by resetting <span class="register">H</span> and <span class="register">D</span> to 64 then adding 32 to both <span class="register">L</span> and <span class="register">E</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26468"></span>26468</td>
 <td class="instruction">LD D,H</td>
-<td class="comment-1" rowspan="1"><span class="register">D</span>=<span class="register">H</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26469"></span>26469</td>
 <td class="instruction">LD A,32</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=32.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26471"></span>26471</td>
 <td class="instruction">ADD A,L</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=<span class="register">L</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26472"></span>26472</td>
 <td class="instruction">LD L,A</td>
-<td class="comment-1" rowspan="1"><span class="register">L</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26473"></span>26473</td>
 <td class="instruction">LD E,A</td>
-<td class="comment-1" rowspan="1"><span class="register">E</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26474"></span>26474</td>
 <td class="instruction">INC E</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">E</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26475"></span>26475</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the row counter and loop back to <a href="26414.html#26447">ClearPlayArea_RowLoop</a> until all 7 rows are cleared.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26476"></span>26476</td>
-<td class="instruction">DJNZ <a href="26414.html#26447">26447</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26414.html#26447">26447</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26414.html#26447">ClearPlayArea_RowLoop</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26478"></span>26478</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>
