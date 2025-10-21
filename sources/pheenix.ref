@@ -8,7 +8,7 @@
 
 [Config]
 Expand=#INCLUDE(Expand)
-RefFiles=bases.ref;analytics.ref;changelog.ref;data.ref;pokes.ref;sound.ref
+RefFiles=bases.ref;analytics.ref;changelog.ref;data.ref;facts.ref;pokes.ref;sound.ref
 GameDir=pheenix
 
 [Game]
@@ -25,6 +25,11 @@ GameIndex=The complete<>RAM disassembly (work in progress)
 [Titles]
 GameStatusBuffer=Game Status Buffer
 UnusedMap=Unused Addresses
+
+[Index:Reference:Reference]
+Facts
+Pokes
+Changelog
 
 [Index:Graphics:Graphics And Sound]
 Sound

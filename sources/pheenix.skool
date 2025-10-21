@@ -1424,10 +1424,11 @@ b$60CD DEFB $00,$01,$01,$03,$07,$0E,$18,$10
  $616B DEFB $00,$00,$70,$FC,$FC,$FE,$7E,$0F
  $6173 DEFB $24,$24,$24,$5A,$99,$00,$00,$00
  $617B DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $6183 DEFB $00,$00,$E0,$78,$7E,$3F,$3F,$1F
- $618B DEFB $07,$00,$3C,$5A,$66,$FF,$FF,$FF
- $6193 DEFB $FF,$7E,$07,$1E,$7E,$FC,$FC,$F8
- $619B DEFB $E0,$00,$24,$24,$24,$5A,$99,$00
+ $6183 DEFB $00,$00
+ $6185 DEFB $E0,$78,$7E,$3F,$3F,$1F,$07,$00
+ $618D DEFB $3C,$5A,$66,$FF,$FF,$FF,$FF,$7E
+ $6195 DEFB $07,$1E,$7E,$FC,$FC,$F8,$E0,$00
+ $619D DEFB $24,$24,$24,$5A,$99,$00
  $61A3 DEFB $00,$00,$00,$10,$20,$06,$07,$03
  $61AB DEFB $00,$00,$30,$70,$78,$18,$00,$00
  $61B3 DEFB $00,$0C,$0C,$06,$C0,$00,$00,$00
@@ -2419,7 +2420,10 @@ g$6637 DEFB $82,$40,$5B,$C0,$01,$48,$DC,$C0
  $665F DEFB $E5,$EF,$F9,$A7,$B7,$69,$75,$EF
  $6667 DEFB $C3,$DB,$8F,$6C,$65,$72,$79,$29
  $666F DEFB $2F,$35,$CF,$6B,$6F,$73,$3B,$22
- $6677 DEFB $F9,$E4,$B7,$A6,$75,$68,$43,$06
+ $6677 DEFB $F9,$E4,$B7,$A6,$75,$68
+
+; Game status buffer entry at 667D
+g$667D DEFB $43,$06
 
 ; Game status buffer entry at 667F
 g$667F DEFB $0F
@@ -5042,64 +5046,67 @@ c$75BC LD HL,$60FF   ; #REGhl=#R$60FF.
 ; Routine at 75BF
 ;
 ; Used by the routine at #R$75B7.
-c$75BF LD BC,$0505   ;
- $75C2 XOR A         ;
- $75C3 LD IXl,A      ;
- $75C5 JR $75E0      ;
+c$75BF LD BC,$0505   ; #REGbc=#N($0505,$04,$04).
+ $75C2 XOR A         ; #REGa=#N$00.
+ $75C3 LD IXl,A      ; Write #REGa to the low byte of #REGix.
+ $75C5 JR $75E0      ; Jump to #R$75E0.
 ; This entry point is used by the routine at #R$7616.
-*$75C7 LD HL,$611F   ;
- $75CA LD B,$05      ;
- $75CC LD A,($667D)  ;
- $75CF LD C,A        ;
- $75D0 JR $75DE      ;
+*$75C7 LD HL,$611F   ; #REGhl=#R$611F.
+ $75CA LD B,$05      ; #REGb=#N$05.
+ $75CC LD A,($667D)  ; {#REGc=*#R$667D.
+ $75CF LD C,A        ; }
+ $75D0 JR $75DE      ; Jump to #R$75DE.
 ; This entry point is used by the routine at #R$7616.
-*$75D2 LD HL,$6185   ;
- $75D5 JR $75DA      ;
+*$75D2 LD HL,$6185   ; #REGhl=#R$6185.
+ $75D5 JR $75DA      ; Jump to #R$75DA.
 ; This entry point is used by the routine at #R$7616.
-*$75D7 LD HL,$615B   ;
+*$75D7 LD HL,$615B   ; #REGhl=#R$615B.
 ; This entry point is used by the routines at #R$75AD and #R$75B2.
-*$75DA LD BC,($667D) ;
-*$75DE LD IXl,B      ;
-*$75E0 PUSH DE       ;
+*$75DA LD BC,($667D) ; #REGbc=*#R$667D.
+*$75DE LD IXl,B      ; Write #REGb to the low byte of #REGix.
+*$75E0 PUSH DE       ; {Stash #REGde, #REGbc and #REGde on the stack.
  $75E1 PUSH BC       ;
- $75E2 PUSH DE       ;
- $75E3 LD B,$03      ;
-*$75E5 PUSH BC       ;
- $75E6 PUSH DE       ;
- $75E7 LD B,$08      ;
-*$75E9 LD A,(HL)     ;
- $75EA LD (DE),A     ;
- $75EB INC HL        ;
- $75EC INC D         ;
- $75ED DJNZ $75E9    ;
- $75EF POP DE        ;
- $75F0 INC DE        ;
- $75F1 POP BC        ;
- $75F2 DJNZ $75E5    ;
- $75F4 POP DE        ;
- $75F5 POP BC        ;
- $75F6 PUSH HL       ;
- $75F7 CALL $66F7    ;
- $75FA EX DE,HL      ;
- $75FB LD A,IXl      ;
- $75FD LD (HL),A     ;
- $75FE INC HL        ;
- $75FF LD (HL),C     ;
- $7600 INC HL        ;
- $7601 LD (HL),B     ;
- $7602 LD BC,$001F   ;
- $7605 ADD HL,BC     ;
- $7606 LD (HL),$06   ;
- $7608 CALL $6704    ;
- $760B POP DE        ;
- $760C LD B,$08      ;
-*$760E LD A,(DE)     ;
- $760F LD (HL),A     ;
- $7610 INC H         ;
- $7611 INC DE        ;
- $7612 DJNZ $760E    ;
- $7614 POP DE        ;
- $7615 RET           ;
+ $75E2 PUSH DE       ; }
+ $75E3 LD B,$03      ; #REGb=#N$03.
+*$75E5 PUSH BC       ; {Stash #REGbc and #REGde on the stack.
+ $75E6 PUSH DE       ; }
+ $75E7 LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+*$75E9 LD A,(HL)     ; {Copy the UDG data to the screen buffer.
+ $75EA LD (DE),A     ; }
+ $75EB INC HL        ; Move to the next UDG graphic data byte.
+ $75EC INC D         ; Move down one pixel line in the screen buffer.
+ $75ED DJNZ $75E9    ; Decrease the line counter by one and loop back to #R$75E9 until all
+                     ; #N$08 lines of the UDG character have been drawn.
+ $75EF POP DE        ; Restore #REGde from the stack.
+ $75F0 INC DE        ; Increment #REGde by one.
+ $75F1 POP BC        ; Restore #REGbc from the stack.
+ $75F2 DJNZ $75E5    ; Decrease counter by one and loop back to #R$75E5 until
+                     ; counter is zero.
+ $75F4 POP DE        ; {Restore #REGde and #REGbc from the stack.
+ $75F5 POP BC        ; }
+ $75F6 PUSH HL       ; Stash #REGhl on the stack.
+ $75F7 CALL $66F7    ; Call #R$66F7.
+ $75FA EX DE,HL      ; Exchange the #REGde and #REGhl registers.
+ $75FB LD A,IXl      ; #REGa=the low byte of #REGix.
+ $75FD LD (HL),A     ; Write #REGa to *#REGhl.
+ $75FE INC HL        ; Increment #REGhl by one.
+ $75FF LD (HL),C     ; Write #REGc to *#REGhl.
+ $7600 INC HL        ; Increment #REGhl by one.
+ $7601 LD (HL),B     ; Write #REGb to *#REGhl.
+ $7602 LD BC,$001F   ; {#REGhl+=#N($001F,$04,$04).
+ $7605 ADD HL,BC     ; }
+ $7606 LD (HL),$06   ; Write #N$06 to *#REGhl.
+ $7608 CALL $6704    ; Call #R$6704.
+ $760B POP DE        ; Restore #REGde from the stack.
+ $760C LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+*$760E LD A,(DE)     ; {Copy the UDG data to the screen buffer.
+ $760F LD (HL),A     ; }
+ $7610 INC H         ; Move down one pixel line in the screen buffer.
+ $7611 INC DE        ; Move to the next UDG graphic data byte.
+ $7612 DJNZ $760E    ; Decrease the line counter by one and loop back to #R$760E until all
+                     ; #N$08 lines of the UDG character have been drawn.
+ $7614 POP DE        ; Restore #REGde from the stack.
+ $7615 RET           ; Return.
 
 ; Routine at 7616
 ;
@@ -6333,63 +6340,72 @@ c$7C82 DI            ; Disable interrupts.
  $7DD6 INC B         ; Increment #REGb by one.
  $7DD7 JR $7D8E      ; Jump to #R$7D8E.
 
-; Handler: Control Menu
+; Start Game
 ;
 ; Used by the routine at #R$7C82.
-@label=Handler_ControlMenu
-c$7DD9 CALL $6B4F    ;
- $7DDC XOR A         ;
+;
+; .
+;
+; First collect the control method.
+@label=StartGame
+c$7DD9 CALL $6B4F    ; Call #R$6B4F.
+; This is a game the player started, so disable the demo mode and unset
+; the game-over flag.
+ $7DDC XOR A         ; {Write #N$00 to; #LIST { *#R$66F5 } { *#R$66F3 } LIST#
  $7DDD LD ($66F5),A  ;
- $7DE0 LD ($66F3),A  ;
- $7DE3 INC A         ;
- $7DE4 LD ($66EF),A  ;
- $7DE7 LD A,$04      ;
- $7DE9 LD ($66F1),A  ;
- $7DEC INC A         ;
- $7DED LD ($66F0),A  ;
- $7DF0 CALL $740C    ;
-*$7DF3 CALL $6CEE    ;
- $7DF6 CALL $7616    ;
- $7DF9 CALL $7B67    ;
- $7DFC CALL $79B2    ;
- $7DFF CALL $7254    ;
- $7E02 CALL $6890    ;
- $7E05 LD A,($66F5)  ;
+ $7DE0 LD ($66F3),A  ; }
+ $7DE3 INC A         ; {Write #N$01 to *#R$66EF.
+ $7DE4 LD ($66EF),A  ; }
+ $7DE7 LD A,$04      ; {Write #N$04 to *#R$66F1.
+ $7DE9 LD ($66F1),A  ; }
+; Set the players starting life count.
+ $7DEC INC A         ; {Write #N$05 to *#R$66F0.
+ $7DED LD ($66F0),A  ; }
+ $7DF0 CALL $740C    ; Call #R$740C.
+*$7DF3 CALL $6CEE    ; Call #R$6CEE.
+ $7DF6 CALL $7616    ; Call #R$7616.
+ $7DF9 CALL $7B67    ; Call #R$7B67.
+ $7DFC CALL $79B2    ; Call #R$79B2.
+ $7DFF CALL $7254    ; Call #R$7254.
+ $7E02 CALL $6890    ; Call #R$6890.
+ $7E05 LD A,($66F5)  ; {Jump to #R$7DF3 if *#R$66F5 is zero.
  $7E08 OR A          ;
- $7E09 JR Z,$7DF3    ;
- $7E0B LD D,$08      ;
-*$7E0D LD BC,$0000   ;
-*$7E10 DJNZ $7E10    ;
- $7E12 DEC C         ;
- $7E13 JR NZ,$7E10   ;
- $7E15 DEC D         ;
- $7E16 JR NZ,$7E0D   ;
- $7E18 LD HL,$6514   ;
- $7E1B LD DE,$651F   ;
- $7E1E LD B,$06      ;
- $7E20 PUSH HL       ;
- $7E21 PUSH DE       ;
-*$7E22 LD A,(DE)     ;
+ $7E09 JR Z,$7DF3    ; }
+ $7E0B LD D,$08      ; #REGd=#N$08.
+*$7E0D LD BC,$0000   ; #REGbc=#N($0000,$04,$04).
+*$7E10 DJNZ $7E10    ; Decrease counter by one and loop back to #R$7E10 until
+                     ; counter is zero.
+ $7E12 DEC C         ; Decrease #REGc by one.
+ $7E13 JR NZ,$7E10   ; Jump to #R$7E10 until #REGc is zero.
+ $7E15 DEC D         ; Decrease #REGd by one.
+ $7E16 JR NZ,$7E0D   ; Jump to #R$7E0D if #REGd is not equal to #REGa.
+ $7E18 LD HL,$6514   ; #REGhl=#R$6514.
+ $7E1B LD DE,$651F   ; #REGde=#R$651F.
+ $7E1E LD B,$06      ; #REGb=#N$06.
+ $7E20 PUSH HL       ; {Stash #REGhl and #REGde on the stack.
+ $7E21 PUSH DE       ; }
+*$7E22 LD A,(DE)     ; {Jump to #R$7E2A if *#REGde is equal to *#REGhl.
  $7E23 CP (HL)       ;
- $7E24 JR Z,$7E2A    ;
- $7E26 JR C,$7E31    ;
- $7E28 JR $7E2E      ;
-*$7E2A INC DE        ;
- $7E2B INC HL        ;
- $7E2C DJNZ $7E22    ;
-*$7E2E POP DE        ;
- $7E2F JR $7E39      ;
-*$7E31 POP DE        ;
- $7E32 POP HL        ;
- $7E33 PUSH HL       ;
- $7E34 LD BC,$0006   ;
- $7E37 LDIR          ;
-*$7E39 POP HL        ;
- $7E3A LD DE,$6515   ;
- $7E3D LD (HL),$30   ;
- $7E3F LD BC,$0005   ;
- $7E42 LDIR          ;
- $7E44 JP $7C82      ;
+ $7E24 JR Z,$7E2A    ; }
+ $7E26 JR C,$7E31    ; Jump to #R$7E31 if *#REGde is less than *#REGhl.
+ $7E28 JR $7E2E      ; Jump to #R$7E2E.
+*$7E2A INC DE        ; Increment #REGde by one.
+ $7E2B INC HL        ; Increment #REGhl by one.
+ $7E2C DJNZ $7E22    ; Decrease counter by one and loop back to #R$7E22 until
+                     ; counter is zero.
+*$7E2E POP DE        ; Restore #REGde from the stack.
+ $7E2F JR $7E39      ; Jump to #R$7E39.
+*$7E31 POP DE        ; {Restore #REGde and #REGhl from the stack.
+ $7E32 POP HL        ; }
+ $7E33 PUSH HL       ; Stash #REGhl on the stack.
+ $7E34 LD BC,$0006   ; #REGbc=#N($0006,$04,$04).
+ $7E37 LDIR          ; LDIR.
+*$7E39 POP HL        ; Restore #REGhl from the stack.
+ $7E3A LD DE,$6515   ; #REGde=#R$6514(#N$6515).
+ $7E3D LD (HL),$30   ; Write ASCII #N$30 ("#CHR$30") to *#REGhl.
+ $7E3F LD BC,$0005   ; #REGbc=#N($0005,$04,$04).
+ $7E42 LDIR          ; LDIR.
+ $7E44 JP $7C82      ; Jump to #R$7C82.
 
 ; Input: "S" To Start
 ;

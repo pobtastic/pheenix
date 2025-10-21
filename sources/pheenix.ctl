@@ -64,6 +64,7 @@ b $60CD
 @ $613D label=Mask_LivesIcon
   $613D,$08,b$01 #UDG(#PC)
   $6153
+  $6185
   $61A3
 
 b $61BB Graphics: MegaDodo Logo
@@ -182,6 +183,8 @@ w $65DD
 g $6619
 
 g $6637
+
+g $667D
 
 g $6680
   $6680
@@ -1434,6 +1437,57 @@ E $75BC Continue on to #R$75BF.
   $75BC,$03 #REGhl=#R$60FF.
 
 c $75BF
+  $75BF,$03 #REGbc=#N($0505,$04,$04).
+  $75C2,$01 #REGa=#N$00.
+  $75C3,$02 Write #REGa to the low byte of #REGix.
+  $75C5,$02 Jump to #R$75E0.
+
+  $75C7,$03 #REGhl=#R$611F.
+  $75CA,$02 #REGb=#N$05.
+  $75CC,$04 #REGc=*#R$667D.
+  $75D0,$02 Jump to #R$75DE.
+
+  $75D2,$03 #REGhl=#R$6185.
+  $75D5,$02 Jump to #R$75DA.
+
+  $75D7,$03 #REGhl=#R$615B.
+  $75DA,$04 #REGbc=*#R$667D.
+  $75DE,$02 Write #REGb to the low byte of #REGix.
+  $75E0,$03 Stash #REGde, #REGbc and #REGde on the stack.
+  $75E3,$02 #REGb=#N$03.
+  $75E5,$02 Stash #REGbc and #REGde on the stack.
+  $75E7,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+  $75E9,$02 Copy the UDG data to the screen buffer.
+  $75EB,$01 Move to the next UDG graphic data byte. 
+  $75EC,$01 Move down one pixel line in the screen buffer.
+  $75ED,$02 Decrease the line counter by one and loop back to #R$75E9 until all
+. #N$08 lines of the UDG character have been drawn.
+  $75EF,$01 Restore #REGde from the stack.
+  $75F0,$01 Increment #REGde by one.
+  $75F1,$01 Restore #REGbc from the stack.
+  $75F2,$02 Decrease counter by one and loop back to #R$75E5 until counter is zero.
+  $75F4,$02 Restore #REGde and #REGbc from the stack.
+  $75F6,$01 Stash #REGhl on the stack.
+  $75F7,$03 Call #R$66F7.
+  $75FA,$01 Exchange the #REGde and #REGhl registers.
+  $75FB,$02 #REGa=the low byte of #REGix.
+  $75FD,$01 Write #REGa to *#REGhl.
+  $75FE,$01 Increment #REGhl by one.
+  $75FF,$01 Write #REGc to *#REGhl.
+  $7600,$01 Increment #REGhl by one.
+  $7601,$01 Write #REGb to *#REGhl.
+  $7602,$04 #REGhl+=#N($001F,$04,$04).
+  $7606,$02 Write #N$06 to *#REGhl.
+  $7608,$03 Call #R$6704.
+  $760B,$01 Restore #REGde from the stack.
+  $760C,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+  $760E,$02 Copy the UDG data to the screen buffer.
+  $7610,$01 Move down one pixel line in the screen buffer.
+  $7611,$01 Move to the next UDG graphic data byte. 
+  $7612,$02 Decrease the line counter by one and loop back to #R$760E until all
+. #N$08 lines of the UDG character have been drawn.
+  $7614,$01 Restore #REGde from the stack.
+  $7615,$01 Return.
 
 c $7616
 
@@ -1803,8 +1857,56 @@ N $7D9E Prints #FONT#(:(#STR($645E,$04,$10)))$3D00,attr=$07(s-to-start)
   $7DD6,$01 Increment #REGb by one.
   $7DD7,$02 Jump to #R$7D8E.
 
-c $7DD9 Handler: Control Menu
-@ $7DD9 label=Handler_ControlMenu
+c $7DD9 Start Game
+@ $7DD9 label=StartGame
+N $7DD9 First collect the control method.
+  $7DD9,$03 Call #R$6B4F.
+N $7DDC This is a game the player started, so disable the demo mode and unset
+. the game-over flag.
+  $7DDC,$07 Write #N$00 to; #LIST { *#R$66F5 } { *#R$66F3 } LIST#
+  $7DE3,$04 Write #N$01 to *#R$66EF.
+  $7DE7,$05 Write #N$04 to *#R$66F1.
+N $7DEC Set the players starting life count.
+  $7DEC,$04 Write #N$05 to *#R$66F0.
+  $7DF0,$03 Call #R$740C.
+  $7DF3,$03 Call #R$6CEE.
+  $7DF6,$03 Call #R$7616.
+  $7DF9,$03 Call #R$7B67.
+  $7DFC,$03 Call #R$79B2.
+  $7DFF,$03 Call #R$7254.
+  $7E02,$03 Call #R$6890.
+  $7E05,$06 Jump to #R$7DF3 if *#R$66F5 is zero.
+  $7E0B,$02 #REGd=#N$08.
+  $7E0D,$03 #REGbc=#N($0000,$04,$04).
+  $7E10,$02 Decrease counter by one and loop back to #R$7E10 until counter is zero.
+  $7E12,$01 Decrease #REGc by one.
+  $7E13,$02 Jump to #R$7E10 until #REGc is zero.
+  $7E15,$01 Decrease #REGd by one.
+  $7E16,$02 Jump to #R$7E0D if #REGd is not equal to #REGa.
+  $7E18,$03 #REGhl=#R$6514.
+  $7E1B,$03 #REGde=#R$651F.
+  $7E1E,$02 #REGb=#N$06.
+  $7E20,$02 Stash #REGhl and #REGde on the stack.
+  $7E22,$04 Jump to #R$7E2A if *#REGde is equal to *#REGhl.
+  $7E26,$02 Jump to #R$7E31 if *#REGde is less than *#REGhl.
+  $7E28,$02 Jump to #R$7E2E.
+
+  $7E2A,$01 Increment #REGde by one.
+  $7E2B,$01 Increment #REGhl by one.
+  $7E2C,$02 Decrease counter by one and loop back to #R$7E22 until counter is zero.
+  $7E2E,$01 Restore #REGde from the stack.
+  $7E2F,$02 Jump to #R$7E39.
+
+  $7E31,$02 Restore #REGde and #REGhl from the stack.
+  $7E33,$01 Stash #REGhl on the stack.
+  $7E34,$03 #REGbc=#N($0006,$04,$04).
+  $7E37,$02 LDIR.
+  $7E39,$01 Restore #REGhl from the stack.
+  $7E3A,$03 #REGde=#R$6514(#N$6515).
+  $7E3D,$02 Write ASCII #N$30 ("#CHR$30") to *#REGhl.
+  $7E3F,$03 #REGbc=#N($0005,$04,$04).
+  $7E42,$02 LDIR.
+  $7E44,$03 Jump to #R$7C82.
 
 c $7E47 Input: "S" To Start
 @ $7E47 label=Input_StartGame
