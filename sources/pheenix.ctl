@@ -17,19 +17,83 @@ b $5B00
 
 c $5C00
 
-b $5FFB UDGs
-@ $5FFB label=UDGS
+b $5FD4 Graphics: Mothership Alien
+@ $5FD4 label=Graphics_MothershipAlien_01
+N $5FD4 Frame #N$01:
+N $5FD4 #UDGS$02,$02(mothership-alien-01)(
+.   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+.   udg
+. )
+  $5FD4,$08,b$01 #UDG(#PC)
+L $5FD4,$08,$04,$02
+@ $5FF4 label=Graphics_MothershipAlien_02
+N $5FF4 Frame #N$02:
+N $5FF4 #UDGS$02,$02(mothership-alien-02)(
+.   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+.   udg
+. )
+  $5FF4,$08,b$01 #UDG(#PC)
+L $5FF4,$08,$04,$02
+
+b $6014
+
+b $6026 Graphics: Lives Icon
 @ $6026 label=Graphics_LivesIcon
+  $6026,$08,b$01 #UDG(#PC,$42)
+
+b $602E
+  $602E,$08,b$01 #UDG(#PC)
+L $602E,$08,$04,$02
+
+b $604E Graphics: Ship
 @ $604E label=Graphics_Ship
+N $604E #UDGS$02,$02(ship)(
+.   #UDG(#PC+$08*($02*$y+$x),$46)(*udg)
+.   udg
+. )
+  $604E,$08,b$01 #UDG(#PC)
+L $604E,$08,$04,$02
+
+b $606E
+  $606E,$08,b$01 #UDG(#PC)
+L $606E,$08,$0B,$02
+
+b $60CD
+  $60CD
+  $60E7
 @ $613D label=Mask_LivesIcon
+  $613D,$08,b$01 #UDG(#PC)
+  $6153
+  $61A3
+
+b $61BB Graphics: MegaDodo Logo
 @ $61BB label=Graphics_MegaDodo
+N $61BB #UDGS$02,$02(megadodo)(
+.   #UDG(#PC+$08*($02*$y+$x),$04)(*udg)
+.   udg
+. )
+  $61BB,$08,b$01 #UDG(#PC)
+L $61BB,$08,$04,$02
+
+b $61DB Graphics: Large Star
 @ $61DB label=Graphics_StarLarge
+  $61DB,$08,b$01 #UDG(#PC,$05)
+
+b $61E3 Graphics: Box
 @ $61E3 label=Graphics_Box
+  $61E3,$08,b$01 #UDG(#PC)
+
+b $61EB
+  $61EB,$08,b$01 #UDG(#PC)
+L $61EB,$08,$0C,$02
+
+b $624B Graphics: Small Star
 @ $624B label=Graphics_StarSmall
-  $5FFB,b,$01 #UDG(#PC)
-  $6026,b,$01 #UDG(#PC,$42)
-  $613D,b,$01 #UDG(#PC)
-L $5FFB,$08,$86
+  $624B,$08,b$01 #UDG(#PC,$05)
+
+b $6253
+  $6253,$08,b$01 #UDG(#PC)
+L $6253,$08,$40,$02
 
 t $642B Messaging: Presents
 @ $642B label=Messaging_Presents
@@ -93,9 +157,9 @@ N $6527 This isn't separate, it's part of the above.
 @ $6527 label=Messaging_Header_LevelNumber
   $6527,$01 #FONT#(:(#STR($6527,$04,$01)))$6253,attr=$44(level-number)
 
-b $6528
-
-b $652B
+g $6528 Score Buffer
+@ $6528 label=ScoreBuffer
+B $6528,$06,$01
 
 g $6538 Table: Mothership UDGs
 @ $6538 label=Table_MothershipUDGs
@@ -111,6 +175,18 @@ B $658A,$01 Screen buffer address #N(#PC-$658A): #N($4800+#PEEK(#PC)).
 L $658A,$01,$51
 
 g $65DB
+
+w $65DD
+
+g $6691
+
+g $6695
+
+g $66A7
+
+g $66B9
+
+g $66D5
 
 g $667F
 
@@ -138,7 +214,10 @@ g $66D4
 g $66ED
 W $66ED,$02
 
-g $66EF
+g $66EF Flag: Extra Life
+@ $66EF label=Flag_ExtraLife
+D $66EF Indicates whether an extra life should be awarded or not.
+B $66EF,$01
 
 g $66F0 Player Lives
 @ $66F0 label=Player_Lives
@@ -167,7 +246,8 @@ D $66F6 #TABLE(default,centre,centre)
 . TABLE#
 B $66F6,$01
 
-c $66F7
+c $66F7 Convert Screen Address To Attribute Buffer Address
+@ $66F7 label=ConvertScreenToAttributeBufferAddress
   $66F7,$01 #REGa=#REGd.
   $66F8,$02,b$01 Keep only bits 3-4.
   $66FA,$06 Shift #REGa right three positions (with carry).
@@ -207,40 +287,28 @@ c $6720 Clear Screen
 . setting all the bytes to #N$00.
   $672D,$01 Return.
 
-c $672E
-  $672E,$03 #REGhl=#N$5820 (attribute buffer location).
-  $6731,$03 #REGde=#N$5821 (attribute buffer location).
-  $6734,$03 #REGbc=#N$02DF.
-  $6737,$02 Write #N$00 to *#REGhl.
-  $6739,$02 LDIR.
-  $673B,$03 #REGhl=#N$4800 (screen buffer location).
-  $673E,$03 #REGde=#N$4801 (screen buffer location).
-  $6741,$03 #REGbc=#N$0FFF.
-  $6744,$01 Write #REGl to *#REGhl.
-  $6745,$02 LDIR.
-  $6747,$03 #REGhl=#N$4020 (screen buffer location).
-  $674A,$03 #REGde=#N$4021 (screen buffer location).
-  $674D,$02 #REGb=#N$07.
-  $674F,$01 Stash #REGbc on the stack.
-  $6750,$02 #REGb=#N$08.
-  $6752,$03 Stash #REGbc, #REGde and #REGhl on the stack.
-  $6755,$03 #REGbc=#N$001F.
-  $6758,$01 Write #REGb to *#REGhl.
-  $6759,$02 LDIR.
-  $675B,$02 Restore #REGhl and #REGde from the stack.
-  $675D,$01 Increment #REGh by one.
-  $675E,$01 Increment #REGd by one.
-  $675F,$01 Restore #REGbc from the stack.
-  $6760,$02 Decrease counter by one and loop back to #R$6752 until counter is zero.
-  $6762,$02 #REGh=#N$40.
-  $6764,$01 #REGd=#REGh.
-  $6765,$02 #REGa=#N$20.
-  $6767,$01 #REGa+=#REGl.
-  $6768,$01 #REGl=#REGa.
-  $6769,$01 #REGe=#REGa.
-  $676A,$01 Increment #REGe by one.
-  $676B,$01 Restore #REGbc from the stack.
-  $676C,$02 Decrease counter by one and loop back to #R$674F until counter is zero.
+c $672E Clear Play-Area
+@ $672E label=ClearPlayArea
+  $672E,$0D Clear #N$02E0 bytes of the attribute buffer from #N$5820 to
+. #N$5AFF.
+  $673B,$0C Clear #N$1000 bytes of the screen buffer from #N$4800 to #N$57FF.
+  $6747,$06 Point #REGhl to screen buffer position #N$4020 and #REGde to screen
+. buffer position #N$4021.
+  $674D,$02 Set a counter in #REGb for #N$07 character rows.
+@ $674F label=ClearPlayArea_RowLoop
+  $674F,$01 Save the row counter on the stack.
+  $6750,$02 Set a counter in #REGb for #N$08 pixel lines.
+@ $6752 label=ClearPlayArea_LineLoop
+  $6752,$03 Stash the row counter and screen position pointers on the stack.
+  $6755,$06 Clear #N$1F bytes across the line.
+  $675B,$02 Restore the screen position pointers.
+  $675D,$02 Move down one pixel line.
+  $675F,$03 Restore the line counter and loop back to #R$6752
+. until all #N$08 lines are cleared.
+  $6762,$09 Move to the next character row by resetting #REGh and #REGd to #N$40,
+. then adding #N$20 to both #REGl and #REGe.
+  $676B,$03 Restore the row counter and loop back to #R$674F
+. until all #N$07 rows are cleared.
   $676E,$01 Return.
 
 c $676F Print String
@@ -295,44 +363,44 @@ c $67A9 Print Score
   $67B2,$03 Call #R$676F.
   $67B5,$01 Return.
 
-c $67B6
-  $67B6,$06 Jump to #R$67C3 if *#R$66F3 is zero.
+c $67B6 Handler: Score
+@ $67B6 label=Handler_Score
+  $67B6,$06 Jump to #R$67C3 if *#R$66F3 is not active.
+N $67BC Demo mode is active, so just reset the score.
   $67BC,$03 #REGde=#R$6528.
   $67BF,$02 #REGb=#N$00.
   $67C1,$02 Jump to #R$67DD.
-
-  $67C3,$03 #REGhl=#R$6514(#N$6519).
-  $67C6,$03 #REGde=#R$6525(#N$652E).
-  $67C9,$02 #REGb=#N$06.
-  $67CB,$01 #REGa=*#REGde.
-  $67CC,$01 #REGa+=*#REGhl.
-  $67CD,$02 #REGa-=#N$30.
-  $67CF,$02 Compare #REGa with #N$3A.
-  $67D1,$02 Jump to #R$67D8 if #REGa is less than #N$3A.
+@ $67C3 label=AddToScore
+  $67C3,$03 Point #REGhl at #R$6514(#N$6519) (the current score).
+  $67C6,$03 Point #REGde at #R$6528(#N$652E) (the points to add).
+  $67C9,$02 Set a counter in #REGb for #N$06 score digits.
+@ $67CB label=AddToScore_Loop
+  $67CB,$02 Fetch the points digit and add it to the corresponding score digit.
+  $67CD,$02 Convert the value from ASCII by subtracing #N$30.
+  $67CF,$04 Jump to #R$67D8 if #REGa is less than #N$3A.
   $67D3,$02 #REGa-=#N$0A.
   $67D5,$01 Decrease #REGhl by one.
   $67D6,$01 Increment *#REGhl by one.
   $67D7,$01 Increment #REGhl by one.
+@ $67D8 label=AddToScore_Store
   $67D8,$01 Write #REGa to *#REGhl.
   $67D9,$01 Decrease #REGde by one.
   $67DA,$01 Decrease #REGhl by one.
   $67DB,$02 Decrease counter by one and loop back to #R$67CB until counter is zero.
-  $67DD,$01 Stash #REGde on the stack.
-  $67DE,$01 Restore #REGhl from the stack.
-  $67DF,$01 Increment #REGde by one.
-  $67E0,$02 #REGc=#N$06.
-  $67E2,$02 Write #N$30 to *#REGhl.
-  $67E4,$02 LDIR.
-  $67E6,$03 #REGa=*#R$6514(#N$6515).
-  $67E9,$02 Compare #REGa with #N$31.
-  $67EB,$01 Return if #REGa is not equal to #N$31.
-  $67EC,$03 #REGhl=#R$66EF.
-  $67EF,$01 #REGa=*#REGhl.
-  $67F0,$01 Set the bits from #REGa.
-  $67F1,$01 Return if #REGa is equal to #REGa.
-  $67F2,$01 Decrease *#REGhl by one.
-  $67F3,$01 Increment #REGhl by one.
-  $67F4,$01 Increment *#REGhl by one.
+@ $67DD label=Reset_ScoreBuffer
+  $67DD,$02 Copy the score buffer pointer to #REGhl (using the stack).
+  $67DF,$01 Increment the score buffer destination pointer by one.
+  $67E0,$02 Set a counter in #REGc for #N$06 score digits.
+  $67E2,$02 Write #N$30 ("#CHR$30") to the score buffer.
+  $67E4,$02 Copy #N$30 ("#CHR$30") across the remaining five score buffer
+. digits.
+N $67E6 Check if the score is at least "10,000".
+  $67E6,$06 Return if *#R$6514(#N$6515) is not equal to #N$31 ("#CHR$31").
+  $67EC,$06 Return if #R$66EF says that no extra life should be awarded.
+N $67F2 Award an extra life to the player.
+  $67F2,$01 Reset #R$66EF as an extra life has been "awarded".
+  $67F3,$01 Move to the lives counter at #R$66F0.
+  $67F4,$01 Award one extra life.
   $67F5,$01 Return.
 
 c $67F6 Print Header
@@ -395,15 +463,18 @@ N $6833 #UDG($6026,$42)
   $6844,$01 Return.
 
 c $6845
+N $6845 #PUSHS #UDGTABLE { #CLS($47)#SIM(start=$6845,stop=$688F,de=$4000)#SCR$02(dh) } TABLE# #POPS
   $6845,$03 #REGhl=#R$613D.
   $6848,$04 #REGix=#N($0002,$04,$04).
   $684C,$02 Jump to #R$685A.
 
 c $684E
+N $684E #PUSHS #UDGTABLE { #CLS($07)#SIM(start=$684E,stop=$688F,de=$4480)#SCR$02(dgdfdgdh) } TABLE# #POPS
   $684E,$03 #REGhl=#R$606E.
   $6851,$02 Jump to #R$6856.
 
 c $6853
+N $6853 #PUSHS #UDGTABLE { #CLS($47)#SIM(start=$6853,stop=$688F,de=$4000)#SCR$02(dgfgdh) } TABLE# #POPS
   $6853,$03 #REGhl=#R$608E.
   $6856,$04 #REGix=#N($0200,$04,$04).
   $685A,$01 Stash #REGde on the stack.
@@ -471,7 +542,7 @@ N $68A8 Point to an asterisk in the ZX Spectrum font UDG data.
 c $68B8 Transition Effect
 @ $68B8 label=TransitionEffect
 D $68B8 #PUSHS #UDGTABLE {
-.   #SIM(start=$6922,stop=$6925)#SIM(start=$68B8,stop=$68D5)#SCR$02(asterisk)
+.   #CLS$43#SIM(start=$68B8,stop=$6910)#SCR$02(asterisk)
 . } TABLE# #POPS
   $68B8,$02 #REGb=#N$02.
   $68BA,$01 Stash #REGbc on the stack.
@@ -1107,7 +1178,9 @@ c $7254
 
 c $72C9
 
-N $7320 #PUSHS #UDGTABLE {
+N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
+. #SIM(start=$74A4,stop=$74B9) #UDGTABLE {
+.   #SIM(start=$72C9,stop=$6FDB)
 .   #SIM(start=$7320,stop=$737D)#SCR$01(fgkjfdg)
 . } TABLE# #POPS
   $7320,$03 Call #R$6720.
@@ -1307,8 +1380,176 @@ c $75BF
 c $7616
 
 c $79B2
+  $79B2,$03 #REGa=*#R$6695.
+  $79B5,$02,b$01 Keep only bit 0.
+  $79B7,$01 Return if ?? is equal to #N$00.
+M $79B2,$06 Return if bit 0 of *#R$6695 is not set.
+  $79B8,$03 #REGhl=#R$66D5.
+  $79BB,$02 #REGb=#N$06.
+  $79BD,$04 Jump to #R$79CA if *#REGhl is not zero.
+  $79C1,$01 Stash #REGbc on the stack.
+  $79C2,$02 #REGb=#N$C8.
+  $79C4,$02 Decrease counter by one and loop back to #R$79C4 until counter is zero.
+  $79C6,$01 Restore #REGbc from the stack.
+  $79C7,$03 Jump to #R$7B5F.
 
-c $7B67
+  $79CA,$03 Stash #REGaf, #REGbc and #REGhl on the stack.
+  $79CD,$06 Jump to #R$7A1F if *#R$66F3 is not zero.
+  $79D3,$03 #REGa=*#R$66F1.
+  $79D6,$02,b$01 Keep only bit 1.
+  $79D8,$02 Jump to #R$79F8 if ?? is equal to #REGa.
+M $79D3,$07 Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
+  $79DA,$07 #REGde=*#REGhl*#N$08.
+  $79E1,$04 #REGhl=#N($00F2,$04,$04)+#REGde.
+  $79E5,$02 #REGb=#N$03.
+  $79E7,$02 Stash #REGbc and #REGhl on the stack.
+  $79E9,$03 #REGde=#N($0002,$04,$04).
+  $79EC,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
+  $79EF,$01 Disable interrupts.
+  $79F0,$01 Restore #REGhl from the stack.
+  $79F1,$02 Increment #REGhl by two.
+  $79F3,$01 Restore #REGbc from the stack.
+  $79F4,$02 Decrease counter by one and loop back to #R$79E7 until counter is zero.
+  $79F6,$02 Jump to #R$7A1F.
+
+c $7B67 Handler: Aliens
+@ $7B67 label=Handler_Aliens
+  $7B67,$05 Return if *#R$6691 is zero.
+  $7B6C,$05 Return if #REGa=*#R$6695 is not zero.
+  $7B71,$03 #REGhl=#R$66A7.
+  $7B74,$02 #REGb=#N$06.
+  $7B76,$02 Stash #REGbc and #REGhl on the stack.
+  $7B78,$01 #REGe=*#REGhl.
+  $7B79,$01 Increment #REGhl by one.
+  $7B7A,$01 #REGd=*#REGhl.
+  $7B7B,$05 Jump to #R$7C18 if #REGd is not zero.
+  $7B80,$07 Jump to #R$7C76 if *#R$66A4 is not zero.
+  $7B87,$01 Stash #REGhl on the stack.
+  $7B88,$03 #REGhl=#R$66B9.
+  $7B8B,$06 Jump to #R$7BA3 if *#R$66BA is not zero.
+  $7B91,$03 #REGa=*#R$66F1.
+  $7B94,$02,b$01 Keep only bits 1-2.
+  $7B96,$02 #REGa=#N$1C.
+  $7B98,$02 Jump to #R$7B9C if #REGhl is equal to #REGa.
+  $7B9A,$02 #REGa=#N$0E.
+  $7B9C,$03 Jump to #R$7BA1 if *#REGhl is not zero.
+  $7B9F,$02 Write #N$FE to *#REGhl.
+  $7BA1,$02 Increment *#REGhl by two.
+  $7BA3,$01 #REGl=*#REGhl.
+  $7BA4,$02 #REGh=#N$00.
+  $7BA6,$04 #REGhl+=#R$65DD.
+  $7BAA,$01 #REGe=*#REGhl.
+  $7BAB,$01 Increment #REGhl by one.
+  $7BAC,$01 #REGd=*#REGhl.
+  $7BAD,$04 Jump to #R$7BB7 if #REGd is not zero.
+  $7BB1,$03 #REGhl=#R$66BA.
+  $7BB4,$01 Write #REGa to *#REGhl.
+  $7BB5,$02 Jump to #R$7C15.
+  $7BB7,$03 Call #R$66F7.
+  $7BBA,$05 Jump to #R$7C15 if #REGd is equal to #N$58.
+  $7BBF,$01 #REGa=#REGe.
+  $7BC0,$02,b$01 Keep only bits 0-4.
+  $7BC2,$01 #REGb=#REGa.
+  $7BC3,$03 #REGa=*#R$66ED.
+  $7BC6,$02,b$01 Keep only bits 0-4.
+  $7BC8,$03 Jump to #R$7BD2 if #REGa is less than #REGb.
+  $7BCB,$01 #REGa-=#REGb.
+  $7BCC,$02 Compare #REGa with #N$08.
+  $7BCE,$02 Jump to #R$7C15 if #REGa is greater than or equal to #N$08.
+  $7BD0,$02 Jump to #R$7BD7.
+  $7BD2,$01 #REGc=#REGa.
+  $7BD3,$02 #REGa=#REGb-#REGc.
+  $7BD5,$02 Jump to #R$7BCC.
+
+  $7BD7,$04 #REGhl=#N($0041,$04,$04)+#REGde.
+  $7BDB,$01 Stash #REGhl on the stack.
+  $7BDC,$03 #REGde=#N$5AE0 (attribute buffer location).
+  $7BDF,$06 Jump to #R$7BE7 if *#R$6693 is zero.
+  $7BE5,$02 #REGe=#N$C0.
+  $7BE7,$02 #REGhl-=#REGde (with carry).
+  $7BE9,$01 Restore #REGhl from the stack.
+  $7BEA,$02 Jump to #R$7C15 if #REGa is greater than or equal to #REGa.
+  $7BEC,$01 Stash #REGhl on the stack.
+  $7BED,$03 #REGhl=#R$66BA.
+  $7BF0,$01 Increment *#REGhl by one.
+  $7BF1,$05 Jump to #R$7BF8 if *#REGhl is not equal to #N$04.
+  $7BF6,$02 Write #N$00 to *#REGhl.
+  $7BF8,$01 Increment #REGhl by one.
+  $7BF9,$03 #REGa=*#R$66F1.
+  $7BFC,$02,b$01 Keep only bit 1.
+  $7BFE,$02 #REGa=#N$03.
+  $7C00,$02 Jump to #R$7C0A if #REGhl is equal to #N$03.
+  $7C02,$01 Increment *#REGhl by one.
+  $7C03,$05 Jump to #R$7C0A if *#REGhl is not equal to #N$03.
+  $7C08,$01 #REGa=#N$00.
+  $7C09,$01 Write #REGa to *#REGhl.
+  $7C0A,$03 Multiply #REGa by #N$08.
+  $7C0D,$02 Restore #REGhl and #REGde from the stack.
+  $7C0F,$01 Increment #REGde by one.
+  $7C10,$01 Write #REGa to *#REGde.
+  $7C11,$02
+  $7C13,$02 Jump to #R$7C41.
+  $7C15,$01 Restore #REGaf from the stack.
+  $7C16,$02 Jump to #R$7C50.
+  $7C18,$01 Exchange the #REGde and #REGhl registers.
+  $7C19,$05 Jump to #R$7C50 if *#REGhl is equal to #N$46.
+  $7C1E,$04 Jump to #R$7C50 if *#REGhl is equal to #N$07.
+  $7C22,$02 Write #N$00 to *#REGhl.
+  $7C24,$01 Increment #REGde by one.
+  $7C25,$01 #REGa=*#REGde.
+  $7C26,$02
+  $7C28,$01 Stash #REGhl on the stack.
+  $7C29,$03 Call #R$6704.
+  $7C2C,$02 #REGb=#N$08.
+  $7C2E,$01 #REGa=#N$00.
+  $7C2F,$01 Write #REGa to *#REGhl.
+  $7C30,$01 Increment #REGh by one.
+  $7C31,$02 Decrease counter by one and loop back to #R$7C2F until counter is zero.
+  $7C33,$01 Restore #REGhl from the stack.
+  $7C34,$02 #REGc=#N$20.
+  $7C36,$01 #REGhl+=#REGbc.
+  $7C37,$01 Stash #REGhl on the stack.
+  $7C38,$03 #REGbc=#N$5B00 (attribute buffer location).
+  $7C3B,$03 #REGhl-=#REGbc.
+  $7C3E,$01 Restore #REGhl from the stack.
+  $7C3F,$02 Jump to #R$7C50 if #REGh is greater than or equal to #REGa.
+  $7C41,$04 Jump to #R$7C54 if *#REGhl is zero.
+  $7C45,$03 #REGa=*#R$6693.
+  $7C48,$01 Set the bits from #REGa.
+  $7C49,$02 Jump to #R$7C50 if #REGh is not equal to #REGa.
+  $7C4B,$01 #REGa=*#REGhl.
+  $7C4C,$02 Compare #REGa with #N$46.
+  $7C4E,$02 Jump to #R$7C54 if #REGa is equal to #N$46.
+  $7C50,$02 #REGd=#N$00.
+  $7C52,$02 Jump to #R$7C76.
+  $7C54,$03 #REGa=*#R$66F1.
+  $7C57,$02,b$01 Keep only bit 1.
+  $7C59,$02 #REGa=#N$45.
+  $7C5B,$02 Jump to #R$7C5F if #REGa is equal to #N$45.
+  $7C5D,$02 #REGa=#N$06.
+  $7C5F,$01 Write #REGa to *#REGhl.
+  $7C60,$01 Stash #REGhl on the stack.
+  $7C61,$03 Call #R$6704.
+  $7C64,$01 Exchange the #REGde and #REGhl registers.
+  $7C65,$03 #REGhl=#R$602E.
+  $7C68,$02
+  $7C6A,$02 #REGb=#N$00.
+  $7C6C,$01 #REGhl+=#REGbc.
+  $7C6D,$02 #REGb=#N$08.
+  $7C6F,$01 #REGa=*#REGhl.
+  $7C70,$01 Write #REGa to *#REGde.
+  $7C71,$01 Increment #REGd by one.
+  $7C72,$01 Increment #REGhl by one.
+  $7C73,$02 Decrease counter by one and loop back to #R$7C6F until counter is zero.
+  $7C75,$02 Restore #REGde and #REGhl from the stack.
+  $7C77,$01 Write #REGe to *#REGhl.
+  $7C78,$01 Increment #REGhl by one.
+  $7C79,$01 Write #REGd to *#REGhl.
+  $7C7A,$02 Increment #REGhl by two.
+  $7C7C,$01 Restore #REGbc from the stack.
+  $7C7D,$01 Decrease #REGb by one.
+  $7C7E,$03 Jump to #R$7B76 if #REGb is not equal to #N$08.
+  $7C81,$01 Return.
 
 c $7C82 Title Screen
 @ $7C82 label=TitleScreen

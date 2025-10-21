@@ -1120,493 +1120,330 @@ c$5C00 RST $38       ;
  $5FD1 NOP           ;
  $5FD2 NOP           ;
  $5FD3 NOP           ;
- $5FD4 NOP           ;
- $5FD5 RLCA          ;
- $5FD6 RRCA          ;
- $5FD7 ADD HL,DE     ;
- $5FD8 DEC DE        ;
- $5FD9 RRA           ;
- $5FDA DEC C         ;
- $5FDB RLCA          ;
- $5FDC NOP           ;
- $5FDD RET P         ;
- $5FDE RET M         ;
- $5FDF CALL Z,$FCDC  ;
- $5FE2 LD E,B        ;
- $5FE3 RET P         ;
- $5FE4 LD DE,$1B1B   ;
- $5FE7 DEC DE        ;
- $5FE8 DEC DE        ;
- $5FE9 LD C,$04      ;
- $5FEB NOP           ;
- $5FEC CALL NZ,$6CEC ;
- $5FEF LD L,H        ;
- $5FF0 LD L,H        ;
- $5FF1 JR C,$6003    ;
- $5FF3 NOP           ;
- $5FF4 NOP           ;
- $5FF5 RLCA          ;
- $5FF6 RRCA          ;
- $5FF7 ADD HL,DE     ;
- $5FF8 DEC E         ;
- $5FF9 RRA           ;
- $5FFA INC C         ;
 
-; UDGs
-@label=UDGS
-b$5FFB DEFB %00000111 ; {#UDG(#PC)
- $5FFC DEFB %00000000 ;
+; Graphics: Mothership Alien
+;
+; .
+;
+; .
+;
+; Frame #N$01:
+; .
+; #UDGS$02,$02(mothership-alien-01)(
+;   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+;   udg
+; )
+@label=Graphics_MothershipAlien_01
+b$5FD4 DEFB %00000000 ; {#UDG(#PC)
+ $5FD5 DEFB %00000111 ;
+ $5FD6 DEFB %00001111 ;
+ $5FD7 DEFB %00011001 ;
+ $5FD8 DEFB %00011011 ;
+ $5FD9 DEFB %00011111 ;
+ $5FDA DEFB %00001101 ;
+ $5FDB DEFB %00000111 ; }
+ $5FDC DEFB %00000000 ; {#UDG(#PC)
+ $5FDD DEFB %11110000 ;
+ $5FDE DEFB %11111000 ;
+ $5FDF DEFB %11001100 ;
+ $5FE0 DEFB %11011100 ;
+ $5FE1 DEFB %11111100 ;
+ $5FE2 DEFB %01011000 ;
+ $5FE3 DEFB %11110000 ; }
+ $5FE4 DEFB %00010001 ; {#UDG(#PC)
+ $5FE5 DEFB %00011011 ;
+ $5FE6 DEFB %00011011 ;
+ $5FE7 DEFB %00011011 ;
+ $5FE8 DEFB %00011011 ;
+ $5FE9 DEFB %00001110 ;
+ $5FEA DEFB %00000100 ;
+ $5FEB DEFB %00000000 ; }
+ $5FEC DEFB %11000100 ; {#UDG(#PC)
+ $5FED DEFB %11101100 ;
+ $5FEE DEFB %01101100 ;
+ $5FEF DEFB %01101100 ;
+ $5FF0 DEFB %01101100 ;
+ $5FF1 DEFB %00111000 ;
+ $5FF2 DEFB %00010000 ;
+ $5FF3 DEFB %00000000 ; }
+; Frame #N$02:
+; .
+; #UDGS$02,$02(mothership-alien-02)(
+;   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+;   udg
+; )
+@label=Graphics_MothershipAlien_02
+ $5FF4 DEFB %00000000 ; {#UDG(#PC)
+ $5FF5 DEFB %00000111 ;
+ $5FF6 DEFB %00001111 ;
+ $5FF7 DEFB %00011001 ;
+ $5FF8 DEFB %00011101 ;
+ $5FF9 DEFB %00011111 ;
+ $5FFA DEFB %00001100 ;
+ $5FFB DEFB %00000111 ; }
+ $5FFC DEFB %00000000 ; {#UDG(#PC)
  $5FFD DEFB %11110000 ;
  $5FFE DEFB %11111000 ;
  $5FFF DEFB %11001100 ;
  $6000 DEFB %11101100 ;
  $6001 DEFB %11111100 ;
- $6002 DEFB %00011000 ; }
-*$6003 DEFB %11110000 ; {#UDG(#PC)
- $6004 DEFB %00000001 ;
+ $6002 DEFB %00011000 ;
+ $6003 DEFB %11110000 ; }
+ $6004 DEFB %00000001 ; {#UDG(#PC)
  $6005 DEFB %00100011 ;
  $6006 DEFB %00110011 ;
  $6007 DEFB %00110011 ;
  $6008 DEFB %00110110 ;
  $6009 DEFB %00111100 ;
- $600A DEFB %00011000 ; }
- $600B DEFB %00000000 ; {#UDG(#PC)
- $600C DEFB %11000000 ;
+ $600A DEFB %00011000 ;
+ $600B DEFB %00000000 ; }
+ $600C DEFB %11000000 ; {#UDG(#PC)
  $600D DEFB %11100010 ;
  $600E DEFB %01100110 ;
  $600F DEFB %01100110 ;
  $6010 DEFB %00110110 ;
  $6011 DEFB %00011110 ;
- $6012 DEFB %00001100 ; }
- $6013 DEFB %00000000 ; {#UDG(#PC)
- $6014 DEFB %00000000 ;
- $6015 DEFB %00000001 ;
- $6016 DEFB %00000000 ;
- $6017 DEFB %00000000 ;
- $6018 DEFB %00000001 ;
- $6019 DEFB %00000000 ;
- $601A DEFB %00000000 ; }
- $601B DEFB %00000011 ; {#UDG(#PC)
- $601C DEFB %10000000 ;
- $601D DEFB %00000000 ;
- $601E DEFB %01111101 ;
- $601F DEFB %01111100 ;
- $6020 DEFB %00000000 ;
- $6021 DEFB %11000001 ;
- $6022 DEFB %00000110 ; }
- $6023 DEFB %00000000 ; {#UDG(#PC)
- $6024 DEFB %10000011 ;
- $6025 DEFB %10000011 ; }
+ $6012 DEFB %00001100 ;
+ $6013 DEFB %00000000 ; }
+
+; Data block at 6014
+b$6014 DEFB $00,$01,$00,$00,$01,$00,$00,$03
+ $601C DEFB $80,$00,$7D,$7C,$00,$C1,$06,$00
+ $6024 DEFB $83,$83
+
+; Graphics: Lives Icon
 @label=Graphics_LivesIcon
- $6026 DEFB %00010000 ; {#UDG(#PC,$42)
+b$6026 DEFB %00010000 ; {#UDG(#PC,$42)
  $6027 DEFB %00010000 ;
  $6028 DEFB %10111010 ;
  $6029 DEFB %10111010 ;
- $602A DEFB %10111010 ; }
- $602B DEFB %11111110 ; {#UDG(#PC)
+ $602A DEFB %10111010 ;
+ $602B DEFB %11111110 ;
  $602C DEFB %10010010 ;
- $602D DEFB %10111010 ;
- $602E DEFB %01100000 ;
+ $602D DEFB %10111010 ; }
+
+; Data block at 602E
+b$602E DEFB %01100000 ; {#UDG(#PC)
  $602F DEFB %01100000 ;
  $6030 DEFB %01100011 ;
  $6031 DEFB %00000011 ;
- $6032 DEFB %00000011 ; }
- $6033 DEFB %00011000 ; {#UDG(#PC)
+ $6032 DEFB %00000011 ;
+ $6033 DEFB %00011000 ;
  $6034 DEFB %00011000 ;
- $6035 DEFB %00011000 ;
- $6036 DEFB %00000000 ;
+ $6035 DEFB %00011000 ; }
+ $6036 DEFB %00000000 ; {#UDG(#PC)
  $6037 DEFB %00000000 ;
  $6038 DEFB %00000000 ;
  $6039 DEFB %00000000 ;
- $603A DEFB %00011000 ; }
- $603B DEFB %00011000 ; {#UDG(#PC)
+ $603A DEFB %00011000 ;
+ $603B DEFB %00011000 ;
  $603C DEFB %00011000 ;
- $603D DEFB %00000000 ;
- $603E DEFB %00000000 ;
+ $603D DEFB %00000000 ; }
+ $603E DEFB %00000000 ; {#UDG(#PC)
  $603F DEFB %01100000 ;
  $6040 DEFB %01100000 ;
  $6041 DEFB %01100000 ;
- $6042 DEFB %00000110 ; }
- $6043 DEFB %00000110 ; {#UDG(#PC)
+ $6042 DEFB %00000110 ;
+ $6043 DEFB %00000110 ;
  $6044 DEFB %00000110 ;
- $6045 DEFB %00000000 ;
- $6046 DEFB %00000000 ;
+ $6045 DEFB %00000000 ; }
+ $6046 DEFB %00000000 ; {#UDG(#PC)
  $6047 DEFB %00001000 ;
  $6048 DEFB %00010000 ;
  $6049 DEFB %00001000 ;
- $604A DEFB %00010000 ; }
- $604B DEFB %00001000 ; {#UDG(#PC)
+ $604A DEFB %00010000 ;
+ $604B DEFB %00001000 ;
  $604C DEFB %00010000 ;
- $604D DEFB %00000000 ;
+ $604D DEFB %00000000 ; }
+
+; Graphics: Ship
+;
+; .
+;
+; .
+;
+; #UDGS$02,$02(ship)(
+;   #UDG(#PC+$08*($02*$y+$x),$46)(*udg)
+;   udg
+; )
 @label=Graphics_Ship
- $604E DEFB %00000001 ;
+b$604E DEFB %00000001 ; {#UDG(#PC)
  $604F DEFB %00000001 ;
  $6050 DEFB %00000011 ;
  $6051 DEFB %00000011 ;
- $6052 DEFB %01000011 ; }
- $6053 DEFB %01000110 ; {#UDG(#PC)
+ $6052 DEFB %01000011 ;
+ $6053 DEFB %01000110 ;
  $6054 DEFB %01100110 ;
- $6055 DEFB %01100111 ;
- $6056 DEFB %00000000 ;
+ $6055 DEFB %01100111 ; }
+ $6056 DEFB %00000000 ; {#UDG(#PC)
  $6057 DEFB %00000000 ;
  $6058 DEFB %10000000 ;
  $6059 DEFB %10000000 ;
- $605A DEFB %10000100 ; }
- $605B DEFB %11000100 ; {#UDG(#PC)
+ $605A DEFB %10000100 ;
+ $605B DEFB %11000100 ;
  $605C DEFB %11001100 ;
- $605D DEFB %11001100 ;
- $605E DEFB %01100111 ;
+ $605D DEFB %11001100 ; }
+ $605E DEFB %01100111 ; {#UDG(#PC)
  $605F DEFB %01111111 ;
  $6060 DEFB %01111111 ;
  $6061 DEFB %01110111 ;
- $6062 DEFB %01100001 ; }
- $6063 DEFB %01100011 ; {#UDG(#PC)
+ $6062 DEFB %01100001 ;
+ $6063 DEFB %01100011 ;
  $6064 DEFB %01000111 ;
- $6065 DEFB %01000000 ;
- $6066 DEFB %11001100 ;
+ $6065 DEFB %01000000 ; }
+ $6066 DEFB %11001100 ; {#UDG(#PC)
  $6067 DEFB %11111100 ;
  $6068 DEFB %11111100 ;
  $6069 DEFB %11011100 ;
- $606A DEFB %00001100 ; }
- $606B DEFB %10001100 ; {#UDG(#PC)
+ $606A DEFB %00001100 ;
+ $606B DEFB %10001100 ;
  $606C DEFB %11000100 ;
- $606D DEFB %00000100 ;
- $606E DEFB %00000000 ;
- $606F DEFB %00000011 ;
- $6070 DEFB %00000111 ;
- $6071 DEFB %00001111 ;
- $6072 DEFB %00001111 ; }
- $6073 DEFB %00011111 ; {#UDG(#PC)
- $6074 DEFB %00011111 ;
- $6075 DEFB %00011111 ;
- $6076 DEFB %11111110 ;
- $6077 DEFB %11111000 ;
- $6078 DEFB %11100000 ;
- $6079 DEFB %11110000 ;
- $607A DEFB %11111000 ; }
- $607B DEFB %11111100 ; {#UDG(#PC)
- $607C DEFB %11110000 ;
- $607D DEFB %11100000 ;
- $607E DEFB %00011111 ;
- $607F DEFB %00011111 ;
- $6080 DEFB %00001111 ;
- $6081 DEFB %00001111 ;
- $6082 DEFB %00000111 ; }
- $6083 DEFB %00000011 ; {#UDG(#PC)
- $6084 DEFB %00000000 ;
- $6085 DEFB %00000000 ;
- $6086 DEFB %11110000 ;
- $6087 DEFB %11111100 ;
- $6088 DEFB %11111000 ;
- $6089 DEFB %11110000 ;
- $608A DEFB %11110000 ; }
- $608B DEFB %11111000 ; {#UDG(#PC)
- $608C DEFB %11111110 ;
- $608D DEFB %00000000 ;
- $608E DEFB %01111111 ;
- $608F DEFB %00011111 ;
- $6090 DEFB %00000111 ;
- $6091 DEFB %00001111 ;
- $6092 DEFB %00011111 ; }
- $6093 DEFB %00111111 ; {#UDG(#PC)
- $6094 DEFB %00001111 ;
- $6095 DEFB %00000111 ;
- $6096 DEFB %00000000 ;
- $6097 DEFB %11000000 ;
- $6098 DEFB %11100000 ;
- $6099 DEFB %11110000 ;
- $609A DEFB %11110000 ; }
- $609B DEFB %11111000 ; {#UDG(#PC)
- $609C DEFB %11111000 ;
- $609D DEFB %11111000 ;
- $609E DEFB %00001111 ;
- $609F DEFB %00111111 ;
- $60A0 DEFB %00011111 ;
- $60A1 DEFB %00001111 ;
- $60A2 DEFB %00000111 ; }
- $60A3 DEFB %00011111 ; {#UDG(#PC)
- $60A4 DEFB %01111111 ;
- $60A5 DEFB %00000000 ;
- $60A6 DEFB %11111000 ;
- $60A7 DEFB %11111000 ;
- $60A8 DEFB %11110000 ;
- $60A9 DEFB %11110000 ;
- $60AA DEFB %11100000 ; }
- $60AB DEFB %11000000 ; {#UDG(#PC)
- $60AC DEFB %00000000 ;
- $60AD DEFB %00000000 ;
- $60AE DEFB %00000001 ;
- $60AF DEFB %00000001 ;
- $60B0 DEFB %00000011 ;
- $60B1 DEFB %00000011 ;
- $60B2 DEFB %00000011 ; }
- $60B3 DEFB %00000011 ; {#UDG(#PC)
- $60B4 DEFB %00000010 ;
- $60B5 DEFB %00000011 ;
- $60B6 DEFB %00100100 ;
- $60B7 DEFB %00011000 ;
- $60B8 DEFB %10011001 ;
- $60B9 DEFB %11111111 ;
- $60BA DEFB %11111111 ; }
- $60BB DEFB %00111100 ; {#UDG(#PC)
- $60BC DEFB %00111100 ;
- $60BD DEFB %00111100 ;
- $60BE DEFB %00000000 ;
- $60BF DEFB %10000000 ;
- $60C0 DEFB %11000000 ;
- $60C1 DEFB %11000000 ;
- $60C2 DEFB %11000000 ; }
- $60C3 DEFB %11000000 ; {#UDG(#PC)
- $60C4 DEFB %01000000 ;
- $60C5 DEFB %11000000 ;
- $60C6 DEFB %00011000 ;
- $60C7 DEFB %01100110 ;
- $60C8 DEFB %00000000 ;
- $60C9 DEFB %00000000 ;
- $60CA DEFB %00000000 ; }
- $60CB DEFB %00000000 ; {#UDG(#PC)
- $60CC DEFB %00000000 ;
- $60CD DEFB %00000000 ;
- $60CE DEFB %00000001 ;
- $60CF DEFB %00000001 ;
- $60D0 DEFB %00000011 ;
- $60D1 DEFB %00000111 ;
- $60D2 DEFB %00001110 ; }
- $60D3 DEFB %00011000 ; {#UDG(#PC)
- $60D4 DEFB %00010000 ;
- $60D5 DEFB %00100100 ;
- $60D6 DEFB %00011000 ;
- $60D7 DEFB %10011001 ;
- $60D8 DEFB %11111111 ;
- $60D9 DEFB %11111111 ;
- $60DA DEFB %00111100 ; }
- $60DB DEFB %00111100 ; {#UDG(#PC)
- $60DC DEFB %00111100 ;
- $60DD DEFB %00000000 ;
- $60DE DEFB %10000000 ;
- $60DF DEFB %10000000 ;
- $60E0 DEFB %11000000 ;
- $60E1 DEFB %11100000 ;
- $60E2 DEFB %01110000 ; }
- $60E3 DEFB %00011000 ; {#UDG(#PC)
- $60E4 DEFB %00001000 ;
- $60E5 DEFB %00100100 ;
- $60E6 DEFB %11000011 ;
- $60E7 DEFB %00000000 ;
- $60E8 DEFB %00000000 ;
- $60E9 DEFB %00000000 ;
- $60EA DEFB %00000000 ; }
- $60EB DEFB %00000000 ; {#UDG(#PC)
- $60EC DEFB %00000000 ;
- $60ED DEFB %00000000 ;
- $60EE DEFB %00000000 ;
- $60EF DEFB %00000000 ;
- $60F0 DEFB %00011110 ;
- $60F1 DEFB %01111111 ;
- $60F2 DEFB %11111111 ; }
- $60F3 DEFB %11111111 ; {#UDG(#PC)
- $60F4 DEFB %11111111 ;
- $60F5 DEFB %01111111 ;
- $60F6 DEFB %00011110 ;
- $60F7 DEFB %00000000 ;
- $60F8 DEFB %00000000 ;
- $60F9 DEFB %10000000 ;
- $60FA DEFB %11000000 ; }
- $60FB DEFB %11000000 ; {#UDG(#PC)
- $60FC DEFB %11000000 ;
- $60FD DEFB %10000000 ;
- $60FE DEFB %00000000 ;
- $60FF DEFB %00000000 ;
- $6100 DEFB %00000000 ;
- $6101 DEFB %00000000 ;
- $6102 DEFB %00000000 ; }
- $6103 DEFB %00000000 ; {#UDG(#PC)
- $6104 DEFB %00000000 ;
- $6105 DEFB %00000000 ;
- $6106 DEFB %00000000 ;
- $6107 DEFB %00000000 ;
- $6108 DEFB %00011011 ;
- $6109 DEFB %01110001 ;
- $610A DEFB %11100011 ; }
- $610B DEFB %11111000 ; {#UDG(#PC)
- $610C DEFB %11100011 ;
- $610D DEFB %01110001 ;
- $610E DEFB %00011011 ;
- $610F DEFB %00000000 ;
- $6110 DEFB %00000000 ;
- $6111 DEFB %11000000 ;
- $6112 DEFB %11100000 ; }
- $6113 DEFB %11100000 ; {#UDG(#PC)
- $6114 DEFB %11100000 ;
- $6115 DEFB %11000000 ;
- $6116 DEFB %00000000 ;
- $6117 DEFB %00000000 ;
- $6118 DEFB %00000000 ;
- $6119 DEFB %00000000 ;
- $611A DEFB %00000000 ; }
- $611B DEFB %00000000 ; {#UDG(#PC)
- $611C DEFB %00000000 ;
- $611D DEFB %00000000 ;
- $611E DEFB %00000000 ;
- $611F DEFB %00000000 ;
- $6120 DEFB %00001100 ;
- $6121 DEFB %00111000 ;
- $6122 DEFB %01110000 ; }
- $6123 DEFB %01111100 ; {#UDG(#PC)
- $6124 DEFB %01110000 ;
- $6125 DEFB %00111000 ;
- $6126 DEFB %00001100 ;
- $6127 DEFB %00111100 ;
- $6128 DEFB %01011010 ;
- $6129 DEFB %01100110 ;
- $612A DEFB %11111111 ; }
- $612B DEFB %11111111 ; {#UDG(#PC)
- $612C DEFB %11111111 ;
- $612D DEFB %11111111 ;
- $612E DEFB %01111110 ;
- $612F DEFB %00000000 ;
- $6130 DEFB %00110000 ;
- $6131 DEFB %00011100 ;
- $6132 DEFB %00111110 ; }
- $6133 DEFB %00001110 ; {#UDG(#PC)
- $6134 DEFB %00111110 ;
- $6135 DEFB %00011100 ;
- $6136 DEFB %00110000 ;
- $6137 DEFB %00100100 ;
- $6138 DEFB %00100100 ;
- $6139 DEFB %00100100 ;
- $613A DEFB %01011010 ; }
- $613B DEFB %10011001 ; {#UDG(#PC)
- $613C DEFB %00000000 ; }
+ $606D DEFB %00000100 ; }
+
+; Data block at 606E
+b$606E DEFB %00000000                   ; {#UDG(#PC)
+ $606F DEFB %00000011                   ;
+ $6070 DEFB %00000111                   ;
+ $6071 DEFB %00001111                   ;
+ $6072 DEFB %00001111                   ;
+ $6073 DEFB %00011111                   ;
+ $6074 DEFB %00011111                   ;
+ $6075 DEFB %00011111                   ; }
+ $6076 DEFB %11111110                   ; {#UDG(#PC)
+ $6077 DEFB %11111000                   ;
+ $6078 DEFB %11100000                   ;
+ $6079 DEFB %11110000                   ;
+ $607A DEFB %11111000                   ;
+ $607B DEFB %11111100                   ;
+ $607C DEFB %11110000                   ;
+ $607D DEFB %11100000                   ; }
+ $607E DEFB %00011111                   ; {#UDG(#PC)
+ $607F DEFB %00011111                   ;
+ $6080 DEFB %00001111                   ;
+ $6081 DEFB %00001111                   ;
+ $6082 DEFB %00000111                   ;
+ $6083 DEFB %00000011                   ;
+ $6084 DEFB %00000000                   ;
+ $6085 DEFB %00000000                   ; }
+ $6086 DEFB %11110000                   ; {#UDG(#PC)
+ $6087 DEFB %11111100                   ;
+ $6088 DEFB %11111000                   ;
+ $6089 DEFB %11110000                   ;
+ $608A DEFB %11110000                   ;
+ $608B DEFB %11111000                   ;
+ $608C DEFB %11111110                   ;
+ $608D DEFB %00000000                   ; }
+ $608E DEFB %01111111                   ; {#UDG(#PC)
+ $608F DEFB %00011111                   ;
+ $6090 DEFB %00000111                   ;
+ $6091 DEFB %00001111                   ;
+ $6092 DEFB %00011111                   ;
+ $6093 DEFB %00111111                   ;
+ $6094 DEFB %00001111                   ;
+ $6095 DEFB %00000111                   ; }
+ $6096 DEFB %00000000                   ; {#UDG(#PC)
+ $6097 DEFB %11000000                   ;
+ $6098 DEFB %11100000                   ;
+ $6099 DEFB %11110000                   ;
+ $609A DEFB %11110000                   ;
+ $609B DEFB %11111000                   ;
+ $609C DEFB %11111000                   ;
+ $609D DEFB %11111000                   ; }
+ $609E DEFB %00001111                   ; {#UDG(#PC)
+ $609F DEFB %00111111                   ;
+ $60A0 DEFB %00011111                   ;
+ $60A1 DEFB %00001111                   ;
+ $60A2 DEFB %00000111                   ;
+ $60A3 DEFB %00011111                   ;
+ $60A4 DEFB %01111111                   ;
+ $60A5 DEFB %00000000                   ; }
+ $60A6 DEFB %11111000                   ; {#UDG(#PC)
+ $60A7 DEFB %11111000                   ;
+ $60A8 DEFB %11110000                   ;
+ $60A9 DEFB %11110000                   ;
+ $60AA DEFB %11100000                   ;
+ $60AB DEFB %11000000                   ;
+ $60AC DEFB %00000000                   ;
+ $60AD DEFB %00000000                   ; }
+ $60AE DEFB %00000001                   ; {#UDG(#PC)
+ $60AF DEFB %00000001                   ;
+ $60B0 DEFB %00000011                   ;
+ $60B1 DEFB %00000011                   ;
+ $60B2 DEFB %00000011                   ;
+ $60B3 DEFB %00000011                   ;
+ $60B4 DEFB %00000010                   ;
+ $60B5 DEFB %00000011                   ; }
+ $60B6 DEFB %00100100                   ; {#UDG(#PC)
+ $60B7 DEFB %00011000                   ;
+ $60B8 DEFB %10011001                   ;
+ $60B9 DEFB %11111111                   ;
+ $60BA DEFB %11111111                   ;
+ $60BB DEFB %00111100                   ;
+ $60BC DEFB %00111100                   ;
+ $60BD DEFB %00111100                   ; }
+ $60BE DEFB %00000000                   ; {#UDG(#PC)
+ $60BF DEFB %10000000                   ;
+ $60C0 DEFB %11000000                   ;
+ $60C1 DEFB %11000000                   ;
+ $60C2 DEFB %11000000                   ;
+ $60C3 DEFB %11000000                   ;
+ $60C4 DEFB %01000000                   ;
+ $60C5 DEFB %11000000                   ; }
+ $60C6 DEFB $18,$66,$00,$00,$00,$00,$00
+
+; Data block at 60CD
+b$60CD DEFB $00,$01,$01,$03,$07,$0E,$18,$10
+ $60D5 DEFB $24,$18,$99,$FF,$FF,$3C,$3C,$3C
+ $60DD DEFB $00,$80,$80,$C0,$E0,$70,$18,$08
+ $60E5 DEFB $24,$C3
+ $60E7 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $60EF DEFB $00,$1E,$7F,$FF,$FF,$FF,$7F,$1E
+ $60F7 DEFB $00,$00,$80,$C0,$C0,$C0,$80,$00
+ $60FF DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $6107 DEFB $00,$1B,$71,$E3,$F8,$E3,$71,$1B
+ $610F DEFB $00,$00,$C0,$E0,$E0,$E0,$C0,$00
+ $6117 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $611F DEFB $00,$0C,$38,$70,$7C,$70,$38,$0C
+ $6127 DEFB $3C,$5A,$66,$FF,$FF,$FF,$FF,$7E
+ $612F DEFB $00,$30,$1C,$3E,$0E,$3E,$1C,$30
+ $6137 DEFB $24,$24,$24,$5A,$99,$00
 @label=Mask_LivesIcon
- $613D DEFB %00000000 ; {#UDG(#PC)
- $613E DEFB %00000000 ;
- $613F DEFB %00000000 ;
- $6140 DEFB %00000000 ;
- $6141 DEFB %00000000 ;
- $6142 DEFB %00000000 ; }
- $6143 DEFB %00000000 ; {#UDG(#PC)
- $6144 DEFB %00000000 ;
- $6145 DEFB %00000000 ;
- $6146 DEFB %00000000 ;
- $6147 DEFB %00000000 ;
- $6148 DEFB %00000000 ;
- $6149 DEFB %00000000 ;
- $614A DEFB %00000000 ; }
- $614B DEFB %00000000 ; {#UDG(#PC)
- $614C DEFB %00000000 ;
- $614D DEFB %00000000 ;
- $614E DEFB %00000000 ;
- $614F DEFB %00000000 ;
- $6150 DEFB %00000000 ;
- $6151 DEFB %00000000 ;
- $6152 DEFB %00000000 ; }
- $6153 DEFB %00000000 ; {#UDG(#PC)
- $6154 DEFB %00000000 ;
- $6155 DEFB %00000000 ;
- $6156 DEFB %00000000 ;
- $6157 DEFB %00000000 ;
- $6158 DEFB %00000000 ;
- $6159 DEFB %00000000 ;
- $615A DEFB %00000000 ; }
- $615B DEFB %00000000 ; {#UDG(#PC)
- $615C DEFB %00000000 ;
- $615D DEFB %00001110 ;
- $615E DEFB %00111111 ;
- $615F DEFB %00111111 ;
- $6160 DEFB %01111111 ;
- $6161 DEFB %01111110 ;
- $6162 DEFB %11110000 ; }
- $6163 DEFB %00111100 ; {#UDG(#PC)
- $6164 DEFB %01011010 ;
- $6165 DEFB %01100110 ;
- $6166 DEFB %11111111 ;
- $6167 DEFB %11111111 ;
- $6168 DEFB %11111111 ;
- $6169 DEFB %11111111 ;
- $616A DEFB %01111110 ; }
- $616B DEFB %00000000 ; {#UDG(#PC)
- $616C DEFB %00000000 ;
- $616D DEFB %01110000 ;
- $616E DEFB %11111100 ;
- $616F DEFB %11111100 ;
- $6170 DEFB %11111110 ;
- $6171 DEFB %01111110 ;
- $6172 DEFB %00001111 ; }
- $6173 DEFB %00100100 ; {#UDG(#PC)
- $6174 DEFB %00100100 ;
- $6175 DEFB %00100100 ;
- $6176 DEFB %01011010 ;
- $6177 DEFB %10011001 ;
- $6178 DEFB %00000000 ;
- $6179 DEFB %00000000 ;
- $617A DEFB %00000000 ; }
- $617B DEFB %00000000 ; {#UDG(#PC)
- $617C DEFB %00000000 ;
- $617D DEFB %00000000 ;
- $617E DEFB %00000000 ;
- $617F DEFB %00000000 ;
- $6180 DEFB %00000000 ;
- $6181 DEFB %00000000 ;
- $6182 DEFB %00000000 ; }
- $6183 DEFB %00000000 ; {#UDG(#PC)
- $6184 DEFB %00000000 ;
- $6185 DEFB %11100000 ;
- $6186 DEFB %01111000 ;
- $6187 DEFB %01111110 ;
- $6188 DEFB %00111111 ;
- $6189 DEFB %00111111 ;
- $618A DEFB %00011111 ; }
- $618B DEFB %00000111 ; {#UDG(#PC)
- $618C DEFB %00000000 ;
- $618D DEFB %00111100 ;
- $618E DEFB %01011010 ;
- $618F DEFB %01100110 ;
- $6190 DEFB %11111111 ;
- $6191 DEFB %11111111 ;
- $6192 DEFB %11111111 ; }
- $6193 DEFB %11111111 ; {#UDG(#PC)
- $6194 DEFB %01111110 ;
- $6195 DEFB %00000111 ;
- $6196 DEFB %00011110 ;
- $6197 DEFB %01111110 ;
- $6198 DEFB %11111100 ;
- $6199 DEFB %11111100 ;
- $619A DEFB %11111000 ; }
- $619B DEFB %11100000 ; {#UDG(#PC)
- $619C DEFB %00000000 ;
- $619D DEFB %00100100 ;
- $619E DEFB %00100100 ;
- $619F DEFB %00100100 ;
- $61A0 DEFB %01011010 ;
- $61A1 DEFB %10011001 ;
- $61A2 DEFB %00000000 ; }
- $61A3 DEFB %00000000 ; {#UDG(#PC)
- $61A4 DEFB %00000000 ;
- $61A5 DEFB %00000000 ;
- $61A6 DEFB %00010000 ;
- $61A7 DEFB %00100000 ;
- $61A8 DEFB %00000110 ;
- $61A9 DEFB %00000111 ;
- $61AA DEFB %00000011 ; }
- $61AB DEFB %00000000 ; {#UDG(#PC)
- $61AC DEFB %00000000 ;
- $61AD DEFB %00110000 ;
- $61AE DEFB %01110000 ;
- $61AF DEFB %01111000 ;
- $61B0 DEFB %00011000 ;
- $61B1 DEFB %00000000 ;
- $61B2 DEFB %00000000 ; }
- $61B3 DEFB %00000000 ; {#UDG(#PC)
- $61B4 DEFB %00001100 ;
- $61B5 DEFB %00001100 ;
- $61B6 DEFB %00000110 ;
- $61B7 DEFB %11000000 ;
- $61B8 DEFB %00000000 ;
- $61B9 DEFB %00000000 ;
- $61BA DEFB %00000000 ; }
+ $613D DEFB %00000000                       ; {#UDG(#PC)
+ $613E DEFB %00000000                       ;
+ $613F DEFB %00000000                       ;
+ $6140 DEFB %00000000                       ;
+ $6141 DEFB %00000000                       ;
+ $6142 DEFB %00000000                       ;
+ $6143 DEFB %00000000                       ;
+ $6144 DEFB %00000000                       ; }
+ $6145 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $614D DEFB $00,$00,$00,$00,$00,$00
+ $6153 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $615B DEFB $00,$00,$0E,$3F,$3F,$7F,$7E,$F0
+ $6163 DEFB $3C,$5A,$66,$FF,$FF,$FF,$FF,$7E
+ $616B DEFB $00,$00,$70,$FC,$FC,$FE,$7E,$0F
+ $6173 DEFB $24,$24,$24,$5A,$99,$00,$00,$00
+ $617B DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $6183 DEFB $00,$00,$E0,$78,$7E,$3F,$3F,$1F
+ $618B DEFB $07,$00,$3C,$5A,$66,$FF,$FF,$FF
+ $6193 DEFB $FF,$7E,$07,$1E,$7E,$FC,$FC,$F8
+ $619B DEFB $E0,$00,$24,$24,$24,$5A,$99,$00
+ $61A3 DEFB $00,$00,$00,$10,$20,$06,$07,$03
+ $61AB DEFB $00,$00,$30,$70,$78,$18,$00,$00
+ $61B3 DEFB $00,$0C,$0C,$06,$C0,$00,$00,$00
+
+; Graphics: MegaDodo Logo
+;
+; .
+;
+; .
+;
+; #UDGS$02,$02(megadodo)(
+;   #UDG(#PC+$08*($02*$y+$x),$04)(*udg)
+;   udg
+; )
 @label=Graphics_MegaDodo
- $61BB DEFB %00000000 ; {#UDG(#PC)
+b$61BB DEFB %00000000 ; {#UDG(#PC)
  $61BC DEFB %00000000 ;
  $61BD DEFB %00000000 ;
  $61BE DEFB %00000000 ;
@@ -1638,8 +1475,10 @@ b$5FFB DEFB %00000111 ; {#UDG(#PC)
  $61D8 DEFB %10000000 ;
  $61D9 DEFB %10000000 ;
  $61DA DEFB %11100000 ; }
+
+; Graphics: Large Star
 @label=Graphics_StarLarge
- $61DB DEFB %00010000 ; {#UDG(#PC)
+b$61DB DEFB %00010000 ; {#UDG(#PC,$05)
  $61DC DEFB %01010100 ;
  $61DD DEFB %00111000 ;
  $61DE DEFB %11111110 ;
@@ -1647,8 +1486,10 @@ b$5FFB DEFB %00000111 ; {#UDG(#PC)
  $61E0 DEFB %01010100 ;
  $61E1 DEFB %00010000 ;
  $61E2 DEFB %00000000 ; }
+
+; Graphics: Box
 @label=Graphics_Box
- $61E3 DEFB %11111111 ; {#UDG(#PC)
+b$61E3 DEFB %11111111 ; {#UDG(#PC)
  $61E4 DEFB %10000001 ;
  $61E5 DEFB %10111101 ;
  $61E6 DEFB %10100101 ;
@@ -1656,7 +1497,9 @@ b$5FFB DEFB %00000111 ; {#UDG(#PC)
  $61E8 DEFB %10111101 ;
  $61E9 DEFB %10000001 ;
  $61EA DEFB %11111111 ; }
- $61EB DEFB %11111111 ; {#UDG(#PC)
+
+; Data block at 61EB
+b$61EB DEFB %11111111 ; {#UDG(#PC)
  $61EC DEFB %11111011 ;
  $61ED DEFB %01111011 ;
  $61EE DEFB %01011010 ;
@@ -1752,8 +1595,10 @@ b$5FFB DEFB %00000111 ; {#UDG(#PC)
  $6248 DEFB %11111000 ;
  $6249 DEFB %11111100 ;
  $624A DEFB %11111110 ; }
+
+; Graphics: Small Star
 @label=Graphics_StarSmall
- $624B DEFB %00000000 ; {#UDG(#PC)
+b$624B DEFB %00000000 ; {#UDG(#PC,$05)
  $624C DEFB %00000000 ;
  $624D DEFB %00011000 ;
  $624E DEFB %00011000 ;
@@ -1761,7 +1606,9 @@ b$5FFB DEFB %00000111 ; {#UDG(#PC)
  $6250 DEFB %00000000 ;
  $6251 DEFB %00000000 ;
  $6252 DEFB %00000000 ; }
- $6253 DEFB %00000000 ; {#UDG(#PC)
+
+; Data block at 6253
+b$6253 DEFB %00000000 ; {#UDG(#PC)
  $6254 DEFB %00000000 ;
  $6255 DEFB %00000000 ;
  $6256 DEFB %00000000 ;
@@ -2236,19 +2083,51 @@ b$5FFB DEFB %00000111 ; {#UDG(#PC)
 
 ; Messaging: Presents
 @label=Messaging_Presents
-t$642B DEFM "presents" ; "#STR#(#PC,$04,$08)".
+t$642B DEFB %01110000 ; {#UDG(#PC)
+ $642C DEFB %01110010 ;
+ $642D DEFB %01100101 ;
+ $642E DEFB %01110011 ;
+ $642F DEFB %01100101 ;
+ $6430 DEFB %01101110 ;
+ $6431 DEFB %01110100 ;
+ $6432 DEFB %01110011 ; }
 
 ; Messaging: Megadodo Software
 @label=Messaging_Copyright
-t$6433 DEFM $7F," "                  ; "#STR#(#PC,$04,$02)".
+t$6433 DEFB %01111111 ; {#UDG(#PC)
+ $6434 DEFB %00100000 ; }
 @label=Messaging_MegadodoSoftware
- $6435 DEFM "MEGADODO SOFTWARE 1983" ; "#STR#(#PC,$04,$16)".
+ $6435 DEFM "MEGADO"  ; "#STR#(#PC,$04,$16)".
+ $643B DEFB %01000100 ; {#UDG(#PC)
+ $643C DEFB %01001111 ;
+ $643D DEFB %00100000 ;
+ $643E DEFB %01010011 ;
+ $643F DEFB %01001111 ;
+ $6440 DEFB %01000110 ;
+ $6441 DEFB %01010100 ;
+ $6442 DEFB %01010111 ; }
+ $6443 DEFB %01000001 ; {#UDG(#PC)
+ $6444 DEFB %01010010 ;
+ $6445 DEFB %01000101 ;
+ $6446 DEFB %00100000 ;
+ $6447 DEFB %00110001 ;
+ $6448 DEFB %00111001 ;
+ $6449 DEFB %00111000 ;
+ $644A DEFB %00110011 ; }
 
 ; Messaging: Author M.W.Ward
 @label=Messaging_WrittenBy
-t$644B DEFM "written by " ; "#STR#(#PC,$04,$13)".
+t$644B DEFB %01110111  ; {#UDG(#PC)
+ $644C DEFB %01110010  ;
+ $644D DEFB %01101001  ;
+ $644E DEFB %01110100  ;
+ $644F DEFB %01110100  ;
+ $6450 DEFB %01100101  ;
+ $6451 DEFB %01101110  ;
+ $6452 DEFB %00100000  ; }
+ $6453 DEFM "by "
 @label=Messaging_Author
- $6456 DEFM "M.W.Ward"    ; "#STR#(#PC,$04,$08)".
+ $6456 DEFM "M.W.Ward" ; "#STR#(#PC,$04,$08)".
 
 ; Messaging: "press S to start"
 @label=Messaging_PressSToStart
@@ -2297,12 +2176,16 @@ t$6514 DEFM "000000" ; #FONT#(:(#STR($6514,$04,$06)))$6253,attr=$06(player-score
 @label=Messaging_Header_LevelNumber
  $6527 DEFM "1"      ; #FONT#(:(#STR($6527,$04,$01)))$6253,attr=$44(level-number)
 
-; Data block at 6528
-b$6528 DEFB $30,$30,$30
-
-; Data block at 652B
-b$652B DEFB $30,$30,$30,$30,$20,$3A,$20,$3B
- $6533 DEFB $3C,$3D,$3E,$3F,$40
+; Score Buffer
+@label=ScoreBuffer
+g$6528 DEFB $30
+ $6529 DEFB $30
+ $652A DEFB $30
+ $652B DEFB $30
+ $652C DEFB $30
+ $652D DEFB $30
+ $652E DEFB $30,$20,$3A,$20,$3B,$3C,$3D,$3E
+ $6536 DEFB $3F,$40
 
 ; Table: Mothership UDGs
 @label=Table_MothershipUDGs
@@ -2487,32 +2370,98 @@ g$658A DEFB $21      ; Screen buffer address #N(#PC-$658A):
                      ; #N($4800+#PEEK(#PC)).
 
 ; Game status buffer entry at 65DB
-g$65DB DEFB $00,$00,$A0,$48,$BD,$48,$BD,$48
- $65E3 DEFB $60,$48,$5D,$48,$7D,$48,$20,$48
- $65EB DEFB $3D,$48,$E0,$40,$FD,$40,$FD,$40
- $65F3 DEFB $A0,$40,$BD,$40,$60,$40,$7D,$40
- $65FB DEFB $A0,$48,$BD,$48,$BD,$48,$60,$48
- $6603 DEFB $5D,$48,$7D,$48,$20,$48,$3D,$48
- $660B DEFB $E0,$40,$FD,$40,$FD,$40,$A0,$40
- $6613 DEFB $BD,$40,$60,$40,$7D,$40,$FD,$48
- $661B DEFB $C0,$48,$DD,$48,$9D,$48,$60,$48
- $6623 DEFB $60,$48,$7D,$48,$7D,$48,$20,$48
- $662B DEFB $3D,$48,$3D,$48,$DD,$40,$60,$40
- $6633 DEFB $7D,$40,$7D,$40,$82,$40,$5B,$C0
- $663B DEFB $01,$48,$DC,$C0,$80,$48,$5D,$C8
- $6643 DEFB $FF,$4F,$DE,$C8,$3D,$48,$20,$48
- $664B DEFB $FD,$40,$E0,$40,$BD,$40,$A0,$40
- $6653 DEFB $7D,$40,$60,$40,$AB,$AF,$B3,$69
- $665B DEFB $4F,$75,$27,$37,$E5,$EF,$F9,$A7
- $6663 DEFB $B7,$69,$75,$EF,$C3,$DB,$8F,$6C
- $666B DEFB $65,$72,$79,$29,$2F,$35,$CF,$6B
- $6673 DEFB $6F,$73,$3B,$22,$F9,$E4,$B7,$A6
- $667B DEFB $75,$68,$43,$06
+g$65DB DEFB $00,$00
+
+; Data block at 65DD
+w$65DD DEFW $48A0
+ $65DF DEFW $48BD
+ $65E1 DEFW $48BD
+ $65E3 DEFW $4860
+ $65E5 DEFW $485D
+ $65E7 DEFW $487D
+ $65E9 DEFW $4820
+ $65EB DEFW $483D
+ $65ED DEFW $40E0
+ $65EF DEFW $40FD
+ $65F1 DEFW $40FD
+ $65F3 DEFW $40A0
+ $65F5 DEFW $40BD
+ $65F7 DEFW $4060
+ $65F9 DEFW $407D
+ $65FB DEFW $48A0
+ $65FD DEFW $48BD
+ $65FF DEFW $48BD
+ $6601 DEFW $4860
+ $6603 DEFW $485D
+ $6605 DEFW $487D
+ $6607 DEFW $4820
+ $6609 DEFW $483D
+ $660B DEFW $40E0
+ $660D DEFW $40FD
+ $660F DEFW $40FD
+ $6611 DEFW $40A0
+ $6613 DEFW $40BD
+ $6615 DEFW $4060
+ $6617 DEFW $407D
+ $6619 DEFW $48FD
+ $661B DEFW $48C0
+ $661D DEFW $48DD
+ $661F DEFW $489D
+ $6621 DEFW $4860
+ $6623 DEFW $4860
+ $6625 DEFW $487D
+ $6627 DEFW $487D
+ $6629 DEFW $4820
+ $662B DEFW $483D
+ $662D DEFW $483D
+ $662F DEFW $40DD
+ $6631 DEFW $4060
+ $6633 DEFW $407D
+ $6635 DEFW $407D
+ $6637 DEFW $4082
+ $6639 DEFW $C05B
+ $663B DEFW $4801
+ $663D DEFW $C0DC
+ $663F DEFW $4880
+ $6641 DEFW $C85D
+ $6643 DEFW $4FFF
+ $6645 DEFW $C8DE
+ $6647 DEFW $483D
+ $6649 DEFW $4820
+ $664B DEFW $40FD
+ $664D DEFW $40E0
+ $664F DEFW $40BD
+ $6651 DEFW $40A0
+ $6653 DEFW $407D
+ $6655 DEFW $4060
+ $6657 DEFW $AFAB
+ $6659 DEFW $69B3
+ $665B DEFW $754F
+ $665D DEFW $3727
+ $665F DEFW $EFE5
+ $6661 DEFW $A7F9
+ $6663 DEFW $69B7
+ $6665 DEFW $EF75
+ $6667 DEFW $DBC3
+ $6669 DEFW $6C8F
+ $666B DEFW $7265
+ $666D DEFW $2979
+ $666F DEFW $352F
+ $6671 DEFW $6BCF
+ $6673 DEFW $736F
+ $6675 DEFW $223B
+ $6677 DEFW $E4F9
+ $6679 DEFW $A6B7
+ $667B DEFW $6875
+ $667D DEFW $0643
 
 ; Game status buffer entry at 667F
 g$667F DEFB $0F,$00,$00,$00,$00,$00,$00,$00
  $6687 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $668F DEFB $00,$00,$00,$00
+ $668F DEFB $00,$00
+
+; Game status buffer entry at 6691
+g$6691 DEFB $00,$00
 
 ; Game status buffer entry at 6693
 g$6693 DEFB $00,$00
@@ -2534,9 +2483,15 @@ g$66A4 DEFB $00
 g$66A5 DEFB $00
 
 ; Game status buffer entry at 66A6
-g$66A6 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $66AE DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $66B6 DEFB $00,$00,$00,$00
+g$66A6 DEFB $00
+
+; Game status buffer entry at 66A7
+g$66A7 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $66AF DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $66B7 DEFB $00,$00
+
+; Game status buffer entry at 66B9
+g$66B9 DEFB $00
 
 ; Game status buffer entry at 66BA
 g$66BA DEFB $00,$00,$00,$00,$00,$00,$00,$00
@@ -2545,15 +2500,20 @@ g$66BA DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $66D2 DEFB $00,$00
 
 ; Game status buffer entry at 66D4
-g$66D4 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $66DC DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $66E4 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $66EC DEFB $00
+g$66D4 DEFB $00
+
+; Game status buffer entry at 66D5
+g$66D5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $66DD DEFB $00,$00,$00,$00,$00,$00,$00,$00
+ $66E5 DEFB $00,$00,$00,$00,$00,$00,$00,$00
 
 ; Game status buffer entry at 66ED
 g$66ED DEFW $5ACE
 
-; Game status buffer entry at 66EF
+; Flag: Extra Life
+;
+; Indicates whether an extra life should be awarded or not.
+@label=Flag_ExtraLife
 g$66EF DEFB $01
 
 ; Player Lives
@@ -2588,10 +2548,11 @@ g$66F5 DEFB $00
 @label=ControlMethod
 g$66F6 DEFB $00
 
-; Routine at 66F7
+; Convert Screen Address To Attribute Buffer Address
 ;
 ; Used by the routines at #R$676F, #R$70E7, #R$7564, #R$75BF, #R$7616 and
 ; #R$7B67.
+@label=ConvertScreenToAttributeBufferAddress
 c$66F7 LD A,D        ; #REGa=#REGd.
  $66F8 AND %00011000 ; Keep only bits 3-4.
  $66FA SRA A         ; {Shift #REGa right three positions (with carry).
@@ -2650,47 +2611,48 @@ c$6720 LD HL,$5AFF   ; {Clear #N$1B00 bytes of screen and attribute buffer memor
  $672B LDDR          ; }
  $672D RET           ; Return.
 
-; Routine at 672E
+; Clear Play-Area
 ;
 ; Used by the routine at #R$67F6.
-c$672E LD HL,$5820   ; #REGhl=#N$5820 (attribute buffer location).
- $6731 LD DE,$5821   ; #REGde=#N$5821 (attribute buffer location).
- $6734 LD BC,$02DF   ; #REGbc=#N$02DF.
- $6737 LD (HL),$00   ; Write #N$00 to *#REGhl.
- $6739 LDIR          ; LDIR.
- $673B LD HL,$4800   ; #REGhl=#N$4800 (screen buffer location).
- $673E LD DE,$4801   ; #REGde=#N$4801 (screen buffer location).
- $6741 LD BC,$0FFF   ; #REGbc=#N$0FFF.
- $6744 LD (HL),L     ; Write #REGl to *#REGhl.
- $6745 LDIR          ; LDIR.
- $6747 LD HL,$4020   ; #REGhl=#N$4020 (screen buffer location).
- $674A LD DE,$4021   ; #REGde=#N$4021 (screen buffer location).
- $674D LD B,$07      ; #REGb=#N$07.
-*$674F PUSH BC       ; Stash #REGbc on the stack.
- $6750 LD B,$08      ; #REGb=#N$08.
-*$6752 PUSH BC       ; {Stash #REGbc, #REGde and #REGhl on the stack.
- $6753 PUSH DE       ;
+@label=ClearPlayArea
+c$672E LD HL,$5820   ; {Clear #N$02E0 bytes of the attribute buffer from #N$5820 to
+ $6731 LD DE,$5821   ; #N$5AFF.
+ $6734 LD BC,$02DF   ;
+ $6737 LD (HL),$00   ;
+ $6739 LDIR          ; }
+ $673B LD HL,$4800   ; {Clear #N$1000 bytes of the screen buffer from #N$4800
+ $673E LD DE,$4801   ; to #N$57FF.
+ $6741 LD BC,$0FFF   ;
+ $6744 LD (HL),L     ;
+ $6745 LDIR          ; }
+ $6747 LD HL,$4020   ; {Point #REGhl to screen buffer position #N$4020 and #REGde to screen
+ $674A LD DE,$4021   ; buffer position #N$4021.}
+ $674D LD B,$07      ; Set a counter in #REGb for #N$07 character rows.
+@label=ClearPlayArea_RowLoop
+*$674F PUSH BC       ; Save the row counter on the stack.
+ $6750 LD B,$08      ; Set a counter in #REGb for #N$08 pixel lines.
+@label=ClearPlayArea_LineLoop
+*$6752 PUSH BC       ; {Stash the row counter and screen position pointers on
+ $6753 PUSH DE       ; the stack.
  $6754 PUSH HL       ; }
- $6755 LD BC,$001F   ; #REGbc=#N$001F.
- $6758 LD (HL),B     ; Write #REGb to *#REGhl.
- $6759 LDIR          ; LDIR.
- $675B POP HL        ; {Restore #REGhl and #REGde from the stack.
+ $6755 LD BC,$001F   ; {Clear #N$1F bytes across the line.
+ $6758 LD (HL),B     ;
+ $6759 LDIR          ; }
+ $675B POP HL        ; {Restore the screen position pointers.
  $675C POP DE        ; }
- $675D INC H         ; Increment #REGh by one.
- $675E INC D         ; Increment #REGd by one.
- $675F POP BC        ; Restore #REGbc from the stack.
- $6760 DJNZ $6752    ; Decrease counter by one and loop back to #R$6752 until
-                     ; counter is zero.
- $6762 LD H,$40      ; #REGh=#N$40.
- $6764 LD D,H        ; #REGd=#REGh.
- $6765 LD A,$20      ; #REGa=#N$20.
- $6767 ADD A,L       ; #REGa+=#REGl.
- $6768 LD L,A        ; #REGl=#REGa.
- $6769 LD E,A        ; #REGe=#REGa.
- $676A INC E         ; Increment #REGe by one.
- $676B POP BC        ; Restore #REGbc from the stack.
- $676C DJNZ $674F    ; Decrease counter by one and loop back to #R$674F until
-                     ; counter is zero.
+ $675D INC H         ; {Move down one pixel line.
+ $675E INC D         ; }
+ $675F POP BC        ; {Restore the line counter and loop back to #R$6752
+ $6760 DJNZ $6752    ; until all #N$08 lines are cleared.}
+ $6762 LD H,$40      ; {Move to the next character row by resetting #REGh and #REGd to #N$40,
+ $6764 LD D,H        ; then adding #N$20 to both #REGl and #REGe.
+ $6765 LD A,$20      ;
+ $6767 ADD A,L       ;
+ $6768 LD L,A        ;
+ $6769 LD E,A        ;
+ $676A INC E         ; }
+ $676B POP BC        ; {Restore the row counter and loop back to #R$674F
+ $676C DJNZ $674F    ; until all #N$07 rows are cleared.}
  $676E RET           ; Return.
 
 ; Print String
@@ -2766,48 +2728,57 @@ c$67A9 LD DE,$4000   ; Set the screen buffer address to #N$4000.
  $67B2 CALL $676F    ; Call #R$676F.
  $67B5 RET           ; Return.
 
-; Routine at 67B6
+; Handler: Score
 ;
 ; Used by the routines at #R$7200, #R$72C9 and #R$79B2.
-c$67B6 LD A,($66F3)  ; {Jump to #R$67C3 if *#R$66F3 is zero.
+@label=Handler_Score
+c$67B6 LD A,($66F3)  ; {Jump to #R$67C3 if *#R$66F3 is not active.
  $67B9 OR A          ;
  $67BA JR Z,$67C3    ; }
+; Demo mode is active, so just reset the score.
  $67BC LD DE,$6528   ; #REGde=#R$6528.
  $67BF LD B,$00      ; #REGb=#N$00.
  $67C1 JR $67DD      ; Jump to #R$67DD.
-*$67C3 LD HL,$6519   ; #REGhl=#R$6514(#N$6519).
- $67C6 LD DE,$652E   ; #REGde=#R$6525(#N$652E).
- $67C9 LD B,$06      ; #REGb=#N$06.
-*$67CB LD A,(DE)     ; #REGa=*#REGde.
- $67CC ADD A,(HL)    ; #REGa+=*#REGhl.
- $67CD SUB $30       ; #REGa-=#N$30.
- $67CF CP $3A        ; Compare #REGa with #N$3A.
- $67D1 JR C,$67D8    ; Jump to #R$67D8 if #REGa is less than #N$3A.
+@label=AddToScore
+*$67C3 LD HL,$6519   ; Point #REGhl at #R$6514(#N$6519) (the current score).
+ $67C6 LD DE,$652E   ; Point #REGde at #R$6528(#N$652E) (the points to add).
+ $67C9 LD B,$06      ; Set a counter in #REGb for #N$06 score digits.
+@label=AddToScore_Loop
+*$67CB LD A,(DE)     ; {Fetch the points digit and add it to the corresponding
+ $67CC ADD A,(HL)    ; score digit.}
+ $67CD SUB $30       ; Convert the value from ASCII by subtracing #N$30.
+ $67CF CP $3A        ; {Jump to #R$67D8 if #REGa is less than #N$3A.
+ $67D1 JR C,$67D8    ; }
  $67D3 SUB $0A       ; #REGa-=#N$0A.
  $67D5 DEC HL        ; Decrease #REGhl by one.
  $67D6 INC (HL)      ; Increment *#REGhl by one.
  $67D7 INC HL        ; Increment #REGhl by one.
+@label=AddToScore_Store
 *$67D8 LD (HL),A     ; Write #REGa to *#REGhl.
  $67D9 DEC DE        ; Decrease #REGde by one.
  $67DA DEC HL        ; Decrease #REGhl by one.
  $67DB DJNZ $67CB    ; Decrease counter by one and loop back to #R$67CB until
                      ; counter is zero.
-*$67DD PUSH DE       ; Stash #REGde on the stack.
- $67DE POP HL        ; Restore #REGhl from the stack.
- $67DF INC DE        ; Increment #REGde by one.
- $67E0 LD C,$06      ; #REGc=#N$06.
- $67E2 LD (HL),$30   ; Write #N$30 to *#REGhl.
- $67E4 LDIR          ; LDIR.
- $67E6 LD A,($6515)  ; #REGa=*#R$6514(#N$6515).
- $67E9 CP $31        ; Compare #REGa with #N$31.
- $67EB RET NZ        ; Return if #REGa is not equal to #N$31.
- $67EC LD HL,$66EF   ; #REGhl=#R$66EF.
- $67EF LD A,(HL)     ; #REGa=*#REGhl.
- $67F0 OR A          ; Set the bits from #REGa.
- $67F1 RET Z         ; Return if #REGa is equal to #REGa.
- $67F2 DEC (HL)      ; Decrease *#REGhl by one.
- $67F3 INC HL        ; Increment #REGhl by one.
- $67F4 INC (HL)      ; Increment *#REGhl by one.
+@label=Reset_ScoreBuffer
+*$67DD PUSH DE       ; {Copy the score buffer pointer to #REGhl (using the
+ $67DE POP HL        ; stack).}
+ $67DF INC DE        ; Increment the score buffer destination pointer by one.
+ $67E0 LD C,$06      ; Set a counter in #REGc for #N$06 score digits.
+ $67E2 LD (HL),$30   ; Write #N$30 ("#CHR$30") to the score buffer.
+ $67E4 LDIR          ; Copy #N$30 ("#CHR$30") across the remaining five score buffer
+                     ; digits.
+; Check if the score is at least "10,000".
+ $67E6 LD A,($6515)  ; {Return if *#R$6514(#N$6515) is not equal to #N$31
+ $67E9 CP $31        ; ("#CHR$31").
+ $67EB RET NZ        ; }
+ $67EC LD HL,$66EF   ; {Return if #R$66EF says that no extra life should be
+ $67EF LD A,(HL)     ; awarded.
+ $67F0 OR A          ;
+ $67F1 RET Z         ; }
+; Award an extra life to the player.
+ $67F2 DEC (HL)      ; Reset #R$66EF as an extra life has been "awarded".
+ $67F3 INC HL        ; Move to the lives counter at #R$66F0.
+ $67F4 INC (HL)      ; Award one extra life.
  $67F5 RET           ; Return.
 
 ; Print Header
@@ -2885,6 +2856,14 @@ c$681C LD DE,$4008   ; Set the screen buffer position to #N$4008 (where the life
 ; Routine at 6845
 ;
 ; Used by the routine at #R$79B2.
+;
+; .
+;
+; #PUSHS
+; #UDGTABLE
+; { #CLS($47)#SIM(start=$6845,stop=$688F,de=$4000)#SCR$02(dh) }
+; TABLE#
+; #POPS
 c$6845 LD HL,$613D   ; #REGhl=#R$613D.
  $6848 LD IX,$0002   ; #REGix=#N($0002,$04,$04).
  $684C JR $685A      ; Jump to #R$685A.
@@ -2892,12 +2871,28 @@ c$6845 LD HL,$613D   ; #REGhl=#R$613D.
 ; Routine at 684E
 ;
 ; Used by the routine at #R$79B2.
+;
+; .
+;
+; #PUSHS
+; #UDGTABLE
+; { #CLS($07)#SIM(start=$684E,stop=$688F,de=$4480)#SCR$02(dgdfdgdh) }
+; TABLE#
+; #POPS
 c$684E LD HL,$606E   ; #REGhl=#R$606E.
  $6851 JR $6856      ; Jump to #R$6856.
 
 ; Routine at 6853
 ;
 ; Used by the routine at #R$79B2.
+;
+; .
+;
+; #PUSHS
+; #UDGTABLE
+; { #CLS($47)#SIM(start=$6853,stop=$688F,de=$4000)#SCR$02(dgfgdh) }
+; TABLE#
+; #POPS
 c$6853 LD HL,$608E   ; #REGhl=#R$608E.
 ; This entry point is used by the routine at #R$684E.
 *$6856 LD IX,$0200   ; #REGix=#N($0200,$04,$04).
@@ -2988,7 +2983,7 @@ c$68A1 PUSH AF       ; {Stash #REGaf, #REGbc, #REGde and #REGhl on the stack.
 ; Used by the routines at #R$72C9, #R$7599 and #R$7C82.
 ; .
 ; #PUSHS #UDGTABLE {
-;   #SIM(start=$6922,stop=$6925)#SIM(start=$68B8,stop=$68D5)#SCR$02(asterisk)
+;   #CLS$43#SIM(start=$68B8,stop=$6910)#SCR$02(asterisk)
 ; } TABLE# #POPS
 @label=TransitionEffect
 c$68B8 LD B,$02      ; #REGb=#N$02.
@@ -4623,7 +4618,9 @@ c$72C9 LD A,($66F3)  ;
  $731B LD A,($66D3)  ;
  $731E OR A          ;
  $731F RET Z         ;
-; #PUSHS #UDGTABLE {
+; #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
+; #SIM(start=$74A4,stop=$74B9) #UDGTABLE {
+;   #SIM(start=$72C9,stop=$6FDB)
 ;   #SIM(start=$7320,stop=$737D)#SCR$01(fgkjfdg)
 ; } TABLE# #POPS
  $7320 CALL $6720    ; Call #R$6720.
@@ -5662,48 +5659,51 @@ c$7616 LD A,($66F1)  ;
 ; Routine at 79B2
 ;
 ; Used by the routines at #R$7C82 and #R$7DD9.
-c$79B2 LD A,($6695)  ;
- $79B5 AND $01       ;
- $79B7 RET Z         ;
- $79B8 LD HL,$66D5   ;
- $79BB LD B,$06      ;
-*$79BD LD A,(HL)     ;
+c$79B2 LD A,($6695)  ; {Return if bit 0 of *#R$6695 is not set.
+ $79B5 AND %00000001 ;
+ $79B7 RET Z         ; }
+ $79B8 LD HL,$66D5   ; #REGhl=#R$66D5.
+ $79BB LD B,$06      ; #REGb=#N$06.
+*$79BD LD A,(HL)     ; {Jump to #R$79CA if *#REGhl is not zero.
  $79BE OR A          ;
- $79BF JR NZ,$79CA   ;
- $79C1 PUSH BC       ;
- $79C2 LD B,$C8      ;
-*$79C4 DJNZ $79C4    ;
- $79C6 POP BC        ;
- $79C7 JP $7B5F      ;
-*$79CA PUSH AF       ;
+ $79BF JR NZ,$79CA   ; }
+ $79C1 PUSH BC       ; Stash #REGbc on the stack.
+ $79C2 LD B,$C8      ; #REGb=#N$C8.
+*$79C4 DJNZ $79C4    ; Decrease counter by one and loop back to #R$79C4 until
+                     ; counter is zero.
+ $79C6 POP BC        ; Restore #REGbc from the stack.
+ $79C7 JP $7B5F      ; Jump to #R$7B5F.
+*$79CA PUSH AF       ; {Stash #REGaf, #REGbc and #REGhl on the stack.
  $79CB PUSH BC       ;
- $79CC PUSH HL       ;
- $79CD LD A,($66F3)  ;
+ $79CC PUSH HL       ; }
+ $79CD LD A,($66F3)  ; {Jump to #R$7A1F if *#R$66F3 is not zero.
  $79D0 OR A          ;
- $79D1 JR NZ,$7A1F   ;
- $79D3 LD A,($66F1)  ;
- $79D6 AND $02       ;
- $79D8 JR Z,$79F8    ;
- $79DA LD A,(HL)     ;
+ $79D1 JR NZ,$7A1F   ; }
+ $79D3 LD A,($66F1)  ; {Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
+ $79D6 AND %00000010 ;
+ $79D8 JR Z,$79F8    ; }
+ $79DA LD A,(HL)     ; {#REGde=*#REGhl*#N$08.
  $79DB ADD A,A       ;
  $79DC ADD A,A       ;
  $79DD ADD A,A       ;
  $79DE LD E,A        ;
- $79DF LD D,$00      ;
- $79E1 LD HL,$00F2   ;
- $79E4 ADD HL,DE     ;
- $79E5 LD B,$03      ;
-*$79E7 PUSH BC       ;
- $79E8 PUSH HL       ;
- $79E9 LD DE,$0002   ;
- $79EC CALL $03B5    ;
- $79EF DI            ;
- $79F0 POP HL        ;
- $79F1 INC HL        ;
- $79F2 INC HL        ;
- $79F3 POP BC        ;
- $79F4 DJNZ $79E7    ;
- $79F6 JR $7A1F      ;
+ $79DF LD D,$00      ; }
+ $79E1 LD HL,$00F2   ; {#REGhl=#N($00F2,$04,$04)+#REGde.
+ $79E4 ADD HL,DE     ; }
+ $79E5 LD B,$03      ; #REGb=#N$03.
+*$79E7 PUSH BC       ; {Stash #REGbc and #REGhl on the stack.
+ $79E8 PUSH HL       ; }
+ $79E9 LD DE,$0002   ; #REGde=#N($0002,$04,$04).
+ $79EC CALL $03B5    ; #HTML(Call <a "noopener nofollow"
+                     ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
+ $79EF DI            ; Disable interrupts.
+ $79F0 POP HL        ; Restore #REGhl from the stack.
+ $79F1 INC HL        ; {Increment #REGhl by two.
+ $79F2 INC HL        ; }
+ $79F3 POP BC        ; Restore #REGbc from the stack.
+ $79F4 DJNZ $79E7    ; Decrease counter by one and loop back to #R$79E7 until
+                     ; counter is zero.
+ $79F6 JR $7A1F      ; Jump to #R$7A1F.
 *$79F8 LD A,(HL)     ;
  $79F9 CP $01        ;
  $79FB JR NZ,$7A1F   ;
@@ -5926,182 +5926,188 @@ c$79B2 LD A,($6695)  ;
  $7B63 JP NZ,$79BD   ;
  $7B66 RET           ;
 
-; Routine at 7B67
+; Handler: Aliens
 ;
 ; Used by the routines at #R$7C82 and #R$7DD9.
-c$7B67 LD A,($6691)  ;
+@label=Handler_Aliens
+c$7B67 LD A,($6691)  ; {Return if *#R$6691 is zero.
  $7B6A OR A          ;
- $7B6B RET Z         ;
- $7B6C LD A,($6695)  ;
+ $7B6B RET Z         ; }
+ $7B6C LD A,($6695)  ; {Return if #REGa=*#R$6695 is not zero.
  $7B6F OR A          ;
- $7B70 RET NZ        ;
- $7B71 LD HL,$66A7   ;
- $7B74 LD B,$06      ;
-*$7B76 PUSH BC       ;
- $7B77 PUSH HL       ;
- $7B78 LD E,(HL)     ;
- $7B79 INC HL        ;
- $7B7A LD D,(HL)     ;
- $7B7B LD A,D        ;
+ $7B70 RET NZ        ; }
+ $7B71 LD HL,$66A7   ; #REGhl=#R$66A7.
+ $7B74 LD B,$06      ; #REGb=#N$06.
+*$7B76 PUSH BC       ; {Stash #REGbc and #REGhl on the stack.
+ $7B77 PUSH HL       ; }
+ $7B78 LD E,(HL)     ; #REGe=*#REGhl.
+ $7B79 INC HL        ; Increment #REGhl by one.
+ $7B7A LD D,(HL)     ; #REGd=*#REGhl.
+ $7B7B LD A,D        ; {Jump to #R$7C18 if #REGd is not zero.
  $7B7C OR A          ;
- $7B7D JP NZ,$7C18   ;
- $7B80 LD A,($66A4)  ;
+ $7B7D JP NZ,$7C18   ; }
+ $7B80 LD A,($66A4)  ; {Jump to #R$7C76 if *#R$66A4 is not zero.
  $7B83 OR A          ;
- $7B84 JP NZ,$7C76   ;
- $7B87 PUSH HL       ;
- $7B88 LD HL,$66B9   ;
- $7B8B LD A,($66BA)  ;
+ $7B84 JP NZ,$7C76   ; }
+ $7B87 PUSH HL       ; Stash #REGhl on the stack.
+ $7B88 LD HL,$66B9   ; #REGhl=#R$66B9.
+ $7B8B LD A,($66BA)  ; {Jump to #R$7BA3 if *#R$66BA is not zero.
  $7B8E OR A          ;
- $7B8F JR NZ,$7BA3   ;
- $7B91 LD A,($66F1)  ;
- $7B94 AND $06       ;
- $7B96 LD A,$1C      ;
- $7B98 JR Z,$7B9C    ;
- $7B9A LD A,$0E      ;
-*$7B9C CP (HL)       ;
- $7B9D JR NZ,$7BA1   ;
- $7B9F LD (HL),$FE   ;
-*$7BA1 INC (HL)      ;
- $7BA2 INC (HL)      ;
-*$7BA3 LD L,(HL)     ;
- $7BA4 LD H,$00      ;
- $7BA6 LD DE,$65DD   ;
- $7BA9 ADD HL,DE     ;
- $7BAA LD E,(HL)     ;
- $7BAB INC HL        ;
- $7BAC LD D,(HL)     ;
- $7BAD LD A,D        ;
+ $7B8F JR NZ,$7BA3   ; }
+ $7B91 LD A,($66F1)  ; #REGa=*#R$66F1.
+ $7B94 AND %00000110 ; Keep only bits 1-2.
+ $7B96 LD A,$1C      ; #REGa=#N$1C.
+ $7B98 JR Z,$7B9C    ; Jump to #R$7B9C if #REGhl is equal to #REGa.
+ $7B9A LD A,$0E      ; #REGa=#N$0E.
+*$7B9C CP (HL)       ; {Jump to #R$7BA1 if *#REGhl is not zero.
+ $7B9D JR NZ,$7BA1   ; }
+ $7B9F LD (HL),$FE   ; Write #N$FE to *#REGhl.
+*$7BA1 INC (HL)      ; {Increment *#REGhl by two.
+ $7BA2 INC (HL)      ; }
+*$7BA3 LD L,(HL)     ; #REGl=*#REGhl.
+ $7BA4 LD H,$00      ; #REGh=#N$00.
+ $7BA6 LD DE,$65DD   ; {#REGhl+=#R$65DD.
+ $7BA9 ADD HL,DE     ; }
+ $7BAA LD E,(HL)     ; #REGe=*#REGhl.
+ $7BAB INC HL        ; Increment #REGhl by one.
+ $7BAC LD D,(HL)     ; #REGd=*#REGhl.
+ $7BAD LD A,D        ; {Jump to #R$7BB7 if #REGd is not zero.
  $7BAE OR A          ;
- $7BAF JR NZ,$7BB7   ;
- $7BB1 LD HL,$66BA   ;
- $7BB4 LD (HL),A     ;
- $7BB5 JR $7C15      ;
-*$7BB7 CALL $66F7    ;
- $7BBA LD A,D        ;
+ $7BAF JR NZ,$7BB7   ; }
+ $7BB1 LD HL,$66BA   ; #REGhl=#R$66BA.
+ $7BB4 LD (HL),A     ; Write #REGa to *#REGhl.
+ $7BB5 JR $7C15      ; Jump to #R$7C15.
+*$7BB7 CALL $66F7    ; Call #R$66F7.
+ $7BBA LD A,D        ; {Jump to #R$7C15 if #REGd is equal to #N$58.
  $7BBB CP $58        ;
- $7BBD JR Z,$7C15    ;
- $7BBF LD A,E        ;
- $7BC0 AND $1F       ;
- $7BC2 LD B,A        ;
- $7BC3 LD A,($66ED)  ;
- $7BC6 AND $1F       ;
- $7BC8 CP B          ;
- $7BC9 JR C,$7BD2    ;
- $7BCB SUB B         ;
-*$7BCC CP $08        ;
- $7BCE JR NC,$7C15   ;
- $7BD0 JR $7BD7      ;
-*$7BD2 LD C,A        ;
- $7BD3 LD A,B        ;
- $7BD4 SUB C         ;
- $7BD5 JR $7BCC      ;
-*$7BD7 LD HL,$0041   ;
- $7BDA ADD HL,DE     ;
- $7BDB PUSH HL       ;
- $7BDC LD DE,$5AE0   ;
- $7BDF LD A,($6693)  ;
+ $7BBD JR Z,$7C15    ; }
+ $7BBF LD A,E        ; #REGa=#REGe.
+ $7BC0 AND %00011111 ; Keep only bits 0-4.
+ $7BC2 LD B,A        ; #REGb=#REGa.
+ $7BC3 LD A,($66ED)  ; #REGa=*#R$66ED.
+ $7BC6 AND %00011111 ; Keep only bits 0-4.
+ $7BC8 CP B          ; {Jump to #R$7BD2 if #REGa is less than #REGb.
+ $7BC9 JR C,$7BD2    ; }
+ $7BCB SUB B         ; #REGa-=#REGb.
+*$7BCC CP $08        ; Compare #REGa with #N$08.
+ $7BCE JR NC,$7C15   ; Jump to #R$7C15 if #REGa is greater than or equal to
+                     ; #N$08.
+ $7BD0 JR $7BD7      ; Jump to #R$7BD7.
+*$7BD2 LD C,A        ; #REGc=#REGa.
+ $7BD3 LD A,B        ; {#REGa=#REGb-#REGc.
+ $7BD4 SUB C         ; }
+ $7BD5 JR $7BCC      ; Jump to #R$7BCC.
+*$7BD7 LD HL,$0041   ; {#REGhl=#N($0041,$04,$04)+#REGde.
+ $7BDA ADD HL,DE     ; }
+ $7BDB PUSH HL       ; Stash #REGhl on the stack.
+ $7BDC LD DE,$5AE0   ; #REGde=#N$5AE0 (attribute buffer location).
+ $7BDF LD A,($6693)  ; {Jump to #R$7BE7 if *#R$6693 is zero.
  $7BE2 AND A         ;
- $7BE3 JR Z,$7BE7    ;
- $7BE5 LD E,$C0      ;
-*$7BE7 SBC HL,DE     ;
- $7BE9 POP HL        ;
- $7BEA JR NC,$7C15   ;
- $7BEC PUSH HL       ;
- $7BED LD HL,$66BA   ;
- $7BF0 INC (HL)      ;
- $7BF1 LD A,(HL)     ;
+ $7BE3 JR Z,$7BE7    ; }
+ $7BE5 LD E,$C0      ; #REGe=#N$C0.
+*$7BE7 SBC HL,DE     ; #REGhl-=#REGde (with carry).
+ $7BE9 POP HL        ; Restore #REGhl from the stack.
+ $7BEA JR NC,$7C15   ; Jump to #R$7C15 if #REGa is greater than or equal to
+                     ; #REGa.
+ $7BEC PUSH HL       ; Stash #REGhl on the stack.
+ $7BED LD HL,$66BA   ; #REGhl=#R$66BA.
+ $7BF0 INC (HL)      ; Increment *#REGhl by one.
+ $7BF1 LD A,(HL)     ; {Jump to #R$7BF8 if *#REGhl is not equal to #N$04.
  $7BF2 CP $04        ;
- $7BF4 JR NZ,$7BF8   ;
- $7BF6 LD (HL),$00   ;
-*$7BF8 INC HL        ;
- $7BF9 LD A,($66F1)  ;
- $7BFC AND $02       ;
- $7BFE LD A,$03      ;
- $7C00 JR Z,$7C0A    ;
- $7C02 INC (HL)      ;
- $7C03 LD A,(HL)     ;
+ $7BF4 JR NZ,$7BF8   ; }
+ $7BF6 LD (HL),$00   ; Write #N$00 to *#REGhl.
+*$7BF8 INC HL        ; Increment #REGhl by one.
+ $7BF9 LD A,($66F1)  ; #REGa=*#R$66F1.
+ $7BFC AND %00000010 ; Keep only bit 1.
+ $7BFE LD A,$03      ; #REGa=#N$03.
+ $7C00 JR Z,$7C0A    ; Jump to #R$7C0A if #REGhl is equal to #N$03.
+ $7C02 INC (HL)      ; Increment *#REGhl by one.
+ $7C03 LD A,(HL)     ; {Jump to #R$7C0A if *#REGhl is not equal to #N$03.
  $7C04 CP $03        ;
- $7C06 JR NZ,$7C0A   ;
- $7C08 XOR A         ;
- $7C09 LD (HL),A     ;
-*$7C0A ADD A,A       ;
+ $7C06 JR NZ,$7C0A   ; }
+ $7C08 XOR A         ; #REGa=#N$00.
+ $7C09 LD (HL),A     ; Write #REGa to *#REGhl.
+*$7C0A ADD A,A       ; {Multiply #REGa by #N$08.
  $7C0B ADD A,A       ;
- $7C0C ADD A,A       ;
- $7C0D POP HL        ;
- $7C0E POP DE        ;
- $7C0F INC DE        ;
- $7C10 LD (DE),A     ;
+ $7C0C ADD A,A       ; }
+ $7C0D POP HL        ; {Restore #REGhl and #REGde from the stack.
+ $7C0E POP DE        ; }
+ $7C0F INC DE        ; Increment #REGde by one.
+ $7C10 LD (DE),A     ; Write #REGa to *#REGde.
  $7C11 LD IXl,A      ;
- $7C13 JR $7C41      ;
-*$7C15 POP AF        ;
- $7C16 JR $7C50      ;
-*$7C18 EX DE,HL      ;
- $7C19 LD A,(HL)     ;
+ $7C13 JR $7C41      ; Jump to #R$7C41.
+*$7C15 POP AF        ; Restore #REGaf from the stack.
+ $7C16 JR $7C50      ; Jump to #R$7C50.
+*$7C18 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
+ $7C19 LD A,(HL)     ; {Jump to #R$7C50 if *#REGhl is equal to #N$46.
  $7C1A CP $46        ;
- $7C1C JR Z,$7C50    ;
- $7C1E CP $07        ;
- $7C20 JR Z,$7C50    ;
- $7C22 LD (HL),$00   ;
- $7C24 INC DE        ;
- $7C25 LD A,(DE)     ;
+ $7C1C JR Z,$7C50    ; }
+ $7C1E CP $07        ; {Jump to #R$7C50 if *#REGhl is equal to #N$07.
+ $7C20 JR Z,$7C50    ; }
+ $7C22 LD (HL),$00   ; Write #N$00 to *#REGhl.
+ $7C24 INC DE        ; Increment #REGde by one.
+ $7C25 LD A,(DE)     ; #REGa=*#REGde.
  $7C26 LD IXl,A      ;
- $7C28 PUSH HL       ;
- $7C29 CALL $6704    ;
- $7C2C LD B,$08      ;
- $7C2E XOR A         ;
-*$7C2F LD (HL),A     ;
- $7C30 INC H         ;
- $7C31 DJNZ $7C2F    ;
- $7C33 POP HL        ;
- $7C34 LD C,$20      ;
- $7C36 ADD HL,BC     ;
- $7C37 PUSH HL       ;
- $7C38 LD BC,$5B00   ;
- $7C3B AND A         ;
- $7C3C SBC HL,BC     ;
- $7C3E POP HL        ;
- $7C3F JR NC,$7C50   ;
-*$7C41 LD A,(HL)     ;
- $7C42 OR A          ;
- $7C43 JR Z,$7C54    ;
- $7C45 LD A,($6693)  ;
- $7C48 OR A          ;
- $7C49 JR NZ,$7C50   ;
- $7C4B LD A,(HL)     ;
- $7C4C CP $46        ;
- $7C4E JR Z,$7C54    ;
-*$7C50 LD D,$00      ;
- $7C52 JR $7C76      ;
-*$7C54 LD A,($66F1)  ;
- $7C57 AND $02       ;
- $7C59 LD A,$45      ;
- $7C5B JR Z,$7C5F    ;
- $7C5D LD A,$06      ;
-*$7C5F LD (HL),A     ;
- $7C60 PUSH HL       ;
- $7C61 CALL $6704    ;
- $7C64 EX DE,HL      ;
- $7C65 LD HL,$602E   ;
+ $7C28 PUSH HL       ; Stash #REGhl on the stack.
+ $7C29 CALL $6704    ; Call #R$6704.
+ $7C2C LD B,$08      ; #REGb=#N$08.
+ $7C2E XOR A         ; #REGa=#N$00.
+*$7C2F LD (HL),A     ; Write #REGa to *#REGhl.
+ $7C30 INC H         ; Increment #REGh by one.
+ $7C31 DJNZ $7C2F    ; Decrease counter by one and loop back to #R$7C2F until
+                     ; counter is zero.
+ $7C33 POP HL        ; Restore #REGhl from the stack.
+ $7C34 LD C,$20      ; #REGc=#N$20.
+ $7C36 ADD HL,BC     ; #REGhl+=#REGbc.
+ $7C37 PUSH HL       ; Stash #REGhl on the stack.
+ $7C38 LD BC,$5B00   ; #REGbc=#N$5B00 (attribute buffer location).
+ $7C3B AND A         ; Set flags.
+ $7C3C SBC HL,BC     ; #REGhl-=#REGbc.
+ $7C3E POP HL        ; Restore #REGhl from the stack.
+ $7C3F JR NC,$7C50   ; Jump to #R$7C50 if #REGh is greater than or equal to
+                     ; #REGa.
+*$7C41 LD A,(HL)     ; #REGa=*#REGhl.
+ $7C42 OR A          ; Set the bits from #REGa.
+ $7C43 JR Z,$7C54    ; Jump to #R$7C54 if #REGh is equal to #REGa.
+ $7C45 LD A,($6693)  ; #REGa=*#R$6693.
+ $7C48 OR A          ; Set the bits from #REGa.
+ $7C49 JR NZ,$7C50   ; Jump to #R$7C50 if #REGh is not equal to #REGa.
+ $7C4B LD A,(HL)     ; #REGa=*#REGhl.
+ $7C4C CP $46        ; Compare #REGa with #N$46.
+ $7C4E JR Z,$7C54    ; Jump to #R$7C54 if #REGa is equal to #N$46.
+*$7C50 LD D,$00      ; #REGd=#N$00.
+ $7C52 JR $7C76      ; Jump to #R$7C76.
+*$7C54 LD A,($66F1)  ; #REGa=*#R$66F1.
+ $7C57 AND %00000010 ; Keep only bit 1.
+ $7C59 LD A,$45      ; #REGa=#N$45.
+ $7C5B JR Z,$7C5F    ; Jump to #R$7C5F if #REGa is equal to #N$45.
+ $7C5D LD A,$06      ; #REGa=#N$06.
+*$7C5F LD (HL),A     ; Write #REGa to *#REGhl.
+ $7C60 PUSH HL       ; Stash #REGhl on the stack.
+ $7C61 CALL $6704    ; Call #R$6704.
+ $7C64 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
+ $7C65 LD HL,$602E   ; #REGhl=#R$602E.
  $7C68 LD C,IXl      ;
- $7C6A LD B,$00      ;
- $7C6C ADD HL,BC     ;
- $7C6D LD B,$08      ;
-*$7C6F LD A,(HL)     ;
- $7C70 LD (DE),A     ;
- $7C71 INC D         ;
- $7C72 INC HL        ;
- $7C73 DJNZ $7C6F    ;
- $7C75 POP DE        ;
-*$7C76 POP HL        ;
- $7C77 LD (HL),E     ;
- $7C78 INC HL        ;
- $7C79 LD (HL),D     ;
- $7C7A INC HL        ;
- $7C7B INC HL        ;
- $7C7C POP BC        ;
- $7C7D DEC B         ;
- $7C7E JP NZ,$7B76   ;
- $7C81 RET           ;
+ $7C6A LD B,$00      ; #REGb=#N$00.
+ $7C6C ADD HL,BC     ; #REGhl+=#REGbc.
+ $7C6D LD B,$08      ; #REGb=#N$08.
+*$7C6F LD A,(HL)     ; #REGa=*#REGhl.
+ $7C70 LD (DE),A     ; Write #REGa to *#REGde.
+ $7C71 INC D         ; Increment #REGd by one.
+ $7C72 INC HL        ; Increment #REGhl by one.
+ $7C73 DJNZ $7C6F    ; Decrease counter by one and loop back to #R$7C6F until
+                     ; counter is zero.
+ $7C75 POP DE        ; {Restore #REGde and #REGhl from the stack.
+*$7C76 POP HL        ; }
+ $7C77 LD (HL),E     ; Write #REGe to *#REGhl.
+ $7C78 INC HL        ; Increment #REGhl by one.
+ $7C79 LD (HL),D     ; Write #REGd to *#REGhl.
+ $7C7A INC HL        ; {Increment #REGhl by two.
+ $7C7B INC HL        ; }
+ $7C7C POP BC        ; Restore #REGbc from the stack.
+ $7C7D DEC B         ; Decrease #REGb by one.
+ $7C7E JP NZ,$7B76   ; Jump to #R$7B76 if #REGb is not equal to #N$08.
+ $7C81 RET           ; Return.
 
 ; Title Screen
 ;
