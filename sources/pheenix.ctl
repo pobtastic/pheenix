@@ -177,6 +177,14 @@ L $658A,$01,$51
 g $65DB
 
 w $65DD
+  $65FB
+
+g $6619
+
+g $6637
+
+g $6680
+  $6680
 
 g $6691
 
@@ -234,7 +242,9 @@ B $66F3,$01
 
 g $66F4
 
-g $66F5
+g $66F5 Flag: Player Lost All Lives?
+@ $66F5 label=Flag_GameOver
+B $66F5,$01
 
 g $66F6 Control Method
 @ $66F6 label=ControlMethod
@@ -1024,6 +1034,7 @@ c $6C9D
   $6CAC,$03 Jump to #R$6CBF if #REGa is zero.
   $6CAF,$04 Jump to #R$6CBF if #REGa is equal to #N$46.
   $6CB3,$04 Jump to #R$6CBF if #REGa is equal to #N$07.
+N $6CB7 See #POKE#immunity(Immunity).
   $6CB7,$05 Write #N$01 to *#R$66A4.
   $6CBC,$02 Restore #REGaf and #REGaf from the stack.
   $6CBE,$01 Return.
@@ -1083,7 +1094,7 @@ c $6CEE
 @ $6D00 label=GameOver
   $6D00,$07 Jump to #R$7030 if *#R$6695 is not zero.
   $6D07,$07 Jump to #R$6D29 if *#R$66F0 is not equal to #N$01.
-  $6D0E,$06 Jump to #R$6D29 if *#R$66F3 is not zero.
+  $6D0E,$06 Jump to #R$6D29 if *#R$66F3 is set.
   $6D14,$01 Stash #REGhl on the stack.
 N $6D15 Prints #FONT#(:(#STR($646E,$04,$04)))$3D00,attr=$45(game)
   $6D15,$03 #REGhl=#R$646E.
@@ -1129,7 +1140,7 @@ N $707F Else, the only control option left is the keyboard.
   $708A,$03 Write #REGa to *#R$6696.
   $708D,$04 Jump to #R$714E if #REGa is equal to #REGc.
   $7091,$04 Jump to #R$714E if #REGa is zero.
-  $7095,$06 Jump to #R$70B8 if *#R$66F3 is not zero.
+  $7095,$06 Jump to #R$70B8 if *#R$66F3 is set.
   $709B,$01 Stash #REGde on the stack.
   $709C,$02 #REGb=#N$16.
   $709E,$03 #REGhl=#N($0052,$04,$04).
@@ -1172,9 +1183,54 @@ c $70E7
 c $7200
 
 c $7254
-  $7254,$03
+  $7254,$08 Jump to #R$730D if *#R$66A4 is not equal to #N$02.
+  $725C,$07 Jump to #R$7277 if *#R$66F1 is not equal to #N$04.
+  $7263,$03 #REGhl=#R$65DD.
+  $7266,$02 #REGb=#N$08.
+  $7268,$01 Stash #REGbc on the stack.
+  $7269,$01 #REGe=*#REGhl.
+  $726A,$01 Increment #REGhl by one.
+  $726B,$01 #REGd=*#REGhl.
+  $726C,$01 Increment #REGhl by one.
+  $726D,$01 Stash #REGhl on the stack.
+  $726E,$05 Call #R$7564 if bit 6 of #REGd is set.
+  $7273,$02 Restore #REGhl and #REGbc from the stack.
+  $7275,$02 Decrease counter by one and loop back to #R$7268 until counter is zero.
+  $7277,$03 #REGhl=#R$6680.
+  $727A,$03 #REGde=#R$6680(#N$6681).
+  $727D,$03 #REGbc=#N($006C,$04,$04).
+  $7280,$01 Write #REGb to *#REGhl.
+  $7281,$02 LDIR.
+  $7283,$03 #REGhl=#R$65DD.
+  $7286,$03 #REGde=#R$65DD(#N$65DE).
+  $7289,$01 Stash #REGhl on the stack.
+  $728A,$02 #REGc=#N$1D.
+  $728C,$01 Write #REGb to *#REGhl.
+  $728D,$02 LDIR.
+  $728F,$03 #REGhl=#R$6637.
+  $7292,$06 Jump to #R$729D if *#R$66F1 is not zero.
+  $7298,$03 #REGhl=#R$65FB.
+  $729B,$02 Jump to #R$72AD.
+  $729D,$04 Jump to #R$72A6 if #REGa is not equal to #N$01.
+  $72A1,$03 #REGhl=#R$6619.
+  $72A4,$02 Jump to #R$72AD.
+  $72A6,$04 Jump to #R$72AD if #REGa is not equal to #N$04.
+  $72AA,$03 #REGhl=#R$6647.
+  $72AD,$01 Restore #REGde from the stack.
+  $72AE,$03 #REGa=*#R$667F.
+  $72B1,$01 Multiply #REGa by #N$02.
+  $72B2,$02 Jump to #R$72B7 if #REGa is zero.
+  $72B4,$01 #REGc=#REGa.
+  $72B5,$02 LDIR.
+  $72B7,$05 Write #N$CE to *#R$66ED.
   $72BC,$03 #REGhl=#R$66F0.
+N $72BF See #POKE#infinite-lives(Infinite Lives).
   $72BF,$01 Decrease #R$66F0 by one.
+  $72C0,$04 Jump to #R$72C9 if *#R$66F0 indicates the player still has lives
+. left.
+N $72C4 Player has lost all their lives, set the *#R$66F5 flag.
+  $72C4,$04 Write #N$01 to *#R$66F5.
+  $72C8,$01 Return.
 
 c $72C9
 
@@ -1201,11 +1257,13 @@ N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
 
 c $74A4 Game Intro
 @ $74A4 label=GameIntro
-D $74A4 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE {
-.   #SIM(start=$74A4,stop=$7558)#SCR$02(level-01)
+D $74A4 #PUSHS #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE {
+.   #CLS$05#SIM(start=$74B9,stop=$7558)#SCR$02(level-01)
 . } TABLE# #POPS
   $74A4,$03 Call #R$6720.
-  $74A7,$05 Return if *#R$66F3 is not zero.
+N $74A7 Don't bother with the animation if this is the demo mode.
+  $74A7,$05 Return if *#R$66F3 is set.
+N $74AC Set the attribute buffer to all cyan.
   $74AC,$0D Copy #INK$05 to #N$0300 bytes starting from #N$5800 in the
 . attribute buffer.
   $74B9,$03 #REGhl=#R$6C13.
@@ -1217,8 +1275,8 @@ N $74C3 Check if the control method is the Kempson joystick?
 N $74CA The control method is Kempston joystick, so test the fire button.
   $74CA,$02 #REGa=read from the Kempston joystick port.
 M $74CC,$05 Jump to #R$7558 if the fire button was pressed.
-  $74CC,$02,b$01 Keep only bits 4.
-  $74CE,$03 Jump to #R$7558 if #REGa is not equal to #N$02.
+  $74CC,$02,b$01 Keep only bit 4.
+  $74CE,$03 Jump to #R$7558 if bit 4 was set.
   $74D1,$02 Jump to #R$74E3.
 N $74D3 Check if the control method is the AGF joystick?
 @ $74D3 label=GameIntro_CheckAGF
@@ -1394,7 +1452,7 @@ M $79B2,$06 Return if bit 0 of *#R$6695 is not set.
   $79C7,$03 Jump to #R$7B5F.
 
   $79CA,$03 Stash #REGaf, #REGbc and #REGhl on the stack.
-  $79CD,$06 Jump to #R$7A1F if *#R$66F3 is not zero.
+  $79CD,$06 Jump to #R$7A1F if *#R$66F3 is set.
   $79D3,$03 #REGa=*#R$66F1.
   $79D6,$02,b$01 Keep only bit 1.
   $79D8,$02 Jump to #R$79F8 if ?? is equal to #REGa.
@@ -1414,6 +1472,7 @@ M $79D3,$07 Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
 
 c $7B67 Handler: Aliens
 @ $7B67 label=Handler_Aliens
+N $7B67 See #POKE#aliens-not-fire(Aliens Don't Fire).
   $7B67,$05 Return if *#R$6691 is zero.
   $7B6C,$05 Return if #REGa=*#R$6695 is not zero.
   $7B71,$03 #REGhl=#R$66A7.
@@ -1454,8 +1513,7 @@ c $7B67 Handler: Aliens
   $7BC6,$02,b$01 Keep only bits 0-4.
   $7BC8,$03 Jump to #R$7BD2 if #REGa is less than #REGb.
   $7BCB,$01 #REGa-=#REGb.
-  $7BCC,$02 Compare #REGa with #N$08.
-  $7BCE,$02 Jump to #R$7C15 if #REGa is greater than or equal to #N$08.
+  $7BCC,$04 Jump to #R$7C15 if #REGa is greater than or equal to #N$08.
   $7BD0,$02 Jump to #R$7BD7.
   $7BD2,$01 #REGc=#REGa.
   $7BD3,$02 #REGa=#REGb-#REGc.
@@ -1481,8 +1539,7 @@ c $7B67 Handler: Aliens
   $7C00,$02 Jump to #R$7C0A if #REGhl is equal to #N$03.
   $7C02,$01 Increment *#REGhl by one.
   $7C03,$05 Jump to #R$7C0A if *#REGhl is not equal to #N$03.
-  $7C08,$01 #REGa=#N$00.
-  $7C09,$01 Write #REGa to *#REGhl.
+  $7C08,$02 Write #N$00 to *#REGhl.
   $7C0A,$03 Multiply #REGa by #N$08.
   $7C0D,$02 Restore #REGhl and #REGde from the stack.
   $7C0F,$01 Increment #REGde by one.
@@ -1514,20 +1571,16 @@ c $7B67 Handler: Aliens
   $7C3E,$01 Restore #REGhl from the stack.
   $7C3F,$02 Jump to #R$7C50 if #REGh is greater than or equal to #REGa.
   $7C41,$04 Jump to #R$7C54 if *#REGhl is zero.
-  $7C45,$03 #REGa=*#R$6693.
-  $7C48,$01 Set the bits from #REGa.
-  $7C49,$02 Jump to #R$7C50 if #REGh is not equal to #REGa.
-  $7C4B,$01 #REGa=*#REGhl.
-  $7C4C,$02 Compare #REGa with #N$46.
-  $7C4E,$02 Jump to #R$7C54 if #REGa is equal to #N$46.
+  $7C45,$06 Jump to #R$7C50 if *#R$6693 is not zero.
+  $7C4B,$05 Jump to #R$7C54 if *#REGhl is equal to #N$46.
   $7C50,$02 #REGd=#N$00.
   $7C52,$02 Jump to #R$7C76.
+
   $7C54,$03 #REGa=*#R$66F1.
   $7C57,$02,b$01 Keep only bit 1.
   $7C59,$02 #REGa=#N$45.
   $7C5B,$02 Jump to #R$7C5F if #REGa is equal to #N$45.
-  $7C5D,$02 #REGa=#N$06.
-  $7C5F,$01 Write #REGa to *#REGhl.
+  $7C5D,$03 Write #N$06 to *#REGhl.
   $7C60,$01 Stash #REGhl on the stack.
   $7C61,$03 Call #R$6704.
   $7C64,$01 Exchange the #REGde and #REGhl registers.
@@ -1535,12 +1588,12 @@ c $7B67 Handler: Aliens
   $7C68,$02
   $7C6A,$02 #REGb=#N$00.
   $7C6C,$01 #REGhl+=#REGbc.
-  $7C6D,$02 #REGb=#N$08.
-  $7C6F,$01 #REGa=*#REGhl.
-  $7C70,$01 Write #REGa to *#REGde.
-  $7C71,$01 Increment #REGd by one.
-  $7C72,$01 Increment #REGhl by one.
-  $7C73,$02 Decrease counter by one and loop back to #R$7C6F until counter is zero.
+  $7C6D,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+  $7C6F,$02 Copy the UDG data to the screen buffer.
+  $7C71,$01 Move down one pixel line in the screen buffer.
+  $7C72,$01 Move to the next UDG graphic data byte.
+  $7C73,$02 Decrease the line counter by one and loop back to #R$7C6F until all
+. #N$08 lines of the UDG character have been drawn.
   $7C75,$02 Restore #REGde and #REGhl from the stack.
   $7C77,$01 Write #REGe to *#REGhl.
   $7C78,$01 Increment #REGhl by one.

@@ -1,7 +1,8 @@
+
 ; Copyright 2025 Paul Maddern (paul@arcadegeek.co.uk)
 
-[Poke:Infinite Lives]
-POKE #R$72BF,#N$00
+[Poke:infinite-lives:Infinite Lives]
+POKE #R$72BF(#N$72BF),#N$00
 
 This removes the command;
 
@@ -16,8 +17,8 @@ This removes the command;
 
 Which is used to decrease the player life counter held at #R$66F0(#N$66F0).
 
-[Poke:Aliens Don't Fire]
-POKE #R$7B67,#N$C9
+[Poke:aliens-not-fire:Aliens Don't Fire]
+POKE #R$7B67(#N$7B67),#N$C9
 
 Just RETurn immediately from the alien subroutine.
 
