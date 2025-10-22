@@ -1,0 +1,69 @@
+; Copyright 2025 Paul Maddern (paul@arcadegeek.co.uk)
+
+[Graphics:Ship]
+<table>
+  <tr><th>#R$604E(#N$604E)</th></tr>
+  <tr>
+    <td><img src="../images/udgs/ship.png"/></td>
+  </tr>
+</table>
+
+[Graphics:Bird Alien]
+<table>
+  <tr><th colspan=2>#R$60AE(#N$60AE)</th></tr>
+  <tr>
+    <td><img src="../images/udgs/bird-01-green.png"/></td>
+    <td><img src="../images/udgs/bird-02-green.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="../images/udgs/bird-01-magenta.png"/></td>
+    <td><img src="../images/udgs/bird-02-magenta.png"/></td>
+  </tr>
+</table>
+
+[Graphics:Pheenix]
+<table>
+  <tr><th>#R$60E7(#N$60E7)</th></tr>
+  <tr>
+    <td><img src="../images/udgs/pheenix-01.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="../images/udgs/pheenix-02.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="../images/udgs/pheenix-03.png"/></td>
+  </tr>
+</table>
+
+<table>
+  <tr><th colspan=2>#R$6153(#N$6153)</th></tr>
+  <tr>
+    <td><img src="../images/udgs/pheenix-04-blue.png"/></td>
+    <td><img src="../images/udgs/pheenix-04-magenta.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="../images/udgs/pheenix-05-blue.png"/></td>
+    <td><img src="../images/udgs/pheenix-05-magenta.png"/></td>
+  </tr>
+</table>
+
+[Graphics:Egg Hit]
+<table>
+  <tr><th colspan=2>#R$606E(#N$606E)</th></tr>
+  <tr>
+    <td><img src="../images/udgs/eggsplosion-left.png"/></td>
+    <td><img src="../images/udgs/eggsplosion-right.png"/></td>
+  </tr>
+</table>
+
+[Graphics:Mothership Alien]
+<p>Appears in the deck of the boss spaceship!</p>
+<table>
+  <tr><th>#R$5FD4(#N$5FD4)</th></tr>
+  <tr>
+    <td><img src="../images/udgs/mothership-alien-01.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="../images/udgs/mothership-alien-02.png"/></td>
+  </tr>
+</table>

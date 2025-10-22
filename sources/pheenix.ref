@@ -8,7 +8,7 @@
 
 [Config]
 Expand=#INCLUDE(Expand)
-RefFiles=bases.ref;analytics.ref;changelog.ref;data.ref;facts.ref;pokes.ref;sound.ref
+RefFiles=bases.ref;analytics.ref;changelog.ref;data.ref;facts.ref;graphics.ref;pokes.ref;sound.ref
 GameDir=pheenix
 
 [Game]
@@ -32,10 +32,15 @@ Pokes
 Changelog
 
 [Index:Graphics:Graphics And Sound]
+Graphics
 Sound
 
 [Paths]
+Graphics=graphics/graphics.html
 Sound=sound/sound.html
+
+[Page:Graphics]
+SectionPrefix=Graphics
 
 [Page:Sound]
 SectionPrefix=Audio

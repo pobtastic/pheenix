@@ -20,81 +20,194 @@ c $5C00
 b $5FD4 Graphics: Mothership Alien
 @ $5FD4 label=Graphics_MothershipAlien_01
 N $5FD4 Frame #N$01:
-N $5FD4 #UDGS$02,$02(mothership-alien-01)(
+N $5FD4 #UDGTABLE { #UDGS$02,$02(mothership-alien-01)(
 .   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
 .   udg
-. )
-  $5FD4,$08,b$01 #UDG(#PC)
-L $5FD4,$08,$04,$02
+. ) } TABLE#
+  $5FD4,$08,b$01 #UDGTABLE { #UDG(#PC,$44) } TABLE#
+L $5FD4,$08,$02,$02
+  $5FE4,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
+L $5FE4,$08,$02,$02
 @ $5FF4 label=Graphics_MothershipAlien_02
 N $5FF4 Frame #N$02:
-N $5FF4 #UDGS$02,$02(mothership-alien-02)(
+N $5FF4 #UDGTABLE { #UDGS$02,$02(mothership-alien-02)(
 .   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
 .   udg
-. )
-  $5FF4,$08,b$01 #UDG(#PC)
-L $5FF4,$08,$04,$02
+. ) } TABLE#
+  $5FF4,$08,b$01 #UDGTABLE { #UDG(#PC,$44) } TABLE#
+L $5FF4,$08,$02,$02
+  $6004,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
+L $6004,$08,$02,$02
 
 b $6014
 
 b $6026 Graphics: Lives Icon
 @ $6026 label=Graphics_LivesIcon
-  $6026,$08,b$01 #UDG(#PC,$42)
+  $6026,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
 
-b $602E
-  $602E,$08,b$01 #UDG(#PC)
-L $602E,$08,$04,$02
+b $602E Graphics: Bullets
+@ $602E label=Graphics_Bullets_01
+  $602E,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+@ $6036 label=Graphics_Bullets_02
+  $6036,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+@ $603E label=Graphics_Bullets_03
+  $603E,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+@ $6046 label=Graphics_Bullets_04
+  $6046,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
 
 b $604E Graphics: Ship
 @ $604E label=Graphics_Ship
-N $604E #UDGS$02,$02(ship)(
+N $604E #UDGTABLE { #UDGS$02,$02(ship)(
 .   #UDG(#PC+$08*($02*$y+$x),$46)(*udg)
 .   udg
-. )
-  $604E,$08,b$01 #UDG(#PC)
+. ) } TABLE#
+  $604E,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
 L $604E,$08,$04,$02
 
-b $606E
-  $606E,$08,b$01 #UDG(#PC)
-L $606E,$08,$0B,$02
+b $606E Graphics: Eggsplosion
+@ $606E label=Graphics_Eggsplosion_Left
+N $606E #UDGTABLE { #UDGS$02,$02(eggsplosion-left)(
+.   #UDG(#PC+$08*($02*$y+$x),$42)(*udg)
+.   udg
+. ) } TABLE#
+  $606E,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
+L $606E,$08,$04,$02
+@ $608E label=Graphics_Eggsplosion_Right
+N $608E #UDGTABLE { #UDGS$02,$02(eggsplosion-right)(
+.   #UDG(#PC+$08*($02*$y+$x),$42)(*udg)
+.   udg
+. ) } TABLE#
+  $608E,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
+L $608E,$08,$04,$02
 
-b $60CD
-  $60CD
-  $60E7
+b $60AE Graphics: Bird
+@ $60AE label=Graphics_Bird_01
+N $60AE #UDGTABLE { #UDGS$03,$02(bird-01-green)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($60C6,$617B),#PC+$08*$x))
+.   #UDG({addr},#MAP($x+($y*$03))($43,1:$44,4:$46))(*udg)
+.   udg
+. ) } TABLE#
+N $60AE #UDGTABLE { #UDGS$03,$02(bird-01-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($60C6,$617B),#PC+$08*$x))
+.   #UDG({addr},#MAP($x+($y*$03))($46,1:$43,4:$46))(*udg)
+.   udg
+. ) } TABLE#
+  $60AE,$08,b$01 #UDGTABLE { #UDG(#PC,$43) } TABLE#
+  $60B6,$08,b$01 #UDGTABLE { #UDG(#PC,$44) } TABLE#
+  $60BE,$08,b$01 #UDGTABLE { #UDG(#PC,$43) } TABLE#
+  $60C6,$07,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+@ $60CD label=Graphics_Bird_02
+N $60CD #UDGTABLE { #UDGS$03,$02(bird-02-green)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($60E5,$617B),#PC+$08*$x))
+.   #UDG({addr},#MAP($x+($y*$03))($43,1:$44,4:$46))(*udg)
+.   udg
+. ) } TABLE#
+N $60CD #UDGTABLE { #UDGS$03,$02(bird-02-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($60E5,$617B),#PC+$08*$x))
+.   #UDG({addr},#MAP($x+($y*$03))($46,1:$43,4:$46))(*udg)
+.   udg
+. ) } TABLE#
+  $60CD,$08,b$01 #UDGTABLE { #UDG(#PC,$43) } TABLE#
+  $60D5,$08,b$01 #UDGTABLE { #UDG(#PC,$44) } TABLE#
+  $60DD,$08,b$01 #UDGTABLE { #UDG(#PC,$43) } TABLE#
+  $60E5,$02,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+
+b $60E7 Graphics: Pheenix (Egg)
+@ $60E7 label=Graphics_Pheenix_01
+N $60E7 #UDGTABLE { #UDGS$03,$01(pheenix-01)(
+.   #UDG(#PC+$08*$x,$45)(*udg)
+.   udg
+. ) } TABLE#
+  $60E7,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+L $60E7,$08,$03,$02
+@ $60FF label=Graphics_Pheenix_02
+N $60FF #UDGTABLE { #UDGS$03,$01(pheenix-02)(
+.   #UDG(#PC+$08*$x,$45)(*udg)
+.   udg
+. ) } TABLE#
+  $60FF,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+L $60FF,$08,$03,$02
+  $6117,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+@ $611F label=Graphics_Pheenix_03
+N $611F #UDGTABLE { #UDGS$03,$02(pheenix-03)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($6137,$617B),#PC+$08*$x))
+.   #UDG({addr},#MAP($x+($y*$03))($45,1:$41,4:$46))(*udg)
+.   udg
+. ) } TABLE#
+  $611F,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+  $6127,$08,b$01 #UDGTABLE { #UDG(#PC,$41) } TABLE#
+  $612F,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+  $6137,$06,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+
+b $613D
 @ $613D label=Mask_LivesIcon
-  $613D,$08,b$01 #UDG(#PC)
-  $6153
-  $6185
-  $61A3
+  $613D,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+  $6145,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+  $614D,$06,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+
+b $6153 Graphics: Pheenix (Hatched)
+@ $6153 label=Graphics_Pheenix_04
+N $615B #UDGTABLE { #UDGS$03,$02(pheenix-04-blue)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($6173,$617B),#PC+$08*$x))
+.   #UDG({addr},#IF($y==0)($41,$46))(*udg)
+.   udg
+. ) } TABLE#
+N $615B #UDGTABLE { #UDGS$03,$02(pheenix-04-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($6173,$617B),#PC+$08*$x))
+.   #UDG({addr},#IF($y==0)($43,$46))(*udg)
+.   udg
+. ) } TABLE#
+  $6153,$08,b$01 #UDGTABLE { #UDG(#PC,$41) } TABLE#
+L $6153,$08,$04,$02
+  $6173,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+L $6173,$08,$02,$02
+@ $6185 label=Graphics_Pheenix_05
+N $6185 #UDGTABLE { #UDGS$03,$02(pheenix-05-blue)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($619D,$617B),#PC+$08*$x))
+.   #UDG({addr},#IF($y==0)($41,$46))(*udg)
+.   udg
+. ) } TABLE#
+N $6185 #UDGTABLE { #UDGS$03,$02(pheenix-05-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($619D,$617B),#PC+$08*$x))
+.   #UDG({addr},#IF($y==0)($43,$46))(*udg)
+.   udg
+. ) } TABLE#
+  $6185,$08,b$01 #UDGTABLE { #UDG(#PC,$41) } TABLE#
+L $6185,$08,$03,$02
+  $619D,$06,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+
+b $61A3
+  $61A3,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+L $61A3,$08,$03,$02
 
 b $61BB Graphics: MegaDodo Logo
 @ $61BB label=Graphics_MegaDodo
-N $61BB #UDGS$02,$02(megadodo)(
+N $61BB #UDGTABLE { #UDGS$02,$02(megadodo)(
 .   #UDG(#PC+$08*($02*$y+$x),$04)(*udg)
 .   udg
-. )
-  $61BB,$08,b$01 #UDG(#PC)
+. ) } TABLE#
+  $61BB,$08,b$01 #UDGTABLE { #UDG(#PC,$04) } TABLE#
 L $61BB,$08,$04,$02
 
 b $61DB Graphics: Large Star
 @ $61DB label=Graphics_StarLarge
-  $61DB,$08,b$01 #UDG(#PC,$05)
+  $61DB,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
 
 b $61E3 Graphics: Box
 @ $61E3 label=Graphics_Box
-  $61E3,$08,b$01 #UDG(#PC)
+  $61E3,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
 
 b $61EB
-  $61EB,$08,b$01 #UDG(#PC)
+  $61EB,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
 L $61EB,$08,$0C,$02
 
 b $624B Graphics: Small Star
 @ $624B label=Graphics_StarSmall
-  $624B,$08,b$01 #UDG(#PC,$05)
+  $624B,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
 
 b $6253
-  $6253,$08,b$01 #UDG(#PC)
-L $6253,$08,$40,$02
+  $6253,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+L $6253,$08,$3B,$02
 
 t $642B Messaging: Presents
 @ $642B label=Messaging_Presents
@@ -118,45 +231,47 @@ t $645E Messaging: "press S to start"
 
 t $646E Messaging: Game Over
 @ $646E label=Messaging_GameOver
-  $646E,$08 #FONT#(:(#STR(#PC,$04,$08)))$6253,attr=$06(game-over)
+  $646E,$08 #FONT#(:(#STR(#PC,$03,$08)))$6253,attr=$06(game-over)
 
 t $6476 Messaging: Instructions
 @ $6476 label=Messaging_Instructions
-  $6476,$0C #FONT#(:(#STR(#PC,$04,$0C)))$6253,attr=$06(instructions)
+D $6476 Used by the routine at #R$6B99.
+  $6476,$0C #FONT#(:(#STR(#PC,$03,$0C)))$6253,attr=$06(instructions)
 @ $6482 label=Messaging_Left
-  $6482,$14 #FONT#(:(#STR(#PC,$04,$14)))$6253,attr=$43(left)
+  $6482,$14 #FONT#(:(#STR(#PC,$03,$14)))$6253,attr=$43(left)
 @ $6496 label=Messaging_Right
-  $6496,$0B #FONT#(:(#STR(#PC,$04,$0B)))$6253,attr=$43(right)
+  $6496,$0B #FONT#(:(#STR(#PC,$03,$0B)))$6253,attr=$43(right)
 @ $64A1 label=Messaging_Fire
-  $64A1,$0F #FONT#(:(#STR(#PC,$04,$0F)))$6253,attr=$43(fire)
+  $64A1,$0F #FONT#(:(#STR(#PC,$03,$0F)))$6253,attr=$43(fire)
 @ $64B0 label=Messaging_Barrier
-  $64B0,$0F #FONT#(:(#STR(#PC,$04,$0F)))$6253,attr=$43(barrier)
+  $64B0,$0F #FONT#(:(#STR(#PC,$03,$0F)))$6253,attr=$43(barrier)
 @ $64BF label=Messaging_Level
-  $64BF,$12 #FONT#(:(#STR(#PC,$04,$12)))$6253,attr=$07(level)
+  $64BF,$12 #FONT#(:(#STR(#PC,$03,$12)))$6253,attr=$07(level)
 
 t $64D1 Messaging: "Select Joystick Or Keys"
 @ $64D1 label=Messaging_SelectJoystickOrKeys
-  $64D1,$17 #FONT#(:(#STR(#PC,$04,$17)))$6253,attr=$06(joystick-or-keys)
+D $64D1 Used by the routine at #R$6B4F.
+  $64D1,$17 #FONT#(:(#STR(#PC,$03,$17)))$6253,attr=$06(joystick-or-keys)
 @ $64E8 label=Messaging_KempstonJoystick
-  $64E8,$12 #FONT#(:(#STR(#PC,$04,$12)))$6253,attr=$06(kempston-joystick)
+  $64E8,$12 #FONT#(:(#STR(#PC,$03,$12)))$3D00,attr=$03(kempston-joystick)
 @ $64FA label=Messaging_AGFJoystick
-  $64FA,$0D #FONT#(:(#STR(#PC,$04,$0D)))$6253,attr=$06(agf-joystick)
+  $64FA,$0D #FONT#(:(#STR(#PC,$03,$0D)))$3D00,attr=$03(agf-joystick)
 @ $6507 label=Messaging_Keyboard
-  $6507,$0C #FONT#(:(#STR(#PC,$04,$0C)))$6253,attr=$06(keyboard)
+  $6507,$0C #FONT#(:(#STR(#PC,$03,$0C)))$3D00,attr=$03(keyboard)
 
 t $6514 Messaging: Header
 @ $6514 label=Messaging_Score
-  $6514,$06 #FONT#(:(#STR($6514,$04,$06)))$6253,attr=$06(player-score)
+  $6514,$06 #FONT#(:(#STR($6514,$03,$06)))$6253,attr=$06(player-score)
 @ $651A label=Messaging_Header_HighScore
-  $651A,$05 #FONT#(:(#STR($651A,$04,$0B)))$6253,attr=$06(high-score)
+  $651A,$05 #FONT#(:(#STR($651A,$03,$0B)))$6253,attr=$06(high-score)
 N $651F This isn't separate, it's part of the above.
 @ $651F label=Messaging_HighScore
-  $651F,$06 #FONT#(:(#STR($651F,$04,$06)))$6253,attr=$06(player-high-score)
+  $651F,$06 #FONT#(:(#STR($651F,$03,$06)))$6253,attr=$06(player-high-score)
 @ $6525 label=Messaging_Header_Level
-  $6525,$02 #FONT#(:(#STR($6525,$04,$03)))$6253,attr=$44(level-in-game)
+  $6525,$02 #FONT#(:(#STR($6525,$03,$03)))$6253,attr=$44(level-in-game)
 N $6527 This isn't separate, it's part of the above.
 @ $6527 label=Messaging_Header_LevelNumber
-  $6527,$01 #FONT#(:(#STR($6527,$04,$01)))$6253,attr=$44(level-number)
+  $6527,$01 #FONT#(:(#STR($6527,$03,$01)))$6253,attr=$44(level-number)
 
 g $6528 Score Buffer
 @ $6528 label=ScoreBuffer
@@ -422,12 +537,12 @@ D $67F6 #PUSHS #UDGTABLE {
 .   #SIM(start=$67F6,stop=$681B)#SCR$02{$00,$00,$200,$10}(header)
 . } TABLE# #POPS
   $67F6,$03 Call #R$67A9.
-N $67F9 Prints "#FONT#(:(#STR($651A,$04,$0B)))$6253,attr=$06(high-score)".
+N $67F9 Prints "#FONT#(:(#STR($651A,$03,$0B)))$6253,attr=$06(high-score)".
   $67F9,$01 Set the print attribute to #INK$06.
   $67FA,$02 Set #REGb for printing #N$0B characters.
   $67FC,$02 Update the screen buffer printing position to #N$4012.
   $67FE,$03 Call #R$676F.
-N $6801 Prints "#FONT#(:(#STR($6525,$04,$03)))$6253,attr=$44(header-level)".
+N $6801 Prints "#FONT#(:(#STR($6525,$03,$03)))$6253,attr=$44(header-level)".
   $6801,$03 Set #REGb for printing #N$03 characters and the print attribute to
 . #COLOUR$44.
   $6804,$02 Update the screen buffer printing position to #N$401D.
@@ -1099,12 +1214,12 @@ c $6CEE
   $6D07,$07 Jump to #R$6D29 if *#R$66F0 is not equal to #N$01.
   $6D0E,$06 Jump to #R$6D29 if *#R$66F3 is set.
   $6D14,$01 Stash #REGhl on the stack.
-N $6D15 Prints #FONT#(:(#STR($646E,$04,$04)))$3D00,attr=$45(game)
+N $6D15 Prints #FONT#(:(#STR($646E,$03,$04)))$3D00,attr=$45(game)
   $6D15,$03 #REGhl=#R$646E.
   $6D18,$03 #REGde=#N$48CB (screen buffer location).
   $6D1B,$03 Set to print #N$04 characters in #COLOUR$45.
   $6D1E,$03 Call #R$676F.
-N $6D21 Prints #FONT#(:(#STR($6472,$04,$04)))$3D00,attr=$45(over)
+N $6D21 Prints #FONT#(:(#STR($6472,$03,$04)))$3D00,attr=$45(over)
   $6D21,$02 Update the screen buffer address.
   $6D23,$02 Set to print #N$04 characters.
   $6D25,$03 Call #R$676F.
@@ -1712,29 +1827,29 @@ N $7CB9 Colour the MegaDodo graphic.
   $7CBB,$05 Write #COLOUR$04 to the top two blocks.
   $7CC0,$02 Update the attribute buffer positioning.
   $7CC2,$03 Write the attribute to the bottom two blocks.
-N $7CC5 Prints #FONT#(:(#STR($6435,$04,$09)))$6253,attr=$05(megadodo)
+N $7CC5 Prints #FONT#(:(#STR($6435,$03,$09)))$6253,attr=$05(megadodo)
   $7CC5,$03 #REGhl=#R$6435.
   $7CC8,$03 #REGde=#N$40A7 (screen buffer location).
   $7CCB,$03 Set to print #N$09 characters in #INK$05.
   $7CCE,$03 Call #R$676F.
-N $7CD1 Prints #FONT#(:(#STR($643E,$04,$08)))$6253,attr=$05(software)
+N $7CD1 Prints #FONT#(:(#STR($643E,$03,$08)))$6253,attr=$05(software)
   $7CD1,$02 Printing #N$08 characters.
   $7CD3,$02 Update the screen buffer address.
   $7CD5,$03 Call #R$676F.
-N $7CD8 Prints #FONT#(:(#STR($642B,$04,$08)))$3D00,attr=$43(presents)
+N $7CD8 Prints #FONT#(:(#STR($642B,$03,$08)))$3D00,attr=$43(presents)
   $7CD8,$03 #REGhl=#R$642B.
   $7CDB,$03 #REGde=#N$40EC (screen buffer location).
   $7CDE,$03 Set to print #N$08 characters in #COLOUR$43.
   $7CE1,$03 Call #R$6775.
-N $7CE4 Prints #FONT#(:(@#STR($6434,$04,$17)))$3D00,attr=$42(megadodo-software)
+N $7CE4 Prints #FONT#(:(@#STR($6434,$03,$17)))$3D00,attr=$42(megadodo-software)
   $7CE4,$03 #REGde=#N$5023 (screen buffer location).
   $7CE7,$03 Set to print #N$18 characters in #COLOUR$42.
   $7CEA,$03 Call #R$6775.
-N $7CED Prints #FONT#(:(#STR($644B,$04,$13)))$3D00,attr=$04(written-by)
+N $7CED Prints #FONT#(:(#STR($644B,$03,$13)))$3D00,attr=$04(written-by)
   $7CED,$02 Update the screen buffer address.
   $7CEF,$03 Set to print #N$13 characters in #INK$04.
   $7CF2,$03 Call #R$6775.
-N $7CF5 Prints #FONT#(:(#STR($645E,$04,$10)))$3D00,attr=$07(s-to-start)
+N $7CF5 Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
   $7CF5,$02 Update the screen buffer address.
   $7CF7,$03 Set to print #N$10 characters in #INK$07.
   $7CFA,$03 Call #R$6775.
@@ -1834,7 +1949,7 @@ N $7D7E Set the level text in the header.
   $7D9A,$01 Increment #REGa by one.
   $7D9B,$01 #REGc=#REGa.
   $7D9C,$02 Set #REGb to print #N$10 characters.
-N $7D9E Prints #FONT#(:(#STR($645E,$04,$10)))$3D00,attr=$07(s-to-start)
+N $7D9E Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
   $7D9E,$03 #REGhl=#R$645E.
   $7DA1,$03 #REGde=#N$4027 (screen buffer location).
   $7DA4,$03 Call #R$6775.
