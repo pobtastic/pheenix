@@ -93,10 +93,20 @@ Used by the routine at <a href="31874.html">TitleScreen</a>.
 <td class="instruction">JR NZ,<a href="32327.html#32341">Input_StartGame_Start</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="32336"></span>
+<div class="comments">
+<div class="paragraph">
+Switch the custom font to the game font.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32336"></span>32336</td>
 <td class="instruction">LD HL,24915</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24915.html">Graphics_Pheenix_04</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25171.html">24915</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -116,6 +126,16 @@ Used by the routine at <a href="31874.html">TitleScreen</a>.
 <td class="instruction">RET NZ</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="32344"></span>
+<div class="comments">
+<div class="paragraph">
+Switch the custom font to the ZX Spectrum font.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32344"></span>32344</td>
 <td class="instruction">LD HL,15360</td>
@@ -126,6 +146,16 @@ Used by the routine at <a href="31874.html">TitleScreen</a>.
 <td class="address-2"><span id="32347"></span>32347</td>
 <td class="instruction">LD (26481),HL</td>
 <td class="comment-1" rowspan="1">Write <span class="register">HL</span> to <a href="26479.html">26481</a> (<a href="26479.html">Configurable_PrintString</a>).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="32350"></span>
+<div class="comments">
+<div class="paragraph">
+Set the flag which will start the game.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

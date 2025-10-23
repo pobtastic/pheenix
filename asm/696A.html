@@ -33,7 +33,7 @@ Next: <a href="6A23.html">6A23</a>
 </td>
 </tr>
 </table>
-<div class="description">696A: Routine at 696A</div>
+<div class="description">696A: Draw Alien Mothership</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -44,7 +44,7 @@ Used by the routine at <a href="72C9.html">72C9</a>.
 <div class="paragraph">
 <table class="">
 <tr>
-<td class="" colspan="1" rowspan="1"><img alt="test" src="../images/scr/test.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="mothership" src="../images/scr/mothership.png" /></td>
 </tr>
 </table>
 </div>
@@ -52,387 +52,462 @@ Used by the routine at <a href="72C9.html">72C9</a>.
 </td>
 </tr>
 <tr>
+<td class="asm-label">Draw_AlienMothership</td>
 <td class="address-2"><span id="696a"></span>696A</td>
 <td class="instruction">LD HL,$6538</td>
 <td class="comment-1" rowspan="4">Call <a href="676F.html#677b">CustomFont_PrintString</a> using <a href="6538.html">Table_MothershipUDGs</a>; printing 02 characters in CYAN.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="696d"></span>696D</td>
 <td class="instruction">LD DE,$408F</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6970"></span>6970</td>
 <td class="instruction">LD BC,$0205</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6973"></span>6973</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6976"></span>6976</td>
 <td class="instruction">LD E,$AF</td>
 <td class="comment-1" rowspan="3">Call <a href="676F.html#677b">CustomFont_PrintString</a> using <a href="6538.html#653a">653A</a>; printing 02 characters in CYAN.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6978"></span>6978</td>
 <td class="instruction">LD B,$02</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="697a"></span>697A</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="697d"></span>697D</td>
 <td class="instruction">LD E,$CA</td>
 <td class="comment-1" rowspan="3">Call <a href="676F.html#677b">CustomFont_PrintString</a> using <a href="6538.html#653c">653C</a>; printing 02 characters in YELLOW.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="697f"></span>697F</td>
 <td class="instruction">LD BC,$0206</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6982"></span>6982</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6985"></span>6985</td>
 <td class="instruction">LD E,$CC</td>
 <td class="comment-1" rowspan="3">Call <a href="676F.html#677b">CustomFont_PrintString</a> using <a href="6538.html#653e">653E</a>; printing 08 characters in INK:RED,
 PAPER:YELLOW.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6987"></span>6987</td>
 <td class="instruction">LD BC,$0832</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="698a"></span>698A</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="698d"></span>698D</td>
 <td class="instruction">LD E,$D4</td>
-<td class="comment-1" rowspan="1"><span class="register">E</span>=D4.</td>
+<td class="comment-1" rowspan="3">Call <a href="676F.html#677b">CustomFont_PrintString</a> using <a href="6538.html#6546">6546</a>; printing 02 characters in YELLOW.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="698f"></span>698F</td>
 <td class="instruction">LD BC,$0206</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0206.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6992"></span>6992</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
-<td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6995"></span>6995</td>
 <td class="instruction">LD E,$E9</td>
-<td class="comment-1" rowspan="1"><span class="register">E</span>=E9.</td>
+<td class="comment-1" rowspan="3">Call <a href="676F.html#677b">CustomFont_PrintString</a> using <a href="6538.html#6548">6548</a>; printing 01 character in YELLOW.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6997"></span>6997</td>
 <td class="instruction">INC B</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">B</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6998"></span>6998</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
-<td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="699b"></span>699B</td>
 <td class="instruction">INC E</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">E</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="699c"></span>699C</td>
 <td class="instruction">LD BC,$0C31</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0C31.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="699f"></span>699F</td>
 <td class="instruction">CALL <a href="676F.html#6775">SpectrumFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#6775">SpectrumFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69a2"></span>69A2</td>
 <td class="instruction">LD E,$F6</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=F6.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69a4"></span>69A4</td>
 <td class="instruction">LD BC,$0106</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0106.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69a7"></span>69A7</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69aa"></span>69AA</td>
 <td class="instruction">LD DE,$4808</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=4808 (screen buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69ad"></span>69AD</td>
 <td class="instruction">INC B</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">B</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69ae"></span>69AE</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69b1"></span>69B1</td>
 <td class="instruction">INC E</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">E</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69b2"></span>69B2</td>
 <td class="instruction">LD BC,$0E31</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0E31.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69b5"></span>69B5</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69b8"></span>69B8</td>
 <td class="instruction">LD E,$17</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=17.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69ba"></span>69BA</td>
 <td class="instruction">LD BC,$0106</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0106.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69bd"></span>69BD</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69c0"></span>69C0</td>
 <td class="instruction">LD E,$27</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=27.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69c2"></span>69C2</td>
 <td class="instruction">LD BC,$120F</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=120F.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69c5"></span>69C5</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69c8"></span>69C8</td>
 <td class="instruction">LD E,$47</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=47.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69ca"></span>69CA</td>
 <td class="instruction">LD BC,$0102</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0102.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69cd"></span>69CD</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69d0"></span>69D0</td>
 <td class="instruction">INC B</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">B</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69d1"></span>69D1</td>
 <td class="instruction">LD E,$68</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=68.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69d3"></span>69D3</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69d6"></span>69D6</td>
 <td class="instruction">LD E,$89</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=89.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69d8"></span>69D8</td>
 <td class="instruction">LD B,$02</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=02.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69da"></span>69DA</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69dd"></span>69DD</td>
 <td class="instruction">LD E,$AB</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=AB.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69df"></span>69DF</td>
 <td class="instruction">LD B,$0A</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=0A.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69e1"></span>69E1</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69e4"></span>69E4</td>
 <td class="instruction">LD E,$95</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=95.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69e6"></span>69E6</td>
 <td class="instruction">LD B,$02</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=02.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69e8"></span>69E8</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69eb"></span>69EB</td>
 <td class="instruction">LD E,$77</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=77.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69ed"></span>69ED</td>
 <td class="instruction">INC B</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">B</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69ee"></span>69EE</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69f1"></span>69F1</td>
 <td class="instruction">LD E,$58</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=58.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69f3"></span>69F3</td>
 <td class="instruction">INC B</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">B</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69f4"></span>69F4</td>
 <td class="instruction">CALL <a href="676F.html#677b">CustomFont_PrintString</a></td>
 <td class="comment-1" rowspan="1">Call <a href="676F.html#677b">CustomFont_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69f7"></span>69F7</td>
 <td class="instruction">LD HL,$0404</td>
 <td class="comment-1" rowspan="2">Write 0404 to *58EF (attribute buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69fa"></span>69FA</td>
 <td class="instruction">LD ($58EF),HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="69fd"></span>69FD</td>
 <td class="instruction">LD HL,$4242</td>
 <td class="comment-1" rowspan="2">Write 4242 to *590F (attribute buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a00"></span>6A00</td>
 <td class="instruction">LD ($590F),HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a03"></span>6A03</td>
 <td class="instruction">LD A,$10</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=INK:BLACK,
 PAPER:RED.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a05"></span>6A05</td>
 <td class="instruction">LD HL,$5948</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=5948 (attribute buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a08"></span>6A08</td>
 <td class="instruction">LD DE,$5949</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=5949 (attribute buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a0b"></span>6A0B</td>
 <td class="instruction">LD (HL),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a0c"></span>6A0C</td>
 <td class="instruction">LD C,$0F</td>
 <td class="comment-1" rowspan="1"><span class="register">C</span>=0F.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a0e"></span>6A0E</td>
 <td class="instruction">LDIR</td>
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a10"></span>6A10</td>
 <td class="instruction">LD L,$69</td>
 <td class="comment-1" rowspan="1"><span class="register">L</span>=69.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a12"></span>6A12</td>
 <td class="instruction">LD E,$6A</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=6A.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a14"></span>6A14</td>
 <td class="instruction">LD (HL),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a15"></span>6A15</td>
 <td class="instruction">LD C,$0D</td>
 <td class="comment-1" rowspan="1"><span class="register">C</span>=0D.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a17"></span>6A17</td>
 <td class="instruction">LDIR</td>
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a19"></span>6A19</td>
 <td class="instruction">LD L,$8A</td>
 <td class="comment-1" rowspan="1"><span class="register">L</span>=8A.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a1b"></span>6A1B</td>
 <td class="instruction">LD E,$8B</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=8B.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a1d"></span>6A1D</td>
 <td class="instruction">LD (HL),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a1e"></span>6A1E</td>
 <td class="instruction">LD C,$0B</td>
 <td class="comment-1" rowspan="1"><span class="register">C</span>=0B.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a20"></span>6A20</td>
 <td class="instruction">LDIR</td>
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6a22"></span>6A22</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>

@@ -47,97 +47,93 @@ Used by the routine at <a href="70E7.html">70E7</a>.
 <tr>
 <td class="address-2"><span id="7200"></span>7200</td>
 <td class="instruction">CP $02</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Jump to <a href="7200.html#7223">7223</a> if <span class="register">A</span> is not equal to 02.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7202"></span>7202</td>
 <td class="instruction">JR NZ,<a href="7200.html#7223">$7223</a></td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7204"></span>7204</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7205"></span>7205</td>
 <td class="instruction">LD A,L</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="3"><span class="register">L</span>-=20.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7206"></span>7206</td>
 <td class="instruction">SUB $20</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7208"></span>7208</td>
 <td class="instruction">LD L,A</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7209"></span>7209</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="720a"></span>720A</td>
 <td class="instruction">CP $10</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Jump to <a href="7200.html#721b">721B</a> if <span class="register">A</span> is not equal to 10.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="720c"></span>720C</td>
 <td class="instruction">JR NZ,<a href="7200.html#721b">$721B</a></td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="720e"></span>720E</td>
 <td class="instruction">LD H,$4D</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=4D.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7210"></span>7210</td>
 <td class="instruction">LD B,$03</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=03.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7212"></span>7212</td>
 <td class="instruction">LD DE,$61EF</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61EB.html#61ef">61EF</a>.</td>
 </tr>
 <tr>
 <td class="address-2"><span id="7215"></span>7215</td>
 <td class="instruction">LD A,(DE)</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">DE</span>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7216"></span>7216</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7217"></span>7217</td>
 <td class="instruction">INC H</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7218"></span>7218</td>
 <td class="instruction">DEC DE</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">DE</span> by one.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7219"></span>7219</td>
 <td class="instruction">DJNZ <a href="7200.html#7215">$7215</a></td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7200.html#7215">7215</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="address-2"><span id="721b"></span>721B</td>
 <td class="instruction">POP HL</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="721c"></span>721C</td>
 <td class="instruction">LD (HL),$00</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Write 00 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -152,27 +148,26 @@ This entry point is used by the routine at <a href="70E7.html">70E7</a>.
 <tr>
 <td class="address-2"><span id="721e"></span>721E</td>
 <td class="instruction">LD DE,$3D00</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">3D00</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7221"></span>7221</td>
 <td class="instruction">JR <a href="7200.html#722c">$722C</a></td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7200.html#722c">722C</a>.</td>
 </tr>
 <tr>
 <td class="address-2"><span id="7223"></span>7223</td>
 <td class="instruction">CP $10</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Jump to <a href="7200.html#7245">7245</a> if <span class="register">A</span> is not equal to 10.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7225"></span>7225</td>
 <td class="instruction">JR NZ,<a href="7200.html#7245">$7245</a></td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7227"></span>7227</td>
 <td class="instruction">LD (HL),$02</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Write 02 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -187,117 +182,111 @@ This entry point is used by the routine at <a href="70E7.html">70E7</a>.
 <tr>
 <td class="address-2"><span id="7229"></span>7229</td>
 <td class="instruction">LD DE,$61EB</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61EB.html">61EB</a>.</td>
 </tr>
 <tr>
 <td class="address-2"><span id="722c"></span>722C</td>
 <td class="instruction">LD H,$48</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=48.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="722e"></span>722E</td>
 <td class="instruction">LD B,$08</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (08 lines in a UDG).</td>
 </tr>
 <tr>
 <td class="address-2"><span id="7230"></span>7230</td>
 <td class="instruction">LD A,(DE)</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7231"></span>7231</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7232"></span>7232</td>
 <td class="instruction">INC DE</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7233"></span>7233</td>
 <td class="instruction">INC H</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7234"></span>7234</td>
 <td class="instruction">DJNZ <a href="7200.html#7230">$7230</a></td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="7200.html#7230">7230</a> until all 08 lines of the UDG character have been drawn.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7236"></span>7236</td>
 <td class="instruction">LD A,$35</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Write 35 to *<a href="6528.html#652e">652E</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7238"></span>7238</td>
 <td class="instruction">LD ($652E),A</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="723b"></span>723B</td>
 <td class="instruction">CALL <a href="67B6.html">Handler_Score</a></td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="67B6.html">Handler_Score</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="723e"></span>723E</td>
 <td class="instruction">CALL <a href="67A9.html">PrintScore</a></td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="67A9.html">PrintScore</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7241"></span>7241</td>
 <td class="instruction">CALL <a href="681C.html">PrintLives</a></td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="681C.html">PrintLives</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7244"></span>7244</td>
 <td class="instruction">RET</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Return.</td>
 </tr>
 <tr>
 <td class="address-2"><span id="7245"></span>7245</td>
 <td class="instruction">CP $40</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 40.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7247"></span>7247</td>
 <td class="instruction">RET NZ</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7248"></span>7248</td>
 <td class="instruction">RES 5,L</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Reset bit 5 of <span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="724a"></span>724A</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="3">Return if *<span class="register">HL</span> is not equal to 42.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="724b"></span>724B</td>
 <td class="instruction">CP $42</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="724d"></span>724D</td>
 <td class="instruction">RET NZ</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="724e"></span>724E</td>
 <td class="instruction">LD A,$01</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Write 01 to *<a href="66D3.html">66D3</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7250"></span>7250</td>
 <td class="instruction">LD ($66D3),A</td>
-<td class="comment-0" rowspan="1"></td>
 </tr>
 <tr>
 <td class="address-1"><span id="7253"></span>7253</td>
 <td class="instruction">RET</td>
-<td class="comment-0" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Return.</td>
 </tr>
 </table>
 <table class="asm-navigation">

@@ -29,11 +29,11 @@ Prev: <a href="7599.html">7599</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#75ad">Map</a></td>
 <td class="next">
-Next: <a href="75B2.html">75B2</a>
+Next: <a href="75B7.html">75B7</a>
 </td>
 </tr>
 </table>
-<div class="description">75AD: Routine at 75AD</div>
+<div class="description">75AD: Handler: Bird Alien</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,14 +45,38 @@ Used by the routine at <a href="7616.html">7616</a>.
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_BirdAlien_01</td>
 <td class="address-2"><span id="75ad"></span>75AD</td>
 <td class="instruction">LD HL,$60AE</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="60AE.html">Graphics_Bird_01</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="75b0"></span>75B0</td>
-<td class="instruction">JR <a href="75BF.html#75da">$75DA</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="75BF.html#75da">75DA</a>.</td>
+<td class="instruction">JR <a href="75B7.html#75da">Handler_Pheenix_LoadColours</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="75B7.html#75da">Handler_Pheenix_LoadColours</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="75b2"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="7616.html">7616</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_BirdAlien_02</td>
+<td class="address-2"><span id="75b2"></span>75B2</td>
+<td class="instruction">LD HL,$60CD</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="60AE.html#60cd">Graphics_Bird_02</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="75b5"></span>75B5</td>
+<td class="instruction">JR <a href="75B7.html#75da">Handler_Pheenix_LoadColours</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="75B7.html#75da">Handler_Pheenix_LoadColours</a>.</td>
 </tr>
 </table>
 <table class="asm-navigation">
@@ -62,7 +86,7 @@ Prev: <a href="7599.html">7599</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#75ad">Map</a></td>
 <td class="next">
-Next: <a href="75B2.html">75B2</a>
+Next: <a href="75B7.html">75B7</a>
 </td>
 </tr>
 </table>

@@ -25,15 +25,15 @@ gtag('config', 'G-75RERFCHBG');
 <table class="asm-navigation">
 <tr>
 <td class="prev">
-Prev: <a href="30130.html">30130</a>
+Prev: <a href="30125.html">30125</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#30135">Map</a></td>
 <td class="next">
-Next: <a href="30140.html">30140</a>
+Next: <a href="30230.html">30230</a>
 </td>
 </tr>
 </table>
-<div class="description">30135: Routine at 75B7</div>
+<div class="description">30135: Handler: Pheenix</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -41,28 +41,521 @@ Next: <a href="30140.html">30140</a>
 <div class="paragraph">
 Used by the routine at <a href="30230.html">30230</a>.
 </div>
+<div class="paragraph">
+This is a fairly dogmatic sprite drawing routine, and hopefully this will explain why there are empty blocks seemingly randomly in the Pheenix sprite data.
+</div>
+<div class="paragraph">
+This routine always assumes the Pheenix sprite data looks like this: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1">X</td>
+<td class="" colspan="1" rowspan="1">X</td>
+<td class="" colspan="1" rowspan="1">X</td>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"></td>
+<td class="" colspan="1" rowspan="1">X</td>
+<td class="" colspan="1" rowspan="1"></td>
+</tr>
+</table> However the sprites aren't always in that format, sometimes they have a single row of 2 UDGs - so in order to use the same routine the sprites "share" empty UDGs, so although something is written, it's just all 0.
+</div>
+<div class="paragraph">
+Lastly, to conserve on space - some UDGs are less than 8 line bytes, they just share the bytes from the following sprite data. So some sprites end with empty bytes, and some start with empty bytes (which are shared between each).
+</div>
+</div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">DE</td>
+<td class="register-desc">Screen buffer sprite destination</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30135"></span>
+<div class="comments">
+<div class="paragraph">
+Display frame 1 (the egg stage).
+</div>
 </div>
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_Pheenix_01</td>
 <td class="address-2"><span id="30135"></span>30135</td>
 <td class="instruction">LD HL,24807</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24807.html">Graphics_Pheenix_01</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="30138"></span>30138</td>
-<td class="instruction">JR <a href="30143.html">30143</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="30143.html">30143</a>.</td>
+<td class="instruction">JR <a href="30135.html#30143">Handler_Pheenix_SingleRow</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="30135.html#30143">Handler_Pheenix_SingleRow</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30140"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="30230.html">30230</a>.
+</div>
+<div class="paragraph">
+Display frame 2 (the egg breaking apart).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_02</td>
+<td class="address-2"><span id="30140"></span>30140</td>
+<td class="instruction">LD HL,24831</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24807.html#24831">Graphics_Pheenix_02</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30143"></span>
+<div class="comments">
+<div class="paragraph">
+Handler for single row sprites (as the second row is invisible).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_SingleRow</td>
+<td class="address-2"><span id="30143"></span>30143</td>
+<td class="instruction">LD BC,1285</td>
+<td class="comment-1" rowspan="1">Set <span class="register">BC</span> to CYAN / CYAN (centre and righthand blocks of the top and only row).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30146"></span>30146</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="2">Write BLACK to the low byte of <span class="register">IX</span> (the lefthand block of the top row - which is an empty block).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30147"></span>30147</td>
+<td class="instruction">LD IXl,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30149"></span>30149</td>
+<td class="instruction">JR <a href="30135.html#30176">Handler_Pheenix_Draw</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="30135.html#30176">Handler_Pheenix_Draw</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30151"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="30230.html">30230</a>.
+</div>
+<div class="paragraph">
+Display frame 3 (the broken egg with a baby Pheenix).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_03</td>
+<td class="address-2"><span id="30151"></span>30151</td>
+<td class="instruction">LD HL,24863</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24807.html#24863">Graphics_Pheenix_03</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30154"></span>30154</td>
+<td class="instruction">LD B,5</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> to CYAN (righthand block of top row/ shell colour).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30156"></span>30156</td>
+<td class="instruction">LD A,(26237)</td>
+<td class="comment-1" rowspan="2"><span class="register">C</span>=*<a href="26237.html">Pheenix_Colour_01</a> (the centre colour of the top row/ Pheenix body).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30159"></span>30159</td>
+<td class="instruction">LD C,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30160"></span>30160</td>
+<td class="instruction">JR <a href="30135.html#30174">Handler_Pheenix_SetColour</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="30135.html#30174">Handler_Pheenix_SetColour</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30162"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="30230.html">30230</a>.
+</div>
+<div class="paragraph">
+Display frame 5 (Pheenix wings "up").
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_05</td>
+<td class="address-2"><span id="30162"></span>30162</td>
+<td class="instruction">LD HL,24965</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24923.html#24965">Graphics_Pheenix_05</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30165"></span>30165</td>
+<td class="instruction">JR <a href="30135.html#30170">Handler_Pheenix_LoadColours</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="30135.html#30170">Handler_Pheenix_LoadColours</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30167"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="30230.html">30230</a>.
+</div>
+<div class="paragraph">
+Display frame 4 (Pheenix wings "down").
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_04</td>
+<td class="address-2"><span id="30167"></span>30167</td>
+<td class="instruction">LD HL,24923</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24923.html">Graphics_Pheenix_04</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30170"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="30125.html">Handler_BirdAlien_01</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_LoadColours</td>
+<td class="address-2"><span id="30170"></span>30170</td>
+<td class="instruction">LD BC,(26237)</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> to *<a href="26237.html">Pheenix_Colour_01</a> (righthand block of top row) and set <span class="register">C</span> to *<a href="26237.html#26238">Pheenix_Colour_02</a> (middle block of top row).</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_SetColour</td>
+<td class="address-2"><span id="30174"></span>30174</td>
+<td class="instruction">LD IXl,B</td>
+<td class="comment-1" rowspan="1">Write <span class="register">B</span> to the low byte of <span class="register">IX</span> which is used for colouring the lefthand block of the top row.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_Draw</td>
+<td class="address-2"><span id="30176"></span>30176</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-1" rowspan="3">Stash the screen buffer destination, colour pair and screen buffer destination (again) on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30177"></span>30177</td>
+<td class="instruction">PUSH BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30178"></span>30178</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30179"></span>
+<div class="comments">
+<div class="paragraph">
+All Pheenix sprites are 3 columns in the top row.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30179"></span>30179</td>
+<td class="instruction">LD B,3</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 3 columns.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_ColumnLoop</td>
+<td class="address-2"><span id="30181"></span>30181</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash the column counter and screen buffer pointer on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30182"></span>30182</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30183"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the UDG to the screen buffer.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30183"></span>30183</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_LineLoop</td>
+<td class="address-2"><span id="30185"></span>30185</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30186"></span>30186</td>
+<td class="instruction">LD (DE),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30187"></span>30187</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30188"></span>30188</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30189"></span>30189</td>
+<td class="instruction">DJNZ <a href="30135.html#30185">Handler_Pheenix_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="30135.html#30185">Handler_Pheenix_LineLoop</a> until all 8 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30191"></span>30191</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the original screen buffer location from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30192"></span>30192</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move right one character block.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30193"></span>30193</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the column counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30194"></span>30194</td>
+<td class="instruction">DJNZ <a href="30135.html#30181">Handler_Pheenix_ColumnLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the column counter by one and loop back to <a href="30135.html#30181">Handler_Pheenix_ColumnLoop</a> until all three columns of this row have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30196"></span>30196</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="2">Restore the screen buffer destination and colour pair from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30197"></span>30197</td>
+<td class="instruction">POP BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30198"></span>30198</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1">Stash the UDG data pointer on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30199"></span>30199</td>
+<td class="instruction">CALL <a href="26359.html">ConvertScreenToAttributeBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26359.html">ConvertScreenToAttributeBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30202"></span>30202</td>
+<td class="instruction">EX DE,HL</td>
+<td class="comment-1" rowspan="1">Exchange the <span class="register">DE</span> and <span class="register">HL</span> registers.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30203"></span>
+<div class="comments">
+<div class="paragraph">
+Colour the top row of the Pheenix sprite.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30203"></span>30203</td>
+<td class="instruction">LD A,IXl</td>
+<td class="comment-1" rowspan="2">Write the colour held by the low byte of <span class="register">IX</span> to the attribute buffer pointer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30205"></span>30205</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30206"></span>30206</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move right one attribute block.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30207"></span>30207</td>
+<td class="instruction">LD (HL),C</td>
+<td class="comment-1" rowspan="1">Write the colour held by <span class="register">C</span> to the attribute buffer pointer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30208"></span>30208</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move right one attribute block.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30209"></span>30209</td>
+<td class="instruction">LD (HL),B</td>
+<td class="comment-1" rowspan="1">Write the colour held by <span class="register">B</span> to the attribute buffer pointer.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30210"></span>
+<div class="comments">
+<div class="paragraph">
+Colour the bottom row of the Pheenix sprite (feet, or an empty block).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30210"></span>30210</td>
+<td class="instruction">LD BC,31</td>
+<td class="comment-1" rowspan="2">Move the attribute buffer pointer to the row below the current row and left one attribute block (by adding 0031).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30213"></span>30213</td>
+<td class="instruction">ADD HL,BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30214"></span>30214</td>
+<td class="instruction">LD (HL),6</td>
+<td class="comment-1" rowspan="1">Write YELLOW to the attribute buffer pointer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30216"></span>30216</td>
+<td class="instruction">CALL <a href="26372.html">ConvertAttributeToScreenBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26372.html">ConvertAttributeToScreenBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30219"></span>
+<div class="comments">
+<div class="paragraph">
+Now draw the bottom row (feet, or empty block).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30219"></span>30219</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the UDG pointer from the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="30220"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the UDG to the screen buffer.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30220"></span>30220</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Pheenix_BottomRowLoop</td>
+<td class="address-2"><span id="30222"></span>30222</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30223"></span>30223</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30224"></span>30224</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30225"></span>30225</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30226"></span>30226</td>
+<td class="instruction">DJNZ <a href="30135.html#30222">Handler_Pheenix_BottomRowLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="30135.html#30222">Handler_Pheenix_BottomRowLoop</a> until all 8 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30228"></span>30228</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the original screen buffer location from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="30229"></span>30229</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
 </tr>
 </table>
 <table class="asm-navigation">
 <tr>
 <td class="prev">
-Prev: <a href="30130.html">30130</a>
+Prev: <a href="30125.html">30125</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#30135">Map</a></td>
 <td class="next">
-Next: <a href="30140.html">30140</a>
+Next: <a href="30230.html">30230</a>
 </td>
 </tr>
 </table>
