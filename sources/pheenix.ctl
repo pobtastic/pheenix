@@ -115,38 +115,44 @@ N $60CD #UDGTABLE { #UDGS$03,$02(bird-02-magenta)(
 b $60E7 Graphics: Pheenix (Egg)
 @ $60E7 label=Graphics_Pheenix_01
 N $60E7 #UDGTABLE { #UDGS$03,$01(pheenix-01)(
-.   #UDG(#PC+$08*$x,$45)(*udg)
+.   #UDG(#PC+$08*$x,$05)(*udg)
 .   udg
 . ) } TABLE#
-  $60E7,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+N $60E7 The drawing routine uses this layout:
+. #TABLE { X | X | X } { | X | } TABLE#
+. Hence, when this sprite is drawn it also writes the empty data at
+. #R$60FF(#N$60FF) on the bottom row.
+  $60E7,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
 L $60E7,$08,$03,$02
 @ $60FF label=Graphics_Pheenix_02
 N $60FF #UDGTABLE { #UDGS$03,$01(pheenix-02)(
-.   #UDG(#PC+$08*$x,$45)(*udg)
+.   #UDG(#PC+$08*$x,$05)(*udg)
 .   udg
 . ) } TABLE#
-  $60FF,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+  $60FF,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
 L $60FF,$08,$03,$02
-  $6117,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
+N $6117 Invisible bottom row.
+  $6117,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
 @ $611F label=Graphics_Pheenix_03
 N $611F #UDGTABLE { #UDGS$03,$02(pheenix-03)(
 .   #LET(addr=#IF($y==1)(#IF($x==1)($6137,$617B),#PC+$08*$x))
-.   #UDG({addr},#MAP($x+($y*$03))($45,1:$41,4:$46))(*udg)
+.   #UDG({addr},#MAP($x+($y*$03))($05,1:$41,4:$46))(*udg)
 .   udg
 . ) } TABLE#
-  $611F,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
-  $6127,$08,b$01 #UDGTABLE { #UDG(#PC,$41) } TABLE#
-  $612F,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
-  $6137,$06,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
+  $611F,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
+  $6127,$08,b$01 #UDGTABLE { #UDG(#PC,$01) } TABLE#
+  $612F,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
+  $6137,$06,b$01 #UDGTABLE { #UDG(#PC,$06) } TABLE#
 
-b $613D
-@ $613D label=Mask_LivesIcon
+b $613D Graphics: Masks
+@ $613D label=Graphics_Masks
   $613D,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
   $6145,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
   $614D,$06,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+  $6153,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
 
-b $6153 Graphics: Pheenix (Hatched)
-@ $6153 label=Graphics_Pheenix_04
+b $615B Graphics: Pheenix (Hatched)
+@ $615B label=Graphics_Pheenix_04
 N $615B #UDGTABLE { #UDGS$03,$02(pheenix-04-blue)(
 .   #LET(addr=#IF($y==1)(#IF($x==1)($6173,$617B),#PC+$08*$x))
 .   #UDG({addr},#IF($y==0)($41,$46))(*udg)
@@ -157,10 +163,11 @@ N $615B #UDGTABLE { #UDGS$03,$02(pheenix-04-magenta)(
 .   #UDG({addr},#IF($y==0)($43,$46))(*udg)
 .   udg
 . ) } TABLE#
-  $6153,$08,b$01 #UDGTABLE { #UDG(#PC,$41) } TABLE#
-L $6153,$08,$04,$02
+  $615B,$08,b$01 #UDGTABLE { #UDG(#PC,$41) } TABLE#
+L $615B,$08,$03,$02
   $6173,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
 L $6173,$08,$02,$02
+  $6183,$02 Unused.
 @ $6185 label=Graphics_Pheenix_05
 N $6185 #UDGTABLE { #UDGS$03,$02(pheenix-05-blue)(
 .   #LET(addr=#IF($y==1)(#IF($x==1)($619D,$617B),#PC+$08*$x))
@@ -176,7 +183,8 @@ N $6185 #UDGTABLE { #UDGS$03,$02(pheenix-05-magenta)(
 L $6185,$08,$03,$02
   $619D,$06,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
 
-b $61A3
+b $61A3 Graphics: Explosion Bits
+@ $61A3 label=Graphics_ExplosionBits
   $61A3,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
 L $61A3,$08,$03,$02
 
@@ -279,18 +287,51 @@ B $6528,$06,$01
 
 g $6538 Table: Mothership UDGs
 @ $6538 label=Table_MothershipUDGs
-B $6538,$02
-B $653A,$02
-B $653C,$02
-B $653E,$03
-T $6541,$02
+B $6538,$02 #UDGTABLE { #UDGS$02,$01(mothership-01)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
+.   udg
+. ) } TABLE#
+B $653A,$02 #UDGTABLE { #UDGS$02,$01(mothership-02)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
+.   udg
+. ) } TABLE#
+B $653C,$02 #UDGTABLE { #UDGS$02,$01(mothership-03)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$06)(*udg)
+.   udg
+. ) } TABLE#
+B $653E,$03 #UDGTABLE { #UDGS$03,$01(mothership-04)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
+.   udg
+. ) } TABLE#
+@ $6541 label=Table_Mothership_Top
+B $6541,$02 #UDGTABLE { #UDGS$02,$01(mothership-05)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
+.   udg
+. ) } TABLE#
+B $6543,$03 #UDGTABLE { #UDGS$03,$01(mothership-06)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
+.   udg
+. ) } TABLE#
+B $6546,$02 #UDGTABLE { #UDGS$02,$01(mothership-07)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$06)(*udg)
+.   udg
+. ) } TABLE#
+B $6548,$01 #UDGTABLE { #UDG(#PC,$06)(mothership-08) } TABLE#
+B $6549,$04 #UDGTABLE { #UDGS$04,$01(mothership-09)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$06)(*udg)
+.   udg
+. ) } TABLE#
+B $654D,$01 #UDGTABLE { #UDG(#PC,$06)(mothership-10) } TABLE#
 
 g $658A Table: "PHEENIX" Logo Position Data
 @ $658A label=Table_PheenixLogoPositionData
 B $658A,$01 Screen buffer address #N(#PC-$658A): #N($4800+#PEEK(#PC)).
 L $658A,$01,$51
 
-g $65DB
+g $65DB Random Number Seed
+@ $65DB label=RandomNumberSeed
+D $65DB Used by the routine at #R$670E.
+W $65DB,$02
 
 w $65DD
   $65FB
@@ -299,22 +340,21 @@ g $6619
 
 g $6637
 
-g $667D
+g $667D Pheenix Colours
+@ $667D label=Pheenix_Colour_01
+D $667D Used by the routine at #R$75B7.
+B $667D,$01
+@ $667E label=Pheenix_Colour_02
+B $667E,$01
+
+g $667F
 
 g $6680
   $6680
+  $6681
+  $668F
 
 g $6691
-
-g $6695
-
-g $66A7
-
-g $66B9
-
-g $66D5
-
-g $667F
 
 g $6693
 
@@ -333,9 +373,20 @@ B $66A5,$01
 
 g $66A6
 
+g $66A7
+
+g $66B9
+
 g $66BA
 
-g $66D4
+g $66D3
+
+g $66D4 Mothership Animation Counter
+@ $66D4 label=MothershipAnimationCounter
+D $66D4 Used by the routine at #R$6A23.
+B $66D4,$01
+
+g $66D5
 
 g $66ED
 W $66ED,$02
@@ -396,16 +447,16 @@ R $6704 O:HL Screen buffer address
   $670C,$01 Update the high byte of the address.
   $670D,$01 Return.
 
-c $670E
+c $670E Generate Random Number
+@ $670E label=GenerateRandomNumber
+R $670E O:A The random number
   $670E,$02 Stash #REGhl and #REGbc on the stack.
   $6710,$03 #REGhl=*#R$65DB.
-  $6713,$01 #REGb=*#REGhl.
-  $6714,$01 Increment #REGhl by one.
-  $6715,$02 #REGa=#N$38.
-  $6717,$01 Merge the bits from #REGh.
-  $6718,$01 #REGh=#REGa.
-  $6719,$01 #REGa=#REGb.
-  $671A,$03 Write #REGhl to *#R$65DB.
+  $6713,$01 Fetch a byte from *#REGhl and store it in #REGb.
+  $6714,$01 Increment the seed pointer by one.
+  $6715,$04 Keep #REGh within #N$00-#N$38.
+  $6719,$01 Copy the random byte into #REGa.
+  $671A,$03 Write the updated seed back to *#R$65DB.
   $671D,$02 Restore #REGbc and #REGhl from the stack.
   $671F,$01 Return.
 
@@ -768,20 +819,17 @@ c $6926
   $6968,$01 Restore #REGbc from the stack.
   $6969,$01 Return.
 
-c $696A
+c $696A Draw Alien Mothership
+@ $696A label=Draw_AlienMothership
 D $696A #PUSHS #UDGTABLE {
-.   #SIM(start=$696A,stop=$6A22)#SCR$02(test)
+.   #CLS($05) #SIM(start=$696A,stop=$6A22)#SCR$02(mothership)
 . } TABLE# #POPS
   $696A,$0C Call #R$677B using #R$6538; printing #N$02 characters in #INK$05.
   $6976,$07 Call #R$677B using #R$653A; printing #N$02 characters in #INK$05.
   $697D,$08 Call #R$677B using #R$653C; printing #N$02 characters in #INK$06.
   $6985,$08 Call #R$677B using #R$653E; printing #N$08 characters in #COLOUR$32.
-  $698D,$02 #REGe=#N$D4.
-  $698F,$03 #REGbc=#N$0206.
-  $6992,$03 Call #R$677B.
-  $6995,$02 #REGe=#N$E9.
-  $6997,$01 Increment #REGb by one.
-  $6998,$03 Call #R$677B.
+  $698D,$08 Call #R$677B using #R$6546; printing #N$02 characters in #INK$06.
+  $6995,$06 Call #R$677B using #R$6548; printing #N$01 character in #INK$06.
   $699B,$01 Increment #REGe by one.
   $699C,$03 #REGbc=#N$0C31.
   $699F,$03 Call #R$6775.
@@ -841,11 +889,17 @@ D $696A #PUSHS #UDGTABLE {
   $6A20,$02 LDIR.
   $6A22,$01 Return.
 
-c $6A23
+c $6A23 Handler: Mothership
+@ $6A23 label=Handler_Mothership
+N $6A23 Prints the top part of the alien mothership:
+. #UDGTABLE { #UDGS$02,$01(mothership-05)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
+.   udg
+. ) } TABLE#
   $6A23,$03 #REGde=#N$40CF (screen buffer location).
   $6A26,$01 Stash #REGde on the stack.
   $6A27,$03 #REGhl=#R$6541.
-  $6A2A,$03 #REGbc=#N$0232.
+  $6A2A,$03 Set to print #N$02 characters in #COLOUR$32.
   $6A2D,$03 Call #R$677B.
   $6A30,$01 Restore #REGhl from the stack.
   $6A31,$03 #REGa=*#R$66D4.
@@ -881,40 +935,53 @@ c $6A23
   $6A65,$01 #REGa=*#REGde.
   $6A66,$02 LDDR.
   $6A68,$01 Write #REGa to *#REGde.
+N $6A69 Update mothership animation counter.
+@ $6A69 label=Handler_Mothership_UpdateCounter
   $6A69,$03 #REGhl=#R$66D4.
-  $6A6C,$01 #REGa=*#REGhl.
-  $6A6D,$01 Increment *#REGhl by one.
+  $6A6C,$01 Fetch the counter and store it in #REGa.
+  $6A6D,$01 Increment *#R$66D4 by one.
+M $6A6E,$04 Only animate the alien every 16th frame (when bits 0-3 are all
+. zero) else jump to #R$6A99.
   $6A6E,$02,b$01 Keep only bits 0-3.
-  $6A70,$02 Jump to #R$6A99 if *#REGhl is not equal to #N$11.
-  $6A72,$02 Test bit 4 of *#REGhl.
+  $6A70,$02 Jump to #R$6A99 unless the result is zero.
+N $6A72 Draw the mothership alien in one of its two frames. Note; it is a 2x2
+. sprite.
+N $6A72 This is the 16th frame, now toggle between the two frames of the alien
+. sprite.
+  $6A72,$02 Test bit 4 of the counter.
   $6A74,$03 #REGhl=#R$5FD4.
-  $6A77,$02 Jump to #R$6A7C if *#REGhl is equal to #N$11.
+  $6A77,$02 Jump to #R$6A7C if bit 4 isn't set.
   $6A79,$03 #REGhl=#R$5FF4.
+@ $6A7C label=Handler_Mothership_DrawAlien
   $6A7C,$03 #REGde=#N$40EF (screen buffer location).
-  $6A7F,$02 #REGb=#N$02.
-  $6A81,$01 Stash #REGbc on the stack.
-  $6A82,$02 #REGb=#N$02.
-  $6A84,$02 Stash #REGbc and #REGde on the stack.
+  $6A7F,$02 Set a counter in #REGb for #N$02 rows.
+@ $6A81 label=Handler_Mothership_RowLoop
+  $6A81,$01 Stash the row counter on the stack.
+  $6A82,$02 Set a counter in #REGb for #N$02 columns.
+@ $6A84 label=Handler_Mothership_ColumnLoop
+  $6A84,$02 Stash the column counter and screen buffer pointer on the stack.
   $6A86,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $6A88 label=Handler_Mothership_LineLoop
   $6A88,$02 Copy the UDG data to the screen buffer.
   $6A8A,$01 Move down one pixel line in the screen buffer.
   $6A8B,$01 Move to the next UDG graphic data byte.
   $6A8C,$02 Decrease the line counter by one and loop back to #R$6A88 until all
 . #N$08 lines of the UDG character have been drawn.
-  $6A8E,$01 Restore #REGde from the stack.
-  $6A8F,$01 Increment #REGde by one.
-  $6A90,$01 Restore #REGbc from the stack.
-  $6A91,$02 Decrease counter by one and loop back to #R$6A84 until counter is zero.
+  $6A8E,$01 Restore the original screen buffer pointer from the stack.
+  $6A8F,$01 Move right one character block.
+  $6A90,$01 Restore the column counter from the stack.
+  $6A91,$02 Decrease the column counter by one and loop back to #R$6A84 until
+. both UDGs have been drawn in this row.
   $6A93,$03 #REGde=#N$480F (screen buffer location).
-  $6A96,$01 Restore #REGbc from the stack.
-  $6A97,$02 Decrease counter by one and loop back to #R$6A81 until counter is zero.
+  $6A96,$01 Restore the row counter from the stack.
+  $6A97,$02 Decrease the row counter by one and loop back to #R$6A81 until both
+. rows have finished being drawn and the alien is complete.
+@ $6A99 label=Handler_Mothership_ProcessBullets
   $6A99,$05 Return if *#R$6695 is not zero.
   $6A9E,$03 #REGhl=#N($0003,$04,$04).
   $6AA1,$01 Stash #REGhl on the stack.
   $6AA2,$03 #REGix=#REGhl (using the stack).
-  $6AA5,$03 #REGbc=#R$66BA.
-  $6AA8,$01 #REGhl+=#REGhl.
-  $6AA9,$01 #REGhl+=#REGbc.
+  $6AA5,$05 Multiply #REGhl by #N$02 and add #R$66BA.
   $6AAA,$01 Stash #REGhl on the stack.
   $6AAB,$01 #REGe=*#REGhl.
   $6AAC,$01 Increment #REGhl by one.
@@ -924,8 +991,7 @@ c $6A23
   $6AB0,$03 Jump to #R$6AC9 if #REGa is not zero.
   $6AB3,$03 Call #R$670E.
   $6AB6,$02,b$01 Keep only bits 0-3.
-  $6AB8,$01 Set the bits from #REGa.
-  $6AB9,$02 Jump to #R$6AC0 if #REGhl is not equal to #REGa.
+  $6AB8,$03 Jump to #R$6AC0 if #REGa is not zero.
   $6ABB,$03 #REGhl=#N$594F (attribute buffer location).
   $6ABE,$02 Jump to #R$6AF2.
 
@@ -955,10 +1021,11 @@ c $6A23
   $6AEE,$02 #REGh=#N$00.
   $6AF0,$02 Jump to #R$6B25.
 
-  $6AF2,$05 Jump to #R$6B25 if *#REGhl is equal to #N$02.
-  $6AF7,$04 Jump to #R$6B05 if *#REGhl is not equal to #N$46.
+@ $6AF2 label=Mothership_Bullet_Collision
+  $6AF2,$05 Jump to #R$6B25 if *#REGhl is equal to #INK$02.
+  $6AF7,$04 Jump to #R$6B05 if *#REGhl is not equal to #COLOUR$46.
   $6AFB,$06 Jump to #R$6AEE if *#R$6693 is not zero.
-  $6B01,$02 Write #N$06 to *#REGhl.
+  $6B01,$02 Write #INK$06 to *#REGhl.
   $6B03,$02 Jump to #R$6B0D.
 
   $6B05,$02,b$01 Keep only bits 0-2.
@@ -979,16 +1046,15 @@ c $6A23
   $6B21,$01 Move to the next UDG graphic data byte.
   $6B22,$02 Decrease the line counter by one and loop back to #R$6B1E until all
 . #N$08 lines of the UDG character have been drawn.
-  $6B24,$01 Restore #REGhl from the stack.
+  $6B24,$01 Restore the attribute position from the stack.
+@ $6B25 label=Handler_Mothership_SaveBulletPosition
   $6B25,$01 Exchange the #REGde and #REGhl registers.
-  $6B26,$01 Restore #REGhl from the stack.
-  $6B27,$01 Write #REGe to *#REGhl.
-  $6B28,$01 Increment #REGhl by one.
-  $6B29,$01 Write #REGd to *#REGhl.
-  $6B2A,$01 Increment #REGhl by one.
-  $6B2B,$01 Restore #REGhl from the stack.
-  $6B2C,$01 Decrease #REGl by one.
-  $6B2D,$03 Jump to #R$6AA1 if #REGl is not equal to #REGa.
+  $6B26,$01 Restore the bullet position table from the stack.
+  $6B27,$04 Save the current bullet position to the table.
+  $6B2B,$01 Restore the bullet index from the stack.
+  $6B2C,$01 Decrease the bullet index by one.
+  $6B2D,$03 Jump back to #R$6AA1 until there are no more bullets left to
+. process.
   $6B30,$01 Return.
 
 c $6B31 Fill Screen With UDG
@@ -1299,6 +1365,45 @@ N $707F Else, the only control option left is the keyboard.
 c $70E7
 
 c $7200
+  $7200,$04 Jump to #R$7223 if #REGa is not equal to #N$02.
+  $7204,$01 Stash #REGhl on the stack.
+  $7205,$04 #REGl-=#N$20.
+  $7209,$01 #REGa=*#REGhl.
+  $720A,$04 Jump to #R$721B if #REGa is not equal to #N$10.
+  $720E,$02 #REGh=#N$4D.
+  $7210,$02 #REGb=#N$03.
+  $7212,$03 #REGde=#R$61EF.
+  $7215,$01 #REGa=*#REGde.
+  $7216,$01 Write #REGa to *#REGhl.
+  $7217,$01 Increment #REGh by one.
+  $7218,$01 Decrease #REGde by one.
+  $7219,$02 Decrease counter by one and loop back to #R$7215 until counter is zero.
+  $721B,$01 Restore #REGhl from the stack.
+  $721C,$02 Write #N$00 to *#REGhl.
+  $721E,$03 #HTML(#REGde=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3D00</a>.)
+  $7221,$02 Jump to #R$722C.
+
+  $7223,$04 Jump to #R$7245 if #REGa is not equal to #N$10.
+  $7227,$02 Write #N$02 to *#REGhl.
+  $7229,$03 #REGde=#R$61EB.
+  $722C,$02 #REGh=#N$48.
+  $722E,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+  $7230,$02 Copy the UDG data to the screen buffer.
+  $7232,$01 Move to the next UDG graphic data byte.
+  $7233,$01 Move down one pixel line in the screen buffer.
+  $7234,$02 Decrease the line counter by one and loop back to #R$7230 until all
+. #N$08 lines of the UDG character have been drawn.
+  $7236,$05 Write #N$35 to *#R$652E.
+  $723B,$03 Call #R$67B6.
+  $723E,$03 Call #R$67A9.
+  $7241,$03 Call #R$681C.
+  $7244,$01 Return.
+
+  $7245,$03 Return if #REGa is not equal to #N$40.
+  $7248,$02 Reset bit 5 of #REGl.
+  $724A,$04 Return if *#REGhl is not equal to #N$42.
+  $724E,$05 Write #N$01 to *#R$66D3.
+  $7253,$01 Return.
 
 c $7254
   $7254,$08 Jump to #R$730D if *#R$66A4 is not equal to #N$02.
@@ -1535,76 +1640,132 @@ N $759E Run a copy protection timing check.
 N $75A9 The copy protection timing check failed ...
   $75A9,$04 Display the transition effect and reset the machine.
 
-c $75AD
+c $75AD Handler: Bird Alien
+@ $75AD label=Handler_BirdAlien_01
   $75AD,$03 #REGhl=#R$60AE.
   $75B0,$02 Jump to #R$75DA.
-
-c $75B2
+@ $75B2 label=Handler_BirdAlien_02
   $75B2,$03 #REGhl=#R$60CD.
   $75B5,$02 Jump to #R$75DA.
 
-c $75B7
+c $75B7 Handler: Pheenix
+@ $75B7 label=Handler_Pheenix_01
+D $75B7 This is a fairly dogmatic sprite drawing routine, and hopefully this
+. will explain why there are empty blocks seemingly randomly in the Pheenix
+. sprite data.
+.
+. This routine always assumes the Pheenix sprite data looks like this:
+. #TABLE { X | X | X } { | X | } TABLE#
+. However the sprites aren't always in that format, sometimes they have a
+. single row of #N$02 UDGs - so in order to use the same routine the sprites
+. "share" empty UDGs, so although something is written, it's just all #N$00.
+.
+. Lastly, to conserve on space - some UDGs are less than #N$08 line bytes, they
+. just share the bytes from the following sprite data. So some sprites end with
+. empty bytes, and some start with empty bytes (which are shared between each).
+R $75B7 DE Screen buffer sprite destination
+N $75B7 Display frame #N$01 (the egg stage).
   $75B7,$03 #REGhl=#R$60E7.
   $75BA,$02 Jump to #R$75BF.
-
-c $75BC
-E $75BC Continue on to #R$75BF.
+N $75BC Display frame #N$02 (the egg breaking apart).
+@ $75BC label=Handler_Pheenix_02
   $75BC,$03 #REGhl=#R$60FF.
-
-c $75BF
-  $75BF,$03 #REGbc=#N($0505,$04,$04).
-  $75C2,$01 #REGa=#N$00.
-  $75C3,$02 Write #REGa to the low byte of #REGix.
+N $75BF Handler for single row sprites (as the second row is invisible).
+@ $75BF label=Handler_Pheenix_SingleRow
+  $75BF,$03 Set #REGbc to #INK$05 / #INK$05 (centre and righthand blocks of the
+. top and only row).
+  $75C2,$03 Write #INK$00 to the low byte of #REGix (the lefthand block of the
+. top row - which is an empty block).
   $75C5,$02 Jump to #R$75E0.
-
+N $75C7 Display frame #N$03 (the broken egg with a baby Pheenix).
+@ $75C7 label=Handler_Pheenix_03
   $75C7,$03 #REGhl=#R$611F.
-  $75CA,$02 #REGb=#N$05.
-  $75CC,$04 #REGc=*#R$667D.
+  $75CA,$02 Set #REGb to #INK$05 (righthand block of top row/ shell colour).
+  $75CC,$04 #REGc=*#R$667D (the centre colour of the top row/ Pheenix body).
   $75D0,$02 Jump to #R$75DE.
-
+N $75D2 Display frame #N$05 (Pheenix wings "up").
+@ $75D2 label=Handler_Pheenix_05
   $75D2,$03 #REGhl=#R$6185.
   $75D5,$02 Jump to #R$75DA.
-
+N $75D7 Display frame #N$04 (Pheenix wings "down").
+@ $75D7 label=Handler_Pheenix_04
   $75D7,$03 #REGhl=#R$615B.
-  $75DA,$04 #REGbc=*#R$667D.
-  $75DE,$02 Write #REGb to the low byte of #REGix.
-  $75E0,$03 Stash #REGde, #REGbc and #REGde on the stack.
-  $75E3,$02 #REGb=#N$03.
-  $75E5,$02 Stash #REGbc and #REGde on the stack.
+@ $75DA label=Handler_Pheenix_LoadColours
+  $75DA,$04 Set #REGb to *#R$667D (righthand block of top row) and set #REGc to
+. *#R$667E (middle block of top row).
+@ $75DE label=Handler_Pheenix_SetColour
+  $75DE,$02 Write #REGb to the low byte of #REGix which is used for colouring
+. the lefthand block of the top row.
+@ $75E0 label=Handler_Pheenix_Draw
+  $75E0,$03 Stash the screen buffer destination, colour pair and screen buffer
+. destination (again) on the stack.
+N $75E3 All Pheenix sprites are #N$03 columns in the top row.
+  $75E3,$02 Set a counter in #REGb for #N$03 columns.
+@ $75E5 label=Handler_Pheenix_ColumnLoop
+  $75E5,$02 Stash the column counter and screen buffer pointer on the stack.
+N $75E7 Draw the UDG to the screen buffer.
   $75E7,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $75E9 label=Handler_Pheenix_LineLoop
   $75E9,$02 Copy the UDG data to the screen buffer.
   $75EB,$01 Move to the next UDG graphic data byte. 
   $75EC,$01 Move down one pixel line in the screen buffer.
   $75ED,$02 Decrease the line counter by one and loop back to #R$75E9 until all
 . #N$08 lines of the UDG character have been drawn.
-  $75EF,$01 Restore #REGde from the stack.
-  $75F0,$01 Increment #REGde by one.
-  $75F1,$01 Restore #REGbc from the stack.
-  $75F2,$02 Decrease counter by one and loop back to #R$75E5 until counter is zero.
-  $75F4,$02 Restore #REGde and #REGbc from the stack.
-  $75F6,$01 Stash #REGhl on the stack.
+  $75EF,$01 Restore the original screen buffer location from the stack.
+  $75F0,$01 Move right one character block.
+  $75F1,$01 Restore the column counter from the stack.
+  $75F2,$02 Decrease the column counter by one and loop back to #R$75E5 until
+. all three columns of this row have been drawn.
+  $75F4,$02 Restore the screen buffer destination and colour pair from the stack.
+  $75F6,$01 Stash the UDG data pointer on the stack.
   $75F7,$03 Call #R$66F7.
   $75FA,$01 Exchange the #REGde and #REGhl registers.
-  $75FB,$02 #REGa=the low byte of #REGix.
-  $75FD,$01 Write #REGa to *#REGhl.
-  $75FE,$01 Increment #REGhl by one.
-  $75FF,$01 Write #REGc to *#REGhl.
-  $7600,$01 Increment #REGhl by one.
-  $7601,$01 Write #REGb to *#REGhl.
-  $7602,$04 #REGhl+=#N($001F,$04,$04).
-  $7606,$02 Write #N$06 to *#REGhl.
+N $75FB Colour the top row of the Pheenix sprite.
+  $75FB,$03 Write the colour held by the low byte of #REGix to the attribute
+. buffer pointer.
+  $75FE,$01 Move right one attribute block.
+  $75FF,$01 Write the colour held by #REGc to the attribute buffer pointer.
+  $7600,$01 Move right one attribute block.
+  $7601,$01 Write the colour held by #REGb to the attribute buffer pointer.
+N $7602 Colour the bottom row of the Pheenix sprite (feet, or an empty block).
+  $7602,$04 Move the attribute buffer pointer to the row below the current row
+. and left one attribute block (by adding #N($001F,$04,$04)).
+  $7606,$02 Write #INK$06 to the attribute buffer pointer.
   $7608,$03 Call #R$6704.
-  $760B,$01 Restore #REGde from the stack.
+N $760B Now draw the bottom row (feet, or empty block).
+  $760B,$01 Restore the UDG pointer from the stack.
+N $760C Draw the UDG to the screen buffer.
   $760C,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $760E label=Handler_Pheenix_BottomRowLoop
   $760E,$02 Copy the UDG data to the screen buffer.
   $7610,$01 Move down one pixel line in the screen buffer.
   $7611,$01 Move to the next UDG graphic data byte. 
   $7612,$02 Decrease the line counter by one and loop back to #R$760E until all
 . #N$08 lines of the UDG character have been drawn.
-  $7614,$01 Restore #REGde from the stack.
+  $7614,$01 Restore the original screen buffer location from the stack.
   $7615,$01 Return.
 
 c $7616
+  $7616,$07 Jump to #R$7620 if *#R$66F1 is not equal to #N$04.
+  $761D,$03 Call #R$6A23.
+  $7620,$03 #REGde=#R$65DD.
+  $7623,$03 #REGhl=*#R$668F.
+  $7626,$06 Jump to #R$764C if *#R$6691 is not zero.
+
+  $7756,$02 Reset bit 7 of #REGd.
+  $7758,$04 Call #R$75B7 if #REGa is equal to #N$00.
+  $775C,$05 Call #R$75BC if #REGa is equal to #N$01.
+  $7761,$05 Call #R$75C7 if #REGa is equal to #N$02.
+  $7766,$04 Jump to #R$777E if #REGa is not equal to #N$03.
+  $776A,$05 Write #N$01 to *#R$6691.
+  $776F,$03 Call #R$75D7.
+  $7772,$03 #REGhl=#R$6680.
+  $7775,$03 #REGde=#R$6681.
+  $7778,$03 #REGbc=#N($000E,$04,$04).
+  $777B,$01 Write #REGb to *#REGhl.
+  $777C,$02 LDIR.
+  $777E,$01 Restore #REGde from the stack.
+  $777F,$03 Jump to #R$798D.
 
 c $79B2
   $79B2,$03 #REGa=*#R$6695.
@@ -1643,7 +1804,7 @@ c $7B67 Handler: Aliens
 @ $7B67 label=Handler_Aliens
 N $7B67 See #POKE#aliens-not-fire(Aliens Don't Fire).
   $7B67,$05 Return if *#R$6691 is zero.
-  $7B6C,$05 Return if #REGa=*#R$6695 is not zero.
+  $7B6C,$05 Return if *#R$6695 is not zero.
   $7B71,$03 #REGhl=#R$66A7.
   $7B74,$02 #REGb=#N$06.
   $7B76,$02 Stash #REGbc and #REGhl on the stack.
@@ -1955,8 +2116,7 @@ N $7D9E Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
   $7DA4,$03 Call #R$6775.
   $7DA7,$01 Restore #REGaf from the stack.
   $7DA8,$02 Jump to #R$7DB0 if #REGa is not equal to #REGa.
-  $7DAA,$03 Call #R$670E.
-  $7DAD,$03 Write #REGa to *#R$66F4.
+  $7DAA,$06 Write a random number to *#R$66F4.
   $7DB0,$03 Call #R$6CEE.
   $7DB3,$03 Call #R$7616.
   $7DB6,$03 Call #R$7B67.
@@ -2033,13 +2193,16 @@ c $7E47 Input: "S" To Start
 . { #N$FD | A | S | D | F | G }
 . TABLE#
   $7E4C,$04 Jump to #R$7E55 if "S" was pressed.
-  $7E50,$03 #REGhl=#R$6153.
+N $7E50 Switch the custom font to the game font.
+  $7E50,$03 #REGhl=#R$6253(#N$6153).
   $7E53,$02 Jump to #R$7E5B.
 @ $7E55 label=Input_StartGame_Start
   $7E55,$03 Return if "G" is being pressed.
+N $7E58 Switch the custom font to the ZX Spectrum font.
   $7E58,$03 #HTML(#REGhl=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
 @ $7E5B label=Input_StartGame_SetFont
   $7E5B,$03 Write #REGhl to #R$676F(#N$6771) (#R$676F).
+N $7E5E Set the flag which will start the game.
   $7E5E,$05 Write #N$01 to #R$66F2.
   $7E63,$01 Return.
 
