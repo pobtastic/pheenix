@@ -42,7 +42,7 @@ Next: <a href="658A.html">658A</a>
 </td>
 </tr>
 <tr>
-<td class="asm-label">Table_MothershipUDGs</td>
+<td class="asm-label">Table_Mothership_MastTop</td>
 <td class="address-1"><span id="6538"></span>6538</td>
 <td class="instruction">DEFB $15,$16</td>
 <td class="comment-1" rowspan="1"><table class="">
@@ -52,7 +52,7 @@ Next: <a href="658A.html">658A</a>
 </table></td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Table_Mothership_MastBottom</td>
 <td class="address-1"><span id="653a"></span>653A</td>
 <td class="instruction">DEFB $17,$18</td>
 <td class="comment-1" rowspan="1"><table class="">
@@ -62,7 +62,7 @@ Next: <a href="658A.html">658A</a>
 </table></td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Table_Mothership_Strip01</td>
 <td class="address-1"><span id="653c"></span>653C</td>
 <td class="instruction">DEFB $19,$1A</td>
 <td class="comment-1" rowspan="1"><table class="">
@@ -82,7 +82,7 @@ Next: <a href="658A.html">658A</a>
 </table></td>
 </tr>
 <tr>
-<td class="asm-label">Table_Mothership_Top</td>
+<td class="asm-label">Table_Mothership_Animation</td>
 <td class="address-1"><span id="6541"></span>6541</td>
 <td class="instruction">DEFB $1B,$1C</td>
 <td class="comment-1" rowspan="1"><table class="">
@@ -112,7 +112,7 @@ Next: <a href="658A.html">658A</a>
 </table></td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Table_Mothership_Strip02</td>
 <td class="address-1"><span id="6548"></span>6548</td>
 <td class="instruction">DEFB $21</td>
 <td class="comment-1" rowspan="1"><table class="">
@@ -125,7 +125,7 @@ Next: <a href="658A.html">658A</a>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6549"></span>6549</td>
 <td class="instruction">DEFB $20,$20,$20,$20</td>
-<td class="comment-1" rowspan="1"><table class="">
+<td class="comment-1" rowspan="3"><table class="">
 <tr>
 <td class="" colspan="1" rowspan="1"><img alt="mothership-09" src="../images/udgs/mothership-09.png" /></td>
 </tr>
@@ -134,7 +134,17 @@ Next: <a href="658A.html">658A</a>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="654d"></span>654D</td>
-<td class="instruction">DEFB $2B</td>
+<td class="instruction">DEFB $2B,$20,$20,$2B</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6551"></span>6551</td>
+<td class="instruction">DEFB $20,$20,$20,$20</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6555"></span>6555</td>
+<td class="instruction">DEFB $28</td>
 <td class="comment-1" rowspan="1"><table class="">
 <tr>
 <td class="" colspan="1" rowspan="1"><img alt="mothership-10" src="../images/udgs/mothership-10.png" /></td>
@@ -142,52 +152,134 @@ Next: <a href="658A.html">658A</a>
 </table></td>
 </tr>
 <tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="654e"></span>654E</td>
-<td class="instruction">DEFB $20,$20,$2B,$20,$20,$20,$20,$28</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="asm-label">Table_Mothership_Strip03</td>
+<td class="address-1"><span id="6556"></span>6556</td>
+<td class="instruction">DEFB $21</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-11" src="../images/udgs/mothership-11.png" /></td>
+</tr>
+</table></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
-<td class="address-1"><span id="6556"></span>6556</td>
-<td class="instruction">DEFB $21,$20,$20,$1F,$1F,$1F,$1F,$20</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="address-1"><span id="6557"></span>6557</td>
+<td class="instruction">DEFB $20,$20,$1F,$1F,$1F,$1F,$20</td>
+<td class="comment-1" rowspan="2"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-12" src="../images/udgs/mothership-12.png" /></td>
+</tr>
+</table></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="655e"></span>655E</td>
-<td class="instruction">DEFB $20,$1F,$1F,$1F,$1F,$20,$20,$28</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DEFB $20,$1F,$1F,$1F,$1F,$20,$20</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
+<td class="address-1"><span id="6565"></span>6565</td>
+<td class="instruction">DEFB $28</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-13" src="../images/udgs/mothership-13.png" /></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_BlueStrip</td>
 <td class="address-1"><span id="6566"></span>6566</td>
-<td class="instruction">DEFB $2E,$20,$20,$2E,$20,$20,$2E,$20</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DEFB $2E,$20,$20,$2E,$20,$20</td>
+<td class="comment-1" rowspan="3"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-14" src="../images/udgs/mothership-14.png" /></td>
+</tr>
+</table></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
-<td class="address-1"><span id="656e"></span>656E</td>
-<td class="instruction">DEFB $20,$2E,$20,$20,$2E,$20,$20,$2E</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="address-1"><span id="656c"></span>656C</td>
+<td class="instruction">DEFB $2E,$20,$20,$2E,$20,$20</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
-<td class="address-1"><span id="6576"></span>6576</td>
-<td class="instruction">DEFB $20,$20,$22,$23,$24,$25,$26,$27</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="address-1"><span id="6572"></span>6572</td>
+<td class="instruction">DEFB $2E,$20,$20,$2E,$20,$20</td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_HullLeft01</td>
+<td class="address-1"><span id="6578"></span>6578</td>
+<td class="instruction">DEFB $22</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-15" src="../images/udgs/mothership-15.png" /></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_HullLeft02</td>
+<td class="address-1"><span id="6579"></span>6579</td>
+<td class="instruction">DEFB $23</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-16" src="../images/udgs/mothership-16.png" /></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_HullLeft03</td>
+<td class="address-1"><span id="657a"></span>657A</td>
+<td class="instruction">DEFB $24,$25</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-17" src="../images/udgs/mothership-17.png" /></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_HullBase</td>
+<td class="address-1"><span id="657c"></span>657C</td>
+<td class="instruction">DEFB $26,$27,$2F,$2F,$2F</td>
+<td class="comment-1" rowspan="2"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-18" src="../images/udgs/mothership-18.png" /></td>
+</tr>
+</table></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
-<td class="address-1"><span id="657e"></span>657E</td>
-<td class="instruction">DEFB $2F,$2F,$2F,$2F,$2F,$2F,$27,$14</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="address-1"><span id="6581"></span>6581</td>
+<td class="instruction">DEFB $2F,$2F,$2F,$27,$14</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Table_Mothership_HullRight03</td>
 <td class="address-1"><span id="6586"></span>6586</td>
-<td class="instruction">DEFB $2C,$2B,$2A,$29</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DEFB $2C,$2B</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-19" src="../images/udgs/mothership-19.png" /></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_HullRight02</td>
+<td class="address-1"><span id="6588"></span>6588</td>
+<td class="instruction">DEFB $2A</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-20" src="../images/udgs/mothership-20.png" /></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">Table_Mothership_HullRight01</td>
+<td class="address-1"><span id="6589"></span>6589</td>
+<td class="instruction">DEFB $29</td>
+<td class="comment-1" rowspan="1"><table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-21" src="../images/udgs/mothership-21.png" /></td>
+</tr>
+</table></td>
 </tr>
 </table>
 <table class="asm-navigation">
