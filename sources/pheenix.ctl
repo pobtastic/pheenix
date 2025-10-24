@@ -286,15 +286,17 @@ g $6528 Score Buffer
 B $6528,$06,$01
 
 g $6538 Table: Mothership UDGs
-@ $6538 label=Table_MothershipUDGs
+@ $6538 label=Table_Mothership_MastTop
 B $6538,$02 #UDGTABLE { #UDGS$02,$01(mothership-01)(
 .   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
 .   udg
 . ) } TABLE#
+@ $653A label=Table_Mothership_MastBottom
 B $653A,$02 #UDGTABLE { #UDGS$02,$01(mothership-02)(
 .   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
 .   udg
 . ) } TABLE#
+@ $653C label=Table_Mothership_Strip01
 B $653C,$02 #UDGTABLE { #UDGS$02,$01(mothership-03)(
 .   #UDG($6153+$08*(#PEEK(#PC+$x)),$06)(*udg)
 .   udg
@@ -303,7 +305,7 @@ B $653E,$03 #UDGTABLE { #UDGS$03,$01(mothership-04)(
 .   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
 .   udg
 . ) } TABLE#
-@ $6541 label=Table_Mothership_Top
+@ $6541 label=Table_Mothership_Animation
 B $6541,$02 #UDGTABLE { #UDGS$02,$01(mothership-05)(
 .   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
 .   udg
@@ -316,12 +318,64 @@ B $6546,$02 #UDGTABLE { #UDGS$02,$01(mothership-07)(
 .   #UDG($6153+$08*(#PEEK(#PC+$x)),$06)(*udg)
 .   udg
 . ) } TABLE#
-B $6548,$01 #UDGTABLE { #UDG(#PC,$06)(mothership-08) } TABLE#
-B $6549,$04 #UDGTABLE { #UDGS$04,$01(mothership-09)(
-.   #UDG($6153+$08*(#PEEK(#PC+$x)),$06)(*udg)
+@ $6548 label=Table_Mothership_Strip02
+B $6548,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$06)(mothership-08)
+. } TABLE#
+B $6549,$0C,$04 #UDGTABLE { #UDGS$0C,$01(mothership-09)(
+.   #UDG($3C00+$08*(#PEEK(#PC+$x)),$31)(*udg)
 .   udg
 . ) } TABLE#
-B $654D,$01 #UDGTABLE { #UDG(#PC,$06)(mothership-10) } TABLE#
+B $6555,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$06)(mothership-10)
+. } TABLE#
+@ $6556 label=Table_Mothership_Strip03
+B $6556,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$06)(mothership-11)
+. } TABLE#
+B $6557,$0E,$07 #UDGTABLE { #UDGS$0E,$01(mothership-12)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$31)(*udg)
+.   udg
+. ) } TABLE#
+B $6565,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$06)(mothership-13)
+. } TABLE#
+@ $6566 label=Table_Mothership_BlueStrip
+B $6566,$12,$06 #UDGTABLE { #UDGS$12,$01(mothership-14)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$0F)(*udg)
+.   udg
+. ) } TABLE#
+@ $6578 label=Table_Mothership_HullLeft01
+B $6578,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$02)(mothership-15)
+. } TABLE#
+@ $6579 label=Table_Mothership_HullLeft02
+B $6579,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$02)(mothership-16)
+. } TABLE#
+@ $657A label=Table_Mothership_HullLeft03
+B $657A,$02 #UDGTABLE { #UDGS$02,$01(mothership-17)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$02)(*udg)
+.   udg
+. ) } TABLE#
+@ $657C label=Table_Mothership_HullBase
+B $657C,$0A,$05 #UDGTABLE { #UDGS$0A,$01(mothership-18)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$02)(*udg)
+.   udg
+. ) } TABLE#
+@ $6586 label=Table_Mothership_HullRight03
+B $6586,$02 #UDGTABLE { #UDGS$02,$01(mothership-19)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$02)(*udg)
+.   udg
+. ) } TABLE#
+@ $6588 label=Table_Mothership_HullRight02
+B $6588,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$02)(mothership-20)
+. } TABLE#
+@ $6589 label=Table_Mothership_HullRight01
+B $6589,$01 #UDGTABLE {
+.   #UDG($6153+$08*#PEEK(#PC),$02)(mothership-21)
+. } TABLE#
 
 g $658A Table: "PHEENIX" Logo Position Data
 @ $658A label=Table_PheenixLogoPositionData
@@ -821,72 +875,147 @@ c $6926
 
 c $696A Draw Alien Mothership
 @ $696A label=Draw_AlienMothership
-D $696A #PUSHS #UDGTABLE {
-.   #CLS($05) #SIM(start=$696A,stop=$6A22)#SCR$02(mothership)
+D $696A #PUSHS #CLS($05) #SIM(start=$67F6,stop=$6818) #UDGTABLE {
+.   #SIM(start=$696A,stop=$6A22)#SCR$02(mothership)
 . } TABLE# #POPS
-  $696A,$0C Call #R$677B using #R$6538; printing #N$02 characters in #INK$05.
-  $6976,$07 Call #R$677B using #R$653A; printing #N$02 characters in #INK$05.
-  $697D,$08 Call #R$677B using #R$653C; printing #N$02 characters in #INK$06.
-  $6985,$08 Call #R$677B using #R$653E; printing #N$08 characters in #COLOUR$32.
-  $698D,$08 Call #R$677B using #R$6546; printing #N$02 characters in #INK$06.
-  $6995,$06 Call #R$677B using #R$6548; printing #N$01 character in #INK$06.
-  $699B,$01 Increment #REGe by one.
-  $699C,$03 #REGbc=#N$0C31.
-  $699F,$03 Call #R$6775.
-  $69A2,$02 #REGe=#N$F6.
-  $69A4,$03 #REGbc=#N$0106.
-  $69A7,$03 Call #R$677B.
-  $69AA,$03 #REGde=#N$4808 (screen buffer location).
-  $69AD,$01 Increment #REGb by one.
-  $69AE,$03 Call #R$677B.
-  $69B1,$01 Increment #REGe by one.
-  $69B2,$03 #REGbc=#N$0E31.
-  $69B5,$03 Call #R$677B.
-  $69B8,$02 #REGe=#N$17.
-  $69BA,$03 #REGbc=#N$0106.
-  $69BD,$03 Call #R$677B.
-  $69C0,$02 #REGe=#N$27.
-  $69C2,$03 #REGbc=#N$120F.
-  $69C5,$03 Call #R$677B.
-  $69C8,$02 #REGe=#N$47.
-  $69CA,$03 #REGbc=#N$0102.
-  $69CD,$03 Call #R$677B.
-  $69D0,$01 Increment #REGb by one.
-  $69D1,$02 #REGe=#N$68.
-  $69D3,$03 Call #R$677B.
-  $69D6,$02 #REGe=#N$89.
-  $69D8,$02 #REGb=#N$02.
-  $69DA,$03 Call #R$677B.
-  $69DD,$02 #REGe=#N$AB.
-  $69DF,$02 #REGb=#N$0A.
-  $69E1,$03 Call #R$677B.
-  $69E4,$02 #REGe=#N$95.
-  $69E6,$02 #REGb=#N$02.
-  $69E8,$03 Call #R$677B.
-  $69EB,$02 #REGe=#N$77.
-  $69ED,$01 Increment #REGb by one.
-  $69EE,$03 Call #R$677B.
-  $69F1,$02 #REGe=#N$58.
-  $69F3,$01 Increment #REGb by one.
-  $69F4,$03 Call #R$677B.
-  $69F7,$06 Write #N$0404 to *#N$58EF (attribute buffer location).
-  $69FD,$06 Write #N$4242 to *#N$590F (attribute buffer location).
+N $696A Print the top of the mast.
+N $696A #PUSHS #CLS($05)
+. #UDGTABLE {
+.   #SIM(start=$696A,stop=$6976)#SCR$01(mothership-step-01)
+. } TABLE#
+  $696A,$0C Call #R$677B using #R$6538; printing #N$02 characters in #INK$05 at
+. #N({sim[DE]}).
+N $6976 Realign #REGde and print the bottom of the mast.
+N $6976 #UDGTABLE {
+.   #SIM(start=$6976,stop=$697D)#SCR$01(mothership-step-02)
+. } TABLE#
+  $6976,$07 Call #R$677B using #R$653A; printing #N$02 characters in #INK$05 at
+. #N({sim[DE]}).
+N $697D Realign #REGde and start printing the top lefthand corner of the ship.
+N $697D #UDGTABLE {
+.   #SIM(start=$697D,stop=$6985)#SCR$01(mothership-step-03)
+. } TABLE#
+  $697D,$08 Call #R$677B using #R$653C; printing #N$02 characters in #INK$06 at
+. #N({sim[DE]}).
+N $6985 Realign #REGde and print the top strip of the ship.
+N $6985 #UDGTABLE {
+.   #SIM(start=$6985,stop=$698D)#SCR$01(mothership-step-04)
+. } TABLE#
+  $6985,$08 Call #R$677B using #R$653E; printing #N$08 characters in
+. #COLOUR$32 at #N({sim[DE]}).
+N $698D Realign #REGde and print the top righthand corner of the ship.
+N $698D #UDGTABLE {
+.   #SIM(start=$698D,stop=$6995)#SCR$01(mothership-step-05)
+. } TABLE#
+  $698D,$08 Call #R$677B using #R$6546; printing #N$02 characters in #INK$06 at
+. #N({sim[DE]}).
+N $6995 Realign #REGde and print the lefthand corner of the next strip.
+N $6995 #UDGTABLE {
+.   #SIM(start=$6995,stop=$699B)#SCR$01(mothership-step-06)
+. } TABLE#
+  $6995,$06 Call #R$677B using #R$6548; printing #N$01 character in #INK$06 at
+. #N({sim[DE]}).
+N $699B Move right one block and print the next body strip of the ship.
+N $699B #UDGTABLE {
+.   #SIM(start=$699B,stop=$69A2)#SCR$01(mothership-step-07)
+. } TABLE#
+  $699B,$07 Call #R$6775 using #R$6549; printing #N$0C characters in #COLOUR$31
+.  at #N({sim[DE]}).
+N $69A2 Realign #REGde and print the righthand corner of this strip.
+N $69A2 #UDGTABLE {
+.   #SIM(start=$69A2,stop=$69AA)#SCR$01(mothership-step-08)
+. } TABLE#
+  $69A2,$08 Call #R$677B using #R$6555; printing #N$01 character in #INK$06 at
+. #N({sim[DE]}).
+N $69AA Realign #REGde and print the lefthand corner of the next strip.
+N $69AA #UDGTABLE {
+.   #SIM(start=$69AA,stop=$69B1)#SCR$01(mothership-step-09)
+. } TABLE#
+  $69AA,$07 Call #R$677B using #R$6556; printing #N$01 character in #INK$06 at
+. #N({sim[DE]}).
+N $69B1 Move right one block and print the next body strip of the ship.
+N $69B1 #UDGTABLE {
+.   #SIM(start=$69B1,stop=$69B8)#SCR$01(mothership-step-10)
+. } TABLE#
+  $69B1,$07 Call #R$677B using #R$6557; printing #N$0E characters in #COLOUR$31
+. at #N({sim[DE]}).
+N $69B8 Realign #REGde and print the righthand corner of this strip.
+N $69B8 #UDGTABLE {
+.   #SIM(start=$69B8,stop=$69C0)#SCR$01(mothership-step-11)
+. } TABLE#
+  $69B8,$08 Call #R$677B using #R$6565; printing #N$01 character in #INK$06 at
+. #N({sim[DE]}).
+N $69C0 Realign #REGde and start printing the next strip.
+N $69C0 #UDGTABLE {
+.   #SIM(start=$69C0,stop=$69C8)#SCR$01(mothership-step-12)
+. } TABLE#
+  $69C0,$08 Call #R$677B using #R$6566; printing #N$12 characters in #COLOUR$0F at
+. #N({sim[DE]}).
+N $69C8 Realign #REGde and start printing the hull.
+N $69C8 #UDGTABLE {
+.   #SIM(start=$69C8,stop=$69D0)#SCR$01(mothership-step-13)
+. } TABLE#
+  $69C8,$08 Call #R$677B using #R$6578; printing #N$01 character in #INK$02 at
+. #N({sim[DE]}).
+N $69D0 Realign #REGde and print the next section of the hull.
+N $69D0 #UDGTABLE {
+.   #SIM(start=$69D0,stop=$69D6)#SCR$01(mothership-step-14)
+. } TABLE#
+  $69D0,$06 Call #R$677B using #R$6579; printing #N$01 character in #INK$02 at
+. #N({sim[DE]}).
+N $69D6 Realign #REGde and print the next section of the hull.
+N $69D6 #UDGTABLE {
+.   #SIM(start=$69D6,stop=$69DD)#SCR$01(mothership-step-15)
+. } TABLE#
+  $69D6,$07 Call #R$677B using #R$657A; printing #N$02 characters in #INK$02 at
+. #N({sim[DE]}).
+N $69DD Realign #REGde and print the bottom of the hull.
+N $69DD #UDGTABLE {
+.   #SIM(start=$69DD,stop=$69E4)#SCR$01(mothership-step-16)
+. } TABLE#
+  $69DD,$07 Call #R$677B using #R$657C; printing #N$0A characters in #INK$02 at
+. #N({sim[DE]}).
+N $69E4 Realign #REGde and print the next section of the hull.
+N $69E4 #UDGTABLE {
+.   #SIM(start=$69E4,stop=$69EB)#SCR$01(mothership-step-17)
+. } TABLE#
+  $69E4,$07 Call #R$677B using #R$6586; printing #N$02 characters in #INK$02 at
+. #N({sim[DE]}).
+N $69EB Realign #REGde and print the next section of the hull.
+N $69EB #UDGTABLE {
+.   #SIM(start=$69EB,stop=$69F1)#SCR$01(mothership-step-18)
+. } TABLE#
+  $69EB,$06 Call #R$677B using #R$6588; printing #N$01 character in #INK$02 at
+. #N({sim[DE]}).
+N $69F1 Realign #REGde and print the last section of the hull.
+N $69F1 #UDGTABLE {
+.   #SIM(start=$69F1,stop=$69F7)#SCR$01(mothership-step-19)
+. } TABLE#
+  $69F1,$06 Call #R$677B using #R$6589; printing #N$01 character in #INK$02 at
+. #N({sim[DE]}).
+N $69F7 Cut out the "door" where the mothership alien will be drawn.
+N $69F7 #UDGTABLE {
+.   #SIM(start=$69F7,stop=$6A03)#SCR$01(mothership-step-20)
+. } TABLE#
+  $69F7,$06 Write #COLOUR$04 / #COLOUR$04 to *#N$58EF in the attribute buffer.
+  $69FD,$06 Write #COLOUR$42 / #COLOUR$42 to *#N$590F in the attribute buffer.
+N $6A03 Colour in the hull.
+N $6A03 #UDGTABLE {
+.   #SIM(start=$6A03,stop=$6A10)#SCR$01(mothership-step-21)
+. } TABLE#
   $6A03,$02 #REGa=#COLOUR$10.
-  $6A05,$03 #REGhl=#N$5948 (attribute buffer location).
-  $6A08,$03 #REGde=#N$5949 (attribute buffer location).
-  $6A0B,$01 Write #REGa to *#REGhl.
-  $6A0C,$02 #REGc=#N$0F.
-  $6A0E,$02 LDIR.
-  $6A10,$02 #REGl=#N$69.
-  $6A12,$02 #REGe=#N$6A.
-  $6A14,$01 Write #REGa to *#REGhl.
-  $6A15,$02 #REGc=#N$0D.
-  $6A17,$02 LDIR.
-  $6A19,$02 #REGl=#N$8A.
-  $6A1B,$02 #REGe=#N$8B.
-  $6A1D,$01 Write #REGa to *#REGhl.
-  $6A1E,$02 #REGc=#N$0B.
-  $6A20,$02 LDIR.
+  $6A05,$0B Copy #REGa (#INK$02) across #N$10 attribute blocks starting from
+. #N$5948.
+N $6A10 #UDGTABLE {
+.   #SIM(start=$6A10,stop=$6A19)#SCR$01(mothership-step-22)
+. } TABLE#
+  $6A10,$09 Realign the attribute buffer pointer to #N$5969 and copy
+. #REGa (#INK$02) across #N$0E attribute blocks.
+N $6A19 #UDGTABLE {
+.   #SIM(start=$6A19,stop=$6A22)#SCR$01(mothership-step-23)
+. } TABLE# #POPS
+  $6A19,$09 Realign the attribute buffer pointer to #N$598A and copy #REGa
+. (#INK$02) across #N$0C attribute blocks.
   $6A22,$01 Return.
 
 c $6A23 Handler: Mothership
@@ -1234,7 +1363,7 @@ N $6CB7 See #POKE#immunity(Immunity).
 c $6CC9 Draw Ship
 @ $6CC9 label=DrawShip
 D $6CC9 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
-. #SIM(start=$74A4,stop=$74B9) #UDGTABLE {
+. #CLS($05) #UDGTABLE {
 .   #SIM(start=$72C9,stop=$6FDB)#SCR$02(ship)
 . } TABLE# #POPS
   $6CC9,$03 Point #REGhl to the ship graphic: #R$604E.

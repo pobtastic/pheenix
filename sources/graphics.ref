@@ -56,8 +56,17 @@
   </tr>
 </table>
 
+[Graphics:Mothership]
+<table>
+  <tr><th>Drawn by the routine at #R$696A.</th></tr>
+  <tr><th>#R$6538(#N$6538)</th></tr>
+  <tr>
+    <td><img src="../images/scr/mothership.png"/></td>
+  </tr>
+</table>
+
 [Graphics:Mothership Alien]
-<p>Appears in the deck of the boss spaceship!</p>
+<p>Appears in the deck of the boss spaceship.</p>
 <table>
   <tr><th>#R$5FD4(#N$5FD4)</th></tr>
   <tr>
