@@ -33,7 +33,7 @@ Next: <a href="68A1.html">68A1</a>
 </td>
 </tr>
 </table>
-<div class="description">6890: Routine at 6890</div>
+<div class="description">6890: Difficulty Delay?</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,49 +45,79 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 </td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="6890"></span>
+<div class="comments">
+<div class="paragraph">
+Level 05 is the mothership level so run at full speed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">DifficultyDelay</td>
 <td class="address-2"><span id="6890"></span>6890</td>
 <td class="instruction">LD A,($6527)</td>
 <td class="comment-1" rowspan="3">Return if *<a href="6514.html#6527">Messaging_Header_LevelNumber</a> is equal to 35 (ASCII "&#53;").</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6893"></span>6893</td>
 <td class="instruction">CP $35</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6895"></span>6895</td>
 <td class="instruction">RET Z</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6896"></span>6896</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="6897"></span>
+<div class="comments">
+<div class="paragraph">
+Loop 08*0100 times.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6897"></span>6897</td>
 <td class="instruction">LD BC,$0008</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0008.</td>
 </tr>
 <tr>
+<td class="asm-label">DifficultyDelay_Loop</td>
 <td class="address-2"><span id="689a"></span>689A</td>
-<td class="instruction">DJNZ <a href="6890.html#689a">$689A</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6890.html#689a">689A</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="6890.html#689a">DifficultyDelay_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the inner loop counter by one and loop back to <a href="6890.html#689a">DifficultyDelay_Loop</a> until this counter is zero.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="689c"></span>689C</td>
 <td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+<td class="comment-1" rowspan="1">Decrease the outer loop counter by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="689d"></span>689D</td>
-<td class="instruction">JR NZ,<a href="6890.html#689a">$689A</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="6890.html#689a">689A</a> until <span class="register">C</span> is zero.</td>
+<td class="instruction">JR NZ,<a href="6890.html#689a">DifficultyDelay_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6890.html#689a">DifficultyDelay_Loop</a> until the outer loop counter is zero.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="689f"></span>689F</td>
 <td class="instruction">POP BC</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="68a0"></span>68A0</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>

@@ -495,7 +495,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label">Handler_Mothership_ProcessBullets</td>
 <td class="address-2"><span id="6a99"></span>6A99</td>
 <td class="instruction">LD A,($6695)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="6695.html">6695</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Return if *<a href="6695.html">Bullet_RateLimiter</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -829,7 +829,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6afb"></span>6AFB</td>
 <td class="instruction">LD A,($6693)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="6A23.html#6aee">Handler_Mothership_6</a> if *<a href="6693.html">6693</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6A23.html#6aee">Handler_Mothership_6</a> if *<a href="6693.html">Flag_Shield</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

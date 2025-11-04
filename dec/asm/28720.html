@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 28720</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="28111.html">28111</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#28720">Map</a></td>
+<td class="next">
+Next: <a href="29017.html">29017</a>
+</td>
+</tr>
+</table>
+<div class="description">28720: Handler: Player Bullets</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="27886.html">27886</a> and <a href="28111.html">28111</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_PlayerBullets</td>
+<td class="address-2"><span id="28720"></span>28720</td>
+<td class="instruction">LD HL,26261</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26261.html">Bullet_RateLimiter</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28723"></span>28723</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28730">PlayerBullets_UpdateLimiter</a> if *<a href="26261.html">Bullet_RateLimiter</a> is not equal to 3.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28724"></span>28724</td>
+<td class="instruction">CP 3</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28726"></span>28726</td>
+<td class="instruction">JR NZ,<a href="28720.html#28730">PlayerBullets_UpdateLimiter</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28728"></span>
+<div class="comments">
+<div class="paragraph">
+Reset <a href="26261.html">Bullet_RateLimiter</a> back to 0 (255+1) to start the counter again.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28728"></span>28728</td>
+<td class="instruction">LD (HL),255</td>
+<td class="comment-1" rowspan="1">Write 255 to *<a href="26261.html">Bullet_RateLimiter</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28730"></span>
+<div class="comments">
+<div class="paragraph">
+Increment the counter.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_UpdateLimiter</td>
+<td class="address-2"><span id="28730"></span>28730</td>
+<td class="instruction">INC (HL)</td>
+<td class="comment-1" rowspan="1">Increment *<a href="26261.html">Bullet_RateLimiter</a> by one.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28731"></span>
+<div class="comments">
+<div class="paragraph">
+Start processing the bullets.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28731"></span>28731</td>
+<td class="instruction">LD HL,26263</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26263.html">Table_BulletPosition</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28734"></span>
+<div class="comments">
+<div class="paragraph">
+Modified by the code at <a href="29385.html#29726">29726</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28734"></span>28734</td>
+<td class="instruction">LD B,1</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for <em>nn</em> bullet(s).</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_Loop</td>
+<td class="address-2"><span id="28736"></span>28736</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="2">Stash the bullet data pointer and bullet counter on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28737"></span>28737</td>
+<td class="instruction">PUSH BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28738"></span>28738</td>
+<td class="instruction">LD E,(HL)</td>
+<td class="comment-1" rowspan="3">Load the bullet position into <span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28739"></span>28739</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28740"></span>28740</td>
+<td class="instruction">LD D,(HL)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28741"></span>28741</td>
+<td class="instruction">LD A,D</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28903">PlayerBullets_UpdateActive</a> if the bullet is active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28742"></span>28742</td>
+<td class="instruction">OR D</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28743"></span>28743</td>
+<td class="instruction">JP NZ,<a href="28720.html#28903">PlayerBullets_UpdateActive</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28746"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the player can fire a new bullet.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28746"></span>28746</td>
+<td class="instruction">LD A,(26276)</td>
+<td class="comment-1" rowspan="6">Jump to <a href="28720.html#29006">PlayerBullets_NextBullet</a> if either *<a href="26276.html">Flag_Collision</a> or *<a href="26259.html">Flag_Shield</a> are active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28749"></span>28749</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28750"></span>28750</td>
+<td class="instruction">JP NZ,<a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28753"></span>28753</td>
+<td class="instruction">LD A,(26259)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28756"></span>28756</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28757"></span>28757</td>
+<td class="instruction">JP NZ,<a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28760"></span>
+<div class="comments">
+<div class="paragraph">
+Load the previous fire button state into <span class="register">C</span>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28760"></span>28760</td>
+<td class="instruction">LD A,(26262)</td>
+<td class="comment-1" rowspan="2"><span class="register">C</span>=*<a href="26262.html">Fire_ButtonState</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28763"></span>28763</td>
+<td class="instruction">LD C,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28764"></span>28764</td>
+<td class="instruction">LD A,(26355)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28777">PlayerBullets_ReadInput</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is not active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28767"></span>28767</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28768"></span>28768</td>
+<td class="instruction">JR Z,<a href="28720.html#28777">PlayerBullets_ReadInput</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28770"></span>
+<div class="comments">
+<div class="paragraph">
+The game is in demo mode, so generate random firing action.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28770"></span>28770</td>
+<td class="instruction">CALL <a href="26382.html">GenerateRandomNumber</a></td>
+<td class="comment-1" rowspan="2">Generate a random number between 0-15.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28773"></span>28773</td>
+<td class="instruction">AND %00001111</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28775"></span>28775</td>
+<td class="instruction">JR <a href="28720.html#28805">PlayerBullets_ProcessInput</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28805">PlayerBullets_ProcessInput</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28777"></span>
+<div class="comments">
+<div class="paragraph">
+Read player fire button input.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_ReadInput</td>
+<td class="address-2"><span id="28777"></span>28777</td>
+<td class="instruction">DI</td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28778"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the Kempson joystick?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28778"></span>28778</td>
+<td class="instruction">LD A,(26358)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28791">PlayerBullets_AGF</a> if *<a href="26358.html">ControlMethod</a> is not the Kempston joystick.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28781"></span>28781</td>
+<td class="instruction">CP 2</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28783"></span>28783</td>
+<td class="instruction">JR NZ,<a href="28720.html#28791">PlayerBullets_AGF</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28785"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is Kempston joystick, so test the fire button.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28785"></span>28785</td>
+<td class="instruction">IN A,(31)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=read from the Kempston joystick port.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28787"></span>28787</td>
+<td class="instruction">AND %00010000</td>
+<td class="comment-1" rowspan="1">Keep only bit 4 (the fire button input).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28789"></span>28789</td>
+<td class="instruction">JR <a href="28720.html#28810">PlayerBullets_StoreInput</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28810">PlayerBullets_StoreInput</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28791"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the AGF joystick?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_AGF</td>
+<td class="address-2"><span id="28791"></span>28791</td>
+<td class="instruction">CP 1</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28720.html#28799">PlayerBullets_Keyboard</a> if *<a href="26358.html">ControlMethod</a> is not the AGF joystick.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28793"></span>28793</td>
+<td class="instruction">JR NZ,<a href="28720.html#28799">PlayerBullets_Keyboard</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28795"></span>28795</td>
+<td class="instruction">LD A,239</td>
+<td class="comment-1" rowspan="1"><table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">239</td>
+<td class="centre" colspan="1" rowspan="1">0</td>
+<td class="centre" colspan="1" rowspan="1">9</td>
+<td class="centre" colspan="1" rowspan="1">8</td>
+<td class="centre" colspan="1" rowspan="1">7</td>
+<td class="centre" colspan="1" rowspan="1">6</td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28797"></span>28797</td>
+<td class="instruction">JR <a href="28720.html#28801">PlayerBullets_ReadKeyboard</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28801">PlayerBullets_ReadKeyboard</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28799"></span>
+<div class="comments">
+<div class="paragraph">
+Else, the only control option left is the keyboard.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_Keyboard</td>
+<td class="address-2"><span id="28799"></span>28799</td>
+<td class="instruction">LD A,127</td>
+<td class="comment-1" rowspan="1"><table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">127</td>
+<td class="centre" colspan="1" rowspan="1">SPACE</td>
+<td class="centre" colspan="1" rowspan="1">FULL-STOP</td>
+<td class="centre" colspan="1" rowspan="1">M</td>
+<td class="centre" colspan="1" rowspan="1">N</td>
+<td class="centre" colspan="1" rowspan="1">B</td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_ReadKeyboard</td>
+<td class="address-2"><span id="28801"></span>28801</td>
+<td class="instruction">IN A,(254)</td>
+<td class="comment-1" rowspan="1">Read from the keyboard.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28803"></span>28803</td>
+<td class="instruction">AND %00000001</td>
+<td class="comment-1" rowspan="1">Keep only bit 0 (the fire button input).</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_ProcessInput</td>
+<td class="address-2"><span id="28805"></span>28805</td>
+<td class="instruction">LD A,16</td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to 16 (the fire button was pressed).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28807"></span>28807</td>
+<td class="instruction">JR Z,<a href="28720.html#28810">PlayerBullets_StoreInput</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28810">PlayerBullets_StoreInput</a> if the fire button was pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28809"></span>28809</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to 0 (the fire button wasn't pressed).</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_StoreInput</td>
+<td class="address-2"><span id="28810"></span>28810</td>
+<td class="instruction">LD (26262),A</td>
+<td class="comment-1" rowspan="1">Write the current fire button state to *<a href="26262.html">Fire_ButtonState</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28813"></span>
+<div class="comments">
+<div class="paragraph">
+Is the fire button state unchanged since the last time this routine ran?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28813"></span>28813</td>
+<td class="instruction">CP C</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28720.html#29006">PlayerBullets_NextBullet</a> if the current fire button state matches the previous fire button state.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28814"></span>28814</td>
+<td class="instruction">JP Z,<a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28817"></span>28817</td>
+<td class="instruction">OR A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28720.html#29006">PlayerBullets_NextBullet</a> if the fire button wasn't pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28818"></span>28818</td>
+<td class="instruction">JP Z,<a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28821"></span>28821</td>
+<td class="instruction">LD A,(26355)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28856">PlayerBullets_CheckSpawn</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28824"></span>28824</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28825"></span>28825</td>
+<td class="instruction">JR NZ,<a href="28720.html#28856">PlayerBullets_CheckSpawn</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28827"></span>28827</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-1" rowspan="1">Stash the bullet position on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28828"></span>28828</td>
+<td class="instruction">LD B,22</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 22 sound iterations.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28830"></span>28830</td>
+<td class="instruction">LD HL,82</td>
+<td class="comment-1" rowspan="1">Set the initial sound pitch to 0082.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_SoundLoop</td>
+<td class="address-2"><span id="28833"></span>28833</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash the sound counter and pitch on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28834"></span>28834</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28835"></span>28835</td>
+<td class="instruction">LD A,16</td>
+<td class="comment-1" rowspan="3">Enable the speaker (bit 4) and disable interrupts.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28837"></span>28837</td>
+<td class="instruction">DI</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28838"></span>28838</td>
+<td class="instruction">OUT (254),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28840"></span>28840</td>
+<td class="instruction">LD DE,1</td>
+<td class="comment-1" rowspan="1">Set the sound duration to 0001.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28843"></span>28843</td>
+<td class="instruction">CALL 949</td>
+<td class="comment-1" rowspan="1">Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28846"></span>28846</td>
+<td class="instruction">DI</td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28847"></span>28847</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore the pitch value from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28848"></span>28848</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="4">Increment the pitch by four.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28849"></span>28849</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28850"></span>28850</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28851"></span>28851</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28852"></span>28852</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the sound counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28853"></span>28853</td>
+<td class="instruction">DJNZ <a href="28720.html#28833">PlayerBullets_SoundLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the sound counter by one and loop back to <a href="28720.html#28833">PlayerBullets_SoundLoop</a> until the counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28855"></span>28855</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the bullet position from the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28856"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the bullet spawning position is clear.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_CheckSpawn</td>
+<td class="address-2"><span id="28856"></span>28856</td>
+<td class="instruction">LD A,(26349)</td>
+<td class="comment-1" rowspan="3"><span class="register">L</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>-31.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28859"></span>28859</td>
+<td class="instruction">SUB 31</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28861"></span>28861</td>
+<td class="instruction">LD L,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28862"></span>28862</td>
+<td class="instruction">LD H,90</td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=90.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28864"></span>28864</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#29006">PlayerBullets_NextBullet</a> if *<span class="register">HL</span> is not zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28865"></span>28865</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28866"></span>28866</td>
+<td class="instruction">JP NZ,<a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28869"></span>28869</td>
+<td class="instruction">LD (HL),71</td>
+<td class="comment-1" rowspan="1">Write INK:WHITE,
+PAPER:BLACK(BRIGHT) to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28871"></span>28871</td>
+<td class="instruction">CALL <a href="26372.html">ConvertAttributeToScreenBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26372.html">ConvertAttributeToScreenBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28874"></span>28874</td>
+<td class="instruction">SET 2,H</td>
+<td class="comment-1" rowspan="1">Set bit 2 of <span class="register">H</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28876"></span>28876</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28877"></span>28877</td>
+<td class="instruction">LD A,(26278)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26278.html">26278</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28880"></span>28880</td>
+<td class="instruction">OR A</td>
+<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28881"></span>28881</td>
+<td class="instruction">LD B,A</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28882"></span>28882</td>
+<td class="instruction">LD A,1</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=1.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28884"></span>28884</td>
+<td class="instruction">JR Z,<a href="28720.html#28890">PlayerBullets_Store</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28890">PlayerBullets_Store</a> if <span class="register">HL</span> is equal to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_FindSlot_Loop</td>
+<td class="address-2"><span id="28886"></span>28886</td>
+<td class="instruction">SLA A</td>
+<td class="comment-1" rowspan="1">Shift <span class="register">A</span> left (with carry).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28888"></span>28888</td>
+<td class="instruction">DJNZ <a href="28720.html#28886">PlayerBullets_FindSlot_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28720.html#28886">PlayerBullets_FindSlot_Loop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_Store</td>
+<td class="address-2"><span id="28890"></span>28890</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="2">Restore <span class="register">DE</span> and <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28891"></span>28891</td>
+<td class="instruction">POP BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28892"></span>28892</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">DE</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28893"></span>28893</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28894"></span>28894</td>
+<td class="instruction">LD HL,26270</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26270.html">Table_BulletData</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_FindSlot</td>
+<td class="address-2"><span id="28897"></span>28897</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28898"></span>28898</td>
+<td class="instruction">DJNZ <a href="28720.html#28897">PlayerBullets_FindSlot</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28720.html#28897">PlayerBullets_FindSlot</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28900"></span>28900</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28901"></span>28901</td>
+<td class="instruction">JR <a href="28720.html#28999">PlayerBullets_DrawNew</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28999">PlayerBullets_DrawNew</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28903"></span>
+<div class="comments">
+<div class="paragraph">
+Update active bullet position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_UpdateActive</td>
+<td class="address-2"><span id="28903"></span>28903</td>
+<td class="instruction">LD HL,26270</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26270.html">Table_BulletData</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28906"></span>28906</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the bullet counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28907"></span>28907</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">But also stash the bullet counter back on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label">LocateBulletData_Loop</td>
+<td class="address-2"><span id="28908"></span>28908</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Advance to the next bullet data slot.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28909"></span>28909</td>
+<td class="instruction">DJNZ <a href="28720.html#28908">LocateBulletData_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the bullet counter by one and loop back to <a href="28720.html#28908">LocateBulletData_Loop</a> until the current bullet slot is found.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28911"></span>28911</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="1">Load the bullet state into <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28912"></span>28912</td>
+<td class="instruction">PUSH AF</td>
+<td class="comment-1" rowspan="2">Stash the bullet state and bullet position on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28913"></span>28913</td>
+<td class="instruction">PUSH DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28914"></span>28914</td>
+<td class="instruction">CALL <a href="26359.html">ConvertScreenToAttributeBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26359.html">ConvertScreenToAttributeBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28917"></span>28917</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Fetch the current attribute applied to the bullet, check if it is: INK:WHITE,
+PAPER:BLACK(BRIGHT)?</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28918"></span>28918</td>
+<td class="instruction">CP 71</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28920"></span>28920</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the bullet position from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28921"></span>28921</td>
+<td class="instruction">JR NZ,<a href="28720.html#28980">PlayerBullets_Collision</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28980">PlayerBullets_Collision</a> if the bullet has hit something, i.e. is no longer INK:WHITE,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28923"></span>28923</td>
+<td class="instruction">BIT 2,D</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28720.html#28940">PlayerBullets_ClearOld</a> if bit 2 of <span class="register">D</span> is not set.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28925"></span>28925</td>
+<td class="instruction">JR Z,<a href="28720.html#28940">PlayerBullets_ClearOld</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28927"></span>
+<div class="comments">
+<div class="paragraph">
+Clear the old bullet position and draw it at a new position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28927"></span>28927</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28928"></span>28928</td>
+<td class="instruction">RES 2,D</td>
+<td class="comment-1" rowspan="1">Reset bit 2 of <span class="register">D</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28930"></span>28930</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">DE</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28931"></span>28931</td>
+<td class="instruction">LD B,4</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 4 pixel lines.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_EraseLoop</td>
+<td class="address-2"><span id="28933"></span>28933</td>
+<td class="instruction">LD (DE),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28934"></span>28934</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28935"></span>28935</td>
+<td class="instruction">DJNZ <a href="28720.html#28933">PlayerBullets_EraseLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="28720.html#28933">PlayerBullets_EraseLoop</a> until all 4 lines of the bullet have been erased.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28937"></span>28937</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to 0 as we're clearing the bullet graphic.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28938"></span>28938</td>
+<td class="instruction">JR <a href="28720.html#28999">PlayerBullets_DrawNew</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28999">PlayerBullets_DrawNew</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28940"></span>
+<div class="comments">
+<div class="paragraph">
+Clear the old bullet from the screen.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_ClearOld</td>
+<td class="address-2"><span id="28940"></span>28940</td>
+<td class="instruction">LD B,4</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 4 pixel lines.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28942"></span>28942</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to 0 as we're clearing the bullet graphic.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_ClearLoop</td>
+<td class="address-2"><span id="28943"></span>28943</td>
+<td class="instruction">LD (DE),A</td>
+<td class="comment-1" rowspan="1">Write the empty data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28944"></span>28944</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28945"></span>28945</td>
+<td class="instruction">DJNZ <a href="28720.html#28943">PlayerBullets_ClearLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="28720.html#28943">PlayerBullets_ClearLoop</a> until all 4 lines of the bullet have been erased.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28947"></span>28947</td>
+<td class="instruction">CALL <a href="26359.html">ConvertScreenToAttributeBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26359.html">ConvertScreenToAttributeBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28950"></span>28950</td>
+<td class="instruction">EX DE,HL</td>
+<td class="comment-1" rowspan="1">Exchange the <span class="register">DE</span> and <span class="register">HL</span> registers.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28951"></span>28951</td>
+<td class="instruction">LD (HL),0</td>
+<td class="comment-1" rowspan="1">Write 0 to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28953"></span>28953</td>
+<td class="instruction">LD A,H</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28971">PlayerBullets_MoveUp</a> if <span class="register">H</span> is not equal to 88.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28954"></span>28954</td>
+<td class="instruction">CP 88</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28956"></span>28956</td>
+<td class="instruction">JR NZ,<a href="28720.html#28971">PlayerBullets_MoveUp</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28958"></span>28958</td>
+<td class="instruction">LD A,L</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">L</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28959"></span>28959</td>
+<td class="instruction">AND %11100000</td>
+<td class="comment-1" rowspan="1">Keep only bits 5-7.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28961"></span>28961</td>
+<td class="instruction">CP 32</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28720.html#28971">PlayerBullets_MoveUp</a> if <span class="register">A</span> is not equal to 32.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28963"></span>28963</td>
+<td class="instruction">JR NZ,<a href="28720.html#28971">PlayerBullets_MoveUp</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28965"></span>28965</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore the bullet state from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28966"></span>28966</td>
+<td class="instruction">LD DE,0</td>
+<td class="comment-1" rowspan="1">Set the bullet position to 0000 (inactive).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28969"></span>28969</td>
+<td class="instruction">JR <a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#29006">PlayerBullets_NextBullet</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28971"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the bullet in the new position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_MoveUp</td>
+<td class="address-2"><span id="28971"></span>28971</td>
+<td class="instruction">LD C,32</td>
+<td class="comment-1" rowspan="3">Move up one row in the attribute buffer (subtract 32).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28973"></span>28973</td>
+<td class="instruction">AND A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28974"></span>28974</td>
+<td class="instruction">SBC HL,BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28976"></span>28976</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28720.html#28989">PlayerBullets_SetNewPosition</a> if the new position is "clear" (i.e. the bullet hasn't hit anything/ there's no attribute applied at this attribute buffer location).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28977"></span>28977</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28978"></span>28978</td>
+<td class="instruction">JR Z,<a href="28720.html#28989">PlayerBullets_SetNewPosition</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28980"></span>
+<div class="comments">
+<div class="paragraph">
+The bullet has hit something so handle the collision.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_Collision</td>
+<td class="address-2"><span id="28980"></span>28980</td>
+<td class="instruction">CALL <a href="29017.html">29017</a></td>
+<td class="comment-1" rowspan="1">Call <a href="29017.html">29017</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28983"></span>28983</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore the bullet state from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28984"></span>28984</td>
+<td class="instruction">LD DE,0</td>
+<td class="comment-1" rowspan="1">Set the bullet position to 0000 (inactive).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28987"></span>28987</td>
+<td class="instruction">JR <a href="28720.html#29006">PlayerBullets_NextBullet</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#29006">PlayerBullets_NextBullet</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_SetNewPosition</td>
+<td class="address-2"><span id="28989"></span>28989</td>
+<td class="instruction">LD (HL),71</td>
+<td class="comment-1" rowspan="1">Mark the new position with the attribute INK:WHITE,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28991"></span>28991</td>
+<td class="instruction">CALL <a href="26372.html">ConvertAttributeToScreenBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26372.html">ConvertAttributeToScreenBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28994"></span>28994</td>
+<td class="instruction">EX DE,HL</td>
+<td class="comment-1" rowspan="1">Exchange the <span class="register">DE</span> and <span class="register">HL</span> registers.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28995"></span>28995</td>
+<td class="instruction">SET 2,D</td>
+<td class="comment-1" rowspan="1">Set bit 2 of <span class="register">D</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28997"></span>28997</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore the bullet state from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28998"></span>28998</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-1" rowspan="1">Stash the new bullet position on the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28999"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the bullet graphic.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_DrawNew</td>
+<td class="address-2"><span id="28999"></span>28999</td>
+<td class="instruction">LD B,4</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 4 pixel lines.</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_DrawLoop</td>
+<td class="address-2"><span id="29001"></span>29001</td>
+<td class="instruction">LD (DE),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29002"></span>29002</td>
+<td class="instruction">INC D</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29003"></span>29003</td>
+<td class="instruction">DJNZ <a href="28720.html#29001">PlayerBullets_DrawLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="28720.html#29001">PlayerBullets_DrawLoop</a> until all 4 lines of the bullet have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29005"></span>29005</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the original bullet position from the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29006"></span>
+<div class="comments">
+<div class="paragraph">
+Housekeeping; move onto the next bullet.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerBullets_NextBullet</td>
+<td class="address-2"><span id="29006"></span>29006</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="2">Restore the bullet counter and bullet data pointer from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29007"></span>29007</td>
+<td class="instruction">POP HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29008"></span>29008</td>
+<td class="instruction">LD (HL),E</td>
+<td class="comment-1" rowspan="4">Store the bullet position back to the data table.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29009"></span>29009</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29010"></span>29010</td>
+<td class="instruction">LD (HL),D</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29011"></span>29011</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29012"></span>29012</td>
+<td class="instruction">DEC B</td>
+<td class="comment-1" rowspan="1">Decrease the bullet counter by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29013"></span>29013</td>
+<td class="instruction">JP NZ,<a href="28720.html#28736">PlayerBullets_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28720.html#28736">PlayerBullets_Loop</a> until all of the bullets have been processed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29016"></span>29016</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="28111.html">28111</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#28720">Map</a></td>
+<td class="next">
+Next: <a href="29017.html">29017</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/7030.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

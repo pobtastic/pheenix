@@ -33,7 +33,7 @@ Next: <a href="26707.html">26707</a>
 </td>
 </tr>
 </table>
-<div class="description">26702: Routine at 684E</div>
+<div class="description">26702: Handler: Eggsplosion Left</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -41,32 +41,32 @@ Next: <a href="26707.html">26707</a>
 <div class="paragraph">
 Used by the routine at <a href="31154.html">31154</a>.
 </div>
+<div class="paragraph">
+Handler for the left half of the Eggsplosion.
 </div>
-</td>
+</div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
 </tr>
 <tr>
-<td class="routine-comment" colspan="5">
-<span id="26702"></span>
-<div class="comments">
-<div class="paragraph">
-<table class="">
-<tr>
-<td class="" colspan="1" rowspan="1"><img alt="dgdfdgdh" src="../../images/scr/dgdfdgdh.png" /></td>
+<td class="register">DE</td>
+<td class="register-desc">Attribute buffer destination</td>
 </tr>
 </table>
-</div>
-</div>
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_EggsplosionLeft</td>
 <td class="address-2"><span id="26702"></span>26702</td>
 <td class="instruction">LD HL,24686</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24686.html">Graphics_Eggsplosion_Left</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26705"></span>26705</td>
-<td class="instruction">JR <a href="26707.html#26710">26710</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="26707.html#26710">26710</a>.</td>
+<td class="instruction">JR <a href="26707.html#26710">Handler_Eggsplosion</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="26707.html#26710">Handler_Eggsplosion</a>.</td>
 </tr>
 </table>
 <table class="asm-navigation">

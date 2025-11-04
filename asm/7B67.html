@@ -74,7 +74,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b6c"></span>7B6C</td>
 <td class="instruction">LD A,($6695)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="6695.html">6695</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Return if *<a href="6695.html">Bullet_RateLimiter</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -147,7 +147,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b80"></span>7B80</td>
 <td class="instruction">LD A,($66A4)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7B67.html#7c76">Handler_Aliens_19</a> if *<a href="66A4.html">66A4</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7B67.html#7c76">Handler_Aliens_19</a> if *<a href="66A4.html">Flag_Collision</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -191,7 +191,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b91"></span>7B91</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F0.html#66f1">66F1</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -364,7 +364,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7bc3"></span>7BC3</td>
 <td class="instruction">LD A,($66ED)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66ED.html">66ED</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -456,7 +456,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7bdf"></span>7BDF</td>
 <td class="instruction">LD A,($6693)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7B67.html#7be7">Handler_Aliens_8</a> if *<a href="6693.html">6693</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7B67.html#7be7">Handler_Aliens_8</a> if *<a href="6693.html">Flag_Shield</a> is inactive.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -542,7 +542,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7bf9"></span>7BF9</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F0.html#66f1">66F1</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -830,7 +830,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7c45"></span>7C45</td>
 <td class="instruction">LD A,($6693)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7B67.html#7c50">Handler_Aliens_15</a> if *<a href="6693.html">6693</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7B67.html#7c50">Handler_Aliens_15</a> if *<a href="6693.html">Flag_Shield</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -874,7 +874,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label">Handler_Aliens_16</td>
 <td class="address-2"><span id="7c54"></span>7C54</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F0.html#66f1">66F1</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

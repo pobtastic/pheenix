@@ -104,7 +104,7 @@ This is a game the player started, so disable the demo mode and unset the game-o
 <td class="asm-label"></td>
 <td class="address-1"><span id="7de7"></span>7DE7</td>
 <td class="instruction">LD A,$04</td>
-<td class="comment-1" rowspan="2">Write 04 to *<a href="66F0.html#66f1">66F1</a>.</td>
+<td class="comment-1" rowspan="2">Write 04 to *<a href="66F1.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -139,7 +139,7 @@ Set the players starting life count.
 <td class="comment-1" rowspan="1">Call <a href="72C9.html#740c">740C</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_0</td>
+<td class="asm-label">Game_Loop</td>
 <td class="address-2"><span id="7df3"></span>7DF3</td>
 <td class="instruction">CALL <a href="6CEE.html">$6CEE</a></td>
 <td class="comment-1" rowspan="1">Call <a href="6CEE.html">6CEE</a>.</td>
@@ -171,14 +171,14 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e02"></span>7E02</td>
-<td class="instruction">CALL <a href="6890.html">$6890</a></td>
-<td class="comment-1" rowspan="1">Call <a href="6890.html">6890</a>.</td>
+<td class="instruction">CALL <a href="6890.html">DifficultyDelay</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6890.html">DifficultyDelay</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e05"></span>7E05</td>
 <td class="instruction">LD A,($66F5)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7DD9.html#7df3">StartGame_0</a> if *<a href="66F5.html">Flag_GameOver</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump back to <a href="7DD9.html#7df3">Game_Loop</a> unless *<a href="66F5.html">Flag_GameOver</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -188,7 +188,17 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e09"></span>7E09</td>
-<td class="instruction">JR Z,<a href="7DD9.html#7df3">StartGame_0</a></td>
+<td class="instruction">JR Z,<a href="7DD9.html#7df3">Game_Loop</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7e0b"></span>
+<div class="comments">
+<div class="paragraph">
+*<a href="66F5.html">Flag_GameOver</a> is active, start the "Game Over" process.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -197,16 +207,16 @@ Set the players starting life count.
 <td class="comment-1" rowspan="1"><span class="register">D</span>=08.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_1</td>
+<td class="asm-label">StartGame_0</td>
 <td class="address-2"><span id="7e0d"></span>7E0D</td>
 <td class="instruction">LD BC,$0000</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0000.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_2</td>
+<td class="asm-label">StartGame_1</td>
 <td class="address-2"><span id="7e10"></span>7E10</td>
-<td class="instruction">DJNZ <a href="7DD9.html#7e10">StartGame_2</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7DD9.html#7e10">StartGame_2</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="7DD9.html#7e10">StartGame_1</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7DD9.html#7e10">StartGame_1</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -217,8 +227,8 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e13"></span>7E13</td>
-<td class="instruction">JR NZ,<a href="7DD9.html#7e10">StartGame_2</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e10">StartGame_2</a> until <span class="register">C</span> is zero.</td>
+<td class="instruction">JR NZ,<a href="7DD9.html#7e10">StartGame_1</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e10">StartGame_1</a> until <span class="register">C</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -229,8 +239,8 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e16"></span>7E16</td>
-<td class="instruction">JR NZ,<a href="7DD9.html#7e0d">StartGame_1</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e0d">StartGame_1</a> if <span class="register">D</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="7DD9.html#7e0d">StartGame_0</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e0d">StartGame_0</a> if <span class="register">D</span> is not equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -262,10 +272,10 @@ Set the players starting life count.
 <td class="instruction">PUSH DE</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_3</td>
+<td class="asm-label">StartGame_2</td>
 <td class="address-2"><span id="7e22"></span>7E22</td>
 <td class="instruction">LD A,(DE)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7DD9.html#7e2a">StartGame_4</a> if *<span class="register">DE</span> is equal to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7DD9.html#7e2a">StartGame_3</a> if *<span class="register">DE</span> is equal to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -275,22 +285,22 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e24"></span>7E24</td>
-<td class="instruction">JR Z,<a href="7DD9.html#7e2a">StartGame_4</a></td>
+<td class="instruction">JR Z,<a href="7DD9.html#7e2a">StartGame_3</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e26"></span>7E26</td>
-<td class="instruction">JR C,<a href="7DD9.html#7e31">StartGame_6</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e31">StartGame_6</a> if *<span class="register">DE</span> is less than *<span class="register">HL</span>.</td>
+<td class="instruction">JR C,<a href="7DD9.html#7e31">StartGame_5</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e31">StartGame_5</a> if *<span class="register">DE</span> is less than *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e28"></span>7E28</td>
-<td class="instruction">JR <a href="7DD9.html#7e2e">StartGame_5</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e2e">StartGame_5</a>.</td>
+<td class="instruction">JR <a href="7DD9.html#7e2e">StartGame_4</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e2e">StartGame_4</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_4</td>
+<td class="asm-label">StartGame_3</td>
 <td class="address-2"><span id="7e2a"></span>7E2A</td>
 <td class="instruction">INC DE</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">DE</span> by one.</td>
@@ -304,11 +314,11 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e2c"></span>7E2C</td>
-<td class="instruction">DJNZ <a href="7DD9.html#7e22">StartGame_3</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7DD9.html#7e22">StartGame_3</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="7DD9.html#7e22">StartGame_2</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7DD9.html#7e22">StartGame_2</a> until counter is zero.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_5</td>
+<td class="asm-label">StartGame_4</td>
 <td class="address-2"><span id="7e2e"></span>7E2E</td>
 <td class="instruction">POP DE</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">DE</span> from the stack.</td>
@@ -316,11 +326,11 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7e2f"></span>7E2F</td>
-<td class="instruction">JR <a href="7DD9.html#7e39">StartGame_7</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e39">StartGame_7</a>.</td>
+<td class="instruction">JR <a href="7DD9.html#7e39">StartGame_6</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7DD9.html#7e39">StartGame_6</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_6</td>
+<td class="asm-label">StartGame_5</td>
 <td class="address-2"><span id="7e31"></span>7E31</td>
 <td class="instruction">POP DE</td>
 <td class="comment-1" rowspan="2">Restore <span class="register">DE</span> and <span class="register">HL</span> from the stack.</td>
@@ -349,7 +359,7 @@ Set the players starting life count.
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_7</td>
+<td class="asm-label">StartGame_6</td>
 <td class="address-2"><span id="7e39"></span>7E39</td>
 <td class="instruction">POP HL</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>

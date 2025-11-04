@@ -33,7 +33,7 @@ Next: <a href="684E.html">684E</a>
 </td>
 </tr>
 </table>
-<div class="description">6845: Routine at 6845</div>
+<div class="description">6845: Handler: 2x2 Mask</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -41,37 +41,38 @@ Next: <a href="684E.html">684E</a>
 <div class="paragraph">
 Used by the routine at <a href="79B2.html">79B2</a>.
 </div>
+<div class="paragraph">
+Handler for a 2x2 mask for removing "Eggsplosions".
 </div>
-</td>
+</div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
 </tr>
 <tr>
-<td class="routine-comment" colspan="5">
-<span id="6845"></span>
-<div class="comments">
-<div class="paragraph">
-<table class="">
-<tr>
-<td class="" colspan="1" rowspan="1"><img alt="dh" src="../images/scr/dh.png" /></td>
+<td class="register">DE</td>
+<td class="register-desc">Attribute buffer destination</td>
 </tr>
 </table>
-</div>
-</div>
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_Mask</td>
 <td class="address-2"><span id="6845"></span>6845</td>
 <td class="instruction">LD HL,$613D</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="613D.html">Graphics_Masks</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6848"></span>6848</td>
 <td class="instruction">LD IX,$0002</td>
-<td class="comment-1" rowspan="1"><span class="register">IX</span>=0002.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">IX</span> to target RED attributes with a BLACK replacement attribute.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="684c"></span>684C</td>
-<td class="instruction">JR <a href="6853.html#685a">$685A</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="6853.html#685a">685A</a>.</td>
+<td class="instruction">JR <a href="6853.html#685a">Handler_Eggsplosion_Draw</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6853.html#685a">Handler_Eggsplosion_Draw</a>.</td>
 </tr>
 </table>
 <table class="asm-navigation">

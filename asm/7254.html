@@ -47,7 +47,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="address-2"><span id="7254"></span>7254</td>
 <td class="instruction">LD A,($66A4)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="72C9.html#730d">730D</a> if *<a href="66A4.html">66A4</a> is not equal to 02.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="72C9.html#730d">730D</a> if *<a href="66A4.html">Flag_Collision</a> is not equal to 02.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7257"></span>7257</td>
@@ -60,7 +60,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="address-1"><span id="725c"></span>725C</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7254.html#7277">7277</a> if *<a href="66F0.html#66f1">66F1</a> is not equal to 04.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7254.html#7277">7277</a> if *<a href="66F1.html">Phase</a> is not equal to 04.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="725f"></span>725F</td>
@@ -113,7 +113,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="address-1"><span id="726e"></span>726E</td>
 <td class="instruction">BIT 6,D</td>
-<td class="comment-1" rowspan="2">Call <a href="7564.html">7564</a> if bit 6 of <span class="register">D</span> is set.</td>
+<td class="comment-1" rowspan="2">Call <a href="7564.html">7564</a> if bit 6 of <span class="register">D</span> is active.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7270"></span>7270</td>
@@ -196,7 +196,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="address-1"><span id="7292"></span>7292</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7254.html#729d">729D</a> if *<a href="66F0.html#66f1">66F1</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7254.html#729d">729D</a> if *<a href="66F1.html">Phase</a> is not zero.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="7295"></span>7295</td>
@@ -282,7 +282,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="address-2"><span id="72b7"></span>72B7</td>
 <td class="instruction">LD HL,$66ED</td>
-<td class="comment-1" rowspan="2">Write CE to *<a href="66ED.html">66ED</a>.</td>
+<td class="comment-1" rowspan="2">Write CE to *<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="72ba"></span>72BA</td>

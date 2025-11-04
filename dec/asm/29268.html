@@ -47,7 +47,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-2"><span id="29268"></span>29268</td>
 <td class="instruction">LD A,(26276)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29385.html#29453">29453</a> if *<a href="26276.html">26276</a> is not equal to 2.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29385.html#29453">29453</a> if *<a href="26276.html">Flag_Collision</a> is not equal to 2.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29271"></span>29271</td>
@@ -60,7 +60,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-1"><span id="29276"></span>29276</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29303">29303</a> if *<a href="26352.html#26353">26353</a> is not equal to 4.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29303">29303</a> if *<a href="26353.html">Phase</a> is not equal to 4.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29279"></span>29279</td>
@@ -113,7 +113,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-1"><span id="29294"></span>29294</td>
 <td class="instruction">BIT 6,D</td>
-<td class="comment-1" rowspan="2">Call <a href="30052.html">30052</a> if bit 6 of <span class="register">D</span> is set.</td>
+<td class="comment-1" rowspan="2">Call <a href="30052.html">30052</a> if bit 6 of <span class="register">D</span> is active.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29296"></span>29296</td>
@@ -196,7 +196,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-1"><span id="29330"></span>29330</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29341">29341</a> if *<a href="26352.html#26353">26353</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29341">29341</a> if *<a href="26353.html">Phase</a> is not zero.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29333"></span>29333</td>
@@ -282,7 +282,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-2"><span id="29367"></span>29367</td>
 <td class="instruction">LD HL,26349</td>
-<td class="comment-1" rowspan="2">Write 206 to *<a href="26349.html">26349</a>.</td>
+<td class="comment-1" rowspan="2">Write 206 to *<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29370"></span>29370</td>

@@ -74,7 +74,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31596"></span>31596</td>
 <td class="instruction">LD A,(26261)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="26261.html">26261</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Return if *<a href="26261.html">Bullet_RateLimiter</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -147,7 +147,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31616"></span>31616</td>
 <td class="instruction">LD A,(26276)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31862">Handler_Aliens_19</a> if *<a href="26276.html">26276</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31862">Handler_Aliens_19</a> if *<a href="26276.html">Flag_Collision</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -191,7 +191,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31633"></span>31633</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26352.html#26353">26353</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26353.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -364,7 +364,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31683"></span>31683</td>
 <td class="instruction">LD A,(26349)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26349.html">26349</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -456,7 +456,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31711"></span>31711</td>
 <td class="instruction">LD A,(26259)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31719">Handler_Aliens_8</a> if *<a href="26259.html">26259</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31719">Handler_Aliens_8</a> if *<a href="26259.html">Flag_Shield</a> is inactive.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -542,7 +542,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31737"></span>31737</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26352.html#26353">26353</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26353.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -830,7 +830,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="31813"></span>31813</td>
 <td class="instruction">LD A,(26259)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31824">Handler_Aliens_15</a> if *<a href="26259.html">26259</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="31591.html#31824">Handler_Aliens_15</a> if *<a href="26259.html">Flag_Shield</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -874,7 +874,7 @@ See <a href="../reference/pokes.html#aliens-not-fire">Aliens Don't Fire</a>.
 <td class="asm-label">Handler_Aliens_16</td>
 <td class="address-2"><span id="31828"></span>31828</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26352.html#26353">26353</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26353.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

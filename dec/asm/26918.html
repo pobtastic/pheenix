@@ -33,7 +33,7 @@ Next: <a href="26986.html">26986</a>
 </td>
 </tr>
 </table>
-<div class="description">26918: Routine at 6926</div>
+<div class="description">26918: Handler: Ship Explosion</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -41,208 +41,299 @@ Next: <a href="26986.html">26986</a>
 <div class="paragraph">
 Used by the routine at <a href="27886.html">27886</a>.
 </div>
+<div class="paragraph">
+Handles the ship explosion animation, including the flashing attribute effect and cycling through the explosion sprite frames.
 </div>
+</div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Attribute buffer address of the explosion</td>
+</tr>
+</table>
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_ShipExplosion</td>
 <td class="address-2"><span id="26918"></span>26918</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
 </tr>
 <tr>
-<td class="address-1"><span id="26919"></span>26919</td>
-<td class="instruction">LD A,(26277)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26277.html">26277</a>.</td>
+<td class="routine-comment" colspan="5">
+<span id="26919"></span>
+<div class="comments">
+<div class="paragraph">
+Calculate a flashing attribute for the explosion. The PAPER colour from the flash counter is used as the INK colour to create a visual effect. The bits are manipulated to move PAPER bits 3-5 to INK positions 0-2, and bit 6 (BRIGHT) is set.
+</div>
+</div>
+</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="26919"></span>26919</td>
+<td class="instruction">LD A,(26277)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26277.html">Explosion_FlashCounter</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26922"></span>26922</td>
 <td class="instruction">DEC A</td>
 <td class="comment-1" rowspan="1">Decrease <span class="register">A</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26923"></span>26923</td>
 <td class="instruction">XOR %11111111</td>
 <td class="comment-1" rowspan="1">Flip bits 0-7.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26925"></span>26925</td>
 <td class="instruction">AND %00111000</td>
 <td class="comment-1" rowspan="1">Keep only bits 3-5.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26927"></span>26927</td>
 <td class="instruction">SRA A</td>
-<td class="comment-1" rowspan="3">Shift <span class="register">A</span> right (with carry).</td>
+<td class="comment-1" rowspan="3">Shift the PAPER bits to the INK bits.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26929"></span>26929</td>
 <td class="instruction">SRA A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26931"></span>26931</td>
 <td class="instruction">SRA A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26933"></span>26933</td>
 <td class="instruction">ADD A,64</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=64.</td>
+<td class="comment-1" rowspan="1">Set bit 6 (e.g. add 01000000) to set this attribute as BRIGHT.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26935"></span>26935</td>
 <td class="instruction">LD B,A</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">A</span>.</td>
+<td class="comment-1" rowspan="1">Store the result in <span class="register">B</span>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="26936"></span>
+<div class="comments">
+<div class="paragraph">
+Check if this is the second frame of the explosion animation to decide whether to use the calculated flashing attribute or a plain one.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26936"></span>26936</td>
 <td class="instruction">LD A,IXl</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=the low byte of <span class="register">IX</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26938"></span>26938</td>
 <td class="instruction">CP 2</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 2.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="26918.html#26946">Handler_ShipExplosion_SetAttribute</a> if <span class="register">A</span> is equal to 2.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26940"></span>26940</td>
-<td class="instruction">JR Z,<a href="26918.html#26946">26946</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="26918.html#26946">26946</a> if <span class="register">A</span> is equal to 2.</td>
+<td class="instruction">JR Z,<a href="26918.html#26946">Handler_ShipExplosion_SetAttribute</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26942"></span>26942</td>
 <td class="instruction">LD A,64</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=64.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26944"></span>26944</td>
-<td class="instruction">JR <a href="26918.html#26947">26947</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="26918.html#26947">26947</a>.</td>
+<td class="instruction">JR <a href="26918.html#26947">Handler_ShipExplosion_Draw</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="26918.html#26947">Handler_ShipExplosion_Draw</a>.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_ShipExplosion_SetAttribute</td>
 <td class="address-2"><span id="26946"></span>26946</td>
 <td class="instruction">LD A,B</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">B</span>.</td>
+<td class="comment-1" rowspan="1">Load <span class="register">A</span> with the attribute byte from <span class="register">B</span>.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_ShipExplosion_Draw</td>
 <td class="address-2"><span id="26947"></span>26947</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26948"></span>26948</td>
 <td class="instruction">CALL <a href="26372.html">ConvertAttributeToScreenBufferAddress</a></td>
 <td class="comment-1" rowspan="1">Call <a href="26372.html">ConvertAttributeToScreenBufferAddress</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26951"></span>26951</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the screen buffer address on the stack.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="26952"></span>
+<div class="comments">
+<div class="paragraph">
+Calculate the sprite data address for the current explosion frame. Each frame is 8 bytes long, so multiply the frame number by 8 and add it to the base address.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26952"></span>26952</td>
 <td class="instruction">LD A,(26275)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26275.html">26275</a>.</td>
+<td class="comment-1" rowspan="3"><span class="register">HL</span>=*<a href="26275.html">Explosion_Frame</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26955"></span>26955</td>
 <td class="instruction">LD H,0</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=0.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26957"></span>26957</td>
 <td class="instruction">LD L,A</td>
-<td class="comment-1" rowspan="1"><span class="register">L</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26958"></span>26958</td>
 <td class="instruction">ADD HL,HL</td>
 <td class="comment-1" rowspan="3">Multiply <span class="register">HL</span> by 8.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26959"></span>26959</td>
 <td class="instruction">ADD HL,HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26960"></span>26960</td>
 <td class="instruction">ADD HL,HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26961"></span>26961</td>
 <td class="instruction">LD DE,24995</td>
 <td class="comment-1" rowspan="2"><span class="register">HL</span>+=<a href="24995.html">Graphics_ExplosionBits</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26964"></span>26964</td>
 <td class="instruction">ADD HL,DE</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26965"></span>26965</td>
 <td class="instruction">EX DE,HL</td>
-<td class="comment-1" rowspan="1">Exchange the <span class="register">DE</span> and <span class="register">HL</span> registers.</td>
+<td class="comment-1" rowspan="1">Switch the result into <span class="register">DE</span> (<span class="register">HL</span> is discarded).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26966"></span>26966</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the screen buffer address into <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="26967"></span>
+<div class="comments">
+<div class="paragraph">
+Advance to the next explosion frame. If the frame counter reaches 3 reset it to 0 to loop the animation.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26967"></span>26967</td>
 <td class="instruction">INC A</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26968"></span>26968</td>
 <td class="instruction">CP 3</td>
-<td class="comment-1" rowspan="2">Jump to <a href="26918.html#26973">26973</a> if <span class="register">A</span> is not equal to 3.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="26918.html#26973">Handler_ShipExplosion_SetFrame</a> if <span class="register">A</span> is not equal to 3.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26970"></span>26970</td>
-<td class="instruction">JR NZ,<a href="26918.html#26973">26973</a></td>
+<td class="instruction">JR NZ,<a href="26918.html#26973">Handler_ShipExplosion_SetFrame</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26972"></span>26972</td>
 <td class="instruction">XOR A</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=0.</td>
+<td class="comment-1" rowspan="1">Point to frame 0.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_ShipExplosion_SetFrame</td>
 <td class="address-2"><span id="26973"></span>26973</td>
 <td class="instruction">LD (26275),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26275.html">26275</a>.</td>
+<td class="comment-1" rowspan="1">Write the frame number to *<a href="26275.html">Explosion_Frame</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26976"></span>26976</td>
 <td class="instruction">LD B,8</td>
 <td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_ShipExplosion_LineLoop</td>
 <td class="address-2"><span id="26978"></span>26978</td>
 <td class="instruction">LD A,(DE)</td>
 <td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26979"></span>26979</td>
 <td class="instruction">LD (HL),A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26980"></span>26980</td>
 <td class="instruction">INC H</td>
 <td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26981"></span>26981</td>
 <td class="instruction">INC DE</td>
 <td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26982"></span>26982</td>
-<td class="instruction">DJNZ <a href="26918.html#26978">26978</a></td>
-<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="26918.html#26978">26978</a> until all 8 lines of the UDG character have been drawn.</td>
+<td class="instruction">DJNZ <a href="26918.html#26978">Handler_ShipExplosion_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="26918.html#26978">Handler_ShipExplosion_LineLoop</a> until all 8 lines of the UDG character have been drawn.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26984"></span>26984</td>
 <td class="instruction">POP BC</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="26985"></span>26985</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>

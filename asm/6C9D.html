@@ -33,85 +33,103 @@ Next: <a href="6CC9.html">6CC9</a>
 </td>
 </tr>
 </table>
-<div class="description">6C9D: Routine at 6C9D</div>
+<div class="description">6C9D: Check Collision</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
 <div class="details">
 <div class="paragraph">
-Used by the routine at <a href="6CEE.html">6CEE</a>.
+Used by the routine at <a href="6DCF.html">6DCF</a>.
 </div>
 </div>
 </td>
 </tr>
 <tr>
+<td class="asm-label">CheckCollision</td>
 <td class="address-2"><span id="6c9d"></span>6C9D</td>
 <td class="instruction">LD A,($6693)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="6693.html">6693</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Return if <a href="6693.html">Flag_Shield</a> is active.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6ca0"></span>6CA0</td>
 <td class="instruction">OR A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6ca1"></span>6CA1</td>
 <td class="instruction">RET NZ</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6ca2"></span>6CA2</td>
 <td class="instruction">LD HL,($66ED)</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=*<a href="66ED.html">66ED</a>.</td>
+<td class="comment-1" rowspan="1">Load the player attribute position from <a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6ca5"></span>6CA5</td>
 <td class="instruction">LD B,$02</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=02.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 02 rows to check.</td>
 </tr>
 <tr>
+<td class="asm-label">CheckCollision_RowLoop</td>
 <td class="address-2"><span id="6ca7"></span>6CA7</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the row counter and attribute position on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6ca8"></span>6CA8</td>
 <td class="instruction">PUSH HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6ca9"></span>6CA9</td>
 <td class="instruction">LD B,$03</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=03.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 03 columns to check.</td>
 </tr>
 <tr>
+<td class="asm-label">CheckCollision_ColumnLoop</td>
 <td class="address-2"><span id="6cab"></span>6CAB</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Load the attribute at this position.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cac"></span>6CAC</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6C9D.html#6cbf">6CBF</a> if <span class="register">A</span> is zero.</td>
+<td class="comment-1" rowspan="2">Skip this position if the attribute is INK:BLACK,
+PAPER:BLACK (empty space).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cad"></span>6CAD</td>
-<td class="instruction">JR Z,<a href="6C9D.html#6cbf">$6CBF</a></td>
+<td class="instruction">JR Z,<a href="6C9D.html#6cbf">CheckCollision_NextColumn</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6caf"></span>6CAF</td>
 <td class="instruction">CP $46</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6C9D.html#6cbf">6CBF</a> if <span class="register">A</span> is equal to 46.</td>
+<td class="comment-1" rowspan="2">Skip this position if the attribute is INK:YELLOW,
+PAPER:BLACK(BRIGHT) (player ship).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cb1"></span>6CB1</td>
-<td class="instruction">JR Z,<a href="6C9D.html#6cbf">$6CBF</a></td>
+<td class="instruction">JR Z,<a href="6C9D.html#6cbf">CheckCollision_NextColumn</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cb3"></span>6CB3</td>
 <td class="instruction">CP $07</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6C9D.html#6cbf">6CBF</a> if <span class="register">A</span> is equal to 07.</td>
+<td class="comment-1" rowspan="2">Skip this position if the attribute is INK:WHITE,
+PAPER:BLACK (white/ background).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cb5"></span>6CB5</td>
-<td class="instruction">JR Z,<a href="6C9D.html#6cbf">$6CBF</a></td>
+<td class="instruction">JR Z,<a href="6C9D.html#6cbf">CheckCollision_NextColumn</a></td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -120,63 +138,87 @@ Used by the routine at <a href="6CEE.html">6CEE</a>.
 <div class="paragraph">
 See <a href="../reference/pokes.html#immunity">Immunity</a>.
 </div>
+<div class="paragraph">
+Collision detected - trigger player death.
+</div>
 </div>
 </td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cb7"></span>6CB7</td>
 <td class="instruction">LD A,$01</td>
-<td class="comment-1" rowspan="2">Write 01 to *<a href="66A4.html">66A4</a>.</td>
+<td class="comment-1" rowspan="2">Set <a href="66A4.html">Flag_Collision</a> to 01.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cb9"></span>6CB9</td>
 <td class="instruction">LD ($66A4),A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cbc"></span>6CBC</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="2">Restore <span class="register">AF</span> and <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Discard the saved positions from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cbd"></span>6CBD</td>
 <td class="instruction">POP AF</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cbe"></span>6CBE</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="6cbf"></span>
+<div class="comments">
+<div class="paragraph">
+Move to the next attribute.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">CheckCollision_NextColumn</td>
 <td class="address-2"><span id="6cbf"></span>6CBF</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next attribute position (right one column).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cc0"></span>6CC0</td>
-<td class="instruction">DJNZ <a href="6C9D.html#6cab">$6CAB</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6C9D.html#6cab">6CAB</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="6C9D.html#6cab">CheckCollision_ColumnLoop</a></td>
+<td class="comment-1" rowspan="1">Loop back to <a href="6C9D.html#6cab">CheckCollision_ColumnLoop</a> until all 03 columns are checked.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cc2"></span>6CC2</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the starting attribute position for this row.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cc3"></span>6CC3</td>
 <td class="instruction">SET 5,L</td>
-<td class="comment-1" rowspan="1">Set bit 5 of <span class="register">L</span>.</td>
+<td class="comment-1" rowspan="1">Move down one row (set bit 5 of <span class="register">L</span> = add 20).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cc5"></span>6CC5</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the row counter and loop back to <a href="6C9D.html#6ca7">CheckCollision_RowLoop</a> until both rows are checked.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cc6"></span>6CC6</td>
-<td class="instruction">DJNZ <a href="6C9D.html#6ca7">$6CA7</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6C9D.html#6ca7">6CA7</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="6C9D.html#6ca7">CheckCollision_RowLoop</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="6cc8"></span>6CC8</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>
