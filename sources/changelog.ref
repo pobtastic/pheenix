@@ -3,6 +3,11 @@
 [Page:Changelog]
 SectionType=BulletPoints
 
+[Changelog:20251104]
+-
+
+- Found the player bullet handling
+
 [Changelog:20251022]
 -
 

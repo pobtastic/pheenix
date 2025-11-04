@@ -134,9 +134,14 @@ L $60FF,$08,$03,$02
 N $6117 Invisible bottom row.
   $6117,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
 @ $611F label=Graphics_Pheenix_03
-N $611F #UDGTABLE { #UDGS$03,$02(pheenix-03)(
+N $611F #UDGTABLE { #UDGS$03,$02(pheenix-03-blue)(
 .   #LET(addr=#IF($y==1)(#IF($x==1)($6137,$617B),#PC+$08*$x))
 .   #UDG({addr},#MAP($x+($y*$03))($05,1:$41,4:$46))(*udg)
+.   udg
+. ) } TABLE#
+N $611F #UDGTABLE { #UDGS$03,$02(pheenix-03-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($6137,$617B),#PC+$08*$x))
+.   #UDG({addr},#MAP($x+($y*$03))($05,1:$43,4:$46))(*udg)
 .   udg
 . ) } TABLE#
   $611F,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
@@ -285,6 +290,11 @@ g $6528 Score Buffer
 @ $6528 label=ScoreBuffer
 B $6528,$06,$01
 
+g $652F
+  $652F
+  $6532
+  $6535
+
 g $6538 Table: Mothership UDGs
 @ $6538 label=Table_Mothership_MastTop
 B $6538,$02 #UDGTABLE { #UDGS$02,$01(mothership-01)(
@@ -410,24 +420,47 @@ g $6680
 
 g $6691
 
-g $6693
+g $6693 Shield Flag?
+@ $6693 label=Flag_Shield
+B $6693,$01
 
-g $6695
+g $6694
+B $6694,$01
 
-g $6696
+g $6695 Bullet Rate Limiter?
+@ $6695 label=Bullet_RateLimiter
+B $6695,$01
 
-g $66A3
+g $6696 State: Fire Button
+@ $6696 label=Fire_ButtonState
+B $6696,$01
+
+g $6697 Table: Bullet Position
+@ $6697 label=Table_BulletPosition
+W $6697,$02
+L $6697,$02,$03
+
+g $669E Table: Bullet Data
+@ $669E label=Table_BulletData
+B $669E,$01
+
+g $66A3 Explosion: Frame
+@ $66A3 label=Explosion_Frame
 B $66A3,$01
 
-g $66A4
+g $66A4 Collision Flag
+@ $66A4 label=Flag_Collision
 B $66A4,$01
 
-g $66A5
+g $66A5 Explosion: Flash Counter
+@ $66A5 label=Explosion_FlashCounter
 B $66A5,$01
 
 g $66A6
 
 g $66A7
+W $66A7,$02
+L $66A7,$02,$06
 
 g $66B9
 
@@ -442,7 +475,8 @@ B $66D4,$01
 
 g $66D5
 
-g $66ED
+g $66ED Player Attribute Buffer Position
+@ $66ED label=PlayerAttributeBufferPosition
 W $66ED,$02
 
 g $66EF Flag: Extra Life
@@ -452,7 +486,13 @@ B $66EF,$01
 
 g $66F0 Player Lives
 @ $66F0 label=Player_Lives
-B $66F0,$02,$01 Life counter.
+B $66F0,$01 Life counter.
+
+g $66F1 Phase?
+@ $66F1 label=Phase
+D $66F1 Maybe not directly the phase number, but when it's #N$04 it draws the
+. mothership.
+B $66F1,$01
 
 g $66F2 Flag: Title Screen Start
 @ $66F2 label=Flag_TitleScreenStart
@@ -535,7 +575,7 @@ c $672E Clear Play-Area
   $6752,$03 Stash the row counter and screen position pointers on the stack.
   $6755,$06 Clear #N$1F bytes across the line.
   $675B,$02 Restore the screen position pointers.
-  $675D,$02 Move down one pixel line.
+  $675D,$02 Move down one pixel line in the screen buffer.
   $675F,$03 Restore the line counter and loop back to #R$6752
 . until all #N$08 lines are cleared.
   $6762,$09 Move to the next character row by resetting #REGh and #REGd to #N$40,
@@ -695,65 +735,82 @@ N $6833 #UDG($6026,$42)
 . all the remaining lives have an icon displayed in the header.
   $6844,$01 Return.
 
-c $6845
-N $6845 #PUSHS #UDGTABLE { #CLS($47)#SIM(start=$6845,stop=$688F,de=$4000)#SCR$02(dh) } TABLE# #POPS
+c $6845 Handler: 2x2 Mask
+@ $6845 label=Handler_Mask
+D $6845 Handler for a 2x2 mask for removing "Eggsplosions".
+R $6845 DE Attribute buffer destination
   $6845,$03 #REGhl=#R$613D.
-  $6848,$04 #REGix=#N($0002,$04,$04).
+  $6848,$04 Set #REGix to target #INK$02 attributes with a #INK$00 replacement
+. attribute.
   $684C,$02 Jump to #R$685A.
 
-c $684E
-N $684E #PUSHS #UDGTABLE { #CLS($07)#SIM(start=$684E,stop=$688F,de=$4480)#SCR$02(dgdfdgdh) } TABLE# #POPS
+c $684E Handler: Eggsplosion Left
+@ $684E label=Handler_EggsplosionLeft
+D $684E Handler for the left half of the Eggsplosion.
+R $684E DE Attribute buffer destination
   $684E,$03 #REGhl=#R$606E.
   $6851,$02 Jump to #R$6856.
 
-c $6853
-N $6853 #PUSHS #UDGTABLE { #CLS($47)#SIM(start=$6853,stop=$688F,de=$4000)#SCR$02(dgfgdh) } TABLE# #POPS
+c $6853 Handler: Eggsplosion Right
+@ $6853 label=Handler_EggsplosionRight
+D $6853 Handler for the right half of the Eggsplosion.
+N $6853 #CLS$00 #SIM(start=$6853,stop=$688F,de=$5850)#SCR$02(mehhhh)
+R $6853 DE Attribute buffer destination
   $6853,$03 #REGhl=#R$608E.
-  $6856,$04 #REGix=#N($0200,$04,$04).
-  $685A,$01 Stash #REGde on the stack.
+N $6856 Common handler for both left and right shell parts.
+@ $6856 label=Handler_Eggsplosion
+  $6856,$04 Set #REGix to target #INK$00 attributes with a #INK$02 replacement
+. attribute.
+@ $685A label=Handler_Eggsplosion_Draw
+  $685A,$01 Stash the attribute buffer pointer on the stack.
   $685B,$01 Exchange the #REGde and #REGhl registers.
-  $685C,$02 #REGb=#N$02.
-  $685E,$02 Stash #REGbc and #REGhl on the stack.
-  $6860,$02 #REGb=#N$02.
-  $6862,$01 Stash #REGbc on the stack.
-  $6863,$01 #REGa=*#REGhl.
-  $6864,$02 Compare #REGa with the low byte of #REGix.
+  $685C,$02 Set a counter in #REGb for #N$02 rows.
+@ $685E label=Handler_Eggsplosion_RowLoop
+  $685E,$02 Stash the row counter and attribute pointer on the stack.
+  $6860,$02 Set a counter in #REGb for #N$02 columns.
+@ $6862 label=Handler_Eggsplosion_ColumnLoop
+  $6862,$01 Stash the column counter on the stack.
+  $6863,$03 Check if the attribute at this attribute buffer position matches
+. the target colour (the low byte of #REGix).
   $6866,$01 Stash #REGhl on the stack.
-  $6867,$02 Jump to #R$6879 if ?? is not equal to #N$00.
+  $6867,$02 Jump to #R$6879 if #REGa is not equal to the low byte of #REGix.
   $6869,$02 #REGa=the high byte of #REGix.
   $686B,$01 Write #REGa to *#REGhl.
   $686C,$03 Call #R$6704.
-  $686F,$02 #REGb=#N$08.
-  $6871,$01 #REGa=*#REGde.
-  $6872,$01 Write #REGa to *#REGhl.
-  $6873,$01 Increment #REGh by one.
-  $6874,$01 Increment #REGde by one.
-  $6875,$02 Decrease counter by one and loop back to #R$6871 until counter is zero.
+  $686F,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $6871 label=Handler_Eggsplosion_LineLoop
+  $6871,$02 Copy the UDG data to the screen buffer.
+  $6873,$01 Move down one pixel line in the screen buffer.
+  $6874,$01 Move to the next UDG graphic data byte.
+  $6875,$02 Decrease the line counter by one and loop back to #R$6871 until all
+. #N$08 lines of the UDG character have been drawn.
   $6877,$02 Jump to #R$6880.
-  $6879,$03 #REGhl=#N($0008,$04,$04).
-  $687C,$01 Set flags.
-  $687D,$02 #REGhl+=#REGde (with carry).
-  $687F,$01 Exchange the #REGde and #REGhl registers.
+@ $6879 label=Handler_Eggsplosion_SkipDraw
+  $6879,$07 #REGde+=#N($0008,$04,$04).
+@ $6880 label=Handler_Eggsplosion_NextColumn
   $6880,$01 Restore #REGhl from the stack.
   $6881,$01 Increment #REGhl by one.
   $6882,$01 Restore #REGbc from the stack.
   $6883,$02 Decrease counter by one and loop back to #R$6862 until counter is zero.
   $6885,$01 Restore #REGhl from the stack.
-  $6886,$02 #REGc=#N$20.
-  $6888,$01 Set flags.
-  $6889,$02 #REGhl+=#REGbc (with carry).
+  $6886,$05 #REGhl+=#N($0020,$04,$04) (with carry).
   $688B,$01 Restore #REGbc from the stack.
   $688C,$02 Decrease counter by one and loop back to #R$685E until counter is zero.
   $688E,$01 Restore #REGde from the stack.
   $688F,$01 Return.
 
-c $6890
+c $6890 Difficulty Delay?
+@ $6890 label=DifficultyDelay
+N $6890 Level #N$05 is the mothership level so run at full speed.
   $6890,$06 Return if *#R$6527 is equal to #N$35 (ASCII "#CHR$35").
   $6896,$01 Stash #REGbc on the stack.
+N $6897 Loop #N$08*#N$0100 times.
   $6897,$03 #REGbc=#N($0008,$04,$04).
-  $689A,$02 Decrease counter by one and loop back to #R$689A until counter is zero.
-  $689C,$01 Decrease #REGc by one.
-  $689D,$02 Jump to #R$689A until #REGc is zero.
+@ $689A label=DifficultyDelay_Loop
+  $689A,$02 Decrease the inner loop counter by one and loop back to #R$689A
+. until this counter is zero.
+  $689C,$01 Decrease the outer loop counter by one.
+  $689D,$02 Jump to #R$689A until the outer loop counter is zero.
   $689F,$01 Restore #REGbc from the stack.
   $68A0,$01 Return.
 
@@ -834,37 +891,53 @@ D $68B8 #PUSHS #UDGTABLE {
   $6922,$03 Call #R$6720.
   $6925,$01 Return.
 
-c $6926
+c $6926 Handler: Ship Explosion
+@ $6926 label=Handler_ShipExplosion
+D $6926 Handles the ship explosion animation, including the flashing attribute
+. effect and cycling through the explosion sprite frames.
+R $6926 HL Attribute buffer address of the explosion
   $6926,$01 Stash #REGbc on the stack.
+N $6927 Calculate a flashing attribute for the explosion. The PAPER colour from
+. the flash counter is used as the INK colour to create a visual effect. The
+. bits are manipulated to move PAPER bits 3-5 to INK positions 0-2, and bit 6
+. (BRIGHT) is set.
   $6927,$03 #REGa=*#R$66A5.
   $692A,$01 Decrease #REGa by one.
   $692B,$02,b$01 Flip bits 0-7.
   $692D,$02,b$01 Keep only bits 3-5.
-  $692F,$06 Shift #REGa right (with carry).
-  $6935,$02 #REGa+=#N$40.
-  $6937,$01 #REGb=#REGa.
-  $6938,$02
-  $693A,$02 Compare #REGa with #N$02.
-  $693C,$02 Jump to #R$6942 if #REGa is equal to #N$02.
+  $692F,$06 Shift the PAPER bits to the INK bits.
+  $6935,$02 Set bit 6 (e.g. add #EVAL($40,$02,$08)) to set this attribute as
+. BRIGHT.
+  $6937,$01 Store the result in #REGb.
+N $6938 Check if this is the second frame of the explosion animation to decide
+. whether to use the calculated flashing attribute or a plain one.
+  $6938,$02 #REGa=the low byte of #REGix.
+  $693A,$04 Jump to #R$6942 if #REGa is equal to #N$02.
   $693E,$02 #REGa=#N$40.
   $6940,$02 Jump to #R$6943.
-
-  $6942,$01 #REGa=#REGb.
-  $6943,$01 Write #REGa to *#REGhl.
+@ $6942 label=Handler_ShipExplosion_SetAttribute
+  $6942,$01 Load #REGa with the attribute byte from #REGb.
+@ $6943 label=Handler_ShipExplosion_Draw
+  $6943,$01 Write the attribute byte to *#REGhl.
   $6944,$03 Call #R$6704.
-  $6947,$01 Stash #REGhl on the stack.
-  $6948,$03 #REGa=*#R$66A3.
-  $694B,$02 #REGh=#N$00.
-  $694D,$01 #REGl=#REGa.
+  $6947,$01 Stash the screen buffer address on the stack.
+N $6948 Calculate the sprite data address for the current explosion frame. Each
+. frame is #N$08 bytes long, so multiply the frame number by #N$08 and add it
+. to the base address.
+  $6948,$06 #REGhl=*#R$66A3.
   $694E,$03 Multiply #REGhl by #N$08.
   $6951,$04 #REGhl+=#R$61A3.
-  $6955,$01 Exchange the #REGde and #REGhl registers.
-  $6956,$01 Restore #REGhl from the stack.
+  $6955,$01 Switch the result into #REGde (#REGhl is discarded).
+  $6956,$01 Restore the screen buffer address into #REGhl from the stack.
+N $6957 Advance to the next explosion frame. If the frame counter reaches #N$03,
+. reset it to #N$00 to loop the animation.
   $6957,$01 Increment #REGa by one.
   $6958,$04 Jump to #R$695D if #REGa is not equal to #N$03.
-  $695C,$01 #REGa=#N$00.
-  $695D,$03 Write #REGa to *#R$66A3.
+  $695C,$01 Point to frame #N$00.
+@ $695D label=Handler_ShipExplosion_SetFrame
+  $695D,$03 Write the frame number to *#R$66A3.
   $6960,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $6962 label=Handler_ShipExplosion_LineLoop
   $6962,$02 Copy the UDG data to the screen buffer.
   $6964,$01 Move down one pixel line in the screen buffer.
   $6965,$01 Move to the next UDG graphic data byte.
@@ -1153,7 +1226,7 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
 @ $6AF2 label=Mothership_Bullet_Collision
   $6AF2,$05 Jump to #R$6B25 if *#REGhl is equal to #INK$02.
   $6AF7,$04 Jump to #R$6B05 if *#REGhl is not equal to #COLOUR$46.
-  $6AFB,$06 Jump to #R$6AEE if *#R$6693 is not zero.
+  $6AFB,$06 Jump to #R$6AEE if *#R$6693 is active.
   $6B01,$02 Write #INK$06 to *#REGhl.
   $6B03,$02 Jump to #R$6B0D.
 
@@ -1337,27 +1410,33 @@ D $6C13 See #R$74A4.
 B $6C13,$03
 L $6C13,$03,$2E
 
-c $6C9D
-  $6C9D,$05 Return if *#R$6693 is not zero.
-  $6CA2,$03 #REGhl=*#R$66ED.
-  $6CA5,$02 #REGb=#N$02.
-  $6CA7,$02 Stash #REGbc and #REGhl on the stack.
-  $6CA9,$02 #REGb=#N$03.
-  $6CAB,$01 #REGa=*#REGhl.
-  $6CAC,$03 Jump to #R$6CBF if #REGa is zero.
-  $6CAF,$04 Jump to #R$6CBF if #REGa is equal to #N$46.
-  $6CB3,$04 Jump to #R$6CBF if #REGa is equal to #N$07.
+c $6C9D Check Collision
+@ $6C9D label=CheckCollision
+  $6C9D,$05 Return if #R$6693 is active.
+  $6CA2,$03 Load the player attribute position from #R$66ED.
+  $6CA5,$02 Set a counter in #REGb for #N$02 rows to check.
+@ $6CA7 label=CheckCollision_RowLoop
+  $6CA7,$02 Stash the row counter and attribute position on the stack.
+  $6CA9,$02 Set a counter in #REGb for #N$03 columns to check.
+@ $6CAB label=CheckCollision_ColumnLoop
+  $6CAB,$01 Load the attribute at this position.
+  $6CAC,$03 Skip this position if the attribute is #COLOUR$00 (empty space).
+  $6CAF,$04 Skip this position if the attribute is #COLOUR$46 (player ship).
+  $6CB3,$04 Skip this position if the attribute is #COLOUR$07 (white/
+. background).
 N $6CB7 See #POKE#immunity(Immunity).
-  $6CB7,$05 Write #N$01 to *#R$66A4.
-  $6CBC,$02 Restore #REGaf and #REGaf from the stack.
+N $6CB7 Collision detected - trigger player death.
+  $6CB7,$05 Set #R$66A4 to #N$01.
+  $6CBC,$02 Discard the saved positions from the stack.
   $6CBE,$01 Return.
-
-  $6CBF,$01 Increment #REGhl by one.
-  $6CC0,$02 Decrease counter by one and loop back to #R$6CAB until counter is zero.
-  $6CC2,$01 Restore #REGhl from the stack.
-  $6CC3,$02 Set bit 5 of #REGl.
-  $6CC5,$01 Restore #REGbc from the stack.
-  $6CC6,$02 Decrease counter by one and loop back to #R$6CA7 until counter is zero.
+N $6CBF Move to the next attribute.
+@ $6CBF label=CheckCollision_NextColumn
+  $6CBF,$01 Move to the next attribute position (right one column).
+  $6CC0,$02 Loop back to #R$6CAB until all #N$03 columns are checked.
+  $6CC2,$01 Restore the starting attribute position for this row.
+  $6CC3,$02 Move down one row (set bit 5 of #REGl = add #N$20).
+  $6CC5,$03 Restore the row counter and loop back to #R$6CA7 until both rows
+. are checked.
   $6CC8,$01 Return.
 
 c $6CC9 Draw Ship
@@ -1394,20 +1473,15 @@ D $6CC9 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
   $6CEB,$03 Jump to #R$6F93.
 
 c $6CEE
-  $6CEE,$03 #REGhl=#R$66A4.
-  $6CF1,$01 #REGa=*#REGhl.
-  $6CF2,$04 Jump to #R$6DCF if #REGa is zero.
-  $6CF6,$01 Increment #REGhl by one.
-  $6CF7,$01 #REGa=*#REGhl.
-  $6CF8,$04 Jump to #R$6D00 if #REGa is not equal to #N$40.
-  $6CFC,$01 Decrease #REGhl by one.
-  $6CFD,$02 Write #N$02 to *#REGhl.
+  $6CEE,$08 Jump to #R$6DCF if *#R$66A4 is zero.
+  $6CF6,$06 Jump to #R$6D00 if *#R$66A5 is not equal to #N$40.
+  $6CFC,$03 Write #N$02 to *#R$66A4.
   $6CFF,$01 Return.
 
 @ $6D00 label=GameOver
   $6D00,$07 Jump to #R$7030 if *#R$6695 is not zero.
   $6D07,$07 Jump to #R$6D29 if *#R$66F0 is not equal to #N$01.
-  $6D0E,$06 Jump to #R$6D29 if *#R$66F3 is set.
+  $6D0E,$06 Jump to #R$6D29 if *#R$66F3 is active.
   $6D14,$01 Stash #REGhl on the stack.
 N $6D15 Prints #FONT#(:(#STR($646E,$03,$04)))$3D00,attr=$45(game)
   $6D15,$03 #REGhl=#R$646E.
@@ -1419,9 +1493,39 @@ N $6D21 Prints #FONT#(:(#STR($6472,$03,$04)))$3D00,attr=$45(over)
   $6D23,$02 Set to print #N$04 characters.
   $6D25,$03 Call #R$676F.
 
+c $6DCF
+
   $6FAE,$02 #REGa=#COLOUR$46.
 
-c $7069
+c $7030 Handler: Player Bullets
+@ $7030 label=Handler_PlayerBullets
+  $7030,$03 #REGhl=#R$6695.
+  $7033,$05 Jump to #R$703A if *#R$6695 is not equal to #N$03.
+N $7038 Reset #R$6695 back to #N$00 (#N$FF+#N$01) to start the counter again.
+  $7038,$02 Write #N$FF to *#R$6695.
+N $703A Increment the counter.
+@ $703A label=PlayerBullets_UpdateLimiter
+  $703A,$01 Increment *#R$6695 by one.
+N $703B Start processing the bullets.
+  $703B,$03 #REGhl=#R$6697.
+N $703E Modified by the code at #R$741E.
+  $703E,$02 #HTML(Set a counter in #REGb for <em>nn</em> bullet(s).)
+@ $7040 label=PlayerBullets_Loop
+  $7040,$02 Stash the bullet data pointer and bullet counter on the stack.
+  $7042,$03 Load the bullet position into #REGde.
+  $7045,$05 Jump to #R$70E7 if the bullet is active.
+N $704A Check if the player can fire a new bullet.
+  $704A,$0E Jump to #R$714E if either *#R$66A4 or *#R$6693 are active.
+N $7058 Load the previous fire button state into #REGc.
+  $7058,$04 #REGc=*#R$6696.
+  $705C,$06 Jump to #R$7069 if *#R$66F3 is not active.
+N $7062 The game is in demo mode, so generate random firing action.
+  $7062,$03 Call #R$670E.
+  $7065,$02,b$01 Keep only bits 0-3.
+M $7062,$04 Generate a random number between #N$00-#N$0F.
+  $7067,$02 Jump to #R$7085.
+N $7069 Read player fire button input.
+@ $7069 label=PlayerBullets_ReadInput
   $7069,$01 Disable interrupts.
 N $706A Check if the control method is the Kempson joystick?
   $706A,$07 Jump to #R$7077 if *#R$66F6 is not the Kempston joystick.
@@ -1430,7 +1534,7 @@ N $7071 The control method is Kempston joystick, so test the fire button.
   $7073,$02,b$01 Keep only bit 4 (the fire button input).
   $7075,$02 Jump to #R$708A.
 N $7077 Check if the control method is the AGF joystick?
-@ $7077 label=Player_Input_AGF
+@ $7077 label=PlayerBullets_AGF
   $7077,$04 Jump to #R$707F if *#R$66F6 is not the AGF joystick.
   $707B,$02 #TABLE(default,centre,centre,centre,centre,centre,centre)
 . { =h,r2 Port Number | =h,c5 Bit }
@@ -1439,36 +1543,44 @@ N $7077 Check if the control method is the AGF joystick?
 . TABLE#
   $707D,$02 Jump to #R$7081.
 N $707F Else, the only control option left is the keyboard.
-@ $707F label=Player_Input_Keyboard
+@ $707F label=PlayerBullets_Keyboard
   $707F,$02 #TABLE(default,centre,centre,centre,centre,centre,centre)
 . { =h,r2 Port Number | =h,c5 Bit }
 . { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
 . { #N$7F | SPACE | FULL-STOP | M | N | B }
 . TABLE#
+@ $7081 label=PlayerBullets_ReadKeyboard
   $7081,$02 Read from the keyboard.
-  $7083,$02,b$01 Keep only bit 0.
-  $7085,$02 #REGa=#N$10.
-  $7087,$02 Jump to #R$708A if ?? is equal to #N$10.
-  $7089,$01 #REGa=#N$00.
-  $708A,$03 Write #REGa to *#R$6696.
-  $708D,$04 Jump to #R$714E if #REGa is equal to #REGc.
-  $7091,$04 Jump to #R$714E if #REGa is zero.
-  $7095,$06 Jump to #R$70B8 if *#R$66F3 is set.
-  $709B,$01 Stash #REGde on the stack.
-  $709C,$02 #REGb=#N$16.
-  $709E,$03 #REGhl=#N($0052,$04,$04).
-  $70A1,$02 Stash #REGbc and #REGhl on the stack.
-  $70A3,$02 #REGa=#COLOUR$10.
-  $70A5,$01 Disable interrupts.
-  $70A6,$02 Set border to the colour held by #REGa.
-  $70A8,$03 #REGde=#N($0001,$04,$04).
+  $7083,$02,b$01 Keep only bit 0 (the fire button input).
+@ $7085 label=PlayerBullets_ProcessInput
+  $7085,$02 Set #REGa to #N$10 (the fire button was pressed).
+  $7087,$02 Jump to #R$708A if the fire button was pressed.
+  $7089,$01 Set #REGa to #N$00 (the fire button wasn't pressed).
+@ $708A label=PlayerBullets_StoreInput
+  $708A,$03 Write the current fire button state to *#R$6696.
+N $708D Is the fire button state unchanged since the last time this routine
+. ran?
+  $708D,$04 Jump to #R$714E if the current fire button state matches the
+. previous fire button state.
+  $7091,$04 Jump to #R$714E if the fire button wasn't pressed.
+  $7095,$06 Jump to #R$70B8 if *#R$66F3 is active.
+  $709B,$01 Stash the bullet position on the stack.
+  $709C,$02 Set a counter in #REGb for #N$16 sound iterations.
+  $709E,$03 Set the initial sound pitch to #N($0052,$04,$04).
+@ $70A1 label=PlayerBullets_SoundLoop
+  $70A1,$02 Stash the sound counter and pitch on the stack.
+  $70A3,$05 Enable the speaker (bit 4) and disable interrupts.
+  $70A8,$03 Set the sound duration to #N($0001,$04,$04).
   $70AB,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
   $70AE,$01 Disable interrupts.
-  $70AF,$01 Restore #REGhl from the stack.
-  $70B0,$04 Increment #REGhl by four.
-  $70B4,$01 Restore #REGbc from the stack.
-  $70B5,$02 Decrease counter by one and loop back to #R$70A1 until counter is zero.
-  $70B7,$01 Restore #REGde from the stack.
+  $70AF,$01 Restore the pitch value from the stack.
+  $70B0,$04 Increment the pitch by four.
+  $70B4,$01 Restore the sound counter from the stack.
+  $70B5,$02 Decrease the sound counter by one and loop back to #R$70A1 until
+. the counter is zero.
+  $70B7,$01 Restore the bullet position from the stack.
+N $70B8 Check if the bullet spawning position is clear.
+@ $70B8 label=PlayerBullets_CheckSpawn
   $70B8,$06 #REGl=*#R$66ED-#N$1F.
   $70BE,$02 #REGh=#N$5A.
   $70C0,$05 Jump to #R$714E if *#REGhl is not zero.
@@ -1481,17 +1593,105 @@ N $707F Else, the only control option left is the keyboard.
   $70D1,$01 #REGb=#REGa.
   $70D2,$02 #REGa=#N$01.
   $70D4,$02 Jump to #R$70DA if #REGhl is equal to #REGa.
+@ $70D6 label=PlayerBullets_FindSlot_Loop
   $70D6,$02 Shift #REGa left (with carry).
   $70D8,$02 Decrease counter by one and loop back to #R$70D6 until counter is zero.
+@ $70DA label=PlayerBullets_Store
   $70DA,$02 Restore #REGde and #REGbc from the stack.
   $70DC,$02 Stash #REGbc and #REGde on the stack.
   $70DE,$03 #REGhl=#R$669E.
+@ $70E1 label=PlayerBullets_FindSlot
   $70E1,$01 Increment #REGhl by one.
   $70E2,$02 Decrease counter by one and loop back to #R$70E1 until counter is zero.
   $70E4,$01 Write #REGa to *#REGhl.
   $70E5,$02 Jump to #R$7147.
+N $70E7 Update active bullet position.
+@ $70E7 label=PlayerBullets_UpdateActive
+  $70E7,$03 #REGhl=#R$669E.
+  $70EA,$01 Restore the bullet counter from the stack.
+  $70EB,$01 But also stash the bullet counter back on the stack.
+@ $70EC label=LocateBulletData_Loop
+  $70EC,$01 Advance to the next bullet data slot.
+  $70ED,$02 Decrease the bullet counter by one and loop back to #R$70EC until
+. the current bullet slot is found.
+  $70EF,$01 Load the bullet state into #REGa.
+  $70F0,$02 Stash the bullet state and bullet position on the stack.
+  $70F2,$03 Call #R$66F7.
+  $70F5,$03 Fetch the current attribute applied to the bullet, check if it is:
+. #COLOUR$47?
+  $70F8,$01 Restore the bullet position from the stack.
+  $70F9,$02 Jump to #R$7134 if the bullet has hit something, i.e. is no longer
+. #COLOUR$47.
+  $70FB,$04 Jump to #R$710C if bit 2 of #REGd is not set.
+N $70FF Clear the old bullet position and draw it at a new position.
+  $70FF,$01 Restore #REGaf from the stack.
+  $7100,$02 Reset bit 2 of #REGd.
+  $7102,$01 Stash #REGde on the stack.
+  $7103,$02 Set a counter in #REGb for #N$04 pixel lines.
+@ $7105 label=PlayerBullets_EraseLoop
+  $7105,$01 Write #REGa to *#REGde.
+  $7106,$01 Move down one pixel line in the screen buffer.
+  $7107,$02 Decrease the line counter by one and loop back to #R$7105 until all
+. #N$04 lines of the bullet have been erased.
+  $7109,$01 Set #REGa to #N$00 as we're clearing the bullet graphic.
+  $710A,$02 Jump to #R$7147.
+N $710C Clear the old bullet from the screen.
+@ $710C label=PlayerBullets_ClearOld
+  $710C,$02 Set a counter in #REGb for #N$04 pixel lines.
+  $710E,$01 Set #REGa to #N$00 as we're clearing the bullet graphic.
+@ $710F label=PlayerBullets_ClearLoop
+  $710F,$01 Write the empty data to the screen buffer.
+  $7110,$01 Move down one pixel line in the screen buffer.
+  $7111,$02 Decrease the line counter by one and loop back to #R$710F until all
+. #N$04 lines of the bullet have been erased.
+  $7113,$03 Call #R$66F7.
+  $7116,$01 Exchange the #REGde and #REGhl registers.
+  $7117,$02 Write #N$00 to *#REGhl.
+  $7119,$05 Jump to #R$712B if #REGh is not equal to #N$58.
+  $711E,$01 #REGa=#REGl.
+  $711F,$02,b$01 Keep only bits 5-7.
+  $7121,$04 Jump to #R$712B if #REGa is not equal to #N$20.
+  $7125,$01 Restore the bullet state from the stack.
+  $7126,$03 Set the bullet position to #N($0000,$04,$04) (inactive).
+  $7129,$02 Jump to #R$714E.
+N $712B Draw the bullet in the new position.
+@ $712B label=PlayerBullets_MoveUp
+  $712B,$05 Move up one row in the attribute buffer (subtract #N$20).
+  $7130,$04 Jump to #R$713D if the new position is "clear" (i.e. the bullet
+. hasn't hit anything/ there's no attribute applied at this attribute buffer
+. location).
+N $7134 The bullet has hit something so handle the collision.
+@ $7134 label=PlayerBullets_Collision
+  $7134,$03 Call #R$7159.
+  $7137,$01 Restore the bullet state from the stack.
+  $7138,$03 Set the bullet position to #N($0000,$04,$04) (inactive).
+  $713B,$02 Jump to #R$714E.
 
-c $70E7
+@ $713D label=PlayerBullets_SetNewPosition
+  $713D,$02 Mark the new position with the attribute #COLOUR$47.
+  $713F,$03 Call #R$6704.
+  $7142,$01 Exchange the #REGde and #REGhl registers.
+  $7143,$02 Set bit 2 of #REGd.
+  $7145,$01 Restore the bullet state from the stack.
+  $7146,$01 Stash the new bullet position on the stack.
+N $7147 Draw the bullet graphic.
+@ $7147 label=PlayerBullets_DrawNew
+  $7147,$02 Set a counter in #REGb for #N$04 pixel lines.
+@ $7149 label=PlayerBullets_DrawLoop
+  $7149,$01 Write #REGa to *#REGde.
+  $714A,$01 Move down one pixel line in the screen buffer.
+  $714B,$02 Decrease the line counter by one and loop back to #R$7149 until all
+. #N$04 lines of the bullet have been drawn.
+  $714D,$01 Restore the original bullet position from the stack.
+N $714E Housekeeping; move onto the next bullet.
+@ $714E label=PlayerBullets_NextBullet
+  $714E,$02 Restore the bullet counter and bullet data pointer from the stack.
+  $7150,$04 Store the bullet position back to the data table.
+  $7154,$01 Decrease the bullet counter by one.
+  $7155,$03 Jump to #R$7040 until all of the bullets have been processed.
+  $7158,$01 Return.
+
+c $7159
 
 c $7200
   $7200,$04 Jump to #R$7223 if #REGa is not equal to #N$02.
@@ -1545,7 +1745,7 @@ c $7254
   $726B,$01 #REGd=*#REGhl.
   $726C,$01 Increment #REGhl by one.
   $726D,$01 Stash #REGhl on the stack.
-  $726E,$05 Call #R$7564 if bit 6 of #REGd is set.
+  $726E,$05 Call #R$7564 if bit 6 of #REGd is active.
   $7273,$02 Restore #REGhl and #REGbc from the stack.
   $7275,$02 Decrease counter by one and loop back to #R$7268 until counter is zero.
   $7277,$03 #REGhl=#R$6680.
@@ -1585,6 +1785,22 @@ N $72C4 Player has lost all their lives, set the *#R$66F5 flag.
   $72C8,$01 Return.
 
 c $72C9
+  $72C9,$07 Jump to #R$740C if *#R$66F3 is active.
+  $72D0,$08 Call #R$67F6 if *#R$66F1 is not equal to #N$04.
+  $72D8,$02 Jump to #R$730A if *#R$66F1 is not equal to #N$04.
+  $72DA,$03 Call #R$681C.
+  $72DD,$03 #REGhl=#N$5940 (attribute buffer location).
+  $72E0,$02 #REGc=#N$02.
+  $72E2,$02 #REGb=#N$E0.
+  $72E4,$02 Stash #REGbc and #REGhl on the stack.
+  $72E6,$05 Jump to #R$7302 if *#REGhl is equal to #N$02.
+  $72EB,$04 Jump to #R$7302 if *#REGhl is equal to #N$10.
+  $72EF,$02 Compare *#REGhl with #N$16.
+  $72F1,$02 #REGa=#N$00.
+  $72F3,$02 Jump to #R$72F7 if *#REGhl is not equal to #N$16.
+  $72F5,$02 #REGa=#N$10.
+  $72F7,$01 Write #REGa to *#REGhl.
+  $72F8,$03 Call #R$6704.
 
 N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
 . #SIM(start=$74A4,stop=$74B9) #UDGTABLE {
@@ -1607,6 +1823,80 @@ N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
   $7342,$02 #REGb=#N$04.
   $7344,$03 Call #R$676F.
 
+  $740C,$03 #REGhl=#R$6680.
+  $740F,$03 #REGde=#R$6681.
+  $7412,$03 #REGbc=#N($006C,$04,$04).
+  $7415,$01 Write #REGb to *#REGhl.
+  $7416,$02 LDIR.
+  $7418,$04 #REGa=*#R$66F1.
+  $741C,$02 #REGa-=#N$04.
+N $741E Self-modifying code; see #R$703E.
+N $741E Point to the bullet count.
+  $741E,$03 #REGde=#R$703E(#N$703F).
+  $7421,$02 Jump to #R$742D if #REGa is not equal to #N$00.
+  $7423,$01 Write #REGa to *#REGhl.
+  $7424,$01 Increment #REGa by one.
+  $7425,$01 Write #REGa to *#REGde.
+  $7426,$01 Stash #REGhl on the stack.
+  $7427,$03 Call #R$74A4.
+  $742A,$01 Restore #REGhl from the stack.
+  $742B,$02 Jump to #R$7431.
+  $742D,$01 Increment *#REGhl by one.
+  $742E,$03 Write #N$04 to *#REGde.
+  $7431,$01 #REGa=*#REGhl.
+  $7432,$01 Stash #REGaf on the stack.
+  $7433,$02,b$01 Keep only bits 1-2.
+  $7435,$05 Write #N$08 to *#R$667F.
+  $743A,$02 Jump to #R$743E if *#REGhl is not equal to #N$04.
+  $743C,$02 Write #N$0F to *#REGhl.
+  $743E,$03 #REGhl=#R$6637.
+  $7441,$01 Restore #REGaf from the stack.
+  $7442,$03 Jump to #R$744A if *#REGhl is not equal to #REGa.
+  $7445,$03 #REGhl=#R$65FB.
+  $7448,$02 Jump to #R$745A.
+  $744A,$04 Jump to #R$7453 if #REGa is not equal to #N$01.
+  $744E,$03 #REGhl=#R$6619.
+  $7451,$02 Jump to #R$745A.
+  $7453,$04 Jump to #R$745A if #REGa is not equal to #N$04.
+  $7457,$03 #REGhl=#R$6647.
+  $745A,$03 #REGde=#R$65DD.
+  $745D,$05 #REGc=*#R$667F multiplied by #N$02.
+  $7462,$02 LDIR.
+
+  $7464,$07 Jump to #R$7470 if *#R$66F1 is not equal to #N$01.
+N $746B Set the Pheenix colouring to produce:
+. #UDGTABLE { #UDGS$03,$02(pheenix-05-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($619D,$617B),#PC+$08*$x))
+.   #UDG({addr},#IF($y==0)($43,$46))(*udg)
+.   udg
+. ) } TABLE#
+  $746B,$03 Set #REGb to #COLOUR$43, and #REGc to #INK$04.
+  $746E,$02 Jump to #R$7485.
+  $7470,$04 Jump to #R$7479 if *#R$66F1 is not equal to #N$02.
+  $7474,$03 Set #REGb to #COLOUR$41, and #REGc to #COLOUR$41.
+  $7477,$02 Jump to #R$7485.
+  $7479,$04 Jump to #R$7482 if *#R$66F1 is not equal to #N$03.
+  $747D,$03 Set #REGb to #COLOUR$43, and #REGc to #COLOUR$43.
+  $7480,$02 Jump to #R$7485.
+N $7482 Set the Pheenix colouring to produce:
+. #UDGTABLE { #UDGS$03,$02(pheenix-05-magenta)(
+.   #LET(addr=#IF($y==1)(#IF($x==1)($619D,$617B),#PC+$08*$x))
+.   #UDG({addr},#IF($y==0)($43,$46))(*udg)
+.   udg
+. ) } TABLE#
+  $7482,$03 Set #REGb to #INK$06, and #REGc to #COLOUR$43.
+  $7485,$04 Write #REGb to *#R$667D and #REGc to *#R$667E.
+  $7489,$05 Write #N$CE to *#R$66ED.
+  $748E,$03 #REGa=*#R$66F1.
+  $7491,$01 Stash the current phase on the stack.
+  $7492,$02,b$01 Keep only bits 1-2.
+  $7494,$03 Call #R$68B8 if the result is not zero.
+  $7497,$03 Call #R$67F6.
+  $749A,$01 Restore the current phase from the stack.
+  $749B,$05 Call #R$696A if the current phase is phase #N$04.
+  $74A0,$03 Call #R$6CC9.
+  $74A3,$01 Return.
+
 c $74A4 Game Intro
 @ $74A4 label=GameIntro
 D $74A4 #PUSHS #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE {
@@ -1614,7 +1904,7 @@ D $74A4 #PUSHS #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE {
 . } TABLE# #POPS
   $74A4,$03 Call #R$6720.
 N $74A7 Don't bother with the animation if this is the demo mode.
-  $74A7,$05 Return if *#R$66F3 is set.
+  $74A7,$05 Return if *#R$66F3 is active.
 N $74AC Set the attribute buffer to all cyan.
   $74AC,$0D Copy #INK$05 to #N$0300 bytes starting from #N$5800 in the
 . attribute buffer.
@@ -1911,7 +2201,7 @@ M $79B2,$06 Return if bit 0 of *#R$6695 is not set.
   $79C7,$03 Jump to #R$7B5F.
 
   $79CA,$03 Stash #REGaf, #REGbc and #REGhl on the stack.
-  $79CD,$06 Jump to #R$7A1F if *#R$66F3 is set.
+  $79CD,$06 Jump to #R$7A1F if *#R$66F3 is active.
   $79D3,$03 #REGa=*#R$66F1.
   $79D6,$02,b$01 Keep only bit 1.
   $79D8,$02 Jump to #R$79F8 if ?? is equal to #REGa.
@@ -1928,6 +2218,181 @@ M $79D3,$07 Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
   $79F3,$01 Restore #REGbc from the stack.
   $79F4,$02 Decrease counter by one and loop back to #R$79E7 until counter is zero.
   $79F6,$02 Jump to #R$7A1F.
+
+  $79F8,$05 Jump to #R$7A1F if *#REGhl is not equal to #N$01.
+  $79FD,$02 #REGb=#N$12.
+  $79FF,$03 #REGhl=#N($0064,$04,$04).
+  $7A02,$02 Stash #REGbc and #REGhl on the stack.
+  $7A04,$02 #REGa=#N$64.
+  $7A06,$01 #REGa-=#REGb.
+  $7A07,$01 #REGa-=#REGb.
+  $7A08,$01 #REGb=#REGa.
+  $7A09,$02 #REGa=#N$10.
+  $7A0B,$01 Disable interrupts.
+  $7A0C,$02 Set border to the colour held by #REGa.
+  $7A0E,$02 Decrease counter by one and loop back to #R$7A0C until counter is zero.
+  $7A10,$03 #REGde=#N($0001,$04,$04).
+  $7A13,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
+  $7A16,$01 Disable interrupts.
+  $7A17,$01 Restore #REGhl from the stack.
+  $7A18,$04 #REGhl+=#N($0008,$04,$04).
+  $7A1C,$01 Restore #REGbc from the stack.
+  $7A1D,$02 Decrease counter by one and loop back to #R$7A02 until counter is zero.
+  $7A1F,$03 Restore #REGhl, #REGbc and #REGaf from the stack.
+  $7A22,$02 Stash #REGbc and #REGhl on the stack.
+  $7A24,$01 Increment #REGhl by one.
+  $7A25,$01 #REGe=*#REGhl.
+  $7A26,$01 Increment #REGhl by one.
+  $7A27,$01 #REGd=*#REGhl.
+  $7A28,$01 #REGc=#REGa.
+  $7A29,$03 #REGa=*#R$66F1.
+  $7A2C,$02,b$01 Keep only bit 1.
+  $7A2E,$01 #REGa=#REGc.
+  $7A2F,$02 Jump to #R$7A99 if bit 1 of *#R$66F1 was set.
+  $7A31,$04 Jump to #R$7A41 if #REGa is not equal to #N$01.
+  $7A35,$02 Stash #REGde and #REGaf on the stack.
+  $7A37,$01 Exchange the #REGde and #REGhl registers.
+  $7A38,$03 Call #R$6704.
+  $7A3B,$01 Exchange the #REGde and #REGhl registers.
+  $7A3C,$03 Call #R$7564.
+  $7A3F,$02 Restore #REGaf and #REGde from the stack.
+  $7A41,$04 Jump to #R$7A61 if #REGa is not equal to #N$04.
+  $7A45,$02 Stash #REGde and #REGaf on the stack.
+  $7A47,$03 #REGhl=#R$652D.
+  $7A4A,$02 Write #N$38 to *#REGhl.
+  $7A4C,$05 Jump to #R$7A56 if #REGd is equal to #N$5A.
+  $7A51,$02 Write #N$32 to *#REGhl.
+  $7A53,$01 Increment #REGhl by one.
+  $7A54,$02 Write #N$35 to *#REGhl.
+  $7A56,$03 Call #R$67B6.
+  $7A59,$03 Call #R$67A9.
+  $7A5C,$03 Call #R$681C.
+  $7A5F,$02 Restore #REGaf and #REGde from the stack.
+  $7A61,$02 Compare #REGa with #N$07.
+  $7A63,$03 #REGbc=#N$0344.
+  $7A66,$02 Jump to #R$7A73 if #REGa is less than #N$07.
+  $7A68,$03 #REGhl=#R$6535.
+  $7A6B,$04 Jump to #R$7A82 if #REGa is less than #N$09.
+  $7A6F,$02 #REGc=#N$03.
+  $7A71,$02 Jump to #R$7A82.
+
+  $7A73,$01 Increment #REGc by one.
+  $7A74,$04 Jump to #R$7A7D if #REGa is less than #N$04.
+  $7A78,$03 #REGhl=#R$6532.
+  $7A7B,$02 Jump to #R$7A82.
+
+  $7A7D,$02 #REGc=#N$47.
+  $7A7F,$03 #REGhl=#R$652F.
+  $7A82,$01 Stash #REGde on the stack.
+  $7A83,$01 Exchange the #REGde and #REGhl registers.
+  $7A84,$03 Call #R$6704.
+  $7A87,$02 Stash #REGhl and #REGbc on the stack.
+  $7A89,$06 #REGhl-=#N$50C0.
+  $7A8F,$02 Restore #REGbc and #REGhl from the stack.
+  $7A91,$01 Exchange the #REGde and #REGhl registers.
+  $7A92,$03 Call #R$677B if #REGa is less than #N$00.
+  $7A95,$01 Restore #REGde from the stack.
+  $7A96,$03 Jump to #R$7B30.
+
+  $7A99,$04 Jump to #R$7AAE if #REGa is not equal to #N$01.
+  $7A9D,$02 Stash #REGde and #REGaf on the stack.
+  $7A9F,$01 Exchange the #REGde and #REGhl registers.
+  $7AA0,$03 Call #R$6704.
+  $7AA3,$01 Exchange the #REGde and #REGhl registers.
+  $7AA4,$03 Call #R$7564.
+  $7AA7,$02 Restore #REGaf and #REGde from the stack.
+  $7AA9,$01 Increment #REGde by one.
+  $7AAA,$01 Write #REGa to *#REGde.
+  $7AAB,$01 Decrease #REGde by one.
+  $7AAC,$02 Jump to #R$7AEB.
+
+  $7AAE,$04 Jump to #R$7AEB if #REGa is not equal to #N$02.
+  $7AB2,$02 Stash #REGaf and #REGde on the stack.
+  $7AB4,$03 #REGhl=#R$652C.
+  $7AB7,$01 Stash #REGhl on the stack.
+  $7AB8,$02 Write #N$31 to *#REGhl.
+  $7ABA,$06 Jump to #R$7ACC if *#R$6691 is zero.
+  $7AC0,$05 Jump to #R$7AC9 if #REGd is less than #N$59.
+  $7AC5,$02 Write #N$32 to *#REGhl.
+  $7AC7,$02 Jump to #R$7ACC if #REGa is equal to #N$59.
+  $7AC9,$01 Increment #REGhl by one.
+  $7ACA,$02 Write #N$35 to *#REGhl.
+  $7ACC,$01 Exchange the #REGde and #REGhl registers.
+  $7ACD,$03 Call #R$6704.
+  $7AD0,$01 Stash #REGhl on the stack.
+  $7AD1,$06 #REGhl-=#N$50C0.
+  $7AD7,$01 Restore #REGhl from the stack.
+  $7AD8,$01 Exchange the #REGde and #REGhl registers.
+  $7AD9,$01 Restore #REGhl from the stack.
+  $7ADA,$03 #REGbc=#N$0345.
+  $7ADD,$03 Call #R$676F if #REGa is less than #N$00.
+  $7AE0,$03 Call #R$67B6.
+  $7AE3,$03 Call #R$67A9.
+  $7AE6,$03 Call #R$681C.
+  $7AE9,$02 Restore #REGde and #REGaf from the stack.
+  $7AEB,$01 Stash #REGde on the stack.
+  $7AEC,$01 #REGc=#REGa.
+  $7AED,$01 #REGa=#REGe.
+  $7AEE,$01 Increment #REGa by one.
+  $7AEF,$02,b$01 Keep only bits 0-4.
+  $7AF1,$01 #REGa-=#REGc.
+  $7AF2,$02 Jump to #R$7B0C if #REGa is less than #REGa.
+  $7AF4,$02 Stash #REGbc and #REGaf on the stack.
+  $7AF6,$03 #REGe-=#REGc.
+  $7AF9,$01 Increment #REGe by one.
+  $7AFA,$03 Call #R$6845.
+  $7AFD,$01 Decrease #REGe by one.
+  $7AFE,$01 Restore #REGaf from the stack.
+  $7AFF,$02 Jump to #R$7B0B until #REGe is zero.
+  $7B01,$01 Restore #REGbc from the stack.
+  $7B02,$01 Stash #REGbc on the stack.
+  $7B03,$05 Jump to #R$7B0B if #REGc is equal to #N$10.
+  $7B08,$03 Call #R$684E.
+  $7B0B,$02 Restore #REGbc and #REGde from the stack.
+  $7B0D,$01 Stash #REGde on the stack.
+  $7B0E,$01 Increment #REGe by one.
+  $7B0F,$01 #REGa=#REGe.
+  $7B10,$02,b$01 Keep only bits 0-4.
+  $7B12,$01 #REGa+=#REGc.
+  $7B13,$04 Jump to #R$7B2F if #REGa is greater than or equal to #N$20.
+  $7B17,$01 Stash #REGbc on the stack.
+  $7B18,$02 Compare #REGa with #N$1F.
+  $7B1A,$01 Stash #REGaf on the stack.
+  $7B1B,$03 #REGe+=#REGc.
+  $7B1E,$01 Decrease #REGde by one.
+  $7B1F,$03 Call #R$6845.
+  $7B22,$01 Increment #REGde by one.
+  $7B23,$02 Restore #REGaf and #REGbc from the stack.
+  $7B25,$02 Jump to #R$7B2F if ??? is zero.
+  $7B27,$05 Jump to #R$7B2F if #REGc is equal to #N$10.
+  $7B2C,$03 Call #R$6853.
+  $7B2F,$02 Restore #REGde and #REGhl from the stack.
+  $7B31,$01 Increment *#REGhl by one.
+  $7B32,$03 #REGa=*#R$66F1.
+  $7B35,$02,b$01 Keep only bit 1.
+  $7B37,$02 #REGa=#N$0B.
+  $7B39,$02 Jump to #R$7B3D if bit 1 of *#R$66F1 was not set.
+  $7B3B,$05 Jump to #R$7B5E if *#REGhl is not equal to #N$11.
+  $7B40,$02 Write #N$00 to *#REGhl.
+  $7B42,$01 Stash #REGhl on the stack.
+  $7B43,$01 Exchange the #REGde and #REGhl registers.
+  $7B44,$03 Call #R$6704.
+  $7B47,$01 Stash #REGhl on the stack.
+  $7B48,$06 #REGhl-=#N$50C0.
+  $7B4E,$01 Restore #REGhl from the stack.
+  $7B4F,$01 Exchange the #REGde and #REGhl registers.
+
+N $7B50 Prints #STR($3F1B,$03,$03)
+  $7B50,$03 #HTML(#REGhl=<a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html#3F1B">#N$3F1B</a>.)
+  $7B53,$03 #REGbc=#N($0300,$04,$04).
+  $7B56,$03 Call #R$6775 if ?? is less than #N$00.
+  $7B59,$03 #REGhl=#R$667F.
+  $7B5C,$01 Decrease *#REGhl by one.
+  $7B5D,$02 Restore #REGhl and #REGbc from the stack.
+  $7B5F,$03 Increment #REGhl by three.
+  $7B62,$01 Decrease #REGb by one.
+  $7B63,$03 Jump to #R$79BD if #REGb is not equal to #N$00.
+  $7B66,$01 Return.
 
 c $7B67 Handler: Aliens
 @ $7B67 label=Handler_Aliens
@@ -1981,7 +2446,7 @@ N $7B67 See #POKE#aliens-not-fire(Aliens Don't Fire).
   $7BD7,$04 #REGhl=#N($0041,$04,$04)+#REGde.
   $7BDB,$01 Stash #REGhl on the stack.
   $7BDC,$03 #REGde=#N$5AE0 (attribute buffer location).
-  $7BDF,$06 Jump to #R$7BE7 if *#R$6693 is zero.
+  $7BDF,$06 Jump to #R$7BE7 if *#R$6693 is inactive.
   $7BE5,$02 #REGe=#N$C0.
   $7BE7,$02 #REGhl-=#REGde (with carry).
   $7BE9,$01 Restore #REGhl from the stack.
@@ -2030,7 +2495,7 @@ N $7B67 See #POKE#aliens-not-fire(Aliens Don't Fire).
   $7C3E,$01 Restore #REGhl from the stack.
   $7C3F,$02 Jump to #R$7C50 if #REGh is greater than or equal to #REGa.
   $7C41,$04 Jump to #R$7C54 if *#REGhl is zero.
-  $7C45,$06 Jump to #R$7C50 if *#R$6693 is not zero.
+  $7C45,$06 Jump to #R$7C50 if *#R$6693 is active.
   $7C4B,$05 Jump to #R$7C54 if *#REGhl is equal to #N$46.
   $7C50,$02 #REGd=#N$00.
   $7C52,$02 Jump to #R$7C76.
@@ -2273,13 +2738,15 @@ N $7DDC This is a game the player started, so disable the demo mode and unset
 N $7DEC Set the players starting life count.
   $7DEC,$04 Write #N$05 to *#R$66F0.
   $7DF0,$03 Call #R$740C.
+@ $7DF3 label=Game_Loop
   $7DF3,$03 Call #R$6CEE.
   $7DF6,$03 Call #R$7616.
   $7DF9,$03 Call #R$7B67.
   $7DFC,$03 Call #R$79B2.
   $7DFF,$03 Call #R$7254.
   $7E02,$03 Call #R$6890.
-  $7E05,$06 Jump to #R$7DF3 if *#R$66F5 is zero.
+  $7E05,$06 Jump back to #R$7DF3 unless *#R$66F5 is active.
+N $7E0B *#R$66F5 is active, start the "Game Over" process.
   $7E0B,$02 #REGd=#N$08.
   $7E0D,$03 #REGbc=#N($0000,$04,$04).
   $7E10,$02 Decrease counter by one and loop back to #R$7E10 until counter is zero.

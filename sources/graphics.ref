@@ -23,20 +23,21 @@
 
 [Graphics:Pheenix]
 <table>
-  <tr><th>#R$60E7(#N$60E7)</th></tr>
+  <tr><th colspan=2>#R$60E7(#N$60E7)</th></tr>
   <tr>
-    <td><img src="../images/udgs/pheenix-01.png"/></td>
+    <td colspan=2><img src="../images/udgs/pheenix-01.png"/></td>
   </tr>
   <tr>
-    <td><img src="../images/udgs/pheenix-02.png"/></td>
+    <td colspan=2><img src="../images/udgs/pheenix-02.png"/></td>
   </tr>
   <tr>
-    <td><img src="../images/udgs/pheenix-03.png"/></td>
+    <td><img src="../images/udgs/pheenix-03-blue.png"/></td>
+    <td><img src="../images/udgs/pheenix-03-magenta.png"/></td>
   </tr>
 </table>
 
 <table>
-  <tr><th colspan=2>#R$6153(#N$6153)</th></tr>
+  <tr><th colspan=2>#R$615B(#N$615B)</th></tr>
   <tr>
     <td><img src="../images/udgs/pheenix-04-blue.png"/></td>
     <td><img src="../images/udgs/pheenix-04-magenta.png"/></td>
