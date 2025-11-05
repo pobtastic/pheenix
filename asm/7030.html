@@ -39,7 +39,7 @@ Next: <a href="7159.html">7159</a>
 <td class="routine-comment" colspan="5">
 <div class="details">
 <div class="paragraph">
-Used by the routines at <a href="6CEE.html">6CEE</a> and <a href="6DCF.html">6DCF</a>.
+Used by the routines at <a href="6CEE.html">Handler_PlayerDeathGameOver</a> and <a href="6DCF.html">Handler_PlayerShipShield</a>.
 </div>
 </div>
 </td>
@@ -219,7 +219,7 @@ Check if the player can fire a new bullet.
 <span id="7058"></span>
 <div class="comments">
 <div class="paragraph">
-Load the previous fire button state into <span class="register">C</span>.
+Load the previous fire button state into <span class="register">C</span> (used for a debounce check at <a href="7030.html#708d">708D</a>).
 </div>
 </div>
 </td>
@@ -234,6 +234,16 @@ Load the previous fire button state into <span class="register">C</span>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="705b"></span>705B</td>
 <td class="instruction">LD C,A</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="705c"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the game is running in demo mode.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -283,7 +293,7 @@ The game is in demo mode, so generate random firing action.
 <span id="7069"></span>
 <div class="comments">
 <div class="paragraph">
-Read player fire button input.
+The game is not in demo mode, so read the player fire button input.
 </div>
 </div>
 </td>
@@ -498,12 +508,22 @@ Is the fire button state unchanged since the last time this routine ran?
 <td class="asm-label"></td>
 <td class="address-1"><span id="7091"></span>7091</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7030.html#714e">PlayerBullets_NextBullet</a> if the fire button wasn't pressed.</td>
+<td class="comment-1" rowspan="2">Also jump to <a href="7030.html#714e">PlayerBullets_NextBullet</a> if the fire button wasn't pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7092"></span>7092</td>
 <td class="instruction">JP Z,<a href="7030.html#714e">PlayerBullets_NextBullet</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7095"></span>
+<div class="comments">
+<div class="paragraph">
+Skip playing the firing sound if this is the demo mode.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -526,6 +546,18 @@ Is the fire button state unchanged since the last time this routine ran?
 <td class="address-1"><span id="709b"></span>709B</td>
 <td class="instruction">PUSH DE</td>
 <td class="comment-1" rowspan="1">Stash the bullet position on the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="709c"></span>
+<div class="comments">
+<div class="paragraph">
+<audio controls="" src="../audio/bullets.wav">
+<p>Your browser doesn't support HTML5 audio. Here is a <a href="../audio/bullets.wav">link to the audio</a> instead.</p>
+</audio>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -634,7 +666,7 @@ Is the fire button state unchanged since the last time this routine ran?
 <span id="70b8"></span>
 <div class="comments">
 <div class="paragraph">
-Check if the bullet spawning position is clear.
+Check if the bullet spawning position is clear in the attribute buffer.
 </div>
 </div>
 </td>
@@ -643,7 +675,7 @@ Check if the bullet spawning position is clear.
 <td class="asm-label">PlayerBullets_CheckSpawn</td>
 <td class="address-2"><span id="70b8"></span>70B8</td>
 <td class="instruction">LD A,($66ED)</td>
-<td class="comment-1" rowspan="3"><span class="register">L</span>=*<a href="66ED.html">PlayerAttributeBufferPosition</a>-1F.</td>
+<td class="comment-1" rowspan="3">Set <span class="register">L</span> to *<a href="66ED.html">PlayerAttributeBufferPosition</a>-1F to calculate the bullet spawn position.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -659,13 +691,13 @@ Check if the bullet spawning position is clear.
 <td class="asm-label"></td>
 <td class="address-1"><span id="70be"></span>70BE</td>
 <td class="instruction">LD H,$5A</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=5A.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">H</span> to 5A as the bullets always spawn on the same row.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70c0"></span>70C0</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7030.html#714e">PlayerBullets_NextBullet</a> if *<span class="register">HL</span> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7030.html#714e">PlayerBullets_NextBullet</a> if the attribute at this position isn't BLACK (i.e. it is occupied).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -678,11 +710,21 @@ Check if the bullet spawning position is clear.
 <td class="instruction">JP NZ,<a href="7030.html#714e">PlayerBullets_NextBullet</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="70c5"></span>
+<div class="comments">
+<div class="paragraph">
+The bullet position isn't already occupied, so colour this attribute block.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70c5"></span>70C5</td>
 <td class="instruction">LD (HL),$47</td>
 <td class="comment-1" rowspan="1">Write INK:WHITE,
-PAPER:BLACK(BRIGHT) to *<span class="register">HL</span>.</td>
+PAPER:BLACK(BRIGHT) to the bullet attribute buffer position.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -706,7 +748,7 @@ PAPER:BLACK(BRIGHT) to *<span class="register">HL</span>.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70cd"></span>70CD</td>
 <td class="instruction">LD A,($66A6)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A6.html">66A6</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A6.html">BulletIndex</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

@@ -33,7 +33,7 @@ Next: <a href="6DCF.html">6DCF</a>
 </td>
 </tr>
 </table>
-<div class="description">6CEE: Routine at 6CEE</div>
+<div class="description">6CEE: Handler: Player Death/ Game Over</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,10 +45,10 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 </td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_PlayerDeathGameOver</td>
 <td class="address-2"><span id="6cee"></span>6CEE</td>
 <td class="instruction">LD HL,$66A4</td>
-<td class="comment-1" rowspan="4">Jump to <a href="6DCF.html">6DCF</a> if *<a href="66A4.html">Flag_Collision</a> is zero.</td>
+<td class="comment-1" rowspan="4">Jump to <a href="6DCF.html">Handler_PlayerShipShield</a> if *<a href="66A4.html">Flag_Collision</a> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -63,7 +63,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6cf3"></span>6CF3</td>
-<td class="instruction">JP Z,<a href="6DCF.html">$6DCF</a></td>
+<td class="instruction">JP Z,<a href="6DCF.html">Handler_PlayerShipShield</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -90,7 +90,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <td class="asm-label"></td>
 <td class="address-1"><span id="6cfc"></span>6CFC</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="2">Write 02 to *<a href="66A4.html">Flag_Collision</a>.</td>
+<td class="comment-1" rowspan="2">Write 02 ("explosion complete") to *<a href="66A4.html">Flag_Collision</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -102,6 +102,16 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <td class="address-1"><span id="6cff"></span>6CFF</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="6d00"></span>
+<div class="comments">
+<div class="paragraph">
+Handles the "Game Over" state.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label">GameOver</td>
@@ -123,7 +133,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d07"></span>6D07</td>
 <td class="instruction">LD A,($66F0)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="6CEE.html#6d29">6D29</a> if *<a href="66F0.html">Player_Lives</a> is not equal to 01.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6CEE.html#6d29">GameOver_Explosion</a> if *<a href="66F0.html">Player_Lives</a> is not equal to 01.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -133,13 +143,13 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d0c"></span>6D0C</td>
-<td class="instruction">JR NZ,<a href="6CEE.html#6d29">$6D29</a></td>
+<td class="instruction">JR NZ,<a href="6CEE.html#6d29">GameOver_Explosion</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d0e"></span>6D0E</td>
 <td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="6CEE.html#6d29">6D29</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is active.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6CEE.html#6d29">GameOver_Explosion</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -149,7 +159,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d12"></span>6D12</td>
-<td class="instruction">JR NZ,<a href="6CEE.html#6d29">$6D29</a></td>
+<td class="instruction">JR NZ,<a href="6CEE.html#6d29">GameOver_Explosion</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -224,481 +234,483 @@ Prints <img alt="over" src="../images/font/over.png" />
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d28"></span>6D28</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="routine-comment" colspan="5">
+<span id="6d29"></span>
+<div class="comments">
+<div class="paragraph">
+Animate the explosion effect.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">GameOver_Explosion</td>
 <td class="address-2"><span id="6d29"></span>6D29</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d2a"></span>6D2A</td>
-<td class="instruction">AND $07</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">AND %00000111</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-2.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d2c"></span>6D2C</td>
 <td class="instruction">BIT 3,(HL)</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Jump to <a href="6CEE.html#6d31">GameOver_SkipIncrement</a> if bit 3 of *<span class="register">HL</span> is set.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d2e"></span>6D2E</td>
-<td class="instruction">JR NZ,<a href="6CEE.html#6d31">$6D31</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR NZ,<a href="6CEE.html#6d31">GameOver_SkipIncrement</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d30"></span>6D30</td>
 <td class="instruction">INC A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">GameOver_SkipIncrement</td>
 <td class="address-2"><span id="6d31"></span>6D31</td>
 <td class="instruction">INC (HL)</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Increment the explosion counter by two.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d32"></span>6D32</td>
 <td class="instruction">INC (HL)</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d33"></span>6D33</td>
 <td class="instruction">LD C,A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Copy the attribute value to <span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d34"></span>6D34</td>
 <td class="instruction">LD B,$00</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=00.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d36"></span>6D36</td>
 <td class="instruction">LD IX,$0002</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">IX</span>=02.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">GameOver_ExplosionLoop</td>
 <td class="address-2"><span id="6d3a"></span>6D3A</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash the colour counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d3b"></span>6D3B</td>
 <td class="instruction">LD HL,($66ED)</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=*<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d3e"></span>6D3E</td>
 <td class="instruction">LD DE,$0021</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2"><span class="register">HL</span>+=0021.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d41"></span>6D41</td>
 <td class="instruction">ADD HL,DE</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d42"></span>6D42</td>
 <td class="instruction">LD (HL),D</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Write <span class="register">D</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d43"></span>6D43</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d44"></span>6D44</td>
 <td class="instruction">LD A,L</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d45"></span>6D45</td>
-<td class="instruction">AND $1F</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">AND %00011111</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-4.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d47"></span>6D47</td>
 <td class="instruction">SUB C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>-=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d48"></span>6D48</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d49"></span>6D49</td>
 <td class="instruction">AND A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2"><span class="register">HL</span>-=<span class="register">BC</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d4a"></span>6D4A</td>
 <td class="instruction">SBC HL,BC</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d4c"></span>6D4C</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d4d"></span>6D4D</td>
 <td class="instruction">CALL NC,<a href="6926.html">Handler_ShipExplosion</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="6926.html">Handler_ShipExplosion</a> if <span class="register">A</span> is greater than 00.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d50"></span>6D50</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d51"></span>6D51</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d52"></span>6D52</td>
 <td class="instruction">LD A,L</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d53"></span>6D53</td>
-<td class="instruction">AND $1F</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">AND %00011111</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-4.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d55"></span>6D55</td>
 <td class="instruction">ADD A,C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>+=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d56"></span>6D56</td>
 <td class="instruction">CP $20</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 20.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d58"></span>6D58</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d59"></span>6D59</td>
 <td class="instruction">ADD HL,BC</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>+=<span class="register">BC</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d5a"></span>6D5A</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d5b"></span>6D5B</td>
 <td class="instruction">CALL C,<a href="6926.html">Handler_ShipExplosion</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="6926.html">Handler_ShipExplosion</a> if <span class="register">A</span> is less than 20.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d5e"></span>6D5E</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d5f"></span>6D5F</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d60"></span>6D60</td>
 <td class="instruction">LD B,C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d61"></span>6D61</td>
 <td class="instruction">LD DE,$0020</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="3"><span class="register">HL</span>-=0020 (with carry).</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_PlayerDeathGameOver_0</td>
 <td class="address-2"><span id="6d64"></span>6D64</td>
 <td class="instruction">AND A</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d65"></span>6D65</td>
 <td class="instruction">SBC HL,DE</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d67"></span>6D67</td>
-<td class="instruction">DJNZ <a href="6CEE.html#6d64">$6D64</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="6CEE.html#6d64">Handler_PlayerDeathGameOver_0</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6CEE.html#6d64">Handler_PlayerDeathGameOver_0</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d69"></span>6D69</td>
 <td class="instruction">CALL <a href="6926.html">Handler_ShipExplosion</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="6926.html">Handler_ShipExplosion</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d6c"></span>6D6C</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d6d"></span>6D6D</td>
 <td class="instruction">LD A,C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d6e"></span>6D6E</td>
 <td class="instruction">SUB $02</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>-=02.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d70"></span>6D70</td>
 <td class="instruction">LD B,A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d71"></span>6D71</td>
-<td class="instruction">JR C,<a href="6CEE.html#6d8a">$6D8A</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR C,<a href="6CEE.html#6d8a">Handler_PlayerDeathGameOver_2</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6CEE.html#6d8a">Handler_PlayerDeathGameOver_2</a> if <span class="register">A</span> is less than <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d73"></span>6D73</td>
-<td class="instruction">JR Z,<a href="6CEE.html#6d8a">$6D8A</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR Z,<a href="6CEE.html#6d8a">Handler_PlayerDeathGameOver_2</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6CEE.html#6d8a">Handler_PlayerDeathGameOver_2</a> if <span class="register">A</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d75"></span>6D75</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d76"></span>6D76</td>
 <td class="instruction">LD DE,$0021</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=0021.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d79"></span>6D79</td>
 <td class="instruction">LD A,L</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d7a"></span>6D7A</td>
-<td class="instruction">AND $1F</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">AND %00011111</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-4.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d7c"></span>6D7C</td>
 <td class="instruction">ADD A,$02</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>+=02.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d7e"></span>6D7E</td>
 <td class="instruction">SUB C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>-=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d7f"></span>6D7F</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_PlayerDeathGameOver_1</td>
 <td class="address-2"><span id="6d80"></span>6D80</td>
 <td class="instruction">AND A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2"><span class="register">HL</span>-=<span class="register">DE</span> (with carry).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d81"></span>6D81</td>
 <td class="instruction">SBC HL,DE</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d83"></span>6D83</td>
-<td class="instruction">DJNZ <a href="6CEE.html#6d80">$6D80</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="6CEE.html#6d80">Handler_PlayerDeathGameOver_1</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6CEE.html#6d80">Handler_PlayerDeathGameOver_1</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d85"></span>6D85</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d86"></span>6D86</td>
 <td class="instruction">CALL NC,<a href="6926.html">Handler_ShipExplosion</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="6926.html">Handler_ShipExplosion</a> if <span class="register">A</span> is greater than 00.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d89"></span>6D89</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_PlayerDeathGameOver_2</td>
 <td class="address-2"><span id="6d8a"></span>6D8A</td>
 <td class="instruction">LD A,C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d8b"></span>6D8B</td>
 <td class="instruction">SUB $02</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>-=02.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d8d"></span>6D8D</td>
 <td class="instruction">LD B,A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d8e"></span>6D8E</td>
-<td class="instruction">JR C,<a href="6CEE.html#6da4">$6DA4</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR C,<a href="6CEE.html#6da4">Handler_PlayerDeathGameOver_4</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6CEE.html#6da4">Handler_PlayerDeathGameOver_4</a> if <span class="register">A</span> is less than <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d90"></span>6D90</td>
-<td class="instruction">JR Z,<a href="6CEE.html#6da4">$6DA4</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR Z,<a href="6CEE.html#6da4">Handler_PlayerDeathGameOver_4</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6CEE.html#6da4">Handler_PlayerDeathGameOver_4</a> if <span class="register">A</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d92"></span>6D92</td>
 <td class="instruction">LD DE,$001F</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=001F.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d95"></span>6D95</td>
 <td class="instruction">LD A,L</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d96"></span>6D96</td>
 <td class="instruction">AND E</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Merge the bits from <span class="register">E</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d97"></span>6D97</td>
 <td class="instruction">ADD A,C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>+=<span class="register">C</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d98"></span>6D98</td>
 <td class="instruction">CP $22</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 22.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d9a"></span>6D9A</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_PlayerDeathGameOver_3</td>
 <td class="address-2"><span id="6d9b"></span>6D9B</td>
 <td class="instruction">AND A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2"><span class="register">HL</span>-=<span class="register">DE</span> (with carry).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d9c"></span>6D9C</td>
 <td class="instruction">SBC HL,DE</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6d9e"></span>6D9E</td>
-<td class="instruction">DJNZ <a href="6CEE.html#6d9b">$6D9B</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="6CEE.html#6d9b">Handler_PlayerDeathGameOver_3</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6CEE.html#6d9b">Handler_PlayerDeathGameOver_3</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6da0"></span>6DA0</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6da1"></span>6DA1</td>
 <td class="instruction">CALL C,<a href="6926.html">Handler_ShipExplosion</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Call <a href="6926.html">Handler_ShipExplosion</a> if <span class="register">A</span> is less than 00.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_PlayerDeathGameOver_4</td>
 <td class="address-2"><span id="6da4"></span>6DA4</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6da5"></span>6DA5</td>
 <td class="instruction">INC C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Increment <span class="register">C</span> by one.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -709,122 +721,119 @@ Prints <img alt="over" src="../images/font/over.png" />
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6da8"></span>6DA8</td>
-<td class="instruction">JR NZ,<a href="6CEE.html#6d3a">$6D3A</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR NZ,<a href="6CEE.html#6d3a">GameOver_ExplosionLoop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6CEE.html#6d3a">GameOver_ExplosionLoop</a> if ?? is not equal to 00.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6daa"></span>6DAA</td>
 <td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="3">Jump to <a href="7030.html">Handler_PlayerBullets</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dad"></span>6DAD</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dae"></span>6DAE</td>
 <td class="instruction">JP NZ,<a href="7030.html">Handler_PlayerBullets</a></td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6db1"></span>6DB1</td>
 <td class="instruction">LD A,($66A5)</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A5.html">Explosion_FlashCounter</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6db4"></span>6DB4</td>
-<td class="instruction">AND $03</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">AND %00000011</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-1.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6db6"></span>6DB6</td>
 <td class="instruction">JP NZ,<a href="7030.html">Handler_PlayerBullets</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7030.html">Handler_PlayerBullets</a> if the result is not equal to zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6db9"></span>6DB9</td>
 <td class="instruction">LD B,$08</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Set sound loop counter to 08.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">GameOver_SoundLoop</td>
 <td class="address-2"><span id="6dbb"></span>6DBB</td>
 <td class="instruction">LD A,B</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=<span class="register">B</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dbc"></span>6DBC</td>
 <td class="instruction">ADD A,$19</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>+=19.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dbe"></span>6DBE</td>
-<td class="instruction">AND $18</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">AND %00011000</td>
+<td class="comment-1" rowspan="1">Keep only bits 3-4.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dc0"></span>6DC0</td>
 <td class="instruction">DI</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dc1"></span>6DC1</td>
 <td class="instruction">OUT ($FE),A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Set border to the colour held by <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dc3"></span>6DC3</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">GameOver_SoundDelay</td>
 <td class="address-2"><span id="6dc4"></span>6DC4</td>
-<td class="instruction">DJNZ <a href="6CEE.html#6dc4">$6DC4</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="6CEE.html#6dc4">GameOver_SoundDelay</a></td>
+<td class="comment-1" rowspan="1">Decrease the delay loop counter by one and loop back to <a href="6CEE.html#6dc4">GameOver_SoundDelay</a> until the counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dc6"></span>6DC6</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dc7"></span>6DC7</td>
-<td class="instruction">DJNZ <a href="6CEE.html#6dbb">$6DBB</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="6CEE.html#6dbb">GameOver_SoundLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6CEE.html#6dbb">GameOver_SoundLoop</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dc9"></span>6DC9</td>
 <td class="instruction">XOR A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="2">Turn the speaker off.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dca"></span>6DCA</td>
 <td class="instruction">OUT ($FE),A</td>
-<td class="comment-1" rowspan="1"></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6dcc"></span>6DCC</td>
 <td class="instruction">JP <a href="7030.html">Handler_PlayerBullets</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7030.html">Handler_PlayerBullets</a>.</td>
 </tr>
 </table>
 <table class="asm-navigation">
