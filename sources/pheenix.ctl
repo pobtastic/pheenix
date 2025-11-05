@@ -508,7 +508,9 @@ g $66F3 Flag: Demo Mode Active?
 @ $66F3 label=Flag_ActiveDemoMode
 B $66F3,$01
 
-g $66F4
+g $66F4 Demo Mode Movement
+@ $66F4 label=Movement_DemoMode
+B $66F4,$01
 
 g $66F5 Flag: Player Lost All Lives?
 @ $66F5 label=Flag_GameOver
@@ -1576,7 +1578,7 @@ N $6D29 Animate the explosion effect.
   $6DA5,$01 Increment #REGc by one.
   $6DA6,$02
   $6DA8,$02 Jump to #R$6D3A if ?? is not equal to #N$00.
-  $6DAA,$07 Jump to #R$7030 if *#R$66F3 is not zero.
+  $6DAA,$07 Jump to #R$7030 if *#R$66F3 is not active.
   $6DB1,$03 #REGa=*#R$66A5.
   $6DB4,$02,b$01 Keep only bits 0-1.
   $6DB6,$03 Jump to #R$7030 if the result is not equal to zero.
@@ -1609,33 +1611,39 @@ N $6DDE Check if the timer has "wrapped around" to #N$FF i.e. finished counting
   $6DDE,$04 Jump to #R$6E20 if bit 7 of *#R$6694 is set.
   $6DE2,$04 Write #N$00 ("inactive") to *#R$6693.
   $6DE6,$02 Jump to #R$6E20.
-N $6DE8 Check for shield activation player input.
-@ $6DE8 label=PlayerShipShield_CheckInput
-  $6DE8,$06 Jump to #R$6DF6 if *#R$66F3 is not zero.
+N $6DE8 Check for shield activation player inputs.
+N $6DE8 Start by checking if the game is running in demo mode or not?
+@ $6DE8 label=PlayerShipShield_CheckDemoMode
+  $6DE8,$06 Jump to #R$6DF6 if *#R$66F3 is not active.
+N $6DEE Demo mode is active, so use a random number to decide whether to
+. activate the shield or not.
   $6DEE,$03 Call #R$670E.
   $6DF1,$03 Jump to #R$6E1B if the generated random number is zero.
   $6DF4,$02 Jump to #R$6E20.
-
+N $6DF6 Check if the control method is the Kempston joystick?
 @ $6DF6 label=PlayerShipShield_CheckKempston
-  $6DF6,$07 Jump to #R$6E05 if *#R$66F6 is not equal to #N$02.
+  $6DF6,$07 Jump to #R$6E05 if *#R$66F6 is not the Kempston joystick.
+N $6DFD The control method is Kempston joystick, so test for "down" being
+. pressed.
   $6DFD,$02 #REGa=read from the Kempston joystick port.
-  $6DFF,$02,b$01 Keep only bit 2.
-  $6E01,$02 Jump to #R$6E1B if #REGa is not equal to #N$02.
+  $6DFF,$02,b$01 Keep only bit 2 ("down").
+  $6E01,$02 Jump to #R$6E1B if "down" is being pressed.
   $6E03,$02 Jump to #R$6E20.
-
 N $6E05 Check if the control method is the AGF joystick?
 @ $6E05 label=PlayerShipShield_CheckAGF
   $6E05,$04 Jump to #R$6E13 if *#R$66F6 is not the AGF joystick.
-  $6E09,$02 #TABLE(default,centre,centre,centre,centre,centre,centre)
+N $6E09 The control method is the AGF joystick, so test for "down" being
+. pressed.
+  $6E09,$04 Read from the keyboard;
+. #TABLE(default,centre,centre,centre,centre,centre,centre)
 . { =h,r2 Port Number | =h,c5 Bit }
 . { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
 . { #N$EF | 0 | 9 | 8 | 7 | 6 }
 . TABLE#
-  $6E0B,$02 #REGa=byte from port #N$FE.
-  $6E0D,$02 Test bit 4 of #REGa.
-  $6E0F,$02 Jump to #R$6E1B if #REGa is equal to #N$EF.
+  $6E0D,$04 Jump to #R$6E1B if "4" was pressed.
   $6E11,$02 Jump to #R$6E20.
-
+N $6E13 Else, the only control option left is the keyboard.
+@ $6E13 label=PlayerShipShield_CheckKeyboard
   $6E13,$04 Read from the keyboard;
 . #TABLE(default,centre,centre,centre,centre,centre,centre)
 . { =h,r2 Port Number | =h,c5 Bit }
@@ -1643,14 +1651,15 @@ N $6E05 Check if the control method is the AGF joystick?
 . { #N$BF | ENTER | L | K | J | H }
 . TABLE#
   $6E17,$02,b$01 Keep only bit 0.
-  $6E19,$02 Jump to #R$6E20 if #REGa is not equal to #N$BF.
-  $6E1B,$02 Write #N$FF to *#REGhl.
-  $6E1D,$01 Decrease #REGhl by one.
-  $6E1E,$02 Write #N$01 to *#REGhl.
+M $6E17,$04 Jump to #R$6E20 if "ENTER" isn't being pressed.
+N $6E1B Activate the shield.
+@ $6E1B label=PlayerShipShield_ActivateShield
+  $6E1B,$02 Write #N$FF to *#R$6694.
+  $6E1D,$03 Write #N$01 to *#R$6693 to activate it.
 N $6E20 Draw the players ship.
-@ $6E20 label=PlayerShip_Draw
-  $6E20,$07 Jump to #R$6EF8 if *#R$6693 is zero.
-  $6E27,$06 Jump to #R$6E40 if *#R$66F3 is not zero.
+@ $6E20 label=DrawPlayersShip
+  $6E20,$07 Jump to #R$6EF8 if *#R$6693 is not active.
+  $6E27,$06 Jump to #R$6E40 if *#R$66F3 is active.
   $6E2D,$03 #REGa=*#R$6694.
   $6E30,$02,b$01 Keep only bits 0-2.
   $6E32,$01 #REGa+=#REGa.
@@ -1662,6 +1671,8 @@ N $6E20 Draw the players ship.
   $6E3A,$02 #REGe=#N$04.
   $6E3C,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
   $6E3F,$01 Disable interrupts.
+N $6E40 Draw shield graphic.
+@ $6E40 label=DrawShield
   $6E40,$03 #REGhl=*#R$66ED.
   $6E43,$02 #REGh=#N$52.
   $6E45,$02 #REGb=#N$02.
@@ -1740,57 +1751,72 @@ N $6E20 Draw the players ship.
   $6EE1,$04 #REGde=*#R$66ED.
   $6EE5,$02 #REGd=#N$50.
   $6EE7,$03 #REGhl=#R$617B.
-  $6EEA,$02 #REGb=#N$03.
-  $6EEC,$02 Stash #REGbc and #REGde on the stack.
+  $6EEA,$02 Set counter in #REGb for #N$03 pixel rows.
+@ $6EEC label=DrawPlayersShip_Loop
+  $6EEC,$02 Stash the row counter and position on the stack.
   $6EEE,$03 #REGbc=#N($0003,$04,$04).
   $6EF1,$02 LDIR.
   $6EF3,$01 Restore #REGde from the stack.
   $6EF4,$01 Increment #REGd by one.
   $6EF5,$01 Restore #REGbc from the stack.
   $6EF6,$02 Decrease counter by one and loop back to #R$6EEC until counter is zero.
-  $6EF8,$02 #REGh=#N$50.
-  $6EFA,$06 Jump to #R$6F05 if *#R$66F3 is zero.
+N $6EF8 Handle player movement input.
+@ $6EF8 label=PlayerShipShield_Movement
+  $6EF8,$02 Set #REGh to #N$50 (screen buffer base).
+  $6EFA,$06 Jump to #R$6F05 if *#R$66F3 is active.
   $6F00,$03 #REGa=*#R$66F4.
   $6F03,$02 Jump to #R$6F37.
-
+N $6F05 Check if the control method is the Kempston joystick?
+@ $6F05 label=PlayerShipShield_CheckKempstonMovement
   $6F05,$01 Disable interrupts.
-  $6F06,$03 #REGa=*#R$66F6.
-  $6F09,$04 Jump to #R$6F1C if #REGa is not equal to #N$02.
+  $6F06,$07 Jump to #R$6F1C if *#R$66F6 is not the Kempston joystick.
+N $6F06 The control method is Kempston joystick, so test for "left" or "right"
+. being pressed.
   $6F0D,$02 #REGa=read from the Kempston joystick port.
-  $6F0F,$02,b$01 Keep only bits 0-1.
-  $6F11,$04 Jump to #R$6F43 if #REGa is equal to #N$02.
-  $6F15,$05 Jump to #R$6FDD if #REGa is equal to #N$01.
+  $6F0F,$02,b$01 Keep only bits 0-1 ("right" and "left").
+  $6F11,$04 Jump to #R$6F43 if "left" is being pressed.
+  $6F15,$05 Jump to #R$6FDD if "right" is being pressed.
   $6F1A,$02 Jump to #R$6F40.
-
-  $6F1C,$04 Jump to #R$6F33 if #REGa is not equal to #N$01.
-  $6F20,$02 #REGa=#N$F7.
-  $6F22,$02 #REGa=byte from port #N$FE.
-  $6F24,$02 Test bit 4 of #REGa.
-  $6F26,$02 Jump to #R$6F43 if #REGa is equal to #N$F7.
-  $6F28,$02 #TABLE(default,centre,centre,centre,centre,centre,centre)
+N $6F1C Check if the control method is the AGF joystick?
+@ $6F1C label=PlayerShipShield_CheckAGFMovement
+  $6F1C,$04 Jump to #R$6F33 if *#R$66F6 is not the AGF joystick.
+N $6F20 The control method is the AGF joystick, so test for "left" being
+. pressed.
+  $6F20,$04 Read from the keyboard;
+. #TABLE(default,centre,centre,centre,centre,centre,centre)
+. { =h,r2 Port Number | =h,c5 Bit }
+. { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+. { #N$F7 | 1 | 2 | 3 | 4 | 5 }
+. TABLE#
+  $6F24,$04 Jump to #R$6F43 if "left" ("5") is being pressed.
+N $6F28 Now test for "right" being pressed.
+  $6F28,$04 Read from the keyboard;
+. #TABLE(default,centre,centre,centre,centre,centre,centre)
 . { =h,r2 Port Number | =h,c5 Bit }
 . { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
 . { #N$EF | 0 | 9 | 8 | 7 | 6 }
 . TABLE#
-  $6F2A,$02 #REGa=byte from port #N$FE.
-  $6F2C,$02 Test bit 2 of #REGa.
-  $6F2E,$03 Jump to #R$6FDD if #REGa is equal to #N$EF.
+  $6F2C,$05 Jump to #R$6FDD if "right" ("8") is being pressed.
   $6F31,$02 Jump to #R$6F40.
-
-  $6F33,$02 #REGa=#N$FE.
-  $6F35,$02 #REGa=byte from port #N$FE.
-  $6F37,$02 Test bit 0 of #REGa.
-  $6F39,$02 Jump to #R$6F43 if #REGa is equal to #N$FE.
-  $6F3B,$02 Test bit 1 of #REGa.
-  $6F3D,$03 Jump to #R$6FDD if #REGa is equal to #N$FE.
-  $6F40,$01 Restore #REGaf from the stack.
+N $6F33 Else, the only control option left is the keyboard.
+@ $6F33 label=PlayerShipShield_CheckKeyboardMovement
+  $6F33,$04 Read from the keyboard;
+. #TABLE(default,centre,centre,centre,centre,centre,centre)
+. { =h,r2 Port Number | =h,c5 Bit }
+. { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+. { #N$FE | SHIFT | Z | X | C | V }
+. TABLE#
+@ $6F37 label=PlayerShip_DemoMovement
+  $6F37,$04 Jump to #R$6F43 if "SHIFT" is being pressed.
+  $6F3B,$05 Jump to #R$6FDD if "Z" is being pressed.
+@ $6F40 label=PlayerShipShield_NoMovement
+  $6F40,$01 Restore the player position from the stack.
   $6F41,$02 Jump to #R$6F93.
-  $6F43,$01 Restore #REGaf from the stack.
-  $6F44,$02 Compare #REGa with #N$C0.
-  $6F46,$02 Jump to #R$6F52 if #REGa is not equal to #N$C0.
-  $6F48,$03 #REGa=*#R$66A6.
-  $6F4B,$02 Compare #REGa with #N$03.
-  $6F4D,$02 Jump to #R$6F93 if #REGa is equal to #N$03.
+N $6F43 Move player ship left.
+@ $6F43 label=PlayerShipShield_MoveLeft
+  $6F43,$01 Restore the player position from the stack.
+  $6F44,$04 Jump to #R$6F52 if #REGa is not equal to #N$C0.
+  $6F48,$07 Jump to #R$6F93 if *#R$66A6 is equal to #N$03.
   $6F4F,$04 #REGl=*#R$66ED.
   $6F53,$02 #REGb=#N$02.
   $6F55,$02 Stash #REGbc and #REGhl on the stack.
@@ -1864,13 +1890,13 @@ N $6F93 Update the ship attributes.
   $6FD8,$01 Restore #REGbc from the stack.
   $6FD9,$02 Decrease counter by one and loop back to #R$6FB2 until counter is zero.
   $6FDB,$02 Jump to #R$7030.
-
-  $6FDD,$01 Restore #REGaf from the stack.
-  $6FDE,$02 Compare #REGa with #N$DD.
+N $6FDD Move player ship right.
+@ $6FDD label=PlayerShipShield_MoveRight
+  $6FDD,$01 Restore the player position from the stack.
+  $6FDE,$02 Compare the player position with #N$DD.
   $6FE0,$03 #REGa=*#R$66A6.
-  $6FE3,$02 Jump to #R$6FE8 if #REGa is not equal to #N$DD.
-  $6FE5,$01 Set the bits from #REGa.
-  $6FE6,$02 Jump to #R$6F93 if #REGa is equal to #REGa.
+  $6FE3,$02 Jump to #R$6FE8 if the player position is not equal to #N$DD.
+  $6FE5,$03 Jump to #R$6F93 if *#R$66A6 is zero.
   $6FE8,$01 Set the bits from #REGa.
   $6FE9,$02 Jump to #R$6FEE if #REGa is equal to #REGa.
   $6FEB,$01 Decrease #REGa by one.
@@ -1945,7 +1971,7 @@ M $7062,$04 Generate a random number between #N$00-#N$0F.
 N $7069 The game is not in demo mode, so read the player fire button input.
 @ $7069 label=PlayerBullets_ReadInput
   $7069,$01 Disable interrupts.
-N $706A Check if the control method is the Kempson joystick?
+N $706A Check if the control method is the Kempston joystick?
   $706A,$07 Jump to #R$7077 if *#R$66F6 is not the Kempston joystick.
 N $7071 The control method is Kempston joystick, so test the fire button.
   $7071,$02 #REGa=read from the Kempston joystick port.
@@ -2335,7 +2361,7 @@ N $74AC Set the attribute buffer to all cyan.
   $74BC,$02 Set a counter in #REGb for #N$2E stars to draw.
 @ $74BE label=GameIntro_StarLoop
   $74BE,$05 Jump to #R$74E3 if #REGb is greater than or equal to #N$2D.
-N $74C3 Check if the control method is the Kempson joystick?
+N $74C3 Check if the control method is the Kempston joystick?
   $74C3,$07 Jump to #R$74D3 if *#R$66F6 is not the Kempston joystick.
 N $74CA The control method is Kempston joystick, so test the fire button.
   $74CA,$02 #REGa=read from the Kempston joystick port.

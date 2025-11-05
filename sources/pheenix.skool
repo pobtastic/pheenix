@@ -1206,9 +1206,11 @@ b$5FD4 DEFB %00000000 ; {#UDGTABLE { #UDG(#PC,$44) } TABLE#
  $6012 DEFB %00001100 ;
  $6013 DEFB %00000000 ; }
 
-; Data block at 6014
+; Graphics: Shield
+@label=Graphics_Shield_01
 b$6014 DEFB $00,$01,$00,$00,$01,$00,$00,$03
  $601C DEFB $80
+@label=Graphics_Shield_02
  $601D DEFB $00,$7D,$7C,$00,$C1,$06,$00,$83
  $6025 DEFB $83
 
@@ -2960,7 +2962,8 @@ g$66F2 DEFB $00
 @label=Flag_ActiveDemoMode
 g$66F3 DEFB $01
 
-; Game status buffer entry at 66F4
+; Demo Mode Movement
+@label=Movement_DemoMode
 g$66F4 DEFB $00
 
 ; Flag: Player Lost All Lives?
@@ -4424,7 +4427,7 @@ c$6CEE LD HL,$66A4   ; {Jump to #R$6DCF if *#R$66A4 is zero.
  $6DA5 INC C         ; Increment #REGc by one.
  $6DA6 DEC IXl       ;
  $6DA8 JR NZ,$6D3A   ; Jump to #R$6D3A if ?? is not equal to #N$00.
- $6DAA LD A,($66F3)  ; {Jump to #R$7030 if *#R$66F3 is not zero.
+ $6DAA LD A,($66F3)  ; {Jump to #R$7030 if *#R$66F3 is not active.
  $6DAD OR A          ;
  $6DAE JP NZ,$7030   ; }
  $6DB1 LD A,($66A5)  ; #REGa=*#R$66A5.
@@ -4468,53 +4471,66 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6DE2 XOR A         ; {Write #N$00 ("inactive") to *#R$6693.
  $6DE3 LD ($6693),A  ; }
  $6DE6 JR $6E20      ; Jump to #R$6E20.
-; Check for shield activation player input.
-@label=PlayerShipShield_CheckInput
-*$6DE8 LD A,($66F3)  ; {Jump to #R$6DF6 if *#R$66F3 is not zero.
+; Check for shield activation player inputs.
+; .
+; Start by checking if the game is running in demo mode or not?
+@label=PlayerShipShield_CheckDemoMode
+*$6DE8 LD A,($66F3)  ; {Jump to #R$6DF6 if *#R$66F3 is not active.
  $6DEB OR A          ;
  $6DEC JR Z,$6DF6    ; }
+; Demo mode is active, so use a random number to decide whether to
+; activate the shield or not.
  $6DEE CALL $670E    ; Call #R$670E.
  $6DF1 OR A          ; {Jump to #R$6E1B if the generated random number is zero.
  $6DF2 JR Z,$6E1B    ; }
  $6DF4 JR $6E20      ; Jump to #R$6E20.
+; Check if the control method is the Kempston joystick?
 @label=PlayerShipShield_CheckKempston
-*$6DF6 LD A,($66F6)  ; {Jump to #R$6E05 if *#R$66F6 is not equal to #N$02.
- $6DF9 CP $02        ;
+*$6DF6 LD A,($66F6)  ; {Jump to #R$6E05 if *#R$66F6 is not the Kempston
+ $6DF9 CP $02        ; joystick.
  $6DFB JR NZ,$6E05   ; }
+; The control method is Kempston joystick, so test for "down" being
+; pressed.
  $6DFD IN A,($1F)    ; #REGa=read from the Kempston joystick port.
- $6DFF AND %00000100 ; Keep only bit 2.
- $6E01 JR NZ,$6E1B   ; Jump to #R$6E1B if #REGa is not equal to #N$02.
+ $6DFF AND %00000100 ; Keep only bit 2 ("down").
+ $6E01 JR NZ,$6E1B   ; Jump to #R$6E1B if "down" is being pressed.
  $6E03 JR $6E20      ; Jump to #R$6E20.
 ; Check if the control method is the AGF joystick?
 @label=PlayerShipShield_CheckAGF
 *$6E05 CP $01        ; {Jump to #R$6E13 if *#R$66F6 is not the AGF joystick.
  $6E07 JR NZ,$6E13   ; }
- $6E09 LD A,$EF      ; #TABLE(default,centre,centre,centre,centre,centre,centre)
+; The control method is the AGF joystick, so test for "down" being
+; pressed.
+ $6E09 LD A,$EF      ; {Read from the keyboard;
+ $6E0B IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
                      ; { =h,r2 Port Number | =h,c5 Bit }
                      ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
                      ; { #N$EF | 0 | 9 | 8 | 7 | 6 }
-                     ; TABLE#
- $6E0B IN A,($FE)    ; #REGa=byte from port #N$FE.
- $6E0D BIT 4,A       ; Test bit 4 of #REGa.
- $6E0F JR Z,$6E1B    ; Jump to #R$6E1B if #REGa is equal to #N$EF.
+                     ; TABLE#}
+ $6E0D BIT 4,A       ; {Jump to #R$6E1B if "4" was pressed.
+ $6E0F JR Z,$6E1B    ; }
  $6E11 JR $6E20      ; Jump to #R$6E20.
+; Else, the only control option left is the keyboard.
+@label=PlayerShipShield_CheckKeyboard
 *$6E13 LD A,$BF      ; {Read from the keyboard;
  $6E15 IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
                      ; { =h,r2 Port Number | =h,c5 Bit }
                      ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
                      ; { #N$BF | ENTER | L | K | J | H }
                      ; TABLE#}
- $6E17 AND %00000001 ; Keep only bit 0.
- $6E19 JR NZ,$6E20   ; Jump to #R$6E20 if #REGa is not equal to #N$BF.
-*$6E1B LD (HL),$FF   ; Write #N$FF to *#REGhl.
- $6E1D DEC HL        ; Decrease #REGhl by one.
- $6E1E LD (HL),$01   ; Write #N$01 to *#REGhl.
+ $6E17 AND %00000001 ; {Jump to #R$6E20 if "ENTER" isn't being pressed.
+ $6E19 JR NZ,$6E20   ; }
+; Activate the shield.
+@label=PlayerShipShield_ActivateShield
+*$6E1B LD (HL),$FF   ; Write #N$FF to *#R$6694.
+ $6E1D DEC HL        ; {Write #N$01 to *#R$6693 to activate it.
+ $6E1E LD (HL),$01   ; }
 ; Draw the players ship.
-@label=PlayerShip_Draw
-*$6E20 LD A,($6693)  ; {Jump to #R$6EF8 if *#R$6693 is zero.
+@label=DrawPlayersShip
+*$6E20 LD A,($6693)  ; {Jump to #R$6EF8 if *#R$6693 is not active.
  $6E23 OR A          ;
  $6E24 JP Z,$6EF8    ; }
- $6E27 LD A,($66F3)  ; {Jump to #R$6E40 if *#R$66F3 is not zero.
+ $6E27 LD A,($66F3)  ; {Jump to #R$6E40 if *#R$66F3 is active.
  $6E2A OR A          ;
  $6E2B JR NZ,$6E40   ; }
  $6E2D LD A,($6694)  ; #REGa=*#R$6694.
@@ -4529,6 +4545,8 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6E3C CALL $03B5    ; #HTML(Call <a "noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
  $6E3F DI            ; Disable interrupts.
+; Draw shield graphic.
+@label=DrawShield
 *$6E40 LD HL,($66ED) ; #REGhl=*#R$66ED.
  $6E43 LD H,$52      ; #REGh=#N$52.
  $6E45 LD B,$02      ; #REGb=#N$02.
@@ -4620,8 +4638,9 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
 *$6EE1 LD DE,($66ED) ; #REGde=*#R$66ED.
  $6EE5 LD D,$50      ; #REGd=#N$50.
  $6EE7 LD HL,$617B   ; #REGhl=#R$617B.
- $6EEA LD B,$03      ; #REGb=#N$03.
-*$6EEC PUSH BC       ; {Stash #REGbc and #REGde on the stack.
+ $6EEA LD B,$03      ; Set counter in #REGb for #N$03 pixel rows.
+@label=DrawPlayersShip_Loop
+*$6EEC PUSH BC       ; {Stash the row counter and position on the stack.
  $6EED PUSH DE       ; }
  $6EEE LD BC,$0003   ; #REGbc=#N($0003,$04,$04).
  $6EF1 LDIR          ; LDIR.
@@ -4630,52 +4649,77 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6EF5 POP BC        ; Restore #REGbc from the stack.
  $6EF6 DJNZ $6EEC    ; Decrease counter by one and loop back to #R$6EEC until
                      ; counter is zero.
-*$6EF8 LD H,$50      ; #REGh=#N$50.
- $6EFA LD A,($66F3)  ; {Jump to #R$6F05 if *#R$66F3 is zero.
+; Handle player movement input.
+@label=PlayerShipShield_Movement
+*$6EF8 LD H,$50      ; Set #REGh to #N$50 (screen buffer base).
+ $6EFA LD A,($66F3)  ; {Jump to #R$6F05 if *#R$66F3 is active.
  $6EFD OR A          ;
  $6EFE JR Z,$6F05    ; }
  $6F00 LD A,($66F4)  ; #REGa=*#R$66F4.
  $6F03 JR $6F37      ; Jump to #R$6F37.
+; Check if the control method is the Kempston joystick?
+@label=PlayerShipShield_CheckKempstonMovement
 *$6F05 DI            ; Disable interrupts.
- $6F06 LD A,($66F6)  ; #REGa=*#R$66F6.
- $6F09 CP $02        ; {Jump to #R$6F1C if #REGa is not equal to #N$02.
+; The control method is Kempston joystick, so test for "left" or "right"
+; being pressed.
+ $6F06 LD A,($66F6)  ; {Jump to #R$6F1C if *#R$66F6 is not the Kempston
+ $6F09 CP $02        ; joystick.
  $6F0B JR NZ,$6F1C   ; }
  $6F0D IN A,($1F)    ; #REGa=read from the Kempston joystick port.
- $6F0F AND %00000011 ; Keep only bits 0-1.
- $6F11 CP $02        ; {Jump to #R$6F43 if #REGa is equal to #N$02.
+ $6F0F AND %00000011 ; Keep only bits 0-1 ("right" and "left").
+ $6F11 CP $02        ; {Jump to #R$6F43 if "left" is being pressed.
  $6F13 JR Z,$6F43    ; }
- $6F15 CP $01        ; {Jump to #R$6FDD if #REGa is equal to #N$01.
+ $6F15 CP $01        ; {Jump to #R$6FDD if "right" is being pressed.
  $6F17 JP Z,$6FDD    ; }
  $6F1A JR $6F40      ; Jump to #R$6F40.
-*$6F1C CP $01        ; {Jump to #R$6F33 if #REGa is not equal to #N$01.
+; Check if the control method is the AGF joystick?
+@label=PlayerShipShield_CheckAGFMovement
+*$6F1C CP $01        ; {Jump to #R$6F33 if *#R$66F6 is not the AGF joystick.
  $6F1E JR NZ,$6F33   ; }
- $6F20 LD A,$F7      ; #REGa=#N$F7.
- $6F22 IN A,($FE)    ; #REGa=byte from port #N$FE.
- $6F24 BIT 4,A       ; Test bit 4 of #REGa.
- $6F26 JR Z,$6F43    ; Jump to #R$6F43 if #REGa is equal to #N$F7.
- $6F28 LD A,$EF      ; #TABLE(default,centre,centre,centre,centre,centre,centre)
+; The control method is the AGF joystick, so test for "left" being
+; pressed.
+ $6F20 LD A,$F7      ; {Read from the keyboard;
+ $6F22 IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
+                     ; { =h,r2 Port Number | =h,c5 Bit }
+                     ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+                     ; { #N$F7 | 1 | 2 | 3 | 4 | 5 }
+                     ; TABLE#}
+ $6F24 BIT 4,A       ; {Jump to #R$6F43 if "left" ("5") is being pressed.
+ $6F26 JR Z,$6F43    ; }
+; Now test for "right" being pressed.
+ $6F28 LD A,$EF      ; {Read from the keyboard;
+ $6F2A IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
                      ; { =h,r2 Port Number | =h,c5 Bit }
                      ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
                      ; { #N$EF | 0 | 9 | 8 | 7 | 6 }
-                     ; TABLE#
- $6F2A IN A,($FE)    ; #REGa=byte from port #N$FE.
- $6F2C BIT 2,A       ; Test bit 2 of #REGa.
- $6F2E JP Z,$6FDD    ; Jump to #R$6FDD if #REGa is equal to #N$EF.
+                     ; TABLE#}
+ $6F2C BIT 2,A       ; {Jump to #R$6FDD if "right" ("8") is being pressed.
+ $6F2E JP Z,$6FDD    ; }
  $6F31 JR $6F40      ; Jump to #R$6F40.
-*$6F33 LD A,$FE      ; #REGa=#N$FE.
- $6F35 IN A,($FE)    ; #REGa=byte from port #N$FE.
-*$6F37 BIT 0,A       ; Test bit 0 of #REGa.
- $6F39 JR Z,$6F43    ; Jump to #R$6F43 if #REGa is equal to #N$FE.
- $6F3B BIT 1,A       ; Test bit 1 of #REGa.
- $6F3D JP Z,$6FDD    ; Jump to #R$6FDD if #REGa is equal to #N$FE.
-*$6F40 POP AF        ; Restore #REGaf from the stack.
+; Else, the only control option left is the keyboard.
+@label=PlayerShipShield_CheckKeyboardMovement
+*$6F33 LD A,$FE      ; {Read from the keyboard;
+ $6F35 IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
+                     ; { =h,r2 Port Number | =h,c5 Bit }
+                     ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+                     ; { #N$FE | SHIFT | Z | X | C | V }
+                     ; TABLE#}
+@label=PlayerShip_DemoMovement
+*$6F37 BIT 0,A       ; {Jump to #R$6F43 if "SHIFT" is being pressed.
+ $6F39 JR Z,$6F43    ; }
+ $6F3B BIT 1,A       ; {Jump to #R$6FDD if "Z" is being pressed.
+ $6F3D JP Z,$6FDD    ; }
+@label=PlayerShipShield_NoMovement
+*$6F40 POP AF        ; Restore the player position from the stack.
  $6F41 JR $6F93      ; Jump to #R$6F93.
-*$6F43 POP AF        ; Restore #REGaf from the stack.
- $6F44 CP $C0        ; Compare #REGa with #N$C0.
- $6F46 JR NZ,$6F52   ; Jump to #R$6F52 if #REGa is not equal to #N$C0.
- $6F48 LD A,($66A6)  ; #REGa=*#R$66A6.
- $6F4B CP $03        ; Compare #REGa with #N$03.
- $6F4D JR Z,$6F93    ; Jump to #R$6F93 if #REGa is equal to #N$03.
+; Move player ship left.
+@label=PlayerShipShield_MoveLeft
+*$6F43 POP AF        ; Restore the player position from the stack.
+ $6F44 CP $C0        ; {Jump to #R$6F52 if #REGa is not equal to #N$C0.
+ $6F46 JR NZ,$6F52   ; }
+ $6F48 LD A,($66A6)  ; {Jump to #R$6F93 if *#R$66A6 is equal to #N$03.
+ $6F4B CP $03        ;
+ $6F4D JR Z,$6F93    ; }
  $6F4F LD A,($66ED)  ; {#REGl=*#R$66ED.
 *$6F52 LD L,A        ; }
  $6F53 LD B,$02      ; #REGb=#N$02.
@@ -4767,12 +4811,15 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6FD9 DJNZ $6FB2    ; Decrease counter by one and loop back to #R$6FB2 until
                      ; counter is zero.
  $6FDB JR $7030      ; Jump to #R$7030.
-*$6FDD POP AF        ; Restore #REGaf from the stack.
- $6FDE CP $DD        ; Compare #REGa with #N$DD.
+; Move player ship right.
+@label=PlayerShipShield_MoveRight
+*$6FDD POP AF        ; Restore the player position from the stack.
+ $6FDE CP $DD        ; Compare the player position with #N$DD.
  $6FE0 LD A,($66A6)  ; #REGa=*#R$66A6.
- $6FE3 JR NZ,$6FE8   ; Jump to #R$6FE8 if #REGa is not equal to #N$DD.
- $6FE5 OR A          ; Set the bits from #REGa.
- $6FE6 JR Z,$6F93    ; Jump to #R$6F93 if #REGa is equal to #REGa.
+ $6FE3 JR NZ,$6FE8   ; Jump to #R$6FE8 if the player position is not equal to
+                     ; #N$DD.
+ $6FE5 OR A          ; {Jump to #R$6F93 if *#R$66A6 is zero.
+ $6FE6 JR Z,$6F93    ; }
 *$6FE8 OR A          ; Set the bits from #REGa.
  $6FE9 JR Z,$6FEE    ; Jump to #R$6FEE if #REGa is equal to #REGa.
  $6FEB DEC A         ; Decrease #REGa by one.
@@ -4868,7 +4915,7 @@ c$7030 LD HL,$6695   ; #REGhl=#R$6695.
 ; The game is not in demo mode, so read the player fire button input.
 @label=PlayerBullets_ReadInput
 *$7069 DI            ; Disable interrupts.
-; Check if the control method is the Kempson joystick?
+; Check if the control method is the Kempston joystick?
  $706A LD A,($66F6)  ; {Jump to #R$7077 if *#R$66F6 is not the Kempston
  $706D CP $02        ; joystick.
  $706F JR NZ,$7077   ; }
@@ -5608,7 +5655,7 @@ c$74A4 CALL $6720    ; Call #R$6720.
 *$74BE LD A,B        ; {Jump to #R$74E3 if #REGb is greater than or equal to
  $74BF CP $2D        ; #N$2D.
  $74C1 JR NC,$74E3   ; }
-; Check if the control method is the Kempson joystick?
+; Check if the control method is the Kempston joystick?
  $74C3 LD A,($66F6)  ; {Jump to #R$74D3 if *#R$66F6 is not the Kempston
  $74C6 CP $02        ; joystick.
  $74C8 JR NZ,$74D3   ; }
