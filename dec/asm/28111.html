@@ -66,7 +66,7 @@ Used by the routine at <a href="27886.html">Handler_PlayerDeathGameOver</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28118"></span>28118</td>
 <td class="instruction">LD HL,26260</td>
-<td class="comment-1" rowspan="4">Jump to <a href="28111.html#28136">PlayerShipShield_CheckInput</a> if *<a href="26260.html">ShieldTimer</a> isn't active.</td>
+<td class="comment-1" rowspan="4">Jump to <a href="28111.html#28136">PlayerShipShield_CheckDemoMode</a> if *<a href="26260.html">ShieldTimer</a> isn't active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -81,7 +81,7 @@ Used by the routine at <a href="27886.html">Handler_PlayerDeathGameOver</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28123"></span>28123</td>
-<td class="instruction">JR Z,<a href="28111.html#28136">PlayerShipShield_CheckInput</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28136">PlayerShipShield_CheckDemoMode</a></td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -113,12 +113,12 @@ Check if the timer has "wrapped around" to 255 i.e. finished counting down.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28126"></span>28126</td>
 <td class="instruction">BIT 7,(HL)</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28192">PlayerShip_Draw</a> if bit 7 of *<a href="26260.html">ShieldTimer</a> is set.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28192">DrawPlayersShip</a> if bit 7 of *<a href="26260.html">ShieldTimer</a> is set.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28128"></span>28128</td>
-<td class="instruction">JR NZ,<a href="28111.html#28192">PlayerShip_Draw</a></td>
+<td class="instruction">JR NZ,<a href="28111.html#28192">DrawPlayersShip</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -134,24 +134,27 @@ Check if the timer has "wrapped around" to 255 i.e. finished counting down.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28134"></span>28134</td>
-<td class="instruction">JR <a href="28111.html#28192">PlayerShip_Draw</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">PlayerShip_Draw</a>.</td>
+<td class="instruction">JR <a href="28111.html#28192">DrawPlayersShip</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">DrawPlayersShip</a>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
 <span id="28136"></span>
 <div class="comments">
 <div class="paragraph">
-Check for shield activation player input.
+Check for shield activation player inputs.
+</div>
+<div class="paragraph">
+Start by checking if the game is running in demo mode or not?
 </div>
 </div>
 </td>
 </tr>
 <tr>
-<td class="asm-label">PlayerShipShield_CheckInput</td>
+<td class="asm-label">PlayerShipShield_CheckDemoMode</td>
 <td class="address-2"><span id="28136"></span>28136</td>
 <td class="instruction">LD A,(26355)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28150">PlayerShipShield_CheckKempston</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28150">PlayerShipShield_CheckKempston</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is not active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -164,6 +167,16 @@ Check for shield activation player input.
 <td class="instruction">JR Z,<a href="28111.html#28150">PlayerShipShield_CheckKempston</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="28142"></span>
+<div class="comments">
+<div class="paragraph">
+Demo mode is active, so use a random number to decide whether to activate the shield or not.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28142"></span>28142</td>
 <td class="instruction">CALL <a href="26382.html">GenerateRandomNumber</a></td>
@@ -173,24 +186,34 @@ Check for shield activation player input.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28145"></span>28145</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28187">Handler_PlayerShipShield_1</a> if the generated random number is zero.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28187">PlayerShipShield_ActivateShield</a> if the generated random number is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28146"></span>28146</td>
-<td class="instruction">JR Z,<a href="28111.html#28187">Handler_PlayerShipShield_1</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28187">PlayerShipShield_ActivateShield</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28148"></span>28148</td>
-<td class="instruction">JR <a href="28111.html#28192">PlayerShip_Draw</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">PlayerShip_Draw</a>.</td>
+<td class="instruction">JR <a href="28111.html#28192">DrawPlayersShip</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">DrawPlayersShip</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28150"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the Kempston joystick?
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label">PlayerShipShield_CheckKempston</td>
 <td class="address-2"><span id="28150"></span>28150</td>
 <td class="instruction">LD A,(26358)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28165">PlayerShipShield_CheckAGF</a> if *<a href="26358.html">ControlMethod</a> is not equal to 2.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28165">PlayerShipShield_CheckAGF</a> if *<a href="26358.html">ControlMethod</a> is not the Kempston joystick.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -203,6 +226,16 @@ Check for shield activation player input.
 <td class="instruction">JR NZ,<a href="28111.html#28165">PlayerShipShield_CheckAGF</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="28157"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is Kempston joystick, so test for "down" being pressed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28157"></span>28157</td>
 <td class="instruction">IN A,(31)</td>
@@ -212,19 +245,19 @@ Check for shield activation player input.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28159"></span>28159</td>
 <td class="instruction">AND %00000100</td>
-<td class="comment-1" rowspan="1">Keep only bit 2.</td>
+<td class="comment-1" rowspan="1">Keep only bit 2 ("down").</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28161"></span>28161</td>
-<td class="instruction">JR NZ,<a href="28111.html#28187">Handler_PlayerShipShield_1</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28187">Handler_PlayerShipShield_1</a> if <span class="register">A</span> is not equal to 2.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28187">PlayerShipShield_ActivateShield</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28187">PlayerShipShield_ActivateShield</a> if "down" is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28163"></span>28163</td>
-<td class="instruction">JR <a href="28111.html#28192">PlayerShip_Draw</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">PlayerShip_Draw</a>.</td>
+<td class="instruction">JR <a href="28111.html#28192">DrawPlayersShip</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">DrawPlayersShip</a>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -240,18 +273,28 @@ Check if the control method is the AGF joystick?
 <td class="asm-label">PlayerShipShield_CheckAGF</td>
 <td class="address-2"><span id="28165"></span>28165</td>
 <td class="instruction">CP 1</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28179">Handler_PlayerShipShield_0</a> if *<a href="26358.html">ControlMethod</a> is not the AGF joystick.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28179">PlayerShipShield_CheckKeyboard</a> if *<a href="26358.html">ControlMethod</a> is not the AGF joystick.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28167"></span>28167</td>
-<td class="instruction">JR NZ,<a href="28111.html#28179">Handler_PlayerShipShield_0</a></td>
+<td class="instruction">JR NZ,<a href="28111.html#28179">PlayerShipShield_CheckKeyboard</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28169"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is the AGF joystick, so test for "down" being pressed.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28169"></span>28169</td>
 <td class="instruction">LD A,239</td>
-<td class="comment-1" rowspan="1"><table class="default">
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
 <tr>
 <th colspan="1" rowspan="2">Port Number</th>
 <th colspan="5" rowspan="1">Bit</th>
@@ -277,28 +320,36 @@ Check if the control method is the AGF joystick?
 <td class="asm-label"></td>
 <td class="address-1"><span id="28171"></span>28171</td>
 <td class="instruction">IN A,(254)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=byte from port 254.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28173"></span>28173</td>
 <td class="instruction">BIT 4,A</td>
-<td class="comment-1" rowspan="1">Test bit 4 of <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28187">PlayerShipShield_ActivateShield</a> if "4" was pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28175"></span>28175</td>
-<td class="instruction">JR Z,<a href="28111.html#28187">Handler_PlayerShipShield_1</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28187">Handler_PlayerShipShield_1</a> if <span class="register">A</span> is equal to 239.</td>
+<td class="instruction">JR Z,<a href="28111.html#28187">PlayerShipShield_ActivateShield</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28177"></span>28177</td>
-<td class="instruction">JR <a href="28111.html#28192">PlayerShip_Draw</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">PlayerShip_Draw</a>.</td>
+<td class="instruction">JR <a href="28111.html#28192">DrawPlayersShip</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">DrawPlayersShip</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_0</td>
+<td class="routine-comment" colspan="5">
+<span id="28179"></span>
+<div class="comments">
+<div class="paragraph">
+Else, the only control option left is the keyboard.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_CheckKeyboard</td>
 <td class="address-2"><span id="28179"></span>28179</td>
 <td class="instruction">LD A,191</td>
 <td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
@@ -332,31 +383,39 @@ Check if the control method is the AGF joystick?
 <td class="asm-label"></td>
 <td class="address-1"><span id="28183"></span>28183</td>
 <td class="instruction">AND %00000001</td>
-<td class="comment-1" rowspan="1">Keep only bit 0.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28192">DrawPlayersShip</a> if "ENTER" isn't being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28185"></span>28185</td>
-<td class="instruction">JR NZ,<a href="28111.html#28192">PlayerShip_Draw</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28192">PlayerShip_Draw</a> if <span class="register">A</span> is not equal to 191.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28192">DrawPlayersShip</a></td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_1</td>
+<td class="routine-comment" colspan="5">
+<span id="28187"></span>
+<div class="comments">
+<div class="paragraph">
+Activate the shield.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_ActivateShield</td>
 <td class="address-2"><span id="28187"></span>28187</td>
 <td class="instruction">LD (HL),255</td>
-<td class="comment-1" rowspan="1">Write 255 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write 255 to *<a href="26260.html">ShieldTimer</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28189"></span>28189</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="2">Write 1 to *<a href="26259.html">Flag_Shield</a> to activate it.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28190"></span>28190</td>
 <td class="instruction">LD (HL),1</td>
-<td class="comment-1" rowspan="1">Write 1 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -369,10 +428,10 @@ Draw the players ship.
 </td>
 </tr>
 <tr>
-<td class="asm-label">PlayerShip_Draw</td>
+<td class="asm-label">DrawPlayersShip</td>
 <td class="address-2"><span id="28192"></span>28192</td>
 <td class="instruction">LD A,(26259)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28408">Handler_PlayerShipShield_14</a> if *<a href="26259.html">Flag_Shield</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28408">PlayerShipShield_Movement</a> if *<a href="26259.html">Flag_Shield</a> is not active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -382,13 +441,13 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28196"></span>28196</td>
-<td class="instruction">JP Z,<a href="28111.html#28408">Handler_PlayerShipShield_14</a></td>
+<td class="instruction">JP Z,<a href="28111.html#28408">PlayerShipShield_Movement</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28199"></span>28199</td>
 <td class="instruction">LD A,(26355)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28224">Handler_PlayerShipShield_2</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28224">DrawShield</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -398,7 +457,7 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28203"></span>28203</td>
-<td class="instruction">JR NZ,<a href="28111.html#28224">Handler_PlayerShipShield_2</a></td>
+<td class="instruction">JR NZ,<a href="28111.html#28224">DrawShield</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -467,7 +526,17 @@ Draw the players ship.
 <td class="comment-1" rowspan="1">Disable interrupts.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_2</td>
+<td class="routine-comment" colspan="5">
+<span id="28224"></span>
+<div class="comments">
+<div class="paragraph">
+Draw shield graphic.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">DrawShield</td>
 <td class="address-2"><span id="28224"></span>28224</td>
 <td class="instruction">LD HL,(26349)</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
@@ -497,7 +566,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_3</td>
+<td class="asm-label">Handler_PlayerShipShield_0</td>
 <td class="address-2"><span id="28235"></span>28235</td>
 <td class="instruction">OR A</td>
 <td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
@@ -511,14 +580,14 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28239"></span>28239</td>
-<td class="instruction">JR NZ,<a href="28111.html#28258">Handler_PlayerShipShield_4</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28258">Handler_PlayerShipShield_4</a> if <span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28258">Handler_PlayerShipShield_1</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28258">Handler_PlayerShipShield_1</a> if <span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28241"></span>28241</td>
 <td class="instruction">LD A,(26260)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28258">Handler_PlayerShipShield_4</a> if bit 2 of *<a href="26260.html">ShieldTimer</a> is not set.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28258">Handler_PlayerShipShield_1</a> if bit 2 of *<a href="26260.html">ShieldTimer</a> is not set.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -528,7 +597,7 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28246"></span>28246</td>
-<td class="instruction">JR Z,<a href="28111.html#28258">Handler_PlayerShipShield_4</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28258">Handler_PlayerShipShield_1</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -540,7 +609,7 @@ Draw the players ship.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28251"></span>28251</td>
 <td class="instruction">LD A,B</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28258">Handler_PlayerShipShield_4</a> if <span class="register">B</span> is not equal to 1.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28258">Handler_PlayerShipShield_1</a> if <span class="register">B</span> is not equal to 1.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -550,7 +619,7 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28254"></span>28254</td>
-<td class="instruction">JR NZ,<a href="28111.html#28258">Handler_PlayerShipShield_4</a></td>
+<td class="instruction">JR NZ,<a href="28111.html#28258">Handler_PlayerShipShield_1</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -559,7 +628,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">D</span>=128.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_4</td>
+<td class="asm-label">Handler_PlayerShipShield_1</td>
 <td class="address-2"><span id="28258"></span>28258</td>
 <td class="instruction">LD (28295),DE</td>
 <td class="comment-1" rowspan="1">Write <span class="register">DE</span> to *<a href="28111.html#28295">28295</a>.</td>
@@ -627,8 +696,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28281"></span>28281</td>
-<td class="instruction">JR Z,<a href="28111.html#28285">Handler_PlayerShipShield_5</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28285">Handler_PlayerShipShield_5</a> if <span class="register">A</span> is equal to 126.</td>
+<td class="instruction">JR Z,<a href="28111.html#28285">Handler_PlayerShipShield_2</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28285">Handler_PlayerShipShield_2</a> if <span class="register">A</span> is equal to 126.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -637,7 +706,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">A</span>+=64.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_5</td>
+<td class="asm-label">Handler_PlayerShipShield_2</td>
 <td class="address-2"><span id="28285"></span>28285</td>
 <td class="instruction">ADD A,8</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>+=8.</td>
@@ -645,8 +714,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28287"></span>28287</td>
-<td class="instruction">DJNZ <a href="28111.html#28285">Handler_PlayerShipShield_5</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28285">Handler_PlayerShipShield_5</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28285">Handler_PlayerShipShield_2</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28285">Handler_PlayerShipShield_2</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -667,7 +736,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=6.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_6</td>
+<td class="asm-label">Handler_PlayerShipShield_3</td>
 <td class="address-2"><span id="28293"></span>28293</td>
 <td class="instruction">SET 0,(HL)</td>
 <td class="comment-1" rowspan="1">Set bit 0 of *<span class="register">HL</span>.</td>
@@ -687,8 +756,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28298"></span>28298</td>
-<td class="instruction">DJNZ <a href="28111.html#28293">Handler_PlayerShipShield_6</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28293">Handler_PlayerShipShield_6</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28293">Handler_PlayerShipShield_3</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28293">Handler_PlayerShipShield_3</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -721,7 +790,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_7</td>
+<td class="asm-label">Handler_PlayerShipShield_4</td>
 <td class="address-2"><span id="28312"></span>28312</td>
 <td class="instruction">SET 0,(HL)</td>
 <td class="comment-1" rowspan="1">Set bit 0 of *<span class="register">HL</span>.</td>
@@ -741,8 +810,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28317"></span>28317</td>
-<td class="instruction">DJNZ <a href="28111.html#28312">Handler_PlayerShipShield_7</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28312">Handler_PlayerShipShield_7</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28312">Handler_PlayerShipShield_4</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28312">Handler_PlayerShipShield_4</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -794,8 +863,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28333"></span>28333</td>
-<td class="instruction">DJNZ <a href="28111.html#28235">Handler_PlayerShipShield_3</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28235">Handler_PlayerShipShield_3</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28235">Handler_PlayerShipShield_0</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28235">Handler_PlayerShipShield_0</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -819,22 +888,22 @@ Draw the players ship.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28341"></span>28341</td>
 <td class="instruction">LD HL,24596</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24596.html">24596</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24596.html">Graphics_Shield_01</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28344"></span>28344</td>
-<td class="instruction">JR Z,<a href="28111.html#28349">Handler_PlayerShipShield_8</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28349">Handler_PlayerShipShield_8</a> if <span class="register">L</span> is equal to 82.</td>
+<td class="instruction">JR Z,<a href="28111.html#28349">Handler_PlayerShipShield_5</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28349">Handler_PlayerShipShield_5</a> if <span class="register">L</span> is equal to 82.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28346"></span>28346</td>
 <td class="instruction">LD HL,24605</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24596.html#24605">24605</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="24596.html#24605">Graphics_Shield_02</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_8</td>
+<td class="asm-label">Handler_PlayerShipShield_5</td>
 <td class="address-2"><span id="28349"></span>28349</td>
 <td class="instruction">LD DE,24955</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="24923.html#24955">24955</a>.</td>
@@ -855,7 +924,7 @@ Draw the players ship.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28356"></span>28356</td>
 <td class="instruction">LD A,(26278)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28385">Handler_PlayerShipShield_12</a> if *<a href="26278.html">BulletIndex</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28385">Handler_PlayerShipShield_9</a> if *<a href="26278.html">BulletIndex</a> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -865,7 +934,7 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28360"></span>28360</td>
-<td class="instruction">JR Z,<a href="28111.html#28385">Handler_PlayerShipShield_12</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28385">Handler_PlayerShipShield_9</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -874,7 +943,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=*<a href="26278.html">BulletIndex</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_9</td>
+<td class="asm-label">Handler_PlayerShipShield_6</td>
 <td class="address-2"><span id="28363"></span>28363</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
@@ -892,7 +961,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=9.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_10</td>
+<td class="asm-label">Handler_PlayerShipShield_7</td>
 <td class="address-2"><span id="28369"></span>28369</td>
 <td class="instruction">SLA (HL)</td>
 <td class="comment-1" rowspan="1">Shift *<span class="register">HL</span> left (with carry).</td>
@@ -918,8 +987,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28375"></span>28375</td>
-<td class="instruction">JR Z,<a href="28111.html#28379">Handler_PlayerShipShield_11</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28379">Handler_PlayerShipShield_11</a> if <span class="register">HL</span> is equal to <span class="register">A</span>.</td>
+<td class="instruction">JR Z,<a href="28111.html#28379">Handler_PlayerShipShield_8</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28379">Handler_PlayerShipShield_8</a> if <span class="register">HL</span> is equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -928,7 +997,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1">Set bit 0 of *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_11</td>
+<td class="asm-label">Handler_PlayerShipShield_8</td>
 <td class="address-2"><span id="28379"></span>28379</td>
 <td class="instruction">INC HL</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
@@ -936,8 +1005,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28380"></span>28380</td>
-<td class="instruction">DJNZ <a href="28111.html#28369">Handler_PlayerShipShield_10</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28369">Handler_PlayerShipShield_10</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28369">Handler_PlayerShipShield_7</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28369">Handler_PlayerShipShield_7</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -948,11 +1017,11 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28383"></span>28383</td>
-<td class="instruction">DJNZ <a href="28111.html#28363">Handler_PlayerShipShield_9</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28363">Handler_PlayerShipShield_9</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28363">Handler_PlayerShipShield_6</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28363">Handler_PlayerShipShield_6</a> until counter is zero.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_12</td>
+<td class="asm-label">Handler_PlayerShipShield_9</td>
 <td class="address-2"><span id="28385"></span>28385</td>
 <td class="instruction">LD DE,(26349)</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
@@ -973,13 +1042,13 @@ Draw the players ship.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28394"></span>28394</td>
 <td class="instruction">LD B,3</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=3.</td>
+<td class="comment-1" rowspan="1">Set counter in <span class="register">B</span> for 3 pixel rows.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_13</td>
+<td class="asm-label">DrawPlayersShip_Loop</td>
 <td class="address-2"><span id="28396"></span>28396</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">DE</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the row counter and position on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1019,20 +1088,30 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28406"></span>28406</td>
-<td class="instruction">DJNZ <a href="28111.html#28396">Handler_PlayerShipShield_13</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28396">Handler_PlayerShipShield_13</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28396">DrawPlayersShip_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28396">DrawPlayersShip_Loop</a> until counter is zero.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_14</td>
+<td class="routine-comment" colspan="5">
+<span id="28408"></span>
+<div class="comments">
+<div class="paragraph">
+Handle player movement input.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_Movement</td>
 <td class="address-2"><span id="28408"></span>28408</td>
 <td class="instruction">LD H,80</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=80.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">H</span> to 80 (screen buffer base).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28410"></span>28410</td>
 <td class="instruction">LD A,(26355)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28421">Handler_PlayerShipShield_15</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28421">PlayerShipShield_CheckKempstonMovement</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1042,42 +1121,61 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28414"></span>28414</td>
-<td class="instruction">JR Z,<a href="28111.html#28421">Handler_PlayerShipShield_15</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28421">PlayerShipShield_CheckKempstonMovement</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28416"></span>28416</td>
 <td class="instruction">LD A,(26356)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26356.html">26356</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26356.html">Movement_DemoMode</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28419"></span>28419</td>
-<td class="instruction">JR <a href="28111.html#28471">Handler_PlayerShipShield_18</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28471">Handler_PlayerShipShield_18</a>.</td>
+<td class="instruction">JR <a href="28111.html#28471">PlayerShip_DemoMovement</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28471">PlayerShip_DemoMovement</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_15</td>
+<td class="routine-comment" colspan="5">
+<span id="28421"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the Kempston joystick?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_CheckKempstonMovement</td>
 <td class="address-2"><span id="28421"></span>28421</td>
 <td class="instruction">DI</td>
 <td class="comment-1" rowspan="1">Disable interrupts.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="28422"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is Kempston joystick, so test for "left" or "right" being pressed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28422"></span>28422</td>
 <td class="instruction">LD A,(26358)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26358.html">ControlMethod</a>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28444">PlayerShipShield_CheckAGFMovement</a> if *<a href="26358.html">ControlMethod</a> is not the Kempston joystick.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28425"></span>28425</td>
 <td class="instruction">CP 2</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28444">Handler_PlayerShipShield_16</a> if <span class="register">A</span> is not equal to 2.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28427"></span>28427</td>
-<td class="instruction">JR NZ,<a href="28111.html#28444">Handler_PlayerShipShield_16</a></td>
+<td class="instruction">JR NZ,<a href="28111.html#28444">PlayerShipShield_CheckAGFMovement</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1089,76 +1187,124 @@ Draw the players ship.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28431"></span>28431</td>
 <td class="instruction">AND %00000011</td>
-<td class="comment-1" rowspan="1">Keep only bits 0-1.</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-1 ("right" and "left").</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28433"></span>28433</td>
 <td class="instruction">CP 2</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28483">Handler_PlayerShipShield_20</a> if <span class="register">A</span> is equal to 2.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28483">PlayerShipShield_MoveLeft</a> if "left" is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28435"></span>28435</td>
-<td class="instruction">JR Z,<a href="28111.html#28483">Handler_PlayerShipShield_20</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28483">PlayerShipShield_MoveLeft</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28437"></span>28437</td>
 <td class="instruction">CP 1</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28637">Handler_PlayerShipShield_37</a> if <span class="register">A</span> is equal to 1.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28637">PlayerShipShield_MoveRight</a> if "right" is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28439"></span>28439</td>
-<td class="instruction">JP Z,<a href="28111.html#28637">Handler_PlayerShipShield_37</a></td>
+<td class="instruction">JP Z,<a href="28111.html#28637">PlayerShipShield_MoveRight</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28442"></span>28442</td>
-<td class="instruction">JR <a href="28111.html#28480">Handler_PlayerShipShield_19</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28480">Handler_PlayerShipShield_19</a>.</td>
+<td class="instruction">JR <a href="28111.html#28480">PlayerShipShield_NoMovement</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28480">PlayerShipShield_NoMovement</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_16</td>
+<td class="routine-comment" colspan="5">
+<span id="28444"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the AGF joystick?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_CheckAGFMovement</td>
 <td class="address-2"><span id="28444"></span>28444</td>
 <td class="instruction">CP 1</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28467">Handler_PlayerShipShield_17</a> if <span class="register">A</span> is not equal to 1.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28467">PlayerShipShield_CheckKeyboardMovement</a> if *<a href="26358.html">ControlMethod</a> is not the AGF joystick.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28446"></span>28446</td>
-<td class="instruction">JR NZ,<a href="28111.html#28467">Handler_PlayerShipShield_17</a></td>
+<td class="instruction">JR NZ,<a href="28111.html#28467">PlayerShipShield_CheckKeyboardMovement</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28448"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is the AGF joystick, so test for "left" being pressed.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28448"></span>28448</td>
 <td class="instruction">LD A,247</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=247.</td>
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">247</td>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1">3</td>
+<td class="centre" colspan="1" rowspan="1">4</td>
+<td class="centre" colspan="1" rowspan="1">5</td>
+</tr>
+</table></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28450"></span>28450</td>
 <td class="instruction">IN A,(254)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=byte from port 254.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28452"></span>28452</td>
 <td class="instruction">BIT 4,A</td>
-<td class="comment-1" rowspan="1">Test bit 4 of <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28483">PlayerShipShield_MoveLeft</a> if "left" ("5") is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28454"></span>28454</td>
-<td class="instruction">JR Z,<a href="28111.html#28483">Handler_PlayerShipShield_20</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28483">Handler_PlayerShipShield_20</a> if <span class="register">A</span> is equal to 247.</td>
+<td class="instruction">JR Z,<a href="28111.html#28483">PlayerShipShield_MoveLeft</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28456"></span>
+<div class="comments">
+<div class="paragraph">
+Now test for "right" being pressed.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28456"></span>28456</td>
 <td class="instruction">LD A,239</td>
-<td class="comment-1" rowspan="1"><table class="default">
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
 <tr>
 <th colspan="1" rowspan="2">Port Number</th>
 <th colspan="5" rowspan="1">Bit</th>
@@ -1184,67 +1330,92 @@ Draw the players ship.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28458"></span>28458</td>
 <td class="instruction">IN A,(254)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=byte from port 254.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28460"></span>28460</td>
 <td class="instruction">BIT 2,A</td>
-<td class="comment-1" rowspan="1">Test bit 2 of <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28637">PlayerShipShield_MoveRight</a> if "right" ("8") is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28462"></span>28462</td>
-<td class="instruction">JP Z,<a href="28111.html#28637">Handler_PlayerShipShield_37</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28637">Handler_PlayerShipShield_37</a> if <span class="register">A</span> is equal to 239.</td>
+<td class="instruction">JP Z,<a href="28111.html#28637">PlayerShipShield_MoveRight</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28465"></span>28465</td>
-<td class="instruction">JR <a href="28111.html#28480">Handler_PlayerShipShield_19</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28480">Handler_PlayerShipShield_19</a>.</td>
+<td class="instruction">JR <a href="28111.html#28480">PlayerShipShield_NoMovement</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28480">PlayerShipShield_NoMovement</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_17</td>
+<td class="routine-comment" colspan="5">
+<span id="28467"></span>
+<div class="comments">
+<div class="paragraph">
+Else, the only control option left is the keyboard.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_CheckKeyboardMovement</td>
 <td class="address-2"><span id="28467"></span>28467</td>
 <td class="instruction">LD A,254</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=254.</td>
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">254</td>
+<td class="centre" colspan="1" rowspan="1">SHIFT</td>
+<td class="centre" colspan="1" rowspan="1">Z</td>
+<td class="centre" colspan="1" rowspan="1">X</td>
+<td class="centre" colspan="1" rowspan="1">C</td>
+<td class="centre" colspan="1" rowspan="1">V</td>
+</tr>
+</table></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28469"></span>28469</td>
 <td class="instruction">IN A,(254)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=byte from port 254.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_18</td>
+<td class="asm-label">PlayerShip_DemoMovement</td>
 <td class="address-2"><span id="28471"></span>28471</td>
 <td class="instruction">BIT 0,A</td>
-<td class="comment-1" rowspan="1">Test bit 0 of <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28483">PlayerShipShield_MoveLeft</a> if "SHIFT" is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28473"></span>28473</td>
-<td class="instruction">JR Z,<a href="28111.html#28483">Handler_PlayerShipShield_20</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28483">Handler_PlayerShipShield_20</a> if <span class="register">A</span> is equal to 254.</td>
+<td class="instruction">JR Z,<a href="28111.html#28483">PlayerShipShield_MoveLeft</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28475"></span>28475</td>
 <td class="instruction">BIT 1,A</td>
-<td class="comment-1" rowspan="1">Test bit 1 of <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28637">PlayerShipShield_MoveRight</a> if "Z" is being pressed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28477"></span>28477</td>
-<td class="instruction">JP Z,<a href="28111.html#28637">Handler_PlayerShipShield_37</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28637">Handler_PlayerShipShield_37</a> if <span class="register">A</span> is equal to 254.</td>
+<td class="instruction">JP Z,<a href="28111.html#28637">PlayerShipShield_MoveRight</a></td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_19</td>
+<td class="asm-label">PlayerShipShield_NoMovement</td>
 <td class="address-2"><span id="28480"></span>28480</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the player position from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1253,40 +1424,47 @@ Draw the players ship.
 <td class="comment-1" rowspan="1">Jump to <a href="28111.html#28563">PlayerShipShield_UpdatePosition</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_20</td>
+<td class="routine-comment" colspan="5">
+<span id="28483"></span>
+<div class="comments">
+<div class="paragraph">
+Move player ship left.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_MoveLeft</td>
 <td class="address-2"><span id="28483"></span>28483</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the player position from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28484"></span>28484</td>
 <td class="instruction">CP 192</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 192.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28498">Handler_PlayerShipShield_10</a> if <span class="register">A</span> is not equal to 192.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28486"></span>28486</td>
-<td class="instruction">JR NZ,<a href="28111.html#28498">Handler_PlayerShipShield_21</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28498">Handler_PlayerShipShield_21</a> if <span class="register">A</span> is not equal to 192.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28498">Handler_PlayerShipShield_10</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28488"></span>28488</td>
 <td class="instruction">LD A,(26278)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26278.html">BulletIndex</a>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28563">PlayerShipShield_UpdatePosition</a> if *<a href="26278.html">BulletIndex</a> is equal to 3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28491"></span>28491</td>
 <td class="instruction">CP 3</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28493"></span>28493</td>
 <td class="instruction">JR Z,<a href="28111.html#28563">PlayerShipShield_UpdatePosition</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28563">PlayerShipShield_UpdatePosition</a> if <span class="register">A</span> is equal to 3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1295,7 +1473,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="2"><span class="register">L</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_21</td>
+<td class="asm-label">Handler_PlayerShipShield_10</td>
 <td class="address-2"><span id="28498"></span>28498</td>
 <td class="instruction">LD L,A</td>
 </tr>
@@ -1306,7 +1484,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=2.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_22</td>
+<td class="asm-label">Handler_PlayerShipShield_11</td>
 <td class="address-2"><span id="28501"></span>28501</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -1323,7 +1501,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_23</td>
+<td class="asm-label">Handler_PlayerShipShield_12</td>
 <td class="address-2"><span id="28505"></span>28505</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -1340,7 +1518,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=3.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_24</td>
+<td class="asm-label">Handler_PlayerShipShield_13</td>
 <td class="address-2"><span id="28509"></span>28509</td>
 <td class="instruction">SLA (HL)</td>
 <td class="comment-1" rowspan="1">Shift *<span class="register">HL</span> left (with carry).</td>
@@ -1366,8 +1544,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28515"></span>28515</td>
-<td class="instruction">JR Z,<a href="28111.html#28519">Handler_PlayerShipShield_25</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28519">Handler_PlayerShipShield_25</a> if <span class="register">HL</span> is equal to 3.</td>
+<td class="instruction">JR Z,<a href="28111.html#28519">Handler_PlayerShipShield_14</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28519">Handler_PlayerShipShield_14</a> if <span class="register">HL</span> is equal to 3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1376,7 +1554,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1">Set bit 0 of *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_25</td>
+<td class="asm-label">Handler_PlayerShipShield_14</td>
 <td class="address-2"><span id="28519"></span>28519</td>
 <td class="instruction">INC HL</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
@@ -1384,8 +1562,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28520"></span>28520</td>
-<td class="instruction">DJNZ <a href="28111.html#28509">Handler_PlayerShipShield_24</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28509">Handler_PlayerShipShield_24</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28509">Handler_PlayerShipShield_13</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28509">Handler_PlayerShipShield_13</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1420,8 +1598,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28528"></span>28528</td>
-<td class="instruction">DJNZ <a href="28111.html#28505">Handler_PlayerShipShield_23</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28505">Handler_PlayerShipShield_23</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28505">Handler_PlayerShipShield_12</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28505">Handler_PlayerShipShield_12</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1444,14 +1622,14 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28534"></span>28534</td>
-<td class="instruction">DJNZ <a href="28111.html#28501">Handler_PlayerShipShield_22</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28501">Handler_PlayerShipShield_22</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28501">Handler_PlayerShipShield_11</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28501">Handler_PlayerShipShield_11</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28536"></span>28536</td>
 <td class="instruction">LD A,(26278)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28546">Handler_PlayerShipShield_26</a> if *<a href="26278.html">BulletIndex</a> is equal to 7.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28546">Handler_PlayerShipShield_15</a> if *<a href="26278.html">BulletIndex</a> is equal to 7.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1461,7 +1639,7 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28541"></span>28541</td>
-<td class="instruction">JR Z,<a href="28111.html#28546">Handler_PlayerShipShield_26</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28546">Handler_PlayerShipShield_15</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1472,17 +1650,17 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28544"></span>28544</td>
-<td class="instruction">JR <a href="28111.html#28547">Handler_PlayerShipShield_27</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28547">Handler_PlayerShipShield_27</a>.</td>
+<td class="instruction">JR <a href="28111.html#28547">Handler_PlayerShipShield_16</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28547">Handler_PlayerShipShield_16</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_26</td>
+<td class="asm-label">Handler_PlayerShipShield_15</td>
 <td class="address-2"><span id="28546"></span>28546</td>
 <td class="instruction">XOR A</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=0.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_27</td>
+<td class="asm-label">Handler_PlayerShipShield_16</td>
 <td class="address-2"><span id="28547"></span>28547</td>
 <td class="instruction">LD (26278),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26278.html">BulletIndex</a>.</td>
@@ -1502,8 +1680,8 @@ Draw the players ship.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28554"></span>28554</td>
-<td class="instruction">JR NZ,<a href="28111.html#28557">Handler_PlayerShipShield_28</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28557">Handler_PlayerShipShield_28</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28557">Handler_PlayerShipShield_17</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28557">Handler_PlayerShipShield_17</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1512,7 +1690,7 @@ Draw the players ship.
 <td class="comment-1" rowspan="1">Decrease <span class="register">A</span> by one.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_28</td>
+<td class="asm-label">Handler_PlayerShipShield_17</td>
 <td class="address-2"><span id="28557"></span>28557</td>
 <td class="instruction">LD (26349),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
@@ -1562,7 +1740,7 @@ Update the ship attributes.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28573"></span>28573</td>
 <td class="instruction">LD A,(26259)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28590">Handler_PlayerShipShield_29</a> if *<a href="26259.html">Flag_Shield</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28590">Handler_PlayerShipShield_18</a> if *<a href="26259.html">Flag_Shield</a> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1572,13 +1750,13 @@ Update the ship attributes.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28577"></span>28577</td>
-<td class="instruction">JR Z,<a href="28111.html#28590">Handler_PlayerShipShield_29</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28590">Handler_PlayerShipShield_18</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28579"></span>28579</td>
 <td class="instruction">LD A,(26260)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28590">Handler_PlayerShipShield_29</a> if bit 2 of *<a href="26260.html">ShieldTimer</a> is not set.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28111.html#28590">Handler_PlayerShipShield_18</a> if bit 2 of *<a href="26260.html">ShieldTimer</a> is not set.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1588,7 +1766,7 @@ Update the ship attributes.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28584"></span>28584</td>
-<td class="instruction">JR Z,<a href="28111.html#28590">Handler_PlayerShipShield_29</a></td>
+<td class="instruction">JR Z,<a href="28111.html#28590">Handler_PlayerShipShield_18</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1599,24 +1777,24 @@ Update the ship attributes.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28588"></span>28588</td>
-<td class="instruction">JR <a href="28111.html#28592">Handler_PlayerShipShield_30</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28592">Handler_PlayerShipShield_30</a>.</td>
+<td class="instruction">JR <a href="28111.html#28592">Handler_PlayerShipShield_19</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28592">Handler_PlayerShipShield_19</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_29</td>
+<td class="asm-label">Handler_PlayerShipShield_18</td>
 <td class="address-2"><span id="28590"></span>28590</td>
 <td class="instruction">LD A,70</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=INK:YELLOW,
 PAPER:BLACK(BRIGHT).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_30</td>
+<td class="asm-label">Handler_PlayerShipShield_19</td>
 <td class="address-2"><span id="28592"></span>28592</td>
 <td class="instruction">LD B,2</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=2.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_31</td>
+<td class="asm-label">Handler_PlayerShipShield_20</td>
 <td class="address-2"><span id="28594"></span>28594</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -1647,8 +1825,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28600"></span>28600</td>
-<td class="instruction">JR Z,<a href="28111.html#28606">Handler_PlayerShipShield_32</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28606">Handler_PlayerShipShield_32</a> if <span class="register">A</span> is equal to 70.</td>
+<td class="instruction">JR Z,<a href="28111.html#28606">Handler_PlayerShipShield_21</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28606">Handler_PlayerShipShield_21</a> if <span class="register">A</span> is equal to 70.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1659,17 +1837,17 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28604"></span>28604</td>
-<td class="instruction">JR NZ,<a href="28111.html#28608">Handler_PlayerShipShield_33</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28608">Handler_PlayerShipShield_33</a> if <span class="register">A</span> is not equal to 7.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28608">Handler_PlayerShipShield_22</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28608">Handler_PlayerShipShield_22</a> if <span class="register">A</span> is not equal to 7.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_32</td>
+<td class="asm-label">Handler_PlayerShipShield_21</td>
 <td class="address-2"><span id="28606"></span>28606</td>
 <td class="instruction">LD (HL),0</td>
 <td class="comment-1" rowspan="1">Write 0 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_33</td>
+<td class="asm-label">Handler_PlayerShipShield_22</td>
 <td class="address-2"><span id="28608"></span>28608</td>
 <td class="instruction">POP AF</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
@@ -1687,7 +1865,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=3.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_34</td>
+<td class="asm-label">Handler_PlayerShipShield_23</td>
 <td class="address-2"><span id="28612"></span>28612</td>
 <td class="instruction">LD (HL),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
@@ -1701,8 +1879,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28614"></span>28614</td>
-<td class="instruction">DJNZ <a href="28111.html#28612">Handler_PlayerShipShield_34</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28612">Handler_PlayerShipShield_34</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28612">Handler_PlayerShipShield_23</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28612">Handler_PlayerShipShield_23</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1725,8 +1903,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28620"></span>28620</td>
-<td class="instruction">JR Z,<a href="28111.html#28626">Handler_PlayerShipShield_35</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28626">Handler_PlayerShipShield_35</a> if <span class="register">A</span> is equal to 70.</td>
+<td class="instruction">JR Z,<a href="28111.html#28626">Handler_PlayerShipShield_24</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28626">Handler_PlayerShipShield_24</a> if <span class="register">A</span> is equal to 70.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1737,17 +1915,17 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28624"></span>28624</td>
-<td class="instruction">JR NZ,<a href="28111.html#28628">Handler_PlayerShipShield_36</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28628">Handler_PlayerShipShield_36</a> if <span class="register">A</span> is not equal to 7.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28628">Handler_PlayerShipShield_25</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28628">Handler_PlayerShipShield_25</a> if <span class="register">A</span> is not equal to 7.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_35</td>
+<td class="asm-label">Handler_PlayerShipShield_24</td>
 <td class="address-2"><span id="28626"></span>28626</td>
 <td class="instruction">LD (HL),0</td>
 <td class="comment-1" rowspan="1">Write 0 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_36</td>
+<td class="asm-label">Handler_PlayerShipShield_25</td>
 <td class="address-2"><span id="28628"></span>28628</td>
 <td class="instruction">POP AF</td>
 <td class="comment-1" rowspan="2">Restore <span class="register">AF</span> and <span class="register">HL</span> from the stack.</td>
@@ -1772,8 +1950,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28633"></span>28633</td>
-<td class="instruction">DJNZ <a href="28111.html#28594">Handler_PlayerShipShield_31</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28594">Handler_PlayerShipShield_31</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28594">Handler_PlayerShipShield_20</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28594">Handler_PlayerShipShield_20</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1782,16 +1960,26 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1">Jump to <a href="28720.html">Handler_PlayerBullets</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_37</td>
+<td class="routine-comment" colspan="5">
+<span id="28637"></span>
+<div class="comments">
+<div class="paragraph">
+Move player ship right.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayerShipShield_MoveRight</td>
 <td class="address-2"><span id="28637"></span>28637</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the player position from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28638"></span>28638</td>
 <td class="instruction">CP 221</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 221.</td>
+<td class="comment-1" rowspan="1">Compare the player position with 221.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1802,23 +1990,22 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28643"></span>28643</td>
-<td class="instruction">JR NZ,<a href="28111.html#28648">Handler_PlayerShipShield_38</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28648">Handler_PlayerShipShield_38</a> if <span class="register">A</span> is not equal to 221.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28648">Handler_PlayerShipShield_26</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28648">Handler_PlayerShipShield_26</a> if the player position is not equal to 221.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28645"></span>28645</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28111.html#28563">PlayerShipShield_UpdatePosition</a> if *<a href="26278.html">BulletIndex</a> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28646"></span>28646</td>
 <td class="instruction">JR Z,<a href="28111.html#28563">PlayerShipShield_UpdatePosition</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28563">PlayerShipShield_UpdatePosition</a> if <span class="register">A</span> is equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_38</td>
+<td class="asm-label">Handler_PlayerShipShield_26</td>
 <td class="address-2"><span id="28648"></span>28648</td>
 <td class="instruction">OR A</td>
 <td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
@@ -1826,8 +2013,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28649"></span>28649</td>
-<td class="instruction">JR Z,<a href="28111.html#28654">Handler_PlayerShipShield_39</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28654">Handler_PlayerShipShield_39</a> if <span class="register">A</span> is equal to <span class="register">A</span>.</td>
+<td class="instruction">JR Z,<a href="28111.html#28654">Handler_PlayerShipShield_27</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28654">Handler_PlayerShipShield_27</a> if <span class="register">A</span> is equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1838,17 +2025,17 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28652"></span>28652</td>
-<td class="instruction">JR <a href="28111.html#28656">Handler_PlayerShipShield_40</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28656">Handler_PlayerShipShield_40</a>.</td>
+<td class="instruction">JR <a href="28111.html#28656">Handler_PlayerShipShield_28</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28656">Handler_PlayerShipShield_28</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_39</td>
+<td class="asm-label">Handler_PlayerShipShield_27</td>
 <td class="address-2"><span id="28654"></span>28654</td>
 <td class="instruction">LD A,7</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=7.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_40</td>
+<td class="asm-label">Handler_PlayerShipShield_28</td>
 <td class="address-2"><span id="28656"></span>28656</td>
 <td class="instruction">LD (26278),A</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26278.html">BulletIndex</a>.</td>
@@ -1868,8 +2055,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28664"></span>28664</td>
-<td class="instruction">JR NZ,<a href="28111.html#28670">Handler_PlayerShipShield_41</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28670">Handler_PlayerShipShield_41</a> if <span class="register">A</span> is not equal to 7.</td>
+<td class="instruction">JR NZ,<a href="28111.html#28670">Handler_PlayerShipShield_29</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28670">Handler_PlayerShipShield_29</a> if <span class="register">A</span> is not equal to 7.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1884,7 +2071,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_41</td>
+<td class="asm-label">Handler_PlayerShipShield_29</td>
 <td class="address-2"><span id="28670"></span>28670</td>
 <td class="instruction">PUSH AF</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
@@ -1908,7 +2095,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=2.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_42</td>
+<td class="asm-label">Handler_PlayerShipShield_30</td>
 <td class="address-2"><span id="28676"></span>28676</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -1925,7 +2112,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_43</td>
+<td class="asm-label">Handler_PlayerShipShield_31</td>
 <td class="address-2"><span id="28680"></span>28680</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -1942,7 +2129,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=3.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_44</td>
+<td class="asm-label">Handler_PlayerShipShield_32</td>
 <td class="address-2"><span id="28684"></span>28684</td>
 <td class="instruction">SRL (HL)</td>
 <td class="comment-1" rowspan="1">Shift *<span class="register">HL</span> right.</td>
@@ -1974,8 +2161,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28692"></span>28692</td>
-<td class="instruction">JR Z,<a href="28111.html#28696">Handler_PlayerShipShield_45</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28696">Handler_PlayerShipShield_45</a> if <span class="register">HL</span> is equal to 3.</td>
+<td class="instruction">JR Z,<a href="28111.html#28696">Handler_PlayerShipShield_33</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28111.html#28696">Handler_PlayerShipShield_33</a> if <span class="register">HL</span> is equal to 3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1984,7 +2171,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1">Set bit 7 of *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_PlayerShipShield_45</td>
+<td class="asm-label">Handler_PlayerShipShield_33</td>
 <td class="address-2"><span id="28696"></span>28696</td>
 <td class="instruction">DEC HL</td>
 <td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
@@ -1992,8 +2179,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28697"></span>28697</td>
-<td class="instruction">DJNZ <a href="28111.html#28684">Handler_PlayerShipShield_44</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28684">Handler_PlayerShipShield_44</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28684">Handler_PlayerShipShield_32</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28684">Handler_PlayerShipShield_32</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -2028,8 +2215,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28705"></span>28705</td>
-<td class="instruction">DJNZ <a href="28111.html#28680">Handler_PlayerShipShield_43</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28680">Handler_PlayerShipShield_43</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28680">Handler_PlayerShipShield_31</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28680">Handler_PlayerShipShield_31</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -2052,8 +2239,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28711"></span>28711</td>
-<td class="instruction">DJNZ <a href="28111.html#28676">Handler_PlayerShipShield_42</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28676">Handler_PlayerShipShield_42</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28111.html#28676">Handler_PlayerShipShield_30</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28111.html#28676">Handler_PlayerShipShield_30</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
