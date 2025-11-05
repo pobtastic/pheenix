@@ -39,7 +39,11 @@ L $5FF4,$08,$02,$02
   $6004,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
 L $6004,$08,$02,$02
 
-b $6014
+b $6014 Graphics: Shield
+@ $6014 label=Graphics_Shield_01
+  $6014,$09
+@ $601D label=Graphics_Shield_02
+  $601D,$09
 
 b $6026 Graphics: Lives Icon
 @ $6026 label=Graphics_LivesIcon
@@ -399,10 +403,8 @@ W $65DB,$02
 
 w $65DD
   $65FB
-
-g $6619
-
-g $6637
+  $6619
+  $6637
 
 g $667D Pheenix Colours
 @ $667D label=Pheenix_Colour_01
@@ -424,7 +426,8 @@ g $6693 Shield Flag?
 @ $6693 label=Flag_Shield
 B $6693,$01
 
-g $6694
+g $6694 Shield Timer
+@ $6694 label=ShieldTimer
 B $6694,$01
 
 g $6695 Bullet Rate Limiter?
@@ -456,7 +459,9 @@ g $66A5 Explosion: Flash Counter
 @ $66A5 label=Explosion_FlashCounter
 B $66A5,$01
 
-g $66A6
+g $66A6 Bullet Index
+@ $66A6 label=BulletIndex
+B $66A6,$01
 
 g $66A7
 W $66A7,$02
@@ -1472,12 +1477,13 @@ D $6CC9 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
   $6CE9,$02 #REGl=#N$CE.
   $6CEB,$03 Jump to #R$6F93.
 
-c $6CEE
+c $6CEE Handler: Player Death/ Game Over
+@ $6CEE label=Handler_PlayerDeathGameOver
   $6CEE,$08 Jump to #R$6DCF if *#R$66A4 is zero.
   $6CF6,$06 Jump to #R$6D00 if *#R$66A5 is not equal to #N$40.
-  $6CFC,$03 Write #N$02 to *#R$66A4.
+  $6CFC,$03 Write #N$02 ("explosion complete") to *#R$66A4.
   $6CFF,$01 Return.
-
+N $6D00 Handles the "Game Over" state.
 @ $6D00 label=GameOver
   $6D00,$07 Jump to #R$7030 if *#R$6695 is not zero.
   $6D07,$07 Jump to #R$6D29 if *#R$66F0 is not equal to #N$01.
@@ -1492,10 +1498,420 @@ N $6D21 Prints #FONT#(:(#STR($6472,$03,$04)))$3D00,attr=$45(over)
   $6D21,$02 Update the screen buffer address.
   $6D23,$02 Set to print #N$04 characters.
   $6D25,$03 Call #R$676F.
+  $6D28,$01 Restore #REGhl from the stack.
+N $6D29 Animate the explosion effect.
+@ $6D29 label=GameOver_Explosion
+  $6D29,$01 #REGa=*#REGhl.
+  $6D2A,$02,b$01 Keep only bits 0-2.
+  $6D2C,$04 Jump to #R$6D31 if bit 3 of *#REGhl is set.
+  $6D30,$01 Increment #REGa by one.
+@ $6D31 label=GameOver_SkipIncrement
+  $6D31,$02 Increment the explosion counter by two.
+  $6D33,$01 Copy the attribute value to #REGc.
+  $6D34,$02 #REGb=#N$00.
+  $6D36,$04 #REGix=#N$0002.
+@ $6D3A label=GameOver_ExplosionLoop
+  $6D3A,$01 Stash the colour counter on the stack.
+  $6D3B,$03 #REGhl=*#R$66ED.
+  $6D3E,$04 #REGhl+=#N($0021,$04,$04).
+  $6D42,$01 Write #REGd to *#REGhl.
+  $6D43,$01 Stash #REGhl on the stack.
+  $6D44,$01 #REGa=#REGl.
+  $6D45,$02,b$01 Keep only bits 0-4.
+  $6D47,$01 #REGa-=#REGc.
+  $6D48,$01 Stash #REGaf on the stack.
+  $6D49,$03 #REGhl-=#REGbc.
+  $6D4C,$01 Restore #REGaf from the stack.
+  $6D4D,$03 Call #R$6926 if #REGa is greater than #N$00.
+  $6D50,$01 Restore #REGhl from the stack.
+  $6D51,$01 Stash #REGhl on the stack.
+  $6D52,$01 #REGa=#REGl.
+  $6D53,$02,b$01 Keep only bits 0-4.
+  $6D55,$01 #REGa+=#REGc.
+  $6D56,$02 Compare #REGa with #N$20.
+  $6D58,$01 Stash #REGaf on the stack.
+  $6D59,$01 #REGhl+=#REGbc.
+  $6D5A,$01 Restore #REGaf from the stack.
+  $6D5B,$03 Call #R$6926 if #REGa is less than #N$20.
+  $6D5E,$01 Restore #REGhl from the stack.
+  $6D5F,$01 Stash #REGhl on the stack.
+  $6D60,$01 #REGb=#REGc.
+  $6D61,$06 #REGhl-=#N($0020,$04,$04) (with carry).
+  $6D67,$02 Decrease counter by one and loop back to #R$6D64 until counter is zero.
+  $6D69,$03 Call #R$6926.
+  $6D6C,$01 Restore #REGhl from the stack.
+  $6D6D,$01 #REGa=#REGc.
+  $6D6E,$02 #REGa-=#N$02.
+  $6D70,$01 #REGb=#REGa.
+  $6D71,$02 Jump to #R$6D8A if #REGa is less than #REGa.
+  $6D73,$02 Jump to #R$6D8A if #REGa is zero.
+  $6D75,$01 Stash #REGhl on the stack.
+  $6D76,$03 #REGde=#N($0021,$04,$04).
+  $6D79,$01 #REGa=#REGl.
+  $6D7A,$02,b$01 Keep only bits 0-4.
+  $6D7C,$02 #REGa+=#N$02.
+  $6D7E,$01 #REGa-=#REGc.
+  $6D7F,$01 Stash #REGaf on the stack.
+  $6D80,$03 #REGhl-=#REGde (with carry).
+  $6D83,$02 Decrease counter by one and loop back to #R$6D80 until counter is zero.
+  $6D85,$01 Restore #REGaf from the stack.
+  $6D86,$03 Call #R$6926 if #REGa is greater than #N$00.
+  $6D89,$01 Restore #REGhl from the stack.
+  $6D8A,$01 #REGa=#REGc.
+  $6D8B,$02 #REGa-=#N$02.
+  $6D8D,$01 #REGb=#REGa.
+  $6D8E,$02 Jump to #R$6DA4 if #REGa is less than #REGa.
+  $6D90,$02 Jump to #R$6DA4 if #REGa is zero.
+  $6D92,$03 #REGde=#N($001F,$04,$04).
+  $6D95,$01 #REGa=#REGl.
+  $6D96,$01 Merge the bits from #REGe.
+  $6D97,$01 #REGa+=#REGc.
+  $6D98,$02 Compare #REGa with #N$22.
+  $6D9A,$01 Stash #REGaf on the stack.
+  $6D9B,$03 #REGhl-=#REGde (with carry).
+  $6D9E,$02 Decrease counter by one and loop back to #R$6D9B until counter is zero.
+  $6DA0,$01 Restore #REGaf from the stack.
+  $6DA1,$03 Call #R$6926 if #REGa is less than #N$00.
+  $6DA4,$01 Restore #REGbc from the stack.
+  $6DA5,$01 Increment #REGc by one.
+  $6DA6,$02
+  $6DA8,$02 Jump to #R$6D3A if ?? is not equal to #N$00.
+  $6DAA,$07 Jump to #R$7030 if *#R$66F3 is not zero.
+  $6DB1,$03 #REGa=*#R$66A5.
+  $6DB4,$02,b$01 Keep only bits 0-1.
+  $6DB6,$03 Jump to #R$7030 if the result is not equal to zero.
+  $6DB9,$02 Set sound loop counter to #N$08.
+@ $6DBB label=GameOver_SoundLoop
+  $6DBB,$01 #REGa=#REGb.
+  $6DBC,$02 #REGa+=#N$19.
+  $6DBE,$02,b$01 Keep only bits 3-4.
+  $6DC0,$01 Disable interrupts.
+  $6DC1,$02 Set border to the colour held by #REGa.
+  $6DC3,$01 Stash #REGbc on the stack.
+@ $6DC4 label=GameOver_SoundDelay
+  $6DC4,$02 Decrease the delay loop counter by one and loop back to #R$6DC4
+. until the counter is zero.
+  $6DC6,$01 Restore #REGbc from the stack.
+  $6DC7,$02 Decrease counter by one and loop back to #R$6DBB until counter is zero.
+  $6DC9,$03 Turn the speaker off.
+  $6DCC,$03 Jump to #R$7030.
 
-c $6DCF
+c $6DCF Handler: Player Ship/ Shield
+@ $6DCF label=Handler_PlayerShipShield
+  $6DCF,$03 Call #R$6C9D.
+  $6DD2,$03 #REGa=*#R$66ED.
+  $6DD5,$01 Stash the player position on the stack.
+  $6DD6,$07 Jump to #R$6DE8 if *#R$6694 isn't active.
+N $6DDD The players shield is active, so decrease the shield timer.
+  $6DDD,$01 Decrease *#R$6694 by one.
+N $6DDE Check if the timer has "wrapped around" to #N$FF i.e. finished counting
+. down.
+  $6DDE,$04 Jump to #R$6E20 if bit 7 of *#R$6694 is set.
+  $6DE2,$04 Write #N$00 ("inactive") to *#R$6693.
+  $6DE6,$02 Jump to #R$6E20.
+N $6DE8 Check for shield activation player input.
+@ $6DE8 label=PlayerShipShield_CheckInput
+  $6DE8,$06 Jump to #R$6DF6 if *#R$66F3 is not zero.
+  $6DEE,$03 Call #R$670E.
+  $6DF1,$03 Jump to #R$6E1B if the generated random number is zero.
+  $6DF4,$02 Jump to #R$6E20.
+
+@ $6DF6 label=PlayerShipShield_CheckKempston
+  $6DF6,$07 Jump to #R$6E05 if *#R$66F6 is not equal to #N$02.
+  $6DFD,$02 #REGa=read from the Kempston joystick port.
+  $6DFF,$02,b$01 Keep only bit 2.
+  $6E01,$02 Jump to #R$6E1B if #REGa is not equal to #N$02.
+  $6E03,$02 Jump to #R$6E20.
+
+N $6E05 Check if the control method is the AGF joystick?
+@ $6E05 label=PlayerShipShield_CheckAGF
+  $6E05,$04 Jump to #R$6E13 if *#R$66F6 is not the AGF joystick.
+  $6E09,$02 #TABLE(default,centre,centre,centre,centre,centre,centre)
+. { =h,r2 Port Number | =h,c5 Bit }
+. { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+. { #N$EF | 0 | 9 | 8 | 7 | 6 }
+. TABLE#
+  $6E0B,$02 #REGa=byte from port #N$FE.
+  $6E0D,$02 Test bit 4 of #REGa.
+  $6E0F,$02 Jump to #R$6E1B if #REGa is equal to #N$EF.
+  $6E11,$02 Jump to #R$6E20.
+
+  $6E13,$04 Read from the keyboard;
+. #TABLE(default,centre,centre,centre,centre,centre,centre)
+. { =h,r2 Port Number | =h,c5 Bit }
+. { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+. { #N$BF | ENTER | L | K | J | H }
+. TABLE#
+  $6E17,$02,b$01 Keep only bit 0.
+  $6E19,$02 Jump to #R$6E20 if #REGa is not equal to #N$BF.
+  $6E1B,$02 Write #N$FF to *#REGhl.
+  $6E1D,$01 Decrease #REGhl by one.
+  $6E1E,$02 Write #N$01 to *#REGhl.
+N $6E20 Draw the players ship.
+@ $6E20 label=PlayerShip_Draw
+  $6E20,$07 Jump to #R$6EF8 if *#R$6693 is zero.
+  $6E27,$06 Jump to #R$6E40 if *#R$66F3 is not zero.
+  $6E2D,$03 #REGa=*#R$6694.
+  $6E30,$02,b$01 Keep only bits 0-2.
+  $6E32,$01 #REGa+=#REGa.
+  $6E33,$01 #REGa+=#REGa.
+  $6E34,$03 #REGhl=#N($00DE,$04,$04).
+  $6E37,$01 #REGd=#REGh.
+  $6E38,$01 #REGe=#REGa.
+  $6E39,$01 #REGhl+=#REGde.
+  $6E3A,$02 #REGe=#N$04.
+  $6E3C,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
+  $6E3F,$01 Disable interrupts.
+  $6E40,$03 #REGhl=*#R$66ED.
+  $6E43,$02 #REGh=#N$52.
+  $6E45,$02 #REGb=#N$02.
+  $6E47,$03 #REGa=*#R$66A6.
+  $6E4A,$01 Stash #REGaf on the stack.
+  $6E4B,$01 Set the bits from #REGa.
+  $6E4C,$03 #REGde=#N($0000,$04,$04).
+  $6E4F,$02 Jump to #R$6E62 if #REGhl is not equal to #REGa.
+  $6E51,$07 Jump to #R$6E62 if bit 2 of *#R$6694 is not set.
+  $6E58,$03 #REGde=#N($0136,$04,$04).
+  $6E5B,$05 Jump to #R$6E62 if #REGb is not equal to #N$01.
+  $6E60,$02 #REGd=#N$80.
+  $6E62,$04 Write #REGde to *#R$6E87.
+  $6E66,$04 Write #REGde to *#R$6E9A.
+  $6E6A,$01 Restore #REGaf from the stack.
+  $6E6B,$01 Increment #REGa by one.
+  $6E6C,$01 Stash #REGbc on the stack.
+  $6E6D,$01 #REGb=#REGa.
+  $6E6E,$01 Stash #REGhl on the stack.
+  $6E6F,$03 #REGhl=#R$6E85(#N$6E86).
+  $6E72,$03 #REGa=*#R$6694.
+  $6E75,$02 Test bit 2 of #REGa.
+  $6E77,$02 #REGa=#N$7E.
+  $6E79,$02 Jump to #R$6E7D if #REGa is equal to #N$7E.
+  $6E7B,$02 #REGa+=#N$40.
+  $6E7D,$02 #REGa+=#N$08.
+  $6E7F,$02 Decrease counter by one and loop back to #R$6E7D until counter is zero.
+  $6E81,$01 Write #REGa to *#REGhl.
+  $6E82,$01 Restore #REGhl from the stack.
+  $6E83,$02 #REGb=#N$06.
+  $6E85,$02 Set bit 0 of *#REGhl.
+  $6E87,$02 Write #N$01 to *#REGhl.
+  $6E89,$01 Increment #REGh by one.
+  $6E8A,$02 Decrease counter by one and loop back to #R$6E85 until counter is zero.
+  $6E8C,$03 #REGa=*#R$6E85(#N$6E86).
+  $6E8F,$03 Write #REGa to *#R$6E98(#N$6E99).
+  $6E92,$02 Set bit 5 of #REGl.
+  $6E94,$02 #REGh=#N$50.
+  $6E96,$02 #REGb=#N$08.
+  $6E98,$02 Set bit 0 of *#REGhl.
+  $6E9A,$02 Write #N$01 to *#REGhl.
+  $6E9C,$01 Increment #REGh by one.
+  $6E9D,$02 Decrease counter by one and loop back to #R$6E98 until counter is zero.
+  $6E9F,$03 #REGhl=*#R$66ED.
+  $6EA2,$02 #REGh=#N$52.
+  $6EA4,$02 Increment #REGl by two.
+  $6EA6,$01 Restore #REGbc from the stack.
+  $6EA7,$03 #REGa=*#R$66A6.
+  $6EAA,$01 Stash #REGaf on the stack.
+  $6EAB,$02 #REGa-=#N$07.
+  $6EAD,$02 Decrease counter by one and loop back to #R$6E4B until counter is zero.
+  $6EAF,$01 Restore #REGaf from the stack.
+  $6EB0,$03 #REGa=*#R$6694.
+  $6EB3,$02 Test bit 2 of #REGa.
+  $6EB5,$03 #REGhl=#R$6014.
+  $6EB8,$02 Jump to #R$6EBD if #REGl is equal to #N$52.
+  $6EBA,$03 #REGhl=#R$601D.
+  $6EBD,$03 #REGde=#R$617B.
+  $6EC0,$02 #REGc=#N$09.
+  $6EC2,$02 LDIR.
+  $6EC4,$06 Jump to #R$6EE1 if *#R$66A6 is zero.
+  $6ECA,$01 #REGb=*#R$66A6.
+  $6ECB,$01 Stash #REGbc on the stack.
+  $6ECC,$03 #REGhl=#R$617B.
+  $6ECF,$02 #REGb=#N$09.
+  $6ED1,$02 Shift *#REGhl left (with carry).
+  $6ED3,$01 Increment #REGhl by one.
+  $6ED4,$02 Test bit 7 of *#REGhl.
+  $6ED6,$01 Decrease #REGhl by one.
+  $6ED7,$02 Jump to #R$6EDB if #REGhl is equal to #REGa.
+  $6ED9,$02 Set bit 0 of *#REGhl.
+  $6EDB,$01 Increment #REGhl by one.
+  $6EDC,$02 Decrease counter by one and loop back to #R$6ED1 until counter is zero.
+  $6EDE,$01 Restore #REGbc from the stack.
+  $6EDF,$02 Decrease counter by one and loop back to #R$6ECB until counter is zero.
+  $6EE1,$04 #REGde=*#R$66ED.
+  $6EE5,$02 #REGd=#N$50.
+  $6EE7,$03 #REGhl=#R$617B.
+  $6EEA,$02 #REGb=#N$03.
+  $6EEC,$02 Stash #REGbc and #REGde on the stack.
+  $6EEE,$03 #REGbc=#N($0003,$04,$04).
+  $6EF1,$02 LDIR.
+  $6EF3,$01 Restore #REGde from the stack.
+  $6EF4,$01 Increment #REGd by one.
+  $6EF5,$01 Restore #REGbc from the stack.
+  $6EF6,$02 Decrease counter by one and loop back to #R$6EEC until counter is zero.
+  $6EF8,$02 #REGh=#N$50.
+  $6EFA,$06 Jump to #R$6F05 if *#R$66F3 is zero.
+  $6F00,$03 #REGa=*#R$66F4.
+  $6F03,$02 Jump to #R$6F37.
+
+  $6F05,$01 Disable interrupts.
+  $6F06,$03 #REGa=*#R$66F6.
+  $6F09,$04 Jump to #R$6F1C if #REGa is not equal to #N$02.
+  $6F0D,$02 #REGa=read from the Kempston joystick port.
+  $6F0F,$02,b$01 Keep only bits 0-1.
+  $6F11,$04 Jump to #R$6F43 if #REGa is equal to #N$02.
+  $6F15,$05 Jump to #R$6FDD if #REGa is equal to #N$01.
+  $6F1A,$02 Jump to #R$6F40.
+
+  $6F1C,$04 Jump to #R$6F33 if #REGa is not equal to #N$01.
+  $6F20,$02 #REGa=#N$F7.
+  $6F22,$02 #REGa=byte from port #N$FE.
+  $6F24,$02 Test bit 4 of #REGa.
+  $6F26,$02 Jump to #R$6F43 if #REGa is equal to #N$F7.
+  $6F28,$02 #TABLE(default,centre,centre,centre,centre,centre,centre)
+. { =h,r2 Port Number | =h,c5 Bit }
+. { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
+. { #N$EF | 0 | 9 | 8 | 7 | 6 }
+. TABLE#
+  $6F2A,$02 #REGa=byte from port #N$FE.
+  $6F2C,$02 Test bit 2 of #REGa.
+  $6F2E,$03 Jump to #R$6FDD if #REGa is equal to #N$EF.
+  $6F31,$02 Jump to #R$6F40.
+
+  $6F33,$02 #REGa=#N$FE.
+  $6F35,$02 #REGa=byte from port #N$FE.
+  $6F37,$02 Test bit 0 of #REGa.
+  $6F39,$02 Jump to #R$6F43 if #REGa is equal to #N$FE.
+  $6F3B,$02 Test bit 1 of #REGa.
+  $6F3D,$03 Jump to #R$6FDD if #REGa is equal to #N$FE.
+  $6F40,$01 Restore #REGaf from the stack.
+  $6F41,$02 Jump to #R$6F93.
+  $6F43,$01 Restore #REGaf from the stack.
+  $6F44,$02 Compare #REGa with #N$C0.
+  $6F46,$02 Jump to #R$6F52 if #REGa is not equal to #N$C0.
+  $6F48,$03 #REGa=*#R$66A6.
+  $6F4B,$02 Compare #REGa with #N$03.
+  $6F4D,$02 Jump to #R$6F93 if #REGa is equal to #N$03.
+  $6F4F,$04 #REGl=*#R$66ED.
+  $6F53,$02 #REGb=#N$02.
+  $6F55,$02 Stash #REGbc and #REGhl on the stack.
+  $6F57,$02 #REGb=#N$08.
+  $6F59,$02 Stash #REGbc and #REGhl on the stack.
+  $6F5B,$02 #REGb=#N$03.
+  $6F5D,$02 Shift *#REGhl left (with carry).
+  $6F5F,$01 Increment #REGhl by one.
+  $6F60,$02 Test bit 7 of *#REGhl.
+  $6F62,$01 Decrease #REGhl by one.
+  $6F63,$02 Jump to #R$6F67 if #REGhl is equal to #N$03.
+  $6F65,$02 Set bit 0 of *#REGhl.
+  $6F67,$01 Increment #REGhl by one.
+  $6F68,$02 Decrease counter by one and loop back to #R$6F5D until counter is zero.
+  $6F6A,$01 Decrease #REGhl by one.
+  $6F6B,$02 Reset bit 0 of *#REGhl.
+  $6F6D,$01 Restore #REGhl from the stack.
+  $6F6E,$01 Increment #REGh by one.
+  $6F6F,$01 Restore #REGbc from the stack.
+  $6F70,$02 Decrease counter by one and loop back to #R$6F59 until counter is zero.
+  $6F72,$01 Restore #REGhl from the stack.
+  $6F73,$02 Set bit 5 of #REGl.
+  $6F75,$01 Restore #REGbc from the stack.
+  $6F76,$02 Decrease counter by one and loop back to #R$6F55 until counter is zero.
+  $6F78,$07 Jump to #R$6F82 if *#R$66A6 is equal to #N$07.
+  $6F7F,$01 Increment #REGa by one.
+  $6F80,$02 Jump to #R$6F83.
+
+  $6F82,$01 #REGa=#N$00.
+  $6F83,$03 Write #REGa to *#R$66A6.
+  $6F86,$01 Set the bits from #REGa.
+  $6F87,$03 #REGa=*#R$66ED.
+  $6F8A,$02 Jump to #R$6F8D if #REGa is not equal to #REGa.
+  $6F8C,$01 Decrease #REGa by one.
+  $6F8D,$03 Write #REGa to *#R$66ED.
+  $6F90,$03 Call #R$6C9D.
+N $6F93 Update the ship attributes.
+@ $6F93 label=PlayerShipShield_UpdatePosition
+  $6F93,$07 Jump to #R$7030 if *#R$66A4 is not zero.
+  $6F9A,$03 #REGhl=*#R$66ED.
+  $6F9D,$06 Jump to #R$6FAE if *#R$6693 is zero.
+  $6FA3,$07 Jump to #R$6FAE if bit 2 of *#R$6694 is not set.
+  $6FAA,$02 #REGa=#N$07.
+  $6FAC,$02 Jump to #R$6FB0.
 
   $6FAE,$02 #REGa=#COLOUR$46.
+  $6FB0,$02 #REGb=#N$02.
+  $6FB2,$02 Stash #REGbc and #REGhl on the stack.
+  $6FB4,$01 Decrease #REGl by one.
+  $6FB5,$01 Stash #REGaf on the stack.
+  $6FB6,$02 Compare #REGa with #N$46.
+  $6FB8,$02 Jump to #R$6FBE if #REGa is equal to #N$46.
+  $6FBA,$02 Compare #REGa with #N$07.
+  $6FBC,$02 Jump to #R$6FC0 if #REGa is not equal to #N$07.
+  $6FBE,$02 Write #N$00 to *#REGhl.
+  $6FC0,$01 Restore #REGaf from the stack.
+  $6FC1,$01 Increment #REGl by one.
+  $6FC2,$02 #REGb=#N$03.
+  $6FC4,$01 Write #REGa to *#REGhl.
+  $6FC5,$01 Increment #REGhl by one.
+  $6FC6,$02 Decrease counter by one and loop back to #R$6FC4 until counter is zero.
+  $6FC8,$01 Stash #REGaf on the stack.
+  $6FC9,$01 #REGa=*#REGhl.
+  $6FCA,$02 Compare #REGa with #N$46.
+  $6FCC,$02 Jump to #R$6FD2 if #REGa is equal to #N$46.
+  $6FCE,$02 Compare #REGa with #N$07.
+  $6FD0,$02 Jump to #R$6FD4 if #REGa is not equal to #N$07.
+  $6FD2,$02 Write #N$00 to *#REGhl.
+  $6FD4,$02 Restore #REGaf and #REGhl from the stack.
+  $6FD6,$02 Set bit 5 of #REGl.
+  $6FD8,$01 Restore #REGbc from the stack.
+  $6FD9,$02 Decrease counter by one and loop back to #R$6FB2 until counter is zero.
+  $6FDB,$02 Jump to #R$7030.
+
+  $6FDD,$01 Restore #REGaf from the stack.
+  $6FDE,$02 Compare #REGa with #N$DD.
+  $6FE0,$03 #REGa=*#R$66A6.
+  $6FE3,$02 Jump to #R$6FE8 if #REGa is not equal to #N$DD.
+  $6FE5,$01 Set the bits from #REGa.
+  $6FE6,$02 Jump to #R$6F93 if #REGa is equal to #REGa.
+  $6FE8,$01 Set the bits from #REGa.
+  $6FE9,$02 Jump to #R$6FEE if #REGa is equal to #REGa.
+  $6FEB,$01 Decrease #REGa by one.
+  $6FEC,$02 Jump to #R$6FF0.
+  $6FEE,$02 #REGa=#N$07.
+  $6FF0,$03 Write #REGa to *#R$66A6.
+  $6FF3,$02 Compare #REGa with #N$07.
+  $6FF5,$03 #REGa=*#R$66ED.
+  $6FF8,$02 Jump to #R$6FFE if #REGa is not equal to #N$07.
+  $6FFA,$01 Increment #REGa by one.
+  $6FFB,$03 Write #REGa to *#R$66ED.
+  $6FFE,$01 Stash #REGaf on the stack.
+  $6FFF,$02 #REGa+=#N$02.
+  $7001,$01 #REGl=#REGa.
+  $7002,$02 #REGb=#N$02.
+  $7004,$02 Stash #REGbc and #REGhl on the stack.
+  $7006,$02 #REGb=#N$08.
+  $7008,$02 Stash #REGbc and #REGhl on the stack.
+  $700A,$02 #REGb=#N$03.
+  $700C,$02 Shift *#REGhl right.
+  $700E,$01 Decrease #REGhl by one.
+  $700F,$02 Test bit 0 of *#REGhl.
+  $7011,$02 Reset bit 0 of *#REGhl.
+  $7013,$01 Increment #REGhl by one.
+  $7014,$02 Jump to #R$7018 if #REGhl is equal to #N$03.
+  $7016,$02 Set bit 7 of *#REGhl.
+  $7018,$01 Decrease #REGhl by one.
+  $7019,$02 Decrease counter by one and loop back to #R$700C until counter is zero.
+  $701B,$01 Increment #REGhl by one.
+  $701C,$02 Reset bit 7 of *#REGhl.
+  $701E,$01 Restore #REGhl from the stack.
+  $701F,$01 Increment #REGh by one.
+  $7020,$01 Restore #REGbc from the stack.
+  $7021,$02 Decrease counter by one and loop back to #R$7008 until counter is zero.
+  $7023,$01 Restore #REGhl from the stack.
+  $7024,$02 Set bit 5 of #REGl.
+  $7026,$01 Restore #REGbc from the stack.
+  $7027,$02 Decrease counter by one and loop back to #R$7004 until counter is zero.
+  $7029,$01 Restore #REGaf from the stack.
+  $702A,$03 Call #R$6C9D.
+  $702D,$03 Jump to #R$6F93.
 
 c $7030 Handler: Player Bullets
 @ $7030 label=Handler_PlayerBullets
@@ -1516,15 +1932,17 @@ N $703E Modified by the code at #R$741E.
   $7045,$05 Jump to #R$70E7 if the bullet is active.
 N $704A Check if the player can fire a new bullet.
   $704A,$0E Jump to #R$714E if either *#R$66A4 or *#R$6693 are active.
-N $7058 Load the previous fire button state into #REGc.
+N $7058 Load the previous fire button state into #REGc (used for a debounce
+. check at #R$708D).
   $7058,$04 #REGc=*#R$6696.
+N $705C Check if the game is running in demo mode.
   $705C,$06 Jump to #R$7069 if *#R$66F3 is not active.
 N $7062 The game is in demo mode, so generate random firing action.
   $7062,$03 Call #R$670E.
   $7065,$02,b$01 Keep only bits 0-3.
 M $7062,$04 Generate a random number between #N$00-#N$0F.
   $7067,$02 Jump to #R$7085.
-N $7069 Read player fire button input.
+N $7069 The game is not in demo mode, so read the player fire button input.
 @ $7069 label=PlayerBullets_ReadInput
   $7069,$01 Disable interrupts.
 N $706A Check if the control method is the Kempson joystick?
@@ -1562,9 +1980,11 @@ N $708D Is the fire button state unchanged since the last time this routine
 . ran?
   $708D,$04 Jump to #R$714E if the current fire button state matches the
 . previous fire button state.
-  $7091,$04 Jump to #R$714E if the fire button wasn't pressed.
+  $7091,$04 Also jump to #R$714E if the fire button wasn't pressed.
+N $7095 Skip playing the firing sound if this is the demo mode.
   $7095,$06 Jump to #R$70B8 if *#R$66F3 is active.
   $709B,$01 Stash the bullet position on the stack.
+N $709C #HTML(#AUDIO(bullets.wav)(#INCLUDE(Bullets)))
   $709C,$02 Set a counter in #REGb for #N$16 sound iterations.
   $709E,$03 Set the initial sound pitch to #N($0052,$04,$04).
 @ $70A1 label=PlayerBullets_SoundLoop
@@ -1579,12 +1999,15 @@ N $708D Is the fire button state unchanged since the last time this routine
   $70B5,$02 Decrease the sound counter by one and loop back to #R$70A1 until
 . the counter is zero.
   $70B7,$01 Restore the bullet position from the stack.
-N $70B8 Check if the bullet spawning position is clear.
+N $70B8 Check if the bullet spawning position is clear in the attribute buffer.
 @ $70B8 label=PlayerBullets_CheckSpawn
-  $70B8,$06 #REGl=*#R$66ED-#N$1F.
-  $70BE,$02 #REGh=#N$5A.
-  $70C0,$05 Jump to #R$714E if *#REGhl is not zero.
-  $70C5,$02 Write #COLOUR$47 to *#REGhl.
+  $70B8,$06 Set #REGl to *#R$66ED-#N$1F to calculate the bullet spawn position.
+  $70BE,$02 Set #REGh to #N$5A as the bullets always spawn on the same row.
+  $70C0,$05 Jump to #R$714E if the attribute at this position isn't #INK$00
+. (i.e. it is occupied).
+N $70C5 The bullet position isn't already occupied, so colour this attribute
+. block.
+  $70C5,$02 Write #COLOUR$47 to the bullet attribute buffer position.
   $70C7,$03 Call #R$6704.
   $70CA,$02 Set bit 2 of #REGh.
   $70CC,$01 Stash #REGhl on the stack.

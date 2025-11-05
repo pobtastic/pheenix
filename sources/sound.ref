@@ -3,3 +3,11 @@
 [Audio:intro:Intro Theme]
 
 #AUDIO(intro.wav)(#INCLUDE(Intro))
+
+[Audio:Bullets]
+
+#AUDIO(bullets.wav)(#INCLUDE(Bullets))
+
+[Audio:Death]
+
+#AUDIO(death.wav)(#INCLUDE(Death))
