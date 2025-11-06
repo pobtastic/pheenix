@@ -12,6 +12,10 @@
 
 #AUDIO(death.wav)(#INCLUDE(Death))
 
+[Audio:Explosions]
+#AUDIO(explosion-01.wav)(#INCLUDE(Explosion01))
+#AUDIO(explosion-02.wav)(#INCLUDE(Explosion02))
+
 [Audio:Shield]
 
 #AUDIO(shield.wav)(#INCLUDE(Shield))

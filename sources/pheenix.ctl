@@ -214,17 +214,21 @@ b $61E3 Graphics: Box
 @ $61E3 label=Graphics_Box
   $61E3,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
 
-b $61EB
+b $61EB Graphics: UDGs
+@ $61EB label=Graphics_UDGs
   $61EB,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
 L $61EB,$08,$0C,$02
-
-b $624B Graphics: Small Star
+N $624B Graphics for the "Small Star" and alien mothership window.
 @ $624B label=Graphics_StarSmall
   $624B,$08,b$01 #UDGTABLE { #UDG(#PC,$05) } TABLE#
-
-b $6253
+N $6253 Graphics for the mothership.
+@ $6253 label=Graphics_Mothership
   $6253,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
-L $6253,$08,$3B,$02
+L $6253,$08,$0D,$02
+N $62BB Font UDGs.
+@ $62BB label=Graphics_Font
+  $62BB,$08,b$01 #UDGTABLE { #UDG(#PC) } TABLE#
+L $62BB,$08,$2E,$02
 
 t $642B Messaging: Presents
 @ $642B label=Messaging_Presents
@@ -294,10 +298,25 @@ g $6528 Score Buffer
 @ $6528 label=ScoreBuffer
 B $6528,$06,$01
 
-g $652F
-  $652F
-  $6532
-  $6535
+g $652F Table: Explosion UDGs
+@ $652F label=Table_ExplosionUDGs_01
+N $652F Frame #N$01:
+  $652F,$03 #UDGTABLE { #UDGS$03,$01(explosion-01)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
+.   udg
+. ) } TABLE#
+N $6532 Frame #N$02:
+@ $6532 label=Table_ExplosionUDGs_02
+  $6532,$03 #UDGTABLE { #UDGS$03,$01(explosion-02)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
+.   udg
+. ) } TABLE#
+N $6535 Frame #N$03:
+@ $6535 label=Table_ExplosionUDGs_03
+  $6535,$03 #UDGTABLE { #UDGS$03,$01(explosion-03)(
+.   #UDG($6153+$08*(#PEEK(#PC+$x)),$05)(*udg)
+.   udg
+. ) } TABLE#
 
 g $6538 Table: Mothership UDGs
 @ $6538 label=Table_Mothership_MastTop
@@ -413,7 +432,11 @@ B $667D,$01
 @ $667E label=Pheenix_Colour_02
 B $667E,$01
 
-g $667F
+g $667F Enemy Count
+@ $667F label=EnemyCount
+D $667F The number of alien enemies "in-play" on the screen (not counting the
+. mothership/ mothership alien which is handled separately).
+B $667F,$01
 
 g $6680
   $6680
@@ -479,7 +502,14 @@ g $66D4 Mothership Animation Counter
 D $66D4 Used by the routine at #R$6A23.
 B $66D4,$01
 
-g $66D5
+g $66D5 Table: Alien Explosions
+@ $66D5 label=Table_AlienExplosions
+N $66D5 Explosion slot: #N($01+(#PC-$66D5)/$03).
+B $66D5,$01 Active flag.
+W $66D6,$02 Position.
+L $66D5,$03,$06
+
+g $66E7
 
 g $66ED Player Attribute Buffer Position
 @ $66ED label=PlayerAttributeBufferPosition
@@ -2643,22 +2673,28 @@ c $7616
   $777E,$01 Restore #REGde from the stack.
   $777F,$03 Jump to #R$798D.
 
-c $79B2
+c $79B2 Handler: Alien Explosions
+@ $79B2 label=Handler_AlienExplosions
   $79B2,$03 #REGa=*#R$6695.
   $79B5,$02,b$01 Keep only bit 0.
-  $79B7,$01 Return if ?? is equal to #N$00.
 M $79B2,$06 Return if bit 0 of *#R$6695 is not set.
   $79B8,$03 #REGhl=#R$66D5.
-  $79BB,$02 #REGb=#N$06.
-  $79BD,$04 Jump to #R$79CA if *#REGhl is not zero.
-  $79C1,$01 Stash #REGbc on the stack.
-  $79C2,$02 #REGb=#N$C8.
-  $79C4,$02 Decrease counter by one and loop back to #R$79C4 until counter is zero.
-  $79C6,$01 Restore #REGbc from the stack.
+  $79BB,$02 Set a counter in #REGb for checking #N$06 explosion slots.
+@ $79BD label=AlienExplosions_Loop
+  $79BD,$04 Jump to #R$79CA if this explosion slot is already active.
+  $79C1,$01 Stash the explosion slot counter on the stack.
+  $79C2,$02 Set a delay loop counter in #REGb of #N$C8 iterations.
+@ $79C4 label=AlienExplosions_DelayLoop
+  $79C4,$02 Decrease the delay loop counter by one and loop back to #R$79C4
+. until the counter is zero.
+  $79C6,$01 Restore the explosion slot counter from the stack.
   $79C7,$03 Jump to #R$7B5F.
-
+N $79CA Process the active explosion.
+@ $79CA label=AlienExplosions_IsActive
   $79CA,$03 Stash #REGaf, #REGbc and #REGhl on the stack.
+N $79CD Play a sound when the explosion is active (but not in demo mode).
   $79CD,$06 Jump to #R$7A1F if *#R$66F3 is active.
+N $79D3 Play the explosion sound effect based on the current phase.
   $79D3,$03 #REGa=*#R$66F1.
   $79D6,$02,b$01 Keep only bit 1.
   $79D8,$02 Jump to #R$79F8 if ?? is equal to #REGa.
@@ -2666,6 +2702,7 @@ M $79D3,$07 Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
   $79DA,$07 #REGde=*#REGhl*#N$08.
   $79E1,$04 #REGhl=#N($00F2,$04,$04)+#REGde.
   $79E5,$02 #REGb=#N$03.
+@ $79E7 label=AlienExplosions_Sound_01
   $79E7,$02 Stash #REGbc and #REGhl on the stack.
   $79E9,$03 #REGde=#N($0002,$04,$04).
   $79EC,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
@@ -2675,26 +2712,29 @@ M $79D3,$07 Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
   $79F3,$01 Restore #REGbc from the stack.
   $79F4,$02 Decrease counter by one and loop back to #R$79E7 until counter is zero.
   $79F6,$02 Jump to #R$7A1F.
-
+@ $79F8 label=AlienExplosions_Sound_02
   $79F8,$05 Jump to #R$7A1F if *#REGhl is not equal to #N$01.
-  $79FD,$02 #REGb=#N$12.
-  $79FF,$03 #REGhl=#N($0064,$04,$04).
-  $7A02,$02 Stash #REGbc and #REGhl on the stack.
-  $7A04,$02 #REGa=#N$64.
-  $7A06,$01 #REGa-=#REGb.
-  $7A07,$01 #REGa-=#REGb.
-  $7A08,$01 #REGb=#REGa.
-  $7A09,$02 #REGa=#N$10.
+N $79FD #HTML(#AUDIO(explosion-02.wav)(#INCLUDE(Explosion02)))
+  $79FD,$02 Set a counter in #REGb for #N$12 explosion sound loops.
+  $79FF,$03 Set the initial pitch to #N($0064,$04,$04).
+@ $7A02 label=AlienExplosions_Sound_02_Loop
+  $7A02,$02 Stash the explosion sound loops counter and pitch on the stack.
+  $7A04,$05 Calculate the delay counter: #N$64 - (#REGb × #N$02).
+  $7A09,$02 Enable the speaker (bit 4).
   $7A0B,$01 Disable interrupts.
-  $7A0C,$02 Set border to the colour held by #REGa.
-  $7A0E,$02 Decrease counter by one and loop back to #R$7A0C until counter is zero.
-  $7A10,$03 #REGde=#N($0001,$04,$04).
+@ $7A0C label=AlienExplosions_Sound_02_DelayLoop
+  $7A0C,$04 Decrease the delay counter by one and loop back to #R$7A0C until
+. the delay counter is zero.
+  $7A10,$03 Set the sound duration to #N($0001,$04,$04).
   $7A13,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
   $7A16,$01 Disable interrupts.
-  $7A17,$01 Restore #REGhl from the stack.
-  $7A18,$04 #REGhl+=#N($0008,$04,$04).
-  $7A1C,$01 Restore #REGbc from the stack.
-  $7A1D,$02 Decrease counter by one and loop back to #R$7A02 until counter is zero.
+  $7A17,$01 Restore the pitch from the stack.
+  $7A18,$04 Increase the pitch by #N($0008,$04,$04).
+  $7A1C,$01 Restore the explosion sound loops counter from the stack.
+  $7A1D,$02 Decrease the explosion sound loops counter by one and loop back to
+. #R$7A02 until the explosion sound has finished playing.
+N $7A1F Update the explosion position and check for scoring.
+@ $7A1F label=AlienExplosions_UpdatePosition
   $7A1F,$03 Restore #REGhl, #REGbc and #REGaf from the stack.
   $7A22,$02 Stash #REGbc and #REGhl on the stack.
   $7A24,$01 Increment #REGhl by one.
@@ -2843,12 +2883,15 @@ N $7B50 Prints #STR($3F1B,$03,$03)
   $7B50,$03 #HTML(#REGhl=<a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html#3F1B">#N$3F1B</a>.)
   $7B53,$03 #REGbc=#N($0300,$04,$04).
   $7B56,$03 Call #R$6775 if ?? is less than #N$00.
-  $7B59,$03 #REGhl=#R$667F.
-  $7B5C,$01 Decrease *#REGhl by one.
-  $7B5D,$02 Restore #REGhl and #REGbc from the stack.
-  $7B5F,$03 Increment #REGhl by three.
-  $7B62,$01 Decrease #REGb by one.
-  $7B63,$03 Jump to #R$79BD if #REGb is not equal to #N$00.
+  $7B59,$04 Decrease *#R$667F by one.
+  $7B5D,$01 Restore the explosion slot pointer from the stack.
+@ $7B5E label=AlienExplosions_Continue
+  $7B5E,$01 Restore the explosion slot counter from the stack.
+N $7B5F Move to the next explosion slot.
+@ $7B5F label=AlienExplosions_NextSlot
+  $7B5F,$03 Move the explosion slot pointer to the next explosion slot.
+  $7B62,$01 Decrease the explosion slot counter by one.
+  $7B63,$03 Jump back to #R$79BD until all explosion slots have been processed.
   $7B66,$01 Return.
 
 c $7B67 Handler: Aliens
