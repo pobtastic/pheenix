@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 6F43</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="6EF8.html">6EF8</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#6f43">Map</a></td>
+<td class="next">
+Next: <a href="6F93.html">6F93</a>
+</td>
+</tr>
+</table>
+<div class="description">6F43: Handler: Move Ship Left</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="6EF8.html">Handler_ShipMovement</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left</td>
+<td class="address-2"><span id="6f43"></span>6F43</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore the player position from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f44"></span>6F44</td>
+<td class="instruction">CP $C0</td>
+<td class="comment-1" rowspan="2">Jump to <a href="6F43.html#6f52">Handler_MoveShip_Left_0</a> if <span class="register">A</span> is not equal to C0.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f46"></span>6F46</td>
+<td class="instruction">JR NZ,<a href="6F43.html#6f52">Handler_MoveShip_Left_0</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f48"></span>6F48</td>
+<td class="instruction">LD A,($66A6)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6F93.html">Handler_UpdateShipPosition</a> if *<a href="66A6.html">BulletIndex</a> is equal to 03.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f4b"></span>6F4B</td>
+<td class="instruction">CP $03</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f4d"></span>6F4D</td>
+<td class="instruction">JR Z,<a href="6F93.html">Handler_UpdateShipPosition</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f4f"></span>6F4F</td>
+<td class="instruction">LD A,($66ED)</td>
+<td class="comment-1" rowspan="2"><span class="register">L</span>=*<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_0</td>
+<td class="address-2"><span id="6f52"></span>6F52</td>
+<td class="instruction">LD L,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f53"></span>6F53</td>
+<td class="instruction">LD B,$02</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=02.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_1</td>
+<td class="address-2"><span id="6f55"></span>6F55</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f56"></span>6F56</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f57"></span>6F57</td>
+<td class="instruction">LD B,$08</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=08.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_2</td>
+<td class="address-2"><span id="6f59"></span>6F59</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f5a"></span>6F5A</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f5b"></span>6F5B</td>
+<td class="instruction">LD B,$03</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=03.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_3</td>
+<td class="address-2"><span id="6f5d"></span>6F5D</td>
+<td class="instruction">SLA (HL)</td>
+<td class="comment-1" rowspan="1">Shift *<span class="register">HL</span> left (with carry).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f5f"></span>6F5F</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f60"></span>6F60</td>
+<td class="instruction">BIT 7,(HL)</td>
+<td class="comment-1" rowspan="1">Test bit 7 of *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f62"></span>6F62</td>
+<td class="instruction">DEC HL</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f63"></span>6F63</td>
+<td class="instruction">JR Z,<a href="6F43.html#6f67">Handler_MoveShip_Left_4</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6F43.html#6f67">Handler_MoveShip_Left_4</a> if <span class="register">HL</span> is equal to 03.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f65"></span>6F65</td>
+<td class="instruction">SET 0,(HL)</td>
+<td class="comment-1" rowspan="1">Set bit 0 of *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_4</td>
+<td class="address-2"><span id="6f67"></span>6F67</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f68"></span>6F68</td>
+<td class="instruction">DJNZ <a href="6F43.html#6f5d">Handler_MoveShip_Left_3</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6F43.html#6f5d">Handler_MoveShip_Left_3</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f6a"></span>6F6A</td>
+<td class="instruction">DEC HL</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f6b"></span>6F6B</td>
+<td class="instruction">RES 0,(HL)</td>
+<td class="comment-1" rowspan="1">Reset bit 0 of *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f6d"></span>6F6D</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f6e"></span>6F6E</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f6f"></span>6F6F</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f70"></span>6F70</td>
+<td class="instruction">DJNZ <a href="6F43.html#6f59">Handler_MoveShip_Left_2</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6F43.html#6f59">Handler_MoveShip_Left_2</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f72"></span>6F72</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f73"></span>6F73</td>
+<td class="instruction">SET 5,L</td>
+<td class="comment-1" rowspan="1">Set bit 5 of <span class="register">L</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f75"></span>6F75</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f76"></span>6F76</td>
+<td class="instruction">DJNZ <a href="6F43.html#6f55">Handler_MoveShip_Left_1</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6F43.html#6f55">Handler_MoveShip_Left_1</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f78"></span>6F78</td>
+<td class="instruction">LD A,($66A6)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6F43.html#6f82">Handler_MoveShip_Left_5</a> if *<a href="66A6.html">BulletIndex</a> is equal to 07.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f7b"></span>6F7B</td>
+<td class="instruction">CP $07</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f7d"></span>6F7D</td>
+<td class="instruction">JR Z,<a href="6F43.html#6f82">Handler_MoveShip_Left_5</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f7f"></span>6F7F</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f80"></span>6F80</td>
+<td class="instruction">JR <a href="6F43.html#6f83">Handler_MoveShip_Left_6</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6F43.html#6f83">Handler_MoveShip_Left_6</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_5</td>
+<td class="address-2"><span id="6f82"></span>6F82</td>
+<td class="instruction">XOR A</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=00.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_6</td>
+<td class="address-2"><span id="6f83"></span>6F83</td>
+<td class="instruction">LD ($66A6),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="66A6.html">BulletIndex</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f86"></span>6F86</td>
+<td class="instruction">OR A</td>
+<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f87"></span>6F87</td>
+<td class="instruction">LD A,($66ED)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f8a"></span>6F8A</td>
+<td class="instruction">JR NZ,<a href="6F43.html#6f8d">Handler_MoveShip_Left_7</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6F43.html#6f8d">Handler_MoveShip_Left_7</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f8c"></span>6F8C</td>
+<td class="instruction">DEC A</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">A</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_MoveShip_Left_7</td>
+<td class="address-2"><span id="6f8d"></span>6F8D</td>
+<td class="instruction">LD ($66ED),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6f90"></span>6F90</td>
+<td class="instruction">CALL <a href="6C9D.html">CheckCollision</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6C9D.html">CheckCollision</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="comments">
+<div class="paragraph">
+Continue on to <a href="6F93.html">Handler_UpdateShipPosition</a>.
+</div>
+</div>
+</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="6EF8.html">6EF8</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#6f43">Map</a></td>
+<td class="next">
+Next: <a href="6F93.html">6F93</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/28483.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

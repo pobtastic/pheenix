@@ -48,7 +48,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <td class="asm-label">Handler_PlayerDeathGameOver</td>
 <td class="address-2"><span id="6cee"></span>6CEE</td>
 <td class="instruction">LD HL,$66A4</td>
-<td class="comment-1" rowspan="4">Jump to <a href="6DCF.html">Handler_PlayerShipShield</a> if *<a href="66A4.html">Flag_Collision</a> is zero.</td>
+<td class="comment-1" rowspan="4">Jump to <a href="6DCF.html">Handler_Shield</a> if *<a href="66A4.html">Flag_Collision</a> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -63,7 +63,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6cf3"></span>6CF3</td>
-<td class="instruction">JP Z,<a href="6DCF.html">Handler_PlayerShipShield</a></td>
+<td class="instruction">JP Z,<a href="6DCF.html">Handler_Shield</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>

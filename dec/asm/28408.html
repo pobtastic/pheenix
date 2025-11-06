@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 28408</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="28111.html">28111</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#28408">Map</a></td>
+<td class="next">
+Next: <a href="28483.html">28483</a>
+</td>
+</tr>
+</table>
+<div class="description">28408: Handler: Ship Movement</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="28111.html">Handler_Shield</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_ShipMovement</td>
+<td class="address-2"><span id="28408"></span>28408</td>
+<td class="instruction">LD H,80</td>
+<td class="comment-1" rowspan="1">Set <span class="register">H</span> to 80 (screen buffer base).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28410"></span>28410</td>
+<td class="instruction">LD A,(26355)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28408.html#28421">ShipMovement_CheckKempston</a> if *<a href="26355.html">Flag_ActiveDemoMode</a> is active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28413"></span>28413</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28414"></span>28414</td>
+<td class="instruction">JR Z,<a href="28408.html#28421">ShipMovement_CheckKempston</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28416"></span>28416</td>
+<td class="instruction">LD A,(26356)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26356.html">Movement_DemoMode</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28419"></span>28419</td>
+<td class="instruction">JR <a href="28408.html#28471">Ship_DemoMovement</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28408.html#28471">Ship_DemoMovement</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28421"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the Kempston joystick?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">ShipMovement_CheckKempston</td>
+<td class="address-2"><span id="28421"></span>28421</td>
+<td class="instruction">DI</td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28422"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is Kempston joystick, so test for "left" or "right" being pressed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28422"></span>28422</td>
+<td class="instruction">LD A,(26358)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28408.html#28444">ShipMovement_CheckAGF</a> if *<a href="26358.html">ControlMethod</a> is not the Kempston joystick.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28425"></span>28425</td>
+<td class="instruction">CP 2</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28427"></span>28427</td>
+<td class="instruction">JR NZ,<a href="28408.html#28444">ShipMovement_CheckAGF</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28429"></span>28429</td>
+<td class="instruction">IN A,(31)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=read from the Kempston joystick port.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28431"></span>28431</td>
+<td class="instruction">AND %00000011</td>
+<td class="comment-1" rowspan="1">Keep only bits 0-1 ("right" and "left").</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28433"></span>28433</td>
+<td class="instruction">CP 2</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28483.html">Handler_MoveShip_Left</a> if "left" is being pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28435"></span>28435</td>
+<td class="instruction">JR Z,<a href="28483.html">Handler_MoveShip_Left</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28437"></span>28437</td>
+<td class="instruction">CP 1</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28637.html">Handler_MoveShip_Right</a> if "right" is being pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28439"></span>28439</td>
+<td class="instruction">JP Z,<a href="28637.html">Handler_MoveShip_Right</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28442"></span>28442</td>
+<td class="instruction">JR <a href="28408.html#28480">Ship_NoMovement</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28408.html#28480">Ship_NoMovement</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28444"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the control method is the AGF joystick?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">ShipMovement_CheckAGF</td>
+<td class="address-2"><span id="28444"></span>28444</td>
+<td class="instruction">CP 1</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28408.html#28467">ShipMovement_CheckKeyboard</a> if *<a href="26358.html">ControlMethod</a> is not the AGF joystick.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28446"></span>28446</td>
+<td class="instruction">JR NZ,<a href="28408.html#28467">ShipMovement_CheckKeyboard</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28448"></span>
+<div class="comments">
+<div class="paragraph">
+The control method is the AGF joystick, so test for "left" being pressed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28448"></span>28448</td>
+<td class="instruction">LD A,247</td>
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">247</td>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1">3</td>
+<td class="centre" colspan="1" rowspan="1">4</td>
+<td class="centre" colspan="1" rowspan="1">5</td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28450"></span>28450</td>
+<td class="instruction">IN A,(254)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28452"></span>28452</td>
+<td class="instruction">BIT 4,A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28483.html">Handler_MoveShip_Left</a> if "left" ("5") is being pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28454"></span>28454</td>
+<td class="instruction">JR Z,<a href="28483.html">Handler_MoveShip_Left</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28456"></span>
+<div class="comments">
+<div class="paragraph">
+Now test for "right" being pressed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28456"></span>28456</td>
+<td class="instruction">LD A,239</td>
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">239</td>
+<td class="centre" colspan="1" rowspan="1">0</td>
+<td class="centre" colspan="1" rowspan="1">9</td>
+<td class="centre" colspan="1" rowspan="1">8</td>
+<td class="centre" colspan="1" rowspan="1">7</td>
+<td class="centre" colspan="1" rowspan="1">6</td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28458"></span>28458</td>
+<td class="instruction">IN A,(254)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28460"></span>28460</td>
+<td class="instruction">BIT 2,A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28637.html">Handler_MoveShip_Right</a> if "right" ("8") is being pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28462"></span>28462</td>
+<td class="instruction">JP Z,<a href="28637.html">Handler_MoveShip_Right</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28465"></span>28465</td>
+<td class="instruction">JR <a href="28408.html#28480">Ship_NoMovement</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28408.html#28480">Ship_NoMovement</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28467"></span>
+<div class="comments">
+<div class="paragraph">
+Else, the only control option left is the keyboard.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">ShipMovement_CheckKeyboard</td>
+<td class="address-2"><span id="28467"></span>28467</td>
+<td class="instruction">LD A,254</td>
+<td class="comment-1" rowspan="2">Read from the keyboard; <table class="default">
+<tr>
+<th colspan="1" rowspan="2">Port Number</th>
+<th colspan="5" rowspan="1">Bit</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">0</th>
+<th colspan="1" rowspan="1">1</th>
+<th colspan="1" rowspan="1">2</th>
+<th colspan="1" rowspan="1">3</th>
+<th colspan="1" rowspan="1">4</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">254</td>
+<td class="centre" colspan="1" rowspan="1">SHIFT</td>
+<td class="centre" colspan="1" rowspan="1">Z</td>
+<td class="centre" colspan="1" rowspan="1">X</td>
+<td class="centre" colspan="1" rowspan="1">C</td>
+<td class="centre" colspan="1" rowspan="1">V</td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28469"></span>28469</td>
+<td class="instruction">IN A,(254)</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28471"></span>
+<div class="comments">
+<div class="paragraph">
+The demo mode handler also lands here, and just checks the bits of the given random number rather than actual key presses.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Ship_DemoMovement</td>
+<td class="address-2"><span id="28471"></span>28471</td>
+<td class="instruction">BIT 0,A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28483.html">Handler_MoveShip_Left</a> if "SHIFT" is being pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28473"></span>28473</td>
+<td class="instruction">JR Z,<a href="28483.html">Handler_MoveShip_Left</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28475"></span>28475</td>
+<td class="instruction">BIT 1,A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28637.html">Handler_MoveShip_Right</a> if "Z" is being pressed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28477"></span>28477</td>
+<td class="instruction">JP Z,<a href="28637.html">Handler_MoveShip_Right</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28480"></span>
+<div class="comments">
+<div class="paragraph">
+Handle when there's been no movement.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Ship_NoMovement</td>
+<td class="address-2"><span id="28480"></span>28480</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore the player position from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="28481"></span>28481</td>
+<td class="instruction">JR <a href="28563.html">Handler_UpdateShipPosition</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28563.html">Handler_UpdateShipPosition</a>.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="28111.html">28111</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#28408">Map</a></td>
+<td class="next">
+Next: <a href="28483.html">28483</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/6EF8.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>
