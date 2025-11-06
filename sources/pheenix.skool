@@ -2860,6 +2860,8 @@ g$6691 DEFB $00,$00
 g$6693 DEFB $00
 
 ; Shield Timer
+;
+; Set and handled by the routine at #R$6E1B.
 @label=ShieldTimer
 g$6694 DEFB $00
 
@@ -4226,7 +4228,7 @@ g$6C13 DEFB $84,$01,$64
 
 ; Check Collision
 ;
-; Used by the routine at #R$6DCF.
+; Used by the routines at #R$6DCF, #R$6F43 and #R$6FDD.
 @label=CheckCollision
 c$6C9D LD A,($6693)  ; {Return if #R$6693 is active.
  $6CA0 OR A          ;
@@ -4451,10 +4453,10 @@ c$6CEE LD HL,$66A4   ; {Jump to #R$6DCF if *#R$66A4 is zero.
  $6DCA OUT ($FE),A   ; }
  $6DCC JP $7030      ; Jump to #R$7030.
 
-; Handler: Player Ship/ Shield
+; Handler: Shield
 ;
 ; Used by the routine at #R$6CEE.
-@label=Handler_PlayerShipShield
+@label=Handler_Shield
 c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6DD2 LD A,($66ED)  ; #REGa=*#R$66ED.
  $6DD5 PUSH AF       ; Stash the player position on the stack.
@@ -4474,7 +4476,7 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
 ; Check for shield activation player inputs.
 ; .
 ; Start by checking if the game is running in demo mode or not?
-@label=PlayerShipShield_CheckDemoMode
+@label=Shield_CheckDemoMode
 *$6DE8 LD A,($66F3)  ; {Jump to #R$6DF6 if *#R$66F3 is not active.
  $6DEB OR A          ;
  $6DEC JR Z,$6DF6    ; }
@@ -4485,18 +4487,18 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6DF2 JR Z,$6E1B    ; }
  $6DF4 JR $6E20      ; Jump to #R$6E20.
 ; Check if the control method is the Kempston joystick?
-@label=PlayerShipShield_CheckKempston
+@label=Shield_CheckKempston
 *$6DF6 LD A,($66F6)  ; {Jump to #R$6E05 if *#R$66F6 is not the Kempston
  $6DF9 CP $02        ; joystick.
  $6DFB JR NZ,$6E05   ; }
 ; The control method is Kempston joystick, so test for "down" being
 ; pressed.
  $6DFD IN A,($1F)    ; #REGa=read from the Kempston joystick port.
- $6DFF AND %00000100 ; Keep only bit 2 ("down").
- $6E01 JR NZ,$6E1B   ; Jump to #R$6E1B if "down" is being pressed.
+ $6DFF AND %00000100 ; {Jump to #R$6E1B if "down" (bit 2) is being pressed.
+ $6E01 JR NZ,$6E1B   ; }
  $6E03 JR $6E20      ; Jump to #R$6E20.
 ; Check if the control method is the AGF joystick?
-@label=PlayerShipShield_CheckAGF
+@label=Shield_CheckAGF
 *$6E05 CP $01        ; {Jump to #R$6E13 if *#R$66F6 is not the AGF joystick.
  $6E07 JR NZ,$6E13   ; }
 ; The control method is the AGF joystick, so test for "down" being
@@ -4507,11 +4509,11 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
                      ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
                      ; { #N$EF | 0 | 9 | 8 | 7 | 6 }
                      ; TABLE#}
- $6E0D BIT 4,A       ; {Jump to #R$6E1B if "4" was pressed.
+ $6E0D BIT 4,A       ; {Jump to #R$6E1B if "down" ("4") was pressed.
  $6E0F JR Z,$6E1B    ; }
  $6E11 JR $6E20      ; Jump to #R$6E20.
 ; Else, the only control option left is the keyboard.
-@label=PlayerShipShield_CheckKeyboard
+@label=Shield_CheckKeyboard
 *$6E13 LD A,$BF      ; {Read from the keyboard;
  $6E15 IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
                      ; { =h,r2 Port Number | =h,c5 Bit }
@@ -4521,27 +4523,30 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6E17 AND %00000001 ; {Jump to #R$6E20 if "ENTER" isn't being pressed.
  $6E19 JR NZ,$6E20   ; }
 ; Activate the shield.
-@label=PlayerShipShield_ActivateShield
+@label=Shield_ActivateShield
 *$6E1B LD (HL),$FF   ; Write #N$FF to *#R$6694.
  $6E1D DEC HL        ; {Write #N$01 to *#R$6693 to activate it.
  $6E1E LD (HL),$01   ; }
-; Draw the players ship.
-@label=DrawPlayersShip
+; Play a sound when the shield is active (but not in demo mode).
+@label=PlayShieldSound
 *$6E20 LD A,($6693)  ; {Jump to #R$6EF8 if *#R$6693 is not active.
  $6E23 OR A          ;
  $6E24 JP Z,$6EF8    ; }
  $6E27 LD A,($66F3)  ; {Jump to #R$6E40 if *#R$66F3 is active.
  $6E2A OR A          ;
  $6E2B JR NZ,$6E40   ; }
+; Play an iteration of the shield sound effect.
+; .
+; #HTML(#AUDIO(shield.wav)(#INCLUDE(Shield)))
  $6E2D LD A,($6694)  ; #REGa=*#R$6694.
- $6E30 AND %00000111 ; Keep only bits 0-2.
- $6E32 ADD A,A       ; #REGa+=#REGa.
- $6E33 ADD A,A       ; #REGa+=#REGa.
- $6E34 LD HL,$00DE   ; #REGhl=#N($00DE,$04,$04).
- $6E37 LD D,H        ; #REGd=#REGh.
- $6E38 LD E,A        ; #REGe=#REGa.
- $6E39 ADD HL,DE     ; #REGhl+=#REGde.
- $6E3A LD E,$04      ; #REGe=#N$04.
+ $6E30 AND %00000111 ; {Calculate the sound pitch: #N($00DE,$04,$04) +
+ $6E32 ADD A,A       ; ((*#R$6694 & #N$07) × #N$04).
+ $6E33 ADD A,A       ;
+ $6E34 LD HL,$00DE   ;
+ $6E37 LD D,H        ;
+ $6E38 LD E,A        ;
+ $6E39 ADD HL,DE     ; }
+ $6E3A LD E,$04      ; Set the duration in #REGe to #N$04.
  $6E3C CALL $03B5    ; #HTML(Call <a "noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
  $6E3F DI            ; Disable interrupts.
@@ -4649,16 +4654,20 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6EF5 POP BC        ; Restore #REGbc from the stack.
  $6EF6 DJNZ $6EEC    ; Decrease counter by one and loop back to #R$6EEC until
                      ; counter is zero.
-; Handle player movement input.
-@label=PlayerShipShield_Movement
-*$6EF8 LD H,$50      ; Set #REGh to #N$50 (screen buffer base).
+; Continue on to #R$6EF8.
+
+; Handler: Ship Movement
+;
+; Used by the routine at #R$6DCF.
+@label=Handler_ShipMovement
+c$6EF8 LD H,$50      ; Set #REGh to #N$50 (screen buffer base).
  $6EFA LD A,($66F3)  ; {Jump to #R$6F05 if *#R$66F3 is active.
  $6EFD OR A          ;
  $6EFE JR Z,$6F05    ; }
  $6F00 LD A,($66F4)  ; #REGa=*#R$66F4.
  $6F03 JR $6F37      ; Jump to #R$6F37.
 ; Check if the control method is the Kempston joystick?
-@label=PlayerShipShield_CheckKempstonMovement
+@label=ShipMovement_CheckKempston
 *$6F05 DI            ; Disable interrupts.
 ; The control method is Kempston joystick, so test for "left" or "right"
 ; being pressed.
@@ -4673,7 +4682,7 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6F17 JP Z,$6FDD    ; }
  $6F1A JR $6F40      ; Jump to #R$6F40.
 ; Check if the control method is the AGF joystick?
-@label=PlayerShipShield_CheckAGFMovement
+@label=ShipMovement_CheckAGF
 *$6F1C CP $01        ; {Jump to #R$6F33 if *#R$66F6 is not the AGF joystick.
  $6F1E JR NZ,$6F33   ; }
 ; The control method is the AGF joystick, so test for "left" being
@@ -4697,24 +4706,30 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6F2E JP Z,$6FDD    ; }
  $6F31 JR $6F40      ; Jump to #R$6F40.
 ; Else, the only control option left is the keyboard.
-@label=PlayerShipShield_CheckKeyboardMovement
+@label=ShipMovement_CheckKeyboard
 *$6F33 LD A,$FE      ; {Read from the keyboard;
  $6F35 IN A,($FE)    ; #TABLE(default,centre,centre,centre,centre,centre,centre)
                      ; { =h,r2 Port Number | =h,c5 Bit }
                      ; { =h 0 | =h 1 | =h 2 | =h 3 | =h 4 }
                      ; { #N$FE | SHIFT | Z | X | C | V }
                      ; TABLE#}
-@label=PlayerShip_DemoMovement
+; The demo mode handler also lands here, and just checks the bits of the
+; given random number rather than actual key presses.
+@label=Ship_DemoMovement
 *$6F37 BIT 0,A       ; {Jump to #R$6F43 if "SHIFT" is being pressed.
  $6F39 JR Z,$6F43    ; }
  $6F3B BIT 1,A       ; {Jump to #R$6FDD if "Z" is being pressed.
  $6F3D JP Z,$6FDD    ; }
-@label=PlayerShipShield_NoMovement
+; Handle when there's been no movement.
+@label=Ship_NoMovement
 *$6F40 POP AF        ; Restore the player position from the stack.
  $6F41 JR $6F93      ; Jump to #R$6F93.
-; Move player ship left.
-@label=PlayerShipShield_MoveLeft
-*$6F43 POP AF        ; Restore the player position from the stack.
+
+; Handler: Move Ship Left
+;
+; Used by the routine at #R$6EF8.
+@label=Handler_MoveShip_Left
+c$6F43 POP AF        ; Restore the player position from the stack.
  $6F44 CP $C0        ; {Jump to #R$6F52 if #REGa is not equal to #N$C0.
  $6F46 JR NZ,$6F52   ; }
  $6F48 LD A,($66A6)  ; {Jump to #R$6F93 if *#R$66A6 is equal to #N$03.
@@ -4763,11 +4778,13 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6F8C DEC A         ; Decrease #REGa by one.
 *$6F8D LD ($66ED),A  ; Write #REGa to *#R$66ED.
  $6F90 CALL $6C9D    ; Call #R$6C9D.
-; This entry point is used by the routine at #R$6CC9.
-; .
-; Update the ship attributes.
-@label=PlayerShipShield_UpdatePosition
-*$6F93 LD A,($66A4)  ; {Jump to #R$7030 if *#R$66A4 is not zero.
+; Continue on to #R$6F93.
+
+; Handler: Update Ship Attributes
+;
+; Used by the routines at #R$6CC9, #R$6EF8, #R$6F43 and #R$6FDD.
+@label=Handler_UpdateShipPosition
+c$6F93 LD A,($66A4)  ; {Jump to #R$7030 if *#R$66A4 is not zero.
  $6F96 OR A          ;
  $6F97 JP NZ,$7030   ; }
  $6F9A LD HL,($66ED) ; #REGhl=*#R$66ED.
@@ -4798,11 +4815,11 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6FC6 DJNZ $6FC4    ; Decrease counter by one and loop back to #R$6FC4 until
                      ; counter is zero.
  $6FC8 PUSH AF       ; Stash #REGaf on the stack.
- $6FC9 LD A,(HL)     ; #REGa=*#REGhl.
- $6FCA CP $46        ; Compare #REGa with #N$46.
- $6FCC JR Z,$6FD2    ; Jump to #R$6FD2 if #REGa is equal to #N$46.
- $6FCE CP $07        ; Compare #REGa with #N$07.
- $6FD0 JR NZ,$6FD4   ; Jump to #R$6FD4 if #REGa is not equal to #N$07.
+ $6FC9 LD A,(HL)     ; {Jump to #R$6FD2 if *#REGhl is equal to #COLOUR$46.
+ $6FCA CP $46        ;
+ $6FCC JR Z,$6FD2    ; }
+ $6FCE CP $07        ; {Jump to #R$6FD4 if *#REGhl is not equal to #INK$07.
+ $6FD0 JR NZ,$6FD4   ; }
 *$6FD2 LD (HL),$00   ; Write #N$00 to *#REGhl.
 *$6FD4 POP AF        ; {Restore #REGaf and #REGhl from the stack.
  $6FD5 POP HL        ; }
@@ -4811,9 +4828,12 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6FD9 DJNZ $6FB2    ; Decrease counter by one and loop back to #R$6FB2 until
                      ; counter is zero.
  $6FDB JR $7030      ; Jump to #R$7030.
-; Move player ship right.
-@label=PlayerShipShield_MoveRight
-*$6FDD POP AF        ; Restore the player position from the stack.
+
+; Handler: Move Ship Right
+;
+; Used by the routine at #R$6EF8.
+@label=Handler_MoveShip_Right
+c$6FDD POP AF        ; Restore the player position from the stack.
  $6FDE CP $DD        ; Compare the player position with #N$DD.
  $6FE0 LD A,($66A6)  ; #REGa=*#R$66A6.
  $6FE3 JR NZ,$6FE8   ; Jump to #R$6FE8 if the player position is not equal to
@@ -4869,7 +4889,7 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
 
 ; Handler: Player Bullets
 ;
-; Used by the routines at #R$6CEE and #R$6DCF.
+; Used by the routines at #R$6CEE and #R$6F93.
 @label=Handler_PlayerBullets
 c$7030 LD HL,$6695   ; #REGhl=#R$6695.
  $7033 LD A,(HL)     ; {Jump to #R$703A if *#R$6695 is not equal to #N$03.

@@ -11,3 +11,7 @@
 [Audio:Death]
 
 #AUDIO(death.wav)(#INCLUDE(Death))
+
+[Audio:Shield]
+
+#AUDIO(shield.wav)(#INCLUDE(Shield))
