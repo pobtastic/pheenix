@@ -2775,76 +2775,87 @@ g$658A DEFB $21      ; Screen buffer address #N(#PC-$658A):
 @label=RandomNumberSeed
 g$65DB DEFW $0000
 
-; Table: Alien Wave Data
+; Active Alien Wave Data Buffer
 @label=Table_AlienWaveData
-w$65DD DEFW $48A0
- $65DF DEFW $48BD
- $65E1 DEFW $48BD
- $65E3 DEFW $4860
- $65E5 DEFW $485D
- $65E7 DEFW $487D
- $65E9 DEFW $4820
- $65EB DEFW $483D
- $65ED DEFW $40E0
- $65EF DEFW $40FD
- $65F1 DEFW $40FD
- $65F3 DEFW $40A0
- $65F5 DEFW $40BD
- $65F7 DEFW $4060
- $65F9 DEFW $407D
- $65FB DEFW $48A0
- $65FD DEFW $48BD
- $65FF DEFW $48BD
- $6601 DEFW $4860
- $6603 DEFW $485D
- $6605 DEFW $487D
- $6607 DEFW $4820
- $6609 DEFW $483D
- $660B DEFW $40E0
- $660D DEFW $40FD
- $660F DEFW $40FD
- $6611 DEFW $40A0
- $6613 DEFW $40BD
- $6615 DEFW $4060
- $6617 DEFW $407D
- $6619 DEFW $48FD
- $661B DEFW $48C0
- $661D DEFW $48DD
- $661F DEFW $489D
- $6621 DEFW $4860
- $6623 DEFW $4860
- $6625 DEFW $487D
- $6627 DEFW $487D
- $6629 DEFW $4820
- $662B DEFW $483D
- $662D DEFW $483D
- $662F DEFW $40DD
- $6631 DEFW $4060
- $6633 DEFW $407D
- $6635 DEFW $407D
- $6637 DEFW $4082
- $6639 DEFW $C05B
- $663B DEFW $4801
- $663D DEFW $C0DC
- $663F DEFW $4880
- $6641 DEFW $C85D
- $6643 DEFW $4FFF
- $6645 DEFW $C8DE
- $6647 DEFW $483D
- $6649 DEFW $4820
- $664B DEFW $40FD
- $664D DEFW $40E0
- $664F DEFW $40BD
- $6651 DEFW $40A0
- $6653 DEFW $407D
- $6655 DEFW $4060
- $6657 DEFW $AFAB
- $6659 DEFW $69B3
- $665B DEFW $754F
- $665D DEFW $3727
- $665F DEFW $EFE5
- $6661 DEFW $A7F9
- $6663 DEFW $69B7
+g$65DD DEFW $48A0    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65DF DEFW $48BD    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65E1 DEFW $48BD    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65E3 DEFW $4860    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65E5 DEFW $485D    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65E7 DEFW $487D    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65E9 DEFW $4820    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65EB DEFW $483D    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65ED DEFW $40E0    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65EF DEFW $40FD    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65F1 DEFW $40FD    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65F3 DEFW $40A0    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65F5 DEFW $40BD    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65F7 DEFW $4060    ; Alien position: #N($01+(#PC-$65DD)/$02).
+ $65F9 DEFW $407D    ; Alien position: #N($01+(#PC-$65DD)/$02).
+
+; Table: Phase #N$00 Alien Wave Data
+@label=Table_AlienWaveData_00
+g$65FB DEFW $48A0    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $65FD DEFW $48BD    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $65FF DEFW $48BD    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6601 DEFW $4860    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6603 DEFW $485D    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6605 DEFW $487D    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6607 DEFW $4820    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6609 DEFW $483D    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $660B DEFW $40E0    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $660D DEFW $40FD    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $660F DEFW $40FD    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6611 DEFW $40A0    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6613 DEFW $40BD    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6615 DEFW $4060    ; Alien position: #N($01+(#PC-$65FB)/$02).
+ $6617 DEFW $407D    ; Alien position: #N($01+(#PC-$65FB)/$02).
+
+; Table: Phase #N$01 Alien Wave Data
+@label=Table_AlienWaveData_01
+g$6619 DEFW $48FD    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $661B DEFW $48C0    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $661D DEFW $48DD    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $661F DEFW $489D    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6621 DEFW $4860    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6623 DEFW $4860    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6625 DEFW $487D    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6627 DEFW $487D    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6629 DEFW $4820    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $662B DEFW $483D    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $662D DEFW $483D    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $662F DEFW $40DD    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6631 DEFW $4060    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6633 DEFW $407D    ; Alien position: #N($01+(#PC-$6619)/$02).
+ $6635 DEFW $407D    ; Alien position: #N($01+(#PC-$6619)/$02).
+
+; Table: Phase #N$02/ #N$03 Alien Wave Data
+@label=Table_AlienWaveData_02_03
+g$6637 DEFW $4082    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $6639 DEFW $C05B    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $663B DEFW $4801    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $663D DEFW $C0DC    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $663F DEFW $4880    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $6641 DEFW $C85D    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $6643 DEFW $4FFF    ; Alien position: #N($01+(#PC-$6637)/$02).
+ $6645 DEFW $C8DE    ; Alien position: #N($01+(#PC-$6637)/$02).
+
+; Table: Phase #N$04 Alien Wave Data
+;
+; Mothership level.
+@label=Table_AlienWaveData_04
+g$6647 DEFW $483D    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $6649 DEFW $4820    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $664B DEFW $40FD    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $664D DEFW $40E0    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $664F DEFW $40BD    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $6651 DEFW $40A0    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $6653 DEFW $407D    ; Alien position: #N($01+(#PC-$6647)/$02).
+ $6655 DEFW $4060    ; Alien position: #N($01+(#PC-$6647)/$02).
+
+; Game status buffer entry at 6657
+g$6657 DEFB $AB,$AF,$B3,$69,$4F,$75,$27,$37
+ $665F DEFB $E5,$EF,$F9,$A7,$B7,$69
 
 ; Game status buffer entry at 6665
 g$6665 DEFB $75
@@ -2864,11 +2875,11 @@ g$667D DEFB $43
 @label=Pheenix_Colour_02
  $667E DEFB $06
 
-; Enemy Count
+; Alien Count
 ;
 ; The number of alien enemies "in-play" on the screen (not counting the
 ; mothership/ mothership alien which is handled separately).
-@label=EnemyCount
+@label=AlienCount
 g$667F DEFB $0F
 
 ; Game status buffer entry at 6680
@@ -3371,6 +3382,8 @@ c$6845 LD HL,$613D   ; #REGhl=#R$613D.
 ; Handler for the left half of the Eggsplosion.
 ;
 ; DE Attribute buffer destination
+;
+; #CLS$00 #SIM(start=$684E,stop=$688F,de=$5890)#SCR$02(screen-eggsplosion-left)
 @label=Handler_EggsplosionLeft
 c$684E LD HL,$606E   ; #REGhl=#R$606E.
  $6851 JR $6856      ; Jump to #R$6856.
@@ -3383,7 +3396,8 @@ c$684E LD HL,$606E   ; #REGhl=#R$606E.
 ;
 ; DE Attribute buffer destination
 ;
-; #CLS$00 #SIM(start=$6853,stop=$688F,de=$5850)#SCR$02(mehhhh)
+; #CLS$00
+; #SIM(start=$6853,stop=$688F,de=$5890)#SCR$02(screen-eggsplosion-right)
 @label=Handler_EggsplosionRight
 c$6853 LD HL,$608E   ; #REGhl=#R$608E.
 ; This entry point is used by the routine at #R$684E.
@@ -5199,112 +5213,122 @@ c$7030 LD HL,$6695   ; #REGhl=#R$6695.
 ; Routine at 7159
 ;
 ; Used by the routine at #R$7030.
-c$7159 LD A,($66F1)  ;
- $715C AND $02       ;
- $715E JR NZ,$7176   ;
- $7160 LD DE,($667D) ;
- $7164 LD A,(HL)     ;
+c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
+ $715C AND %00000010 ; #N$03.
+ $715E JR NZ,$7176   ; }
+ $7160 LD DE,($667D) ; #REGde=*#R$667D.
+ $7164 LD A,(HL)     ; {Jump to #R$7176 if *#REGhl is not equal to #REGd.
  $7165 CP D          ;
- $7166 JR NZ,$7176   ;
- $7168 INC HL        ;
- $7169 LD A,(HL)     ;
- $716A DEC HL        ;
- $716B CP E          ;
- $716C JR Z,$717F    ;
- $716E DEC HL        ;
- $716F LD A,(HL)     ;
- $7170 DEC HL        ;
- $7171 CP E          ;
- $7172 JR Z,$717F    ;
- $7174 INC HL        ;
- $7175 INC HL        ;
-*$7176 LD A,(HL)     ;
+ $7166 JR NZ,$7176   ; }
+ $7168 INC HL        ; Increment #REGhl by one.
+ $7169 LD A,(HL)     ; #REGa=*#REGhl.
+ $716A DEC HL        ; Decrease #REGhl by one.
+ $716B CP E          ; {Jump to #R$717F if #REGa is equal to #REGe.
+ $716C JR Z,$717F    ; }
+ $716E DEC HL        ; Decrease #REGhl by one.
+ $716F LD A,(HL)     ; #REGa=*#REGhl.
+ $7170 DEC HL        ; Decrease #REGhl by one.
+ $7171 CP E          ; {Jump to #R$717F if #REGa is equal to #REGe.
+ $7172 JR Z,$717F    ; }
+ $7174 INC HL        ; {Increment #REGhl by two.
+ $7175 INC HL        ; }
+*$7176 LD A,(HL)     ; {Jump to #R$71BE if *#REGhl is not equal to #N$06.
  $7177 CP $06        ;
- $7179 JR NZ,$71BE   ;
- $717B DEC HL        ;
- $717C AND A         ;
- $717D SBC HL,BC     ;
-*$717F PUSH HL       ;
- $7180 CALL $6704    ;
- $7183 EX DE,HL      ;
- $7184 LD HL,$65DD   ;
- $7187 LD A,($66F1)  ;
- $718A AND $06       ;
- $718C LD B,$08      ;
- $718E JR NZ,$7192   ;
- $7190 LD B,$0F      ;
-*$7192 LD A,(HL)     ;
+ $7179 JR NZ,$71BE   ; }
+ $717B DEC HL        ; Decrease #REGhl by one.
+ $717C AND A         ; {#REGhl-=#REGbc.
+ $717D SBC HL,BC     ; }
+*$717F PUSH HL       ; Stash #REGhl on the stack.
+ $7180 CALL $6704    ; Call #R$6704.
+ $7183 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
+ $7184 LD HL,$65DD   ; #REGhl=#R$65DD.
+ $7187 LD A,($66F1)  ; #REGa=*#R$66F1.
+ $718A AND %00000110 ; Keep only bits 1-2.
+ $718C LD B,$08      ; #REGb=#N$08.
+ $718E JR NZ,$7192   ; Jump to #R$7192 if #REGhl is not equal to #REGa.
+ $7190 LD B,$0F      ; #REGb=#N$0F.
+*$7192 LD A,(HL)     ; {Jump to #R$719C if *#REGhl is equal to #REGe.
  $7193 CP E          ;
- $7194 JR Z,$719C    ;
- $7196 INC HL        ;
-*$7197 INC HL        ;
- $7198 DJNZ $7192    ;
- $719A POP HL        ;
- $719B RET           ;
-*$719C INC HL        ;
- $719D PUSH DE       ;
- $719E LD D,(HL)     ;
- $719F RES 7,D       ;
- $71A1 LD A,D        ;
- $71A2 POP DE        ;
- $71A3 CP D          ;
- $71A4 JR Z,$71A8    ;
- $71A6 JR $7197      ;
-*$71A8 LD (HL),$00   ;
- $71AA POP DE        ;
+ $7194 JR Z,$719C    ; }
+ $7196 INC HL        ; {Increment #REGhl by two.
+*$7197 INC HL        ; }
+ $7198 DJNZ $7192    ; Decrease counter by one and loop back to #R$7192 until
+                     ; counter is zero.
+ $719A POP HL        ; Restore #REGhl from the stack.
+ $719B RET           ; Return.
+*$719C INC HL        ; Increment #REGhl by one.
+ $719D PUSH DE       ; Stash #REGde on the stack.
+ $719E LD D,(HL)     ; #REGd=*#REGhl.
+ $719F RES 7,D       ; Reset bit 7 of #REGd.
+ $71A1 LD A,D        ; #REGa=#REGd.
+ $71A2 POP DE        ; Restore #REGde from the stack.
+ $71A3 CP D          ; {Jump to #R$71A8 if #REGa is equal to #REGd.
+ $71A4 JR Z,$71A8    ; }
+ $71A6 JR $7197      ; Jump to #R$7197.
+*$71A8 LD (HL),$00   ; Write #N$00 to *#REGhl.
+ $71AA POP DE        ; Restore #REGde from the stack.
 ; This entry point is used by the routine at #R$7616.
-*$71AB LD HL,$66D5   ;
-*$71AE LD A,(HL)     ;
- $71AF OR A          ;
- $71B0 JR Z,$71B7    ;
- $71B2 INC HL        ;
+; .
+; Locate an empty explosion slot.
+; .
+; Noting that ... this doesn't check for an "end" so has the potential to
+; overwrite data!
+*$71AB LD HL,$66D5   ; #REGhl=#R$66D5.
+*$71AE LD A,(HL)     ; {Jump to #R$71B7 if the active flag of this slot is marked as
+ $71AF OR A          ; inactive.
+ $71B0 JR Z,$71B7    ; }
+ $71B2 INC HL        ; {Move to the next set of explosion data.
  $71B3 INC HL        ;
- $71B4 INC HL        ;
- $71B5 JR $71AE      ;
-*$71B7 LD (HL),$01   ;
- $71B9 INC HL        ;
- $71BA LD (HL),E     ;
+ $71B4 INC HL        ; }
+ $71B5 JR $71AE      ; Jump back to #R$71AE.
+; Activate this explosion slot.
+@label=ActivateExplosion
+*$71B7 LD (HL),$01   ; Activate this explosion slot.
+ $71B9 INC HL        ; {Write the position held by #REGde to the explosion slot
+ $71BA LD (HL),E     ; data.
  $71BB INC HL        ;
- $71BC LD (HL),D     ;
- $71BD RET           ;
-*$71BE LD A,($66F1)  ;
+ $71BC LD (HL),D     ; }
+ $71BD RET           ; Return.
+*$71BE LD A,($66F1)  ; {Jump to #R$71EC if bit 1 of *#R$66F1 is not set.
  $71C1 BIT 1,A       ;
- $71C3 JR Z,$71EC    ;
- $71C5 LD A,(HL)     ;
- $71C6 CP $43        ;
- $71C8 JR Z,$71D1    ;
- $71CA CP $41        ;
- $71CC JR Z,$71D1    ;
- $71CE CP $05        ;
- $71D0 RET NZ        ;
-*$71D1 LD A,($66F3)  ;
+ $71C3 JR Z,$71EC    ; }
+ $71C5 LD A,(HL)     ; #REGa=*#REGhl.
+ $71C6 CP $43        ; {Jump to #R$71D1 if #REGa is equal to #N$43.
+ $71C8 JR Z,$71D1    ; }
+ $71CA CP $41        ; {Jump to #R$71D1 if #REGa is equal to #N$41.
+ $71CC JR Z,$71D1    ; }
+ $71CE CP $05        ; {Return if #REGa is not equal to #N$05.
+ $71D0 RET NZ        ; }
+*$71D1 LD A,($66F3)  ; {Return if *#R$66F3 is active.
  $71D4 OR A          ;
- $71D5 RET NZ        ;
- $71D6 LD B,$18      ;
- $71D8 LD HL,$0122   ;
-*$71DB PUSH BC       ;
- $71DC PUSH HL       ;
- $71DD LD DE,$0001   ;
- $71E0 CALL $03B5    ;
- $71E3 DI            ;
- $71E4 POP HL        ;
- $71E5 INC HL        ;
+ $71D5 RET NZ        ; }
+ $71D6 LD B,$18      ; #REGb=#N$18.
+ $71D8 LD HL,$0122   ; #REGhl=#N($0122,$04,$04).
+*$71DB PUSH BC       ; {Stash #REGbc and #REGhl on the stack.
+ $71DC PUSH HL       ; }
+ $71DD LD DE,$0001   ; #REGde=#N($0001,$04,$04).
+ $71E0 CALL $03B5    ; #HTML(Call <a "noopener nofollow"
+                     ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
+ $71E3 DI            ; Disable interrupts.
+ $71E4 POP HL        ; Restore #REGhl from the stack.
+ $71E5 INC HL        ; {Increment #REGhl by three.
  $71E6 INC HL        ;
- $71E7 INC HL        ;
- $71E8 POP BC        ;
- $71E9 DJNZ $71DB    ;
- $71EB RET           ;
-*$71EC CP $04        ;
- $71EE RET NZ        ;
- $71EF LD A,(HL)     ;
+ $71E7 INC HL        ; }
+ $71E8 POP BC        ; Restore #REGbc from the stack.
+ $71E9 DJNZ $71DB    ; Decrease counter by one and loop back to #R$71DB until
+                     ; counter is zero.
+ $71EB RET           ; Return.
+*$71EC CP $04        ; {Return if #REGa is not equal to #N$04.
+ $71EE RET NZ        ; }
+ $71EF LD A,(HL)     ; {Jump to #R$71F8 if *#REGhl is not equal to #N$01.
  $71F0 CP $01        ;
- $71F2 JR NZ,$71F8   ;
- $71F4 LD (HL),$40   ;
- $71F6 JR $721E      ;
-*$71F8 CP $0F        ;
- $71FA JR NZ,$7200   ;
- $71FC LD (HL),$01   ;
- $71FE JR $7229      ;
+ $71F2 JR NZ,$71F8   ; }
+ $71F4 LD (HL),$40   ; Write #N$40 to *#REGhl.
+ $71F6 JR $721E      ; Jump to #R$721E.
+*$71F8 CP $0F        ; {Jump to #R$7200 if #REGa is not equal to #N$0F.
+ $71FA JR NZ,$7200   ; }
+ $71FC LD (HL),$01   ; Write #N$01 to *#REGhl.
+ $71FE JR $7229      ; Jump to #R$7229.
 
 ; Routine at 7200
 ;
@@ -5692,16 +5716,18 @@ c$740C LD HL,$6680   ; #REGhl=#R$6680.
  $7427 CALL $74A4    ; Call #R$74A4.
  $742A POP HL        ; Restore #REGhl from the stack.
  $742B JR $7431      ; Jump to #R$7431.
+@label=NextPhase
 *$742D INC (HL)      ; Increment *#REGhl by one.
  $742E LD A,$04      ; {Write #N$04 to *#REGde.
  $7430 LD (DE),A     ; }
 *$7431 LD A,(HL)     ; #REGa=*#REGhl.
  $7432 PUSH AF       ; Stash #REGaf on the stack.
  $7433 AND %00000110 ; Keep only bits 1-2.
- $7435 LD HL,$667F   ; {Write #N$08 to *#R$667F.
+ $7435 LD HL,$667F   ; {Set *#R$667F to #N$08 aliens.
  $7438 LD (HL),$08   ; }
  $743A JR NZ,$743E   ; Jump to #R$743E if *#REGhl is not equal to #N$04.
- $743C LD (HL),$0F   ; Write #N$0F to *#REGhl.
+ $743C LD (HL),$0F   ; Set *#R$667F to #N$0F aliens.
+@label=SetAlienWaveData
 *$743E LD HL,$6637   ; #REGhl=#R$6637.
  $7441 POP AF        ; Restore #REGaf from the stack.
  $7442 OR A          ; {Jump to #R$744A if *#REGhl is not equal to #REGa.
@@ -5715,6 +5741,7 @@ c$740C LD HL,$6680   ; #REGhl=#R$6680.
 *$7453 CP $04        ; {Jump to #R$745A if #REGa is not equal to #N$04.
  $7455 JR NZ,$745A   ; }
  $7457 LD HL,$6647   ; #REGhl=#R$6647.
+@label=CopyWaveData
 *$745A LD DE,$65DD   ; #REGde=#R$65DD.
  $745D LD A,($667F)  ; {#REGc=*#R$667F multiplied by #N$02.
  $7460 ADD A,A       ;

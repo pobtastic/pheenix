@@ -421,11 +421,33 @@ g $65DB Random Number Seed
 D $65DB Used by the routine at #R$670E.
 W $65DB,$02
 
-w $65DD Table: Alien Wave Data
+g $65DD Active Alien Wave Data Buffer
 @ $65DD label=Table_AlienWaveData
-  $65FB
-  $6619
-  $6637
+W $65DD,$02 Alien position: #N($01+(#PC-$65DD)/$02).
+L $65DD,$02,$0F
+
+g $65FB Table: Phase #N$00 Alien Wave Data
+@ $65FB label=Table_AlienWaveData_00
+W $65FB,$02 Alien position: #N($01+(#PC-$65FB)/$02).
+L $65FB,$02,$0F
+
+g $6619 Table: Phase #N$01 Alien Wave Data
+@ $6619 label=Table_AlienWaveData_01
+W $6619,$02 Alien position: #N($01+(#PC-$6619)/$02).
+L $6619,$02,$0F
+
+g $6637 Table: Phase #N$02/ #N$03 Alien Wave Data
+@ $6637 label=Table_AlienWaveData_02_03
+W $6637,$02 Alien position: #N($01+(#PC-$6637)/$02).
+L $6637,$02,$08
+
+g $6647 Table: Phase #N$04 Alien Wave Data
+@ $6647 label=Table_AlienWaveData_04
+D $6647 Mothership level.
+W $6647,$02 Alien position: #N($01+(#PC-$6647)/$02).
+L $6647,$02,$08
+
+g $6657
 
 g $6665
 
@@ -440,8 +462,8 @@ B $667D,$01
 @ $667E label=Pheenix_Colour_02
 B $667E,$01
 
-g $667F Enemy Count
-@ $667F label=EnemyCount
+g $667F Alien Count
+@ $667F label=AlienCount
 D $667F The number of alien enemies "in-play" on the screen (not counting the
 . mothership/ mothership alien which is handled separately).
 B $667F,$01
@@ -803,6 +825,7 @@ R $6845 DE Attribute buffer destination
 c $684E Handler: Eggsplosion Left
 @ $684E label=Handler_EggsplosionLeft
 D $684E Handler for the left half of the Eggsplosion.
+N $684E #CLS$00 #SIM(start=$684E,stop=$688F,de=$5890)#SCR$02(screen-eggsplosion-left)
 R $684E DE Attribute buffer destination
   $684E,$03 #REGhl=#R$606E.
   $6851,$02 Jump to #R$6856.
@@ -810,7 +833,7 @@ R $684E DE Attribute buffer destination
 c $6853 Handler: Eggsplosion Right
 @ $6853 label=Handler_EggsplosionRight
 D $6853 Handler for the right half of the Eggsplosion.
-N $6853 #CLS$00 #SIM(start=$6853,stop=$688F,de=$5850)#SCR$02(mehhhh)
+N $6853 #CLS$00 #SIM(start=$6853,stop=$688F,de=$5890)#SCR$02(screen-eggsplosion-right)
 R $6853 DE Attribute buffer destination
   $6853,$03 #REGhl=#R$608E.
 N $6856 Common handler for both left and right shell parts.
@@ -2195,6 +2218,90 @@ N $714E Housekeeping; move onto the next bullet.
   $7158,$01 Return.
 
 c $7159
+  $7159,$03 #REGa=*#R$66F1.
+  $715C,$02,b$01 Keep only bit 1.
+  $715E,$02 Jump to #R$7176 if the result is not zero.
+M $7159,$07 Jump to #R$7176 if this *#R$66F1 is either #N$02 or #N$03.
+  $7160,$04 #REGde=*#R$667D.
+  $7164,$04 Jump to #R$7176 if *#REGhl is not equal to #REGd.
+  $7168,$01 Increment #REGhl by one.
+  $7169,$01 #REGa=*#REGhl.
+  $716A,$01 Decrease #REGhl by one.
+  $716B,$03 Jump to #R$717F if #REGa is equal to #REGe.
+  $716E,$01 Decrease #REGhl by one.
+  $716F,$01 #REGa=*#REGhl.
+  $7170,$01 Decrease #REGhl by one.
+  $7171,$03 Jump to #R$717F if #REGa is equal to #REGe.
+  $7174,$02 Increment #REGhl by two.
+  $7176,$05 Jump to #R$71BE if *#REGhl is not equal to #N$06.
+  $717B,$01 Decrease #REGhl by one.
+  $717C,$03 #REGhl-=#REGbc.
+  $717F,$01 Stash #REGhl on the stack.
+  $7180,$03 Call #R$6704.
+  $7183,$01 Exchange the #REGde and #REGhl registers.
+  $7184,$03 #REGhl=#R$65DD.
+  $7187,$03 #REGa=*#R$66F1.
+  $718A,$02,b$01 Keep only bits 1-2.
+  $718C,$02 #REGb=#N$08.
+  $718E,$02 Jump to #R$7192 if #REGhl is not equal to #REGa.
+  $7190,$02 #REGb=#N$0F.
+  $7192,$04 Jump to #R$719C if *#REGhl is equal to #REGe.
+  $7196,$02 Increment #REGhl by two.
+  $7198,$02 Decrease counter by one and loop back to #R$7192 until counter is zero.
+  $719A,$01 Restore #REGhl from the stack.
+  $719B,$01 Return.
+
+  $719C,$01 Increment #REGhl by one.
+  $719D,$01 Stash #REGde on the stack.
+  $719E,$01 #REGd=*#REGhl.
+  $719F,$02 Reset bit 7 of #REGd.
+  $71A1,$01 #REGa=#REGd.
+  $71A2,$01 Restore #REGde from the stack.
+  $71A3,$03 Jump to #R$71A8 if #REGa is equal to #REGd.
+  $71A6,$02 Jump to #R$7197.
+
+  $71A8,$02 Write #N$00 to *#REGhl.
+  $71AA,$01 Restore #REGde from the stack.
+
+N $71AB Locate an empty explosion slot.
+N $71AB Noting that ... this doesn't check for an "end" so has the potential to
+. overwrite data!
+  $71AB,$03 #REGhl=#R$66D5.
+  $71AE,$04 Jump to #R$71B7 if the active flag of this slot is marked as
+. inactive.
+  $71B2,$03 Move to the next set of explosion data.
+  $71B5,$02 Jump back to #R$71AE.
+N $71B7 Activate this explosion slot.
+@ $71B7 label=ActivateExplosion
+  $71B7,$02 Activate this explosion slot.
+  $71B9,$04 Write the position held by #REGde to the explosion slot data.
+  $71BD,$01 Return.
+
+  $71BE,$07 Jump to #R$71EC if bit 1 of *#R$66F1 is not set.
+  $71C5,$01 #REGa=*#REGhl.
+  $71C6,$04 Jump to #R$71D1 if #REGa is equal to #N$43.
+  $71CA,$04 Jump to #R$71D1 if #REGa is equal to #N$41.
+  $71CE,$03 Return if #REGa is not equal to #N$05.
+  $71D1,$05 Return if *#R$66F3 is active.
+  $71D6,$02 #REGb=#N$18.
+  $71D8,$03 #REGhl=#N($0122,$04,$04).
+  $71DB,$02 Stash #REGbc and #REGhl on the stack.
+  $71DD,$03 #REGde=#N($0001,$04,$04).
+  $71E0,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
+  $71E3,$01 Disable interrupts.
+  $71E4,$01 Restore #REGhl from the stack.
+  $71E5,$03 Increment #REGhl by three.
+  $71E8,$01 Restore #REGbc from the stack.
+  $71E9,$02 Decrease counter by one and loop back to #R$71DB until counter is zero.
+  $71EB,$01 Return.
+
+  $71EC,$03 Return if #REGa is not equal to #N$04.
+  $71EF,$05 Jump to #R$71F8 if *#REGhl is not equal to #N$01.
+  $71F4,$02 Write #N$40 to *#REGhl.
+  $71F6,$02 Jump to #R$721E.
+  $71F8,$04 Jump to #R$7200 if #REGa is not equal to #N$0F.
+  $71FC,$02 Write #N$01 to *#REGhl.
+  $71FE,$02 Jump to #R$7229.
 
 c $7200
   $7200,$04 Jump to #R$7223 if #REGa is not equal to #N$02.
@@ -2491,14 +2598,17 @@ N $741E Point to the bullet count.
   $7427,$03 Call #R$74A4.
   $742A,$01 Restore #REGhl from the stack.
   $742B,$02 Jump to #R$7431.
+
+@ $742D label=NextPhase
   $742D,$01 Increment *#REGhl by one.
   $742E,$03 Write #N$04 to *#REGde.
   $7431,$01 #REGa=*#REGhl.
   $7432,$01 Stash #REGaf on the stack.
   $7433,$02,b$01 Keep only bits 1-2.
-  $7435,$05 Write #N$08 to *#R$667F.
+  $7435,$05 Set *#R$667F to #N$08 aliens.
   $743A,$02 Jump to #R$743E if *#REGhl is not equal to #N$04.
-  $743C,$02 Write #N$0F to *#REGhl.
+  $743C,$02 Set *#R$667F to #N$0F aliens.
+@ $743E label=SetAlienWaveData
   $743E,$03 #REGhl=#R$6637.
   $7441,$01 Restore #REGaf from the stack.
   $7442,$03 Jump to #R$744A if *#REGhl is not equal to #REGa.
@@ -2509,6 +2619,7 @@ N $741E Point to the bullet count.
   $7451,$02 Jump to #R$745A.
   $7453,$04 Jump to #R$745A if #REGa is not equal to #N$04.
   $7457,$03 #REGhl=#R$6647.
+@ $745A label=CopyWaveData
   $745A,$03 #REGde=#R$65DD.
   $745D,$05 #REGc=*#R$667F multiplied by #N$02.
   $7462,$02 LDIR.
