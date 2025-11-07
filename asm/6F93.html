@@ -150,25 +150,24 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fb6"></span>6FB6</td>
 <td class="instruction">CP $46</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 46.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fbe">Handler_UpdateShipPosition_3</a> if <span class="register">A</span> is equal to INK:YELLOW,
+PAPER:BLACK(BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fb8"></span>6FB8</td>
 <td class="instruction">JR Z,<a href="6F93.html#6fbe">Handler_UpdateShipPosition_3</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="6F93.html#6fbe">Handler_UpdateShipPosition_3</a> if <span class="register">A</span> is equal to 46.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fba"></span>6FBA</td>
 <td class="instruction">CP $07</td>
-<td class="comment-1" rowspan="1">Compare <span class="register">A</span> with 07.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fc0">Handler_UpdateShipPosition_4</a> if <span class="register">A</span> is not equal to WHITE.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fbc"></span>6FBC</td>
 <td class="instruction">JR NZ,<a href="6F93.html#6fc0">Handler_UpdateShipPosition_4</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="6F93.html#6fc0">Handler_UpdateShipPosition_4</a> if <span class="register">A</span> is not equal to 07.</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_UpdateShipPosition_3</td>

@@ -47,7 +47,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-2"><span id="29268"></span>29268</td>
 <td class="instruction">LD A,(26276)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29385.html#29453">29453</a> if *<a href="26276.html">Flag_Collision</a> is not equal to 2.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29453.html">Handler_DisplayBonus</a> if *<a href="26276.html">Flag_Collision</a> is not equal to 2.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29271"></span>29271</td>
@@ -55,7 +55,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 </tr>
 <tr>
 <td class="address-1"><span id="29273"></span>29273</td>
-<td class="instruction">JP NZ,<a href="29385.html#29453">29453</a></td>
+<td class="instruction">JP NZ,<a href="29453.html">Handler_DisplayBonus</a></td>
 </tr>
 <tr>
 <td class="address-1"><span id="29276"></span>29276</td>
@@ -73,7 +73,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-1"><span id="29283"></span>29283</td>
 <td class="instruction">LD HL,26077</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">26077</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29286"></span>29286</td>
@@ -161,7 +161,7 @@ Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.
 <tr>
 <td class="address-1"><span id="29315"></span>29315</td>
 <td class="instruction">LD HL,26077</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">26077</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29318"></span>29318</td>
@@ -311,7 +311,7 @@ See <a href="../reference/pokes.html#infinite-lives">Infinite Lives</a>.
 <tr>
 <td class="address-1"><span id="29376"></span>29376</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29385.html">29385</a> if *<a href="26352.html">Player_Lives</a> indicates the player still has lives left.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29385.html">Handler_LevelComplete</a> if *<a href="26352.html">Player_Lives</a> indicates the player still has lives left.</td>
 </tr>
 <tr>
 <td class="address-1"><span id="29377"></span>29377</td>
@@ -319,7 +319,7 @@ See <a href="../reference/pokes.html#infinite-lives">Infinite Lives</a>.
 </tr>
 <tr>
 <td class="address-1"><span id="29378"></span>29378</td>
-<td class="instruction">JR NZ,<a href="29385.html">29385</a></td>
+<td class="instruction">JR NZ,<a href="29385.html">Handler_LevelComplete</a></td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">

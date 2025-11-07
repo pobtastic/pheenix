@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 740C</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="7407.html">7407</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#740c">Map</a></td>
+<td class="next">
+Next: <a href="74A4.html">74A4</a>
+</td>
+</tr>
+</table>
+<div class="description">740C: Initialise Level</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routines at <a href="72C9.html">Handler_LevelComplete</a>, <a href="730D.html">Handler_DisplayBonus</a>, <a href="7C82.html">TitleScreen</a> and <a href="7DD9.html">StartGame</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel</td>
+<td class="address-2"><span id="740c"></span>740C</td>
+<td class="instruction">LD HL,$6680</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6680.html">6680</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="740f"></span>740F</td>
+<td class="instruction">LD DE,$6681</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6680.html">6681</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7412"></span>7412</td>
+<td class="instruction">LD BC,$006C</td>
+<td class="comment-1" rowspan="1"><span class="register">BC</span>=006C.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7415"></span>7415</td>
+<td class="instruction">LD (HL),B</td>
+<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7416"></span>7416</td>
+<td class="instruction">LDIR</td>
+<td class="comment-1" rowspan="1">LDIR.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7418"></span>7418</td>
+<td class="instruction">LD HL,$66F1</td>
+<td class="comment-1" rowspan="2"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="741b"></span>741B</td>
+<td class="instruction">LD A,(HL)</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="741c"></span>741C</td>
+<td class="instruction">SUB $04</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>-=04.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="741e"></span>
+<div class="comments">
+<div class="paragraph">
+Self-modifying code; see <a href="7030.html#703e">703E</a>.
+</div>
+<div class="paragraph">
+Point to the bullet count.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="741e"></span>741E</td>
+<td class="instruction">LD DE,$703F</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="7030.html#703e">703F</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7421"></span>7421</td>
+<td class="instruction">JR NZ,<a href="740C.html#742d">InitialiseLevel_0</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#742d">InitialiseLevel_0</a> if <span class="register">A</span> is not equal to 00.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7423"></span>7423</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7424"></span>7424</td>
+<td class="instruction">INC A</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7425"></span>7425</td>
+<td class="instruction">LD (DE),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7426"></span>7426</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7427"></span>7427</td>
+<td class="instruction">CALL <a href="74A4.html">GameIntro</a></td>
+<td class="comment-1" rowspan="1">Call <a href="74A4.html">GameIntro</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="742a"></span>742A</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="742b"></span>742B</td>
+<td class="instruction">JR <a href="740C.html#7431">InitialiseLevel_1</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#7431">InitialiseLevel_1</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_0</td>
+<td class="address-2"><span id="742d"></span>742D</td>
+<td class="instruction">INC (HL)</td>
+<td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="742e"></span>742E</td>
+<td class="instruction">LD A,$04</td>
+<td class="comment-1" rowspan="2">Write 04 to *<span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7430"></span>7430</td>
+<td class="instruction">LD (DE),A</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_1</td>
+<td class="address-2"><span id="7431"></span>7431</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7432"></span>7432</td>
+<td class="instruction">PUSH AF</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7433"></span>7433</td>
+<td class="instruction">AND %00000110</td>
+<td class="comment-1" rowspan="1">Keep only bits 1-2.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7435"></span>7435</td>
+<td class="instruction">LD HL,$667F</td>
+<td class="comment-1" rowspan="2">Write 08 to *<a href="667F.html">EnemyCount</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7438"></span>7438</td>
+<td class="instruction">LD (HL),$08</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="743a"></span>743A</td>
+<td class="instruction">JR NZ,<a href="740C.html#743e">InitialiseLevel_2</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#743e">InitialiseLevel_2</a> if *<span class="register">HL</span> is not equal to 04.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="743c"></span>743C</td>
+<td class="instruction">LD (HL),$0F</td>
+<td class="comment-1" rowspan="1">Write 0F to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_2</td>
+<td class="address-2"><span id="743e"></span>743E</td>
+<td class="instruction">LD HL,$6637</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#6637">6637</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7441"></span>7441</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7442"></span>7442</td>
+<td class="instruction">OR A</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#744a">InitialiseLevel_3</a> if *<span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7443"></span>7443</td>
+<td class="instruction">JR NZ,<a href="740C.html#744a">InitialiseLevel_3</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7445"></span>7445</td>
+<td class="instruction">LD HL,$65FB</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#65fb">65FB</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7448"></span>7448</td>
+<td class="instruction">JR <a href="740C.html#745a">InitialiseLevel_5</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#745a">InitialiseLevel_5</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_3</td>
+<td class="address-2"><span id="744a"></span>744A</td>
+<td class="instruction">CP $01</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#7453">InitialiseLevel_4</a> if <span class="register">A</span> is not equal to 01.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="744c"></span>744C</td>
+<td class="instruction">JR NZ,<a href="740C.html#7453">InitialiseLevel_4</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="744e"></span>744E</td>
+<td class="instruction">LD HL,$6619</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#6619">6619</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7451"></span>7451</td>
+<td class="instruction">JR <a href="740C.html#745a">InitialiseLevel_5</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#745a">InitialiseLevel_5</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_4</td>
+<td class="address-2"><span id="7453"></span>7453</td>
+<td class="instruction">CP $04</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#745a">InitialiseLevel_5</a> if <span class="register">A</span> is not equal to 04.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7455"></span>7455</td>
+<td class="instruction">JR NZ,<a href="740C.html#745a">InitialiseLevel_5</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7457"></span>7457</td>
+<td class="instruction">LD HL,$6647</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#6647">6647</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_5</td>
+<td class="address-2"><span id="745a"></span>745A</td>
+<td class="instruction">LD DE,$65DD</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="65DD.html">Table_AlienWaveData</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="745d"></span>745D</td>
+<td class="instruction">LD A,($667F)</td>
+<td class="comment-1" rowspan="3"><span class="register">C</span>=*<a href="667F.html">EnemyCount</a> multiplied by 02.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7460"></span>7460</td>
+<td class="instruction">ADD A,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7461"></span>7461</td>
+<td class="instruction">LD C,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7462"></span>7462</td>
+<td class="instruction">LDIR</td>
+<td class="comment-1" rowspan="1">LDIR.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7464"></span>
+<div class="comments">
+<div class="paragraph">
+Is this phase 01?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7464"></span>7464</td>
+<td class="instruction">LD A,($66F1)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="740C.html#7470">Initialise_Phase_02</a> if *<a href="66F1.html">Phase</a> is not equal to 01.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7467"></span>7467</td>
+<td class="instruction">CP $01</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7469"></span>7469</td>
+<td class="instruction">JR NZ,<a href="740C.html#7470">Initialise_Phase_02</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="746b"></span>
+<div class="comments">
+<div class="paragraph">
+Set the alien colouring for phase 01.
+</div>
+<div class="paragraph">
+Set the bird alien colouring to produce. <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="bird-01-green" src="../images/udgs/bird-01-green.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="746b"></span>746B</td>
+<td class="instruction">LD BC,$4304</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> to INK:MAGENTA,
+PAPER:BLACK(BRIGHT), and <span class="register">C</span> to GREEN.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="746e"></span>746E</td>
+<td class="instruction">JR <a href="740C.html#7485">InitialiseLevel_SetColors</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#7485">InitialiseLevel_SetColors</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7470"></span>
+<div class="comments">
+<div class="paragraph">
+Is this phase 02?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Initialise_Phase_02</td>
+<td class="address-2"><span id="7470"></span>7470</td>
+<td class="instruction">CP $02</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#7479">Initialise_Phase_03</a> if *<a href="66F1.html">Phase</a> is not equal to 02.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7472"></span>7472</td>
+<td class="instruction">JR NZ,<a href="740C.html#7479">Initialise_Phase_03</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7474"></span>
+<div class="comments">
+<div class="paragraph">
+Set the alien colouring for phase 02.
+</div>
+<div class="paragraph">
+Set the Pheenix colouring to produce: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="pheenix-05-blue" src="../images/udgs/pheenix-05-blue.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7474"></span>7474</td>
+<td class="instruction">LD B,$41</td>
+<td class="comment-1" rowspan="2">Set both <span class="register">B</span> and <span class="register">C</span> to INK:BLUE,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7476"></span>7476</td>
+<td class="instruction">LD C,B</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7477"></span>7477</td>
+<td class="instruction">JR <a href="740C.html#7485">InitialiseLevel_SetColors</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#7485">InitialiseLevel_SetColors</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7479"></span>
+<div class="comments">
+<div class="paragraph">
+Is this phase 03?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Initialise_Phase_03</td>
+<td class="address-2"><span id="7479"></span>7479</td>
+<td class="instruction">CP $03</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#7482">Initialise_Phase_Default</a> if *<a href="66F1.html">Phase</a> is not equal to 03.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="747b"></span>747B</td>
+<td class="instruction">JR NZ,<a href="740C.html#7482">Initialise_Phase_Default</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="747d"></span>
+<div class="comments">
+<div class="paragraph">
+Set the alien colouring for phase 03.
+</div>
+<div class="paragraph">
+Set the Pheenix colouring to produce: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="pheenix-05-magenta" src="../images/udgs/pheenix-05-magenta.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="747d"></span>747D</td>
+<td class="instruction">LD B,$43</td>
+<td class="comment-1" rowspan="2">Set both <span class="register">B</span> and <span class="register">C</span> to INK:MAGENTA,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="747f"></span>747F</td>
+<td class="instruction">LD C,B</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7480"></span>7480</td>
+<td class="instruction">JR <a href="740C.html#7485">InitialiseLevel_SetColors</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#7485">InitialiseLevel_SetColors</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7482"></span>
+<div class="comments">
+<div class="paragraph">
+This is either phase 00 or 04. Set the bird alien colouring to produce: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="bird-01-magenta" src="../images/udgs/bird-01-magenta.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Initialise_Phase_Default</td>
+<td class="address-2"><span id="7482"></span>7482</td>
+<td class="instruction">LD BC,$0643</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> to YELLOW, and <span class="register">C</span> to INK:MAGENTA,
+PAPER:BLACK(BRIGHT).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7485"></span>
+<div class="comments">
+<div class="paragraph">
+Set the alien colourings.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">InitialiseLevel_SetColors</td>
+<td class="address-2"><span id="7485"></span>7485</td>
+<td class="instruction">LD ($667D),BC</td>
+<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<a href="667D.html">Pheenix_Colour_01</a> and <span class="register">C</span> to *<a href="667D.html#667e">Pheenix_Colour_02</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7489"></span>
+<div class="comments">
+<div class="paragraph">
+Set the players ship starting position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7489"></span>7489</td>
+<td class="instruction">LD HL,$66ED</td>
+<td class="comment-1" rowspan="2">Write CE to *<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="748c"></span>748C</td>
+<td class="instruction">LD (HL),$CE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="748e"></span>748E</td>
+<td class="instruction">LD A,($66F1)</td>
+<td class="comment-1" rowspan="2">Stash *<a href="66F1.html">Phase</a> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7491"></span>7491</td>
+<td class="instruction">PUSH AF</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7492"></span>
+<div class="comments">
+<div class="paragraph">
+The <a href="68B8.html">TransitionEffect</a> shouldn't play out for the first phase.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7492"></span>7492</td>
+<td class="instruction">AND %00000110</td>
+<td class="comment-1" rowspan="2">Call <a href="68B8.html">TransitionEffect</a> if *<a href="66F1.html">Phase</a> is either 02 03 or 04.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7494"></span>7494</td>
+<td class="instruction">CALL NZ,<a href="68B8.html">TransitionEffect</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="7497"></span>7497</td>
+<td class="instruction">CALL <a href="67F6.html">PrintHeader</a></td>
+<td class="comment-1" rowspan="1">Call <a href="67F6.html">PrintHeader</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="749a"></span>
+<div class="comments">
+<div class="paragraph">
+The alien mothership is only shown in phase 04.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="749a"></span>749A</td>
+<td class="instruction">POP AF</td>
+<td class="comment-1" rowspan="3">Call <a href="696A.html">Draw_AlienMothership</a> if *<a href="66F1.html">Phase</a> is 04.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="749b"></span>749B</td>
+<td class="instruction">CP $04</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="749d"></span>749D</td>
+<td class="instruction">CALL Z,<a href="696A.html">Draw_AlienMothership</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="74a0"></span>74A0</td>
+<td class="instruction">CALL <a href="6CC9.html">DrawShip</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6CC9.html">DrawShip</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="74a3"></span>74A3</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="7407.html">7407</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#740c">Map</a></td>
+<td class="next">
+Next: <a href="74A4.html">74A4</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/29708.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

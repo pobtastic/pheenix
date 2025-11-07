@@ -29,11 +29,11 @@ Prev: <a href="7254.html">7254</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#72c9">Map</a></td>
 <td class="next">
-Next: <a href="74A4.html">74A4</a>
+Next: <a href="730D.html">730D</a>
 </td>
 </tr>
 </table>
-<div class="description">72C9: Routine at 72C9</div>
+<div class="description">72C9: Handler: Level Complete</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,1336 +45,264 @@ Used by the routine at <a href="7254.html">7254</a>.
 </td>
 </tr>
 <tr>
-<td class="address-2"><span id="72c9"></span>72C9</td>
-<td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="72C9.html#740c">740C</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is active.</td>
+<td class="routine-comment" colspan="5">
+<span id="72c9"></span>
+<div class="comments">
+<div class="paragraph">
+Skip over anything fancy if the game is in demo mode.
+</div>
+</div>
+</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelComplete</td>
+<td class="address-2"><span id="72c9"></span>72C9</td>
+<td class="instruction">LD A,($66F3)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="740C.html">InitialiseLevel</a> if *<a href="66F3.html">Flag_ActiveDemoMode</a> is active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72cc"></span>72CC</td>
 <td class="instruction">OR A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72cd"></span>72CD</td>
-<td class="instruction">JP NZ,<a href="72C9.html#740c">$740C</a></td>
+<td class="instruction">JP NZ,<a href="740C.html">InitialiseLevel</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="72d0"></span>
+<div class="comments">
+<div class="paragraph">
+The alien mothership only appears in phase 04 so skip over all the clearing routine unless this is phase 04.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72d0"></span>72D0</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Call <a href="67F6.html">PrintHeader</a> if *<a href="66F1.html">Phase</a> is not equal to 04.</td>
+<td class="comment-1" rowspan="4">If *<a href="66F1.html">Phase</a> is not equal to 04 call <a href="67F6.html">PrintHeader</a> and then jump to <a href="72C9.html#730a">LevelComplete_DrawShip</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72d3"></span>72D3</td>
 <td class="instruction">CP $04</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72d5"></span>72D5</td>
 <td class="instruction">CALL NZ,<a href="67F6.html">PrintHeader</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72d8"></span>72D8</td>
-<td class="instruction">JR NZ,<a href="72C9.html#730a">$730A</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#730a">730A</a> if *<a href="66F1.html">Phase</a> is not equal to 04.</td>
+<td class="instruction">JR NZ,<a href="72C9.html#730a">LevelComplete_DrawShip</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="72da"></span>
+<div class="comments">
+<div class="paragraph">
+Clear the mothership phase playfield.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72da"></span>72DA</td>
 <td class="instruction">CALL <a href="681C.html">PrintLives</a></td>
 <td class="comment-1" rowspan="1">Call <a href="681C.html">PrintLives</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72dd"></span>72DD</td>
 <td class="instruction">LD HL,$5940</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=5940 (attribute buffer location).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72e0"></span>72E0</td>
 <td class="instruction">LD C,$02</td>
-<td class="comment-1" rowspan="1"><span class="register">C</span>=02.</td>
+<td class="comment-1" rowspan="1">Set a row counter in <span class="register">C</span> for 02 rows.</td>
 </tr>
 <tr>
+<td class="asm-label">ClearMothership_RowLoop</td>
 <td class="address-2"><span id="72e2"></span>72E2</td>
 <td class="instruction">LD B,$E0</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=E0.</td>
+<td class="comment-1" rowspan="1">Set a column counter in <span class="register">B</span> for E0 columns.</td>
 </tr>
 <tr>
+<td class="asm-label">ClearMothership_Loop</td>
 <td class="address-2"><span id="72e4"></span>72E4</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the row, column counters and attribute buffer pointer on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72e5"></span>72E5</td>
 <td class="instruction">PUSH HL</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72e6"></span>72E6</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="72C9.html#7302">7302</a> if *<span class="register">HL</span> is equal to 02.</td>
+<td class="comment-1" rowspan="5">Jump to <a href="72C9.html#7302">ClearMothership_Next</a> if the attribute byte being pointed to is either INK:RED,
+PAPER:BLACK (02) or INK:BLACK,
+PAPER:RED (10).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72e7"></span>72E7</td>
 <td class="instruction">CP $02</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72e9"></span>72E9</td>
-<td class="instruction">JR Z,<a href="72C9.html#7302">$7302</a></td>
+<td class="instruction">JR Z,<a href="72C9.html#7302">ClearMothership_Next</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72eb"></span>72EB</td>
 <td class="instruction">CP $10</td>
-<td class="comment-1" rowspan="2">Jump to <a href="72C9.html#7302">7302</a> if *<span class="register">HL</span> is equal to 10.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72ed"></span>72ED</td>
-<td class="instruction">JR Z,<a href="72C9.html#7302">$7302</a></td>
+<td class="instruction">JR Z,<a href="72C9.html#7302">ClearMothership_Next</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72ef"></span>72EF</td>
 <td class="instruction">CP $16</td>
-<td class="comment-1" rowspan="1">Compare *<span class="register">HL</span> with 16.</td>
+<td class="comment-1" rowspan="1">Is the attribute byte being pointed to INK:YELLOW,
+PAPER:RED?</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72f1"></span>72F1</td>
 <td class="instruction">LD A,$00</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=00.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to BLACK (00).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72f3"></span>72F3</td>
-<td class="instruction">JR NZ,<a href="72C9.html#72f7">$72F7</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#72f7">72F7</a> if *<span class="register">HL</span> is not equal to 16.</td>
+<td class="instruction">JR NZ,<a href="72C9.html#72f7">ClearMothership_Write</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#72f7">ClearMothership_Write</a> if the attribute byte being pointed to is INK:YELLOW,
+PAPER:RED.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72f5"></span>72F5</td>
 <td class="instruction">LD A,$10</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=10.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to INK:BLACK,
+PAPER:RED (10).</td>
 </tr>
 <tr>
+<td class="asm-label">ClearMothership_Write</td>
 <td class="address-2"><span id="72f7"></span>72F7</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute value in <span class="register">A</span> to the attribute buffer.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72f8"></span>72F8</td>
 <td class="instruction">CALL <a href="6704.html">ConvertAttributeToScreenBufferAddress</a></td>
 <td class="comment-1" rowspan="1">Call <a href="6704.html">ConvertAttributeToScreenBufferAddress</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72fb"></span>72FB</td>
 <td class="instruction">XOR A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Set <span class="register">A</span> to 00 (clearing/ empty value).</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72fc"></span>72FC</td>
 <td class="instruction">LD B,$08</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (08 lines in a character block).</td>
 </tr>
 <tr>
+<td class="asm-label">ClearMothership_ClearLine_Loop</td>
 <td class="address-2"><span id="72fe"></span>72FE</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Write the empty data to the screen buffer pointer.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="72ff"></span>72FF</td>
 <td class="instruction">INC H</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="7300"></span>7300</td>
-<td class="instruction">DJNZ <a href="72C9.html#72fe">$72FE</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="72C9.html#72fe">ClearMothership_ClearLine_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="72C9.html#72fe">ClearMothership_ClearLine_Loop</a> until all 08 lines of the character block have been erased.</td>
 </tr>
 <tr>
+<td class="asm-label">ClearMothership_Next</td>
 <td class="address-2"><span id="7302"></span>7302</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore the attribute buffer pointer from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="7303"></span>7303</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Move to the next attribute byte.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="7304"></span>7304</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Restore the row and column counters from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="7305"></span>7305</td>
-<td class="instruction">DJNZ <a href="72C9.html#72e4">$72E4</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">DJNZ <a href="72C9.html#72e4">ClearMothership_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the column counter by one and loop back to <a href="72C9.html#72e4">ClearMothership_Loop</a> until all of the column blocks have been erased.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="7307"></span>7307</td>
 <td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1"></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="7308"></span>7308</td>
-<td class="instruction">JR NZ,<a href="72C9.html#72e2">$72E2</a></td>
-<td class="comment-1" rowspan="1"></td>
+<td class="instruction">JR NZ,<a href="72C9.html#72e2">ClearMothership_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="72C9.html#72e2">ClearMothership_RowLoop</a> until all of the rows have been processed.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="730a"></span>
+<div class="comments">
+<div class="paragraph">
+Redraw the players ship on the screen.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">LevelComplete_DrawShip</td>
 <td class="address-2"><span id="730a"></span>730A</td>
-<td class="instruction">CALL <a href="6CC9.html">DrawShip</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="routine-comment" colspan="5">
-<span id="730d"></span>
-<div class="comments">
-<div class="paragraph">
-This entry point is used by the routine at <a href="7254.html">7254</a>.
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<td class="address-2"><span id="730d"></span>730D</td>
-<td class="instruction">LD A,($66A4)</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7310"></span>7310</td>
-<td class="instruction">CP $01</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7312"></span>7312</td>
-<td class="instruction">RET Z</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7313"></span>7313</td>
-<td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7316"></span>7316</td>
-<td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7318"></span>7318</td>
-<td class="instruction">JP NZ,<a href="72C9.html#7407">$7407</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="731b"></span>731B</td>
-<td class="instruction">LD A,($66D3)</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="731e"></span>731E</td>
-<td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="731f"></span>731F</td>
-<td class="instruction">RET Z</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="routine-comment" colspan="5">
-<span id="7320"></span>
-<div class="comments">
-<div class="paragraph">
-<table class="">
-<tr>
-<td class="" colspan="1" rowspan="1"><img alt="fgkjfdg" src="../images/scr/fgkjfdg.png" /></td>
-</tr>
-</table>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7320"></span>7320</td>
-<td class="instruction">CALL <a href="6720.html">ClearScreen</a></td>
-<td class="comment-1" rowspan="1">Call <a href="6720.html">ClearScreen</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7323"></span>7323</td>
-<td class="instruction">LD DE,$61DB</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61DB.html">Graphics_StarLarge</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7326"></span>7326</td>
-<td class="instruction">CALL <a href="6B31.html">FillScreenWithUDG</a></td>
-<td class="comment-1" rowspan="1">Call <a href="6B31.html">FillScreenWithUDG</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7329"></span>7329</td>
-<td class="instruction">LD DE,$486E</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=486E (screen buffer location).</td>
-</tr>
-<tr>
-<td class="address-1"><span id="732c"></span>732C</td>
-<td class="instruction">LD BC,$0445</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0445.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="732f"></span>732F</td>
-<td class="instruction">LD HL,$652B</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6528.html#652b">652B</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7332"></span>7332</td>
-<td class="instruction">LD A,($667F)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="667F.html">EnemyCount</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7335"></span>7335</td>
-<td class="instruction">SRA A</td>
-<td class="comment-1" rowspan="1">Shift <span class="register">A</span> right (with carry).</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7337"></span>7337</td>
-<td class="instruction">ADD A,$34</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=34.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7339"></span>7339</td>
-<td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="733a"></span>733A</td>
-<td class="instruction">CALL <a href="676F.html">Configurable_PrintString</a></td>
-<td class="comment-1" rowspan="1">Call <a href="676F.html">Configurable_PrintString</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="733d"></span>733D</td>
-<td class="instruction">LD HL,$652B</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6528.html#652b">652B</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7340"></span>7340</td>
-<td class="instruction">LD E,$8E</td>
-<td class="comment-1" rowspan="1"><span class="register">E</span>=8E.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7342"></span>7342</td>
-<td class="instruction">LD B,$04</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=04.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7344"></span>7344</td>
-<td class="instruction">CALL <a href="676F.html">Configurable_PrintString</a></td>
-<td class="comment-1" rowspan="1">Call <a href="676F.html">Configurable_PrintString</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7347"></span>7347</td>
-<td class="instruction">LD C,$04</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7349"></span>7349</td>
-<td class="instruction">LD HL,$4E6B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="734c"></span>734C</td>
-<td class="instruction">LD DE,$4F6B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="734f"></span>734F</td>
-<td class="instruction">LD B,$08</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7351"></span>7351</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7352"></span>7352</td>
-<td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7353"></span>7353</td>
-<td class="instruction">LD BC,$000A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7356"></span>7356</td>
-<td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7358"></span>7358</td>
-<td class="instruction">POP DE</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7359"></span>7359</td>
-<td class="instruction">PUSH DE</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="735a"></span>735A</td>
-<td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="735b"></span>735B</td>
-<td class="instruction">DEC H</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="735c"></span>735C</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="735d"></span>735D</td>
-<td class="instruction">DJNZ <a href="72C9.html#7351">$7351</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="735f"></span>735F</td>
-<td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7360"></span>7360</td>
-<td class="instruction">JR NZ,<a href="72C9.html#7349">$7349</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7362"></span>7362</td>
-<td class="instruction">LD C,$04</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7364"></span>7364</td>
-<td class="instruction">LD HL,$498B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7367"></span>7367</td>
-<td class="instruction">LD DE,$488B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="736a"></span>736A</td>
-<td class="instruction">LD B,$07</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="736c"></span>736C</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="736d"></span>736D</td>
-<td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="736e"></span>736E</td>
-<td class="instruction">LD BC,$000A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7371"></span>7371</td>
-<td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7373"></span>7373</td>
-<td class="instruction">POP DE</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7374"></span>7374</td>
-<td class="instruction">PUSH DE</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7375"></span>7375</td>
-<td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7376"></span>7376</td>
-<td class="instruction">INC H</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7377"></span>7377</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7378"></span>7378</td>
-<td class="instruction">DJNZ <a href="72C9.html#736c">$736C</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="737a"></span>737A</td>
-<td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="737b"></span>737B</td>
-<td class="instruction">JR NZ,<a href="72C9.html#7364">$7364</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="737d"></span>737D</td>
-<td class="instruction">CALL <a href="67B6.html">Handler_Score</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7380"></span>7380</td>
-<td class="instruction">LD IX,$0000</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7384"></span>7384</td>
-<td class="instruction">LD B,$10</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7386"></span>7386</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7387"></span>7387</td>
-<td class="instruction">LD B,$0B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7389"></span>7389</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="738a"></span>738A</td>
-<td class="instruction">PUSH IX</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="738c"></span>738C</td>
-<td class="instruction">LD HL,$594A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="738f"></span>738F</td>
-<td class="instruction">LD DE,$030B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7392"></span>7392</td>
-<td class="instruction">LD A,$0C</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7394"></span>7394</td>
-<td class="instruction">SUB B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7395"></span>7395</td>
-<td class="instruction">LD B,A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7396"></span>7396</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7397"></span>7397</td>
-<td class="instruction">LD A,IXl</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7399"></span>7399</td>
-<td class="instruction">AND $3F</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="739b"></span>739B</td>
-<td class="instruction">LD B,E</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="739c"></span>739C</td>
-<td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="739d"></span>739D</td>
-<td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="739e"></span>739E</td>
-<td class="instruction">DJNZ <a href="72C9.html#739c">$739C</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73a0"></span>73A0</td>
-<td class="instruction">LD B,D</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="73a1"></span>73A1</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73a2"></span>73A2</td>
-<td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73a3"></span>73A3</td>
-<td class="instruction">LD BC,$0020</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73a6"></span>73A6</td>
-<td class="instruction">ADD HL,BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73a7"></span>73A7</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73a8"></span>73A8</td>
-<td class="instruction">DJNZ <a href="72C9.html#73a1">$73A1</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73aa"></span>73AA</td>
-<td class="instruction">LD B,E</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="73ab"></span>73AB</td>
-<td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ac"></span>73AC</td>
-<td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ad"></span>73AD</td>
-<td class="instruction">DJNZ <a href="72C9.html#73ab">$73AB</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73af"></span>73AF</td>
-<td class="instruction">LD B,D</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="73b0"></span>73B0</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73b1"></span>73B1</td>
-<td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73b2"></span>73B2</td>
-<td class="instruction">LD BC,$0020</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73b5"></span>73B5</td>
-<td class="instruction">SBC HL,BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73b7"></span>73B7</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73b8"></span>73B8</td>
-<td class="instruction">DJNZ <a href="72C9.html#73b0">$73B0</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ba"></span>73BA</td>
-<td class="instruction">LD C,$21</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73bc"></span>73BC</td>
-<td class="instruction">SBC HL,BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73be"></span>73BE</td>
-<td class="instruction">INC E</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73bf"></span>73BF</td>
-<td class="instruction">INC E</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c0"></span>73C0</td>
-<td class="instruction">INC D</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c1"></span>73C1</td>
-<td class="instruction">INC D</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c2"></span>73C2</td>
-<td class="instruction">INC IX</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c4"></span>73C4</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c5"></span>73C5</td>
-<td class="instruction">DJNZ <a href="72C9.html#7396">$7396</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c7"></span>73C7</td>
-<td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c8"></span>73C8</td>
-<td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73c9"></span>73C9</td>
-<td class="instruction">LD A,L</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ca"></span>73CA</td>
-<td class="instruction">AND $0F</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73cc"></span>73CC</td>
-<td class="instruction">LD L,A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73cd"></span>73CD</td>
-<td class="instruction">LD H,B</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ce"></span>73CE</td>
-<td class="instruction">ADD HL,HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73cf"></span>73CF</td>
-<td class="instruction">ADD HL,HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d0"></span>73D0</td>
-<td class="instruction">ADD HL,HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d1"></span>73D1</td>
-<td class="instruction">ADD HL,HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d2"></span>73D2</td>
-<td class="instruction">ADD HL,HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d3"></span>73D3</td>
-<td class="instruction">ADD HL,HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d4"></span>73D4</td>
-<td class="instruction">LD B,$07</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="73d6"></span>73D6</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d7"></span>73D7</td>
-<td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73d8"></span>73D8</td>
-<td class="instruction">LD DE,$0002</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73db"></span>73DB</td>
-<td class="instruction">CALL $03B5</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73de"></span>73DE</td>
-<td class="instruction">DI</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73df"></span>73DF</td>
-<td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73e0"></span>73E0</td>
-<td class="instruction">LD BC,$0014</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73e3"></span>73E3</td>
-<td class="instruction">ADD HL,BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73e4"></span>73E4</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73e5"></span>73E5</td>
-<td class="instruction">DJNZ <a href="72C9.html#73d6">$73D6</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73e7"></span>73E7</td>
-<td class="instruction">POP IX</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73e9"></span>73E9</td>
-<td class="instruction">DEC IX</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73eb"></span>73EB</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ec"></span>73EC</td>
-<td class="instruction">DJNZ <a href="72C9.html#7389">$7389</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ee"></span>73EE</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ef"></span>73EF</td>
-<td class="instruction">DJNZ <a href="72C9.html#7386">$7386</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73f1"></span>73F1</td>
-<td class="instruction">CALL <a href="6720.html">ClearScreen</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73f4"></span>73F4</td>
-<td class="instruction">LD BC,$00C8</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="73f7"></span>73F7</td>
-<td class="instruction">DJNZ <a href="72C9.html#73f7">$73F7</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73f9"></span>73F9</td>
-<td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73fa"></span>73FA</td>
-<td class="instruction">JR NZ,<a href="72C9.html#73f7">$73F7</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73fc"></span>73FC</td>
-<td class="instruction">LD HL,$6898</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="73ff"></span>73FF</td>
-<td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7400"></span>7400</td>
-<td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7402"></span>7402</td>
-<td class="instruction">JR C,<a href="72C9.html#740c">$740C</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7404"></span>7404</td>
-<td class="instruction">DEC (HL)</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7405"></span>7405</td>
-<td class="instruction">JR <a href="72C9.html#740c">$740C</a></td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-2"><span id="7407"></span>7407</td>
-<td class="instruction">LD A,($667F)</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="740a"></span>740A</td>
-<td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="address-1"><span id="740b"></span>740B</td>
-<td class="instruction">RET NZ</td>
-<td class="comment-1" rowspan="1"></td>
-</tr>
-<tr>
-<td class="routine-comment" colspan="5">
-<span id="740c"></span>
-<div class="comments">
-<div class="paragraph">
-This entry point is used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.html">StartGame</a>.
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<td class="address-2"><span id="740c"></span>740C</td>
-<td class="instruction">LD HL,$6680</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6680.html">6680</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="740f"></span>740F</td>
-<td class="instruction">LD DE,$6681</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6680.html#6681">6681</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7412"></span>7412</td>
-<td class="instruction">LD BC,$006C</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=006C.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7415"></span>7415</td>
-<td class="instruction">LD (HL),B</td>
-<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7416"></span>7416</td>
-<td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7418"></span>7418</td>
-<td class="instruction">LD HL,$66F1</td>
-<td class="comment-1" rowspan="2"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="741b"></span>741B</td>
-<td class="instruction">LD A,(HL)</td>
-</tr>
-<tr>
-<td class="address-1"><span id="741c"></span>741C</td>
-<td class="instruction">SUB $04</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>-=04.</td>
-</tr>
-<tr>
-<td class="routine-comment" colspan="5">
-<span id="741e"></span>
-<div class="comments">
-<div class="paragraph">
-Self-modifying code; see <a href="7030.html#703e">703E</a>.
-</div>
-<div class="paragraph">
-Point to the bullet count.
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<td class="address-1"><span id="741e"></span>741E</td>
-<td class="instruction">LD DE,$703F</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="7030.html#703e">703F</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7421"></span>7421</td>
-<td class="instruction">JR NZ,<a href="72C9.html#742d">$742D</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#742d">742D</a> if <span class="register">A</span> is not equal to 00.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7423"></span>7423</td>
-<td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7424"></span>7424</td>
-<td class="instruction">INC A</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7425"></span>7425</td>
-<td class="instruction">LD (DE),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">DE</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7426"></span>7426</td>
-<td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7427"></span>7427</td>
-<td class="instruction">CALL <a href="74A4.html">GameIntro</a></td>
-<td class="comment-1" rowspan="1">Call <a href="74A4.html">GameIntro</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="742a"></span>742A</td>
-<td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="742b"></span>742B</td>
-<td class="instruction">JR <a href="72C9.html#7431">$7431</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#7431">7431</a>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="742d"></span>742D</td>
-<td class="instruction">INC (HL)</td>
-<td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="742e"></span>742E</td>
-<td class="instruction">LD A,$04</td>
-<td class="comment-1" rowspan="2">Write 04 to *<span class="register">DE</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7430"></span>7430</td>
-<td class="instruction">LD (DE),A</td>
-</tr>
-<tr>
-<td class="address-2"><span id="7431"></span>7431</td>
-<td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7432"></span>7432</td>
-<td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7433"></span>7433</td>
-<td class="instruction">AND %00000110</td>
-<td class="comment-1" rowspan="1">Keep only bits 1-2.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7435"></span>7435</td>
-<td class="instruction">LD HL,$667F</td>
-<td class="comment-1" rowspan="2">Write 08 to *<a href="667F.html">EnemyCount</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7438"></span>7438</td>
-<td class="instruction">LD (HL),$08</td>
-</tr>
-<tr>
-<td class="address-1"><span id="743a"></span>743A</td>
-<td class="instruction">JR NZ,<a href="72C9.html#743e">$743E</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#743e">743E</a> if *<span class="register">HL</span> is not equal to 04.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="743c"></span>743C</td>
-<td class="instruction">LD (HL),$0F</td>
-<td class="comment-1" rowspan="1">Write 0F to *<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="743e"></span>743E</td>
-<td class="instruction">LD HL,$6637</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#6637">6637</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7441"></span>7441</td>
-<td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7442"></span>7442</td>
-<td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="72C9.html#744a">744A</a> if *<span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7443"></span>7443</td>
-<td class="instruction">JR NZ,<a href="72C9.html#744a">$744A</a></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7445"></span>7445</td>
-<td class="instruction">LD HL,$65FB</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#65fb">65FB</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7448"></span>7448</td>
-<td class="instruction">JR <a href="72C9.html#745a">$745A</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#745a">745A</a>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="744a"></span>744A</td>
-<td class="instruction">CP $01</td>
-<td class="comment-1" rowspan="2">Jump to <a href="72C9.html#7453">7453</a> if <span class="register">A</span> is not equal to 01.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="744c"></span>744C</td>
-<td class="instruction">JR NZ,<a href="72C9.html#7453">$7453</a></td>
-</tr>
-<tr>
-<td class="address-1"><span id="744e"></span>744E</td>
-<td class="instruction">LD HL,$6619</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#6619">6619</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7451"></span>7451</td>
-<td class="instruction">JR <a href="72C9.html#745a">$745A</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#745a">745A</a>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="7453"></span>7453</td>
-<td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="2">Jump to <a href="72C9.html#745a">745A</a> if <span class="register">A</span> is not equal to 04.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7455"></span>7455</td>
-<td class="instruction">JR NZ,<a href="72C9.html#745a">$745A</a></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7457"></span>7457</td>
-<td class="instruction">LD HL,$6647</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html#6647">6647</a>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="745a"></span>745A</td>
-<td class="instruction">LD DE,$65DD</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="65DD.html">65DD</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="745d"></span>745D</td>
-<td class="instruction">LD A,($667F)</td>
-<td class="comment-1" rowspan="3"><span class="register">C</span>=*<a href="667F.html">EnemyCount</a> multiplied by 02.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7460"></span>7460</td>
-<td class="instruction">ADD A,A</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7461"></span>7461</td>
-<td class="instruction">LD C,A</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7462"></span>7462</td>
-<td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7464"></span>7464</td>
-<td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="72C9.html#7470">7470</a> if *<a href="66F1.html">Phase</a> is not equal to 01.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7467"></span>7467</td>
-<td class="instruction">CP $01</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7469"></span>7469</td>
-<td class="instruction">JR NZ,<a href="72C9.html#7470">$7470</a></td>
-</tr>
-<tr>
-<td class="routine-comment" colspan="5">
-<span id="746b"></span>
-<div class="comments">
-<div class="paragraph">
-Set the Pheenix colouring to produce: <table class="">
-<tr>
-<td class="" colspan="1" rowspan="1"><img alt="pheenix-05-magenta" src="../images/udgs/pheenix-05-magenta.png" /></td>
-</tr>
-</table>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<td class="address-1"><span id="746b"></span>746B</td>
-<td class="instruction">LD BC,$4304</td>
-<td class="comment-1" rowspan="1">Set <span class="register">B</span> to INK:MAGENTA,
-PAPER:BLACK(BRIGHT), and <span class="register">C</span> to GREEN.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="746e"></span>746E</td>
-<td class="instruction">JR <a href="72C9.html#7485">$7485</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#7485">7485</a>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="7470"></span>7470</td>
-<td class="instruction">CP $02</td>
-<td class="comment-1" rowspan="2">Jump to <a href="72C9.html#7479">7479</a> if *<a href="66F1.html">Phase</a> is not equal to 02.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7472"></span>7472</td>
-<td class="instruction">JR NZ,<a href="72C9.html#7479">$7479</a></td>
-</tr>
-<tr>
-<td class="address-1"><span id="7474"></span>7474</td>
-<td class="instruction">LD B,$41</td>
-<td class="comment-1" rowspan="2">Set <span class="register">B</span> to INK:BLUE,
-PAPER:BLACK(BRIGHT), and <span class="register">C</span> to INK:BLUE,
-PAPER:BLACK(BRIGHT).</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7476"></span>7476</td>
-<td class="instruction">LD C,B</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7477"></span>7477</td>
-<td class="instruction">JR <a href="72C9.html#7485">$7485</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#7485">7485</a>.</td>
-</tr>
-<tr>
-<td class="address-2"><span id="7479"></span>7479</td>
-<td class="instruction">CP $03</td>
-<td class="comment-1" rowspan="2">Jump to <a href="72C9.html#7482">7482</a> if *<a href="66F1.html">Phase</a> is not equal to 03.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="747b"></span>747B</td>
-<td class="instruction">JR NZ,<a href="72C9.html#7482">$7482</a></td>
-</tr>
-<tr>
-<td class="address-1"><span id="747d"></span>747D</td>
-<td class="instruction">LD B,$43</td>
-<td class="comment-1" rowspan="2">Set <span class="register">B</span> to INK:MAGENTA,
-PAPER:BLACK(BRIGHT), and <span class="register">C</span> to INK:MAGENTA,
-PAPER:BLACK(BRIGHT).</td>
-</tr>
-<tr>
-<td class="address-1"><span id="747f"></span>747F</td>
-<td class="instruction">LD C,B</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7480"></span>7480</td>
-<td class="instruction">JR <a href="72C9.html#7485">$7485</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="72C9.html#7485">7485</a>.</td>
-</tr>
-<tr>
-<td class="routine-comment" colspan="5">
-<span id="7482"></span>
-<div class="comments">
-<div class="paragraph">
-Set the Pheenix colouring to produce: <table class="">
-<tr>
-<td class="" colspan="1" rowspan="1"><img alt="pheenix-05-magenta" src="../images/udgs/pheenix-05-magenta.png" /></td>
-</tr>
-</table>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<td class="address-2"><span id="7482"></span>7482</td>
-<td class="instruction">LD BC,$0643</td>
-<td class="comment-1" rowspan="1">Set <span class="register">B</span> to YELLOW, and <span class="register">C</span> to INK:MAGENTA,
-PAPER:BLACK(BRIGHT).</td>
-</tr>
-<tr>
-<td class="address-2"><span id="7485"></span>7485</td>
-<td class="instruction">LD ($667D),BC</td>
-<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<a href="667D.html">Pheenix_Colour_01</a> and <span class="register">C</span> to *<a href="667D.html#667e">Pheenix_Colour_02</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7489"></span>7489</td>
-<td class="instruction">LD HL,$66ED</td>
-<td class="comment-1" rowspan="2">Write CE to *<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="748c"></span>748C</td>
-<td class="instruction">LD (HL),$CE</td>
-</tr>
-<tr>
-<td class="address-1"><span id="748e"></span>748E</td>
-<td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7491"></span>7491</td>
-<td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash the current phase on the stack.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7492"></span>7492</td>
-<td class="instruction">AND %00000110</td>
-<td class="comment-1" rowspan="1">Keep only bits 1-2.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7494"></span>7494</td>
-<td class="instruction">CALL NZ,<a href="68B8.html">TransitionEffect</a></td>
-<td class="comment-1" rowspan="1">Call <a href="68B8.html">TransitionEffect</a> if the result is not zero.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="7497"></span>7497</td>
-<td class="instruction">CALL <a href="67F6.html">PrintHeader</a></td>
-<td class="comment-1" rowspan="1">Call <a href="67F6.html">PrintHeader</a>.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="749a"></span>749A</td>
-<td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore the current phase from the stack.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="749b"></span>749B</td>
-<td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="2">Call <a href="696A.html">Draw_AlienMothership</a> if the current phase is phase 04.</td>
-</tr>
-<tr>
-<td class="address-1"><span id="749d"></span>749D</td>
-<td class="instruction">CALL Z,<a href="696A.html">Draw_AlienMothership</a></td>
-</tr>
-<tr>
-<td class="address-1"><span id="74a0"></span>74A0</td>
 <td class="instruction">CALL <a href="6CC9.html">DrawShip</a></td>
 <td class="comment-1" rowspan="1">Call <a href="6CC9.html">DrawShip</a>.</td>
 </tr>
 <tr>
-<td class="address-1"><span id="74a3"></span>74A3</td>
-<td class="instruction">RET</td>
-<td class="comment-1" rowspan="1">Return.</td>
+<td class="routine-comment" colspan="5">
+<div class="comments">
+<div class="paragraph">
+Continue on to <a href="730D.html">Handler_DisplayBonus</a>.
+</div>
+</div>
+</td>
 </tr>
 </table>
 <table class="asm-navigation">
@@ -1384,7 +312,7 @@ Prev: <a href="7254.html">7254</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#72c9">Map</a></td>
 <td class="next">
-Next: <a href="74A4.html">74A4</a>
+Next: <a href="730D.html">730D</a>
 </td>
 </tr>
 </table>

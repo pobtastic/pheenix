@@ -197,6 +197,21 @@ Play the explosion sound effect based on the current phase.
 <td class="instruction">JR Z,<a href="79B2.html#79f8">AlienExplosions_Sound_02</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="79da"></span>
+<div class="comments">
+<div class="paragraph">
+Play explosion sound 01.
+</div>
+<div class="paragraph">
+<audio controls="" src="../audio/explosion-01.wav">
+<p>Your browser doesn't support HTML5 audio. Here is a <a href="../audio/explosion-01.wav">link to the audio</a> instead.</p>
+</audio>
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="79da"></span>79DA</td>
 <td class="instruction">LD A,(HL)</td>
@@ -309,10 +324,20 @@ Play the explosion sound effect based on the current phase.
 <td class="comment-1" rowspan="1">Jump to <a href="79B2.html#7a1f">AlienExplosions_UpdatePosition</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="79f8"></span>
+<div class="comments">
+<div class="paragraph">
+Play explosion sound 02.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label">AlienExplosions_Sound_02</td>
 <td class="address-2"><span id="79f8"></span>79F8</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="79B2.html#7a1f">AlienExplosions_UpdatePosition</a> if *<span class="register">HL</span> is not equal to 01.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="79B2.html#7a1f">AlienExplosions_UpdatePosition</a> if the explosion type is not 01.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1427,6 +1452,16 @@ Update the explosion position and check for scoring.
 <td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="7b32"></span>
+<div class="comments">
+<div class="paragraph">
+The number of frames the explosion persists for varies between the phases, presumably because some phases allow the ship to make "quick shots" and the number of slots may be at risk when the player can fire more rapidly.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b32"></span>7B32</td>
 <td class="instruction">LD A,($66F1)</td>
@@ -1442,24 +1477,25 @@ Update the explosion position and check for scoring.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b37"></span>7B37</td>
 <td class="instruction">LD A,$0B</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=0B.</td>
+<td class="comment-1" rowspan="1">Set the frame limit in <span class="register">A</span> to 0B frames.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b39"></span>7B39</td>
-<td class="instruction">JR Z,<a href="79B2.html#7b3d">Handler_AlienExplosions_15</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="79B2.html#7b3d">Handler_AlienExplosions_15</a> if bit 1 of *<a href="66F1.html">Phase</a> was not set.</td>
+<td class="instruction">JR Z,<a href="79B2.html#7b3d">AlienExplosions_CheckComplete</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="79B2.html#7b3d">AlienExplosions_CheckComplete</a> if bit 1 of *<a href="66F1.html">Phase</a> was not set.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b3b"></span>7B3B</td>
 <td class="instruction">LD A,$11</td>
-<td class="comment-1" rowspan="3">Jump to <a href="79B2.html#7b5e">AlienExplosions_Continue</a> if *<span class="register">HL</span> is not equal to 11.</td>
+<td class="comment-1" rowspan="1">Set the frame limit in <span class="register">A</span> to 11 frames.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_AlienExplosions_15</td>
+<td class="asm-label">AlienExplosions_CheckComplete</td>
 <td class="address-2"><span id="7b3d"></span>7B3D</td>
 <td class="instruction">CP (HL)</td>
+<td class="comment-1" rowspan="2">Jump to <a href="79B2.html#7b5e">AlienExplosions_Continue</a> if *<span class="register">HL</span> is not equal to the frame limit.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1470,13 +1506,13 @@ Update the explosion position and check for scoring.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b40"></span>7B40</td>
 <td class="instruction">LD (HL),$00</td>
-<td class="comment-1" rowspan="1">Write 00 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Clear the current explosion slot (set to 00).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7b42"></span>7B42</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the explosion slot pointer on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
