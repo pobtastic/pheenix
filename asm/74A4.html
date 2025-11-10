@@ -42,9 +42,176 @@ Next: <a href="7564.html">7564</a>
 Used by the routine at <a href="740C.html">InitialiseLevel</a>.
 </div>
 <div class="paragraph">
-<table class="">
+Displays a randomly generated starfield and plays the "theme-tune" as a cute little game intro cutscene animation.
+</div>
+</div>
+</td>
+</tr>
 <tr>
-<td class="" colspan="1" rowspan="1"><img alt="level-01" src="../images/scr/level-01.png" /></td>
+<td class="routine-comment" colspan="5">
+<span id="74a4"></span>
+<div class="comments">
+<div class="paragraph">
+The routine runs through 2E loops and draws two stars on the top row for each iteration, one "large" and one small. Each iteration also bumps down the previously drawn stars - and does keep going even after the screen is full.
+</div>
+<div class="paragraph">
+Phoenix, the arcade game this is based on also has a similar intro animation.
+</div>
+<div class="paragraph">
+Note; the example output below is run using the actual game code and so is randomly generated and hence won't match the real game exactly (given the random nature of how it's generated).
+</div>
+<div class="paragraph">
+Here is an example of the animation frames:  
+
+  <table class="">
+<tr>
+<th colspan="1" rowspan="1">Frame 00</th>
+<th colspan="1" rowspan="1">Frame 01</th>
+<th colspan="1" rowspan="1">Frame 02</th>
+<th colspan="1" rowspan="1">Frame 03</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-0" src="../images/scr/game-intro-0.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-1" src="../images/scr/game-intro-1.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-2" src="../images/scr/game-intro-2.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-3" src="../images/scr/game-intro-3.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 04</th>
+<th colspan="1" rowspan="1">Frame 05</th>
+<th colspan="1" rowspan="1">Frame 06</th>
+<th colspan="1" rowspan="1">Frame 07</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-4" src="../images/scr/game-intro-4.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-5" src="../images/scr/game-intro-5.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-6" src="../images/scr/game-intro-6.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-7" src="../images/scr/game-intro-7.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 08</th>
+<th colspan="1" rowspan="1">Frame 09</th>
+<th colspan="1" rowspan="1">Frame 0A</th>
+<th colspan="1" rowspan="1">Frame 0B</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-8" src="../images/scr/game-intro-8.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-9" src="../images/scr/game-intro-9.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-10" src="../images/scr/game-intro-10.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-11" src="../images/scr/game-intro-11.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 0C</th>
+<th colspan="1" rowspan="1">Frame 0D</th>
+<th colspan="1" rowspan="1">Frame 0E</th>
+<th colspan="1" rowspan="1">Frame 0F</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-12" src="../images/scr/game-intro-12.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-13" src="../images/scr/game-intro-13.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-14" src="../images/scr/game-intro-14.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-15" src="../images/scr/game-intro-15.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 10</th>
+<th colspan="1" rowspan="1">Frame 11</th>
+<th colspan="1" rowspan="1">Frame 12</th>
+<th colspan="1" rowspan="1">Frame 13</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-16" src="../images/scr/game-intro-16.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-17" src="../images/scr/game-intro-17.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-18" src="../images/scr/game-intro-18.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-19" src="../images/scr/game-intro-19.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 14</th>
+<th colspan="1" rowspan="1">Frame 15</th>
+<th colspan="1" rowspan="1">Frame 16</th>
+<th colspan="1" rowspan="1">Frame 17</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-20" src="../images/scr/game-intro-20.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-21" src="../images/scr/game-intro-21.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-22" src="../images/scr/game-intro-22.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-23" src="../images/scr/game-intro-23.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 18</th>
+<th colspan="1" rowspan="1">Frame 19</th>
+<th colspan="1" rowspan="1">Frame 1A</th>
+<th colspan="1" rowspan="1">Frame 1B</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-24" src="../images/scr/game-intro-24.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-25" src="../images/scr/game-intro-25.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-26" src="../images/scr/game-intro-26.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-27" src="../images/scr/game-intro-27.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 1C</th>
+<th colspan="1" rowspan="1">Frame 1D</th>
+<th colspan="1" rowspan="1">Frame 1E</th>
+<th colspan="1" rowspan="1">Frame 1F</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-28" src="../images/scr/game-intro-28.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-29" src="../images/scr/game-intro-29.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-30" src="../images/scr/game-intro-30.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-31" src="../images/scr/game-intro-31.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 20</th>
+<th colspan="1" rowspan="1">Frame 21</th>
+<th colspan="1" rowspan="1">Frame 22</th>
+<th colspan="1" rowspan="1">Frame 23</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-32" src="../images/scr/game-intro-32.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-33" src="../images/scr/game-intro-33.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-34" src="../images/scr/game-intro-34.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-35" src="../images/scr/game-intro-35.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 24</th>
+<th colspan="1" rowspan="1">Frame 25</th>
+<th colspan="1" rowspan="1">Frame 26</th>
+<th colspan="1" rowspan="1">Frame 27</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-36" src="../images/scr/game-intro-36.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-37" src="../images/scr/game-intro-37.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-38" src="../images/scr/game-intro-38.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-39" src="../images/scr/game-intro-39.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 28</th>
+<th colspan="1" rowspan="1">Frame 29</th>
+<th colspan="1" rowspan="1">Frame 2A</th>
+<th colspan="1" rowspan="1">Frame 2B</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-40" src="../images/scr/game-intro-40.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-41" src="../images/scr/game-intro-41.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-42" src="../images/scr/game-intro-42.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-43" src="../images/scr/game-intro-43.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 2C</th>
+<th colspan="1" rowspan="1">Frame 2D</th>
+<th colspan="1" rowspan="1">Frame 2E</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-44" src="../images/scr/game-intro-44.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-45" src="../images/scr/game-intro-45.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-46" src="../images/scr/game-intro-46.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Which create the following animation: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="game-intro-animation" src="../images/udgs/game-intro-animation.png" /></td>
 </tr>
 </table>
 </div>
