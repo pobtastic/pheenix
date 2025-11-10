@@ -34,6 +34,7 @@ Changelog
 [Index:Graphics:Graphics And Sound]
 Graphics
 Sound
+Game Intro
 
 [Paths]
 Graphics=graphics/graphics.html
@@ -41,6 +42,9 @@ Sound=sound/sound.html
 
 [Page:Graphics]
 SectionPrefix=Graphics
+
+[Page:Game Intro]
+Content=asm/#N$74A4.html
 
 [Page:Sound]
 SectionPrefix=Audio

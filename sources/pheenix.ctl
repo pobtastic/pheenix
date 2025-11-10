@@ -9,7 +9,7 @@
 > $4000 @expand=#DEF(#ANIMATE(delay,count=$50)(name=$a)*$name-1,$delay;#FOR$02,$count||x|$name-x|;||($name-animation))
 > $4000 @set-handle-unsupported-macros=1
 b $4000 Loading Screen
-D $4000 #UDGTABLE { =h Pheenix Loading Screen. } { #SCR$02(loading) } UDGTABLE#
+D $4000 #UDGTABLE { =h Pheenix Loading Screen. } { #SCR$02(loading) } TABLE#
 @ $4000 label=Loading
   $4000,$1800,$20 Pixels.
   $5800,$0300,$20 Attributes.
@@ -2685,9 +2685,29 @@ N $749A The alien mothership is only shown in phase #N$04.
 
 c $74A4 Game Intro
 @ $74A4 label=GameIntro
-D $74A4 #PUSHS #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE {
-.   #CLS$05#SIM(start=$74B9,stop=$7558)#SCR$02(level-01)
-. } TABLE# #POPS
+D $74A4 Displays a randomly generated starfield and plays the "theme-tune" as a
+. cute little game intro cutscene animation.
+N $74A4 The routine runs through #N$2E loops and draws two stars on the top row
+. for each iteration, one "large" and one small. Each iteration also bumps down
+. the previously drawn stars - and does keep going even after the screen is
+. full.
+.
+. Phoenix, the arcade game this is based on also has a similar intro animation.
+N $74A4 Note; the example output below is run using the actual game code and so
+. is randomly generated and hence won't match the real game exactly (given the
+. random nature of how it's generated).
+.
+. Here is an example of the animation frames:
+. #PUSHS #CLS$05 #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE
+.  #FOR$00,$0A""y"
+.   { #FOR$00,$03(x,=h Frame #N(x+y*$04), | ) }
+.   { #FOR$00,$03(x,#SIM(start=$74B9,stop=$7555)#SCR$01(game-intro-#EVAL(x+y*$04)*), | ) }
+.  ""
+.  { #FOR$2C,$2E(x,=h Frame #Nx, | ) }
+.  { #FOR$2C,$2E(x,#SIM(start=$74B9,stop=$7555)#SCR$01(game-intro-x*), | ) }
+. TABLE# #POPS
+N $74A4 Which create the following animation:
+. #UDGTABLE { #UDGARRAY#(#ANIMATE$10,$2E(game-intro)) } TABLE#
   $74A4,$03 Call #R$6720.
 N $74A7 Don't bother with the animation if this is the demo mode.
   $74A7,$05 Return if *#R$66F3 is active.
@@ -3720,7 +3740,7 @@ D $7C82 #PUSHS #UDGTABLE {
 .     #SCR$02(*title-screen-x)#PLOT(0,0,0)(title-screen-x)
 .   ||
 .   #UDGARRAY#(#ANIMATE$0A,$08(title-screen))
-. } UDGTABLE# #POPS
+. } TABLE# #POPS
   $7C82,$01 Disable interrupts.
   $7C83,$03 Set border to #INK$00.
   $7C86,$03 #HTML(Write #INK$00 to *<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/5C48.html">BORDCR</a>.)

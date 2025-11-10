@@ -9,7 +9,7 @@
 ; #UDGTABLE
 ; { =h Pheenix Loading Screen. }
 ; { #SCR$02(loading) }
-; UDGTABLE#
+; TABLE#
 @label=Loading
 b$4000 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; {Pixels.
  $4020 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;
@@ -5823,9 +5823,34 @@ c$740C LD HL,$6680   ; #REGhl=#R$6680.
 ;
 ; Used by the routine at #R$740C.
 ; .
-; #PUSHS #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE {
-;   #CLS$05#SIM(start=$74B9,stop=$7558)#SCR$02(level-01)
-; } TABLE# #POPS
+; Displays a randomly generated starfield and plays the "theme-tune" as a
+; cute little game intro cutscene animation.
+;
+; .
+;
+; The routine runs through #N$2E loops and draws two stars on the top row
+; for each iteration, one "large" and one small. Each iteration also bumps down
+; the previously drawn stars - and does keep going even after the screen is
+; full.
+; .
+; Phoenix, the arcade game this is based on also has a similar intro animation.
+; .
+; Note; the example output below is run using the actual game code and so
+; is randomly generated and hence won't match the real game exactly (given the
+; random nature of how it's generated).
+; .
+; Here is an example of the animation frames:
+; #PUSHS #CLS$05 #POKES$74EF,$00;$74F0,$00;$74F1,$00 #UDGTABLE
+;  #FOR$00,$0A""y"
+;   { #FOR$00,$03(x,=h Frame #N(x+y*$04), | ) }
+;   { #FOR$00,$03(x,#SIM(start=$74B9,stop=$7555)#SCR$01(game-intro-#EVAL(x+y*$04)*), | ) }
+;  ""
+;  { #FOR$2C,$2E(x,=h Frame #Nx, | ) }
+;  { #FOR$2C,$2E(x,#SIM(start=$74B9,stop=$7555)#SCR$01(game-intro-x*), | ) }
+; TABLE# #POPS
+; .
+; Which create the following animation:
+; #UDGTABLE { #UDGARRAY#(#ANIMATE$10,$2E(game-intro)) } TABLE#
 @label=GameIntro
 c$74A4 CALL $6720    ; Call #R$6720.
 ; Don't bother with the animation if this is the demo mode.
@@ -7203,7 +7228,7 @@ c$7B67 LD A,($6691)  ; {Return if *#R$6691 is zero.
 ;     #SCR$02(*title-screen-x)#PLOT(0,0,0)(title-screen-x)
 ;   ||
 ;   #UDGARRAY#(#ANIMATE$0A,$08(title-screen))
-; } UDGTABLE# #POPS
+; } TABLE# #POPS
 @label=TitleScreen
 c$7C82 DI            ; Disable interrupts.
  $7C83 XOR A         ; {Set border to #INK$00.
