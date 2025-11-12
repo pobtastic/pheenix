@@ -35,6 +35,7 @@ Changelog
 Graphics
 Sound
 Game Intro
+Transition Effect
 
 [Paths]
 Graphics=graphics/graphics.html
@@ -45,6 +46,9 @@ SectionPrefix=Graphics
 
 [Page:Game Intro]
 Content=asm/#N$74A4.html
+
+[Page:Transition Effect]
+Content=asm/#N$68B8.html
 
 [Page:Sound]
 SectionPrefix=Audio

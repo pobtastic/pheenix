@@ -2934,8 +2934,10 @@ g$66A3 DEFB $00
 @label=Flag_Collision
 g$66A4 DEFB $00
 
-; Explosion: Flash Counter
-@label=Explosion_FlashCounter
+; Explosion Counter
+;
+; Used by the routine at #R$6926.
+@label=Explosion_Counter
 g$66A5 DEFB $00
 
 ; Bullet Index
@@ -3057,14 +3059,17 @@ g$66F6 DEFB $00
 ;
 ; Used by the routines at #R$676F, #R$7030, #R$7564, #R$75B7, #R$7616 and
 ; #R$7B67.
+;
+;   DE Screen buffer address
+; O:DE Attribute buffer address
 @label=ConvertScreenToAttributeBufferAddress
-c$66F7 LD A,D        ; #REGa=#REGd.
- $66F8 AND %00011000 ; Keep only bits 3-4.
- $66FA SRA A         ; {Shift #REGa right three positions (with carry).
- $66FC SRA A         ;
+c$66F7 LD A,D        ; {Extract bits 3-4 from #REGd (the character row within the display
+ $66F8 AND %00011000 ; file third).}
+ $66FA SRA A         ; {Shift the result right three positions (divide by #N$08) to get the
+ $66FC SRA A         ; attribute row offset.
  $66FE SRA A         ; }
- $6700 ADD A,$58     ; #REGa+=#N$58.
- $6702 LD D,A        ; #REGd=#REGa.
+ $6700 ADD A,$58     ; {Add #N$58 to convert to the attribute buffer address range
+ $6702 LD D,A        ; (#N$5800-#N$5AFF).}
  $6703 RET           ; Return.
 
 ; Convert Attribute Address To Screen Buffer Address
@@ -3383,7 +3388,8 @@ c$6845 LD HL,$613D   ; #REGhl=#R$613D.
 ;
 ; DE Attribute buffer destination
 ;
-; #CLS$00 #SIM(start=$684E,stop=$688F,de=$5890)#SCR$02(screen-eggsplosion-left)
+; #CLS$00 #SIM(start=$67F6,stop=$6818)
+; #SIM(start=$684E,stop=$688F,de=$598C)#SCR$02(screen-eggsplosion-left)
 @label=Handler_EggsplosionLeft
 c$684E LD HL,$606E   ; #REGhl=#R$606E.
  $6851 JR $6856      ; Jump to #R$6856.
@@ -3396,8 +3402,8 @@ c$684E LD HL,$606E   ; #REGhl=#R$606E.
 ;
 ; DE Attribute buffer destination
 ;
-; #CLS$00
-; #SIM(start=$6853,stop=$688F,de=$5890)#SCR$02(screen-eggsplosion-right)
+; #CLS$00 #SIM(start=$67F6,stop=$6818)
+; #SIM(start=$6853,stop=$688F,de=$598F)#SCR$02(screen-eggsplosion-right)
 @label=Handler_EggsplosionRight
 c$6853 LD HL,$608E   ; #REGhl=#R$608E.
 ; This entry point is used by the routine at #R$684E.
@@ -3506,80 +3512,139 @@ c$68A1 PUSH AF       ; {Stash #REGaf, #REGbc, #REGde and #REGhl on the stack.
 ;
 ; Used by the routines at #R$740C, #R$7599 and #R$7C82.
 ; .
-; #PUSHS #UDGTABLE {
-;   #CLS$43#SIM(start=$68B8,stop=$6910)#SCR$02(asterisk)
-; } TABLE# #POPS
+; Creates a transition effect where a rectangular frame grows outwards
+; from the center of the screen, the colour varies depending on the current
+; phase. Once the frame fills the whole screen, it then "erases" from the
+; center outwards again.
+; .
+; This animation is also present in Phoenix, the arcade game this game is based
+; on.
+;
+; .
+;
+; Demonstrating the transition using #COLOUR$43:
+; #PUSHS #CLS$43#SIM(start=$68BA,stop=$68D3,bc=$0200) #UDGTABLE { =h,c4 First Animation }
+;  #FOR$00,$02""y"
+;   { #FOR$00,$03(x,=h Frame #N(x+y*$04), | ) }
+;   { #FOR$00,$03(x,#SIM(start=$68D3,stop=$6915)#SCR$01(transition-#EVAL(x+y*$04)*), | ) }
+;  ""
+; #SIM(start=$68BA,stop=$68D3,bc=$0100) { =h,c4 Second Animation }
+;  #FOR$00,$02""y"
+;   { #FOR$00,$03(x,=h Frame #N(x+y*$04), | ) }
+;   { #FOR$00,$03(x,#SIM(start=$68D3,stop=$6915)#SCR$01(transition-#EVAL($0C+x+y*$04)*), | ) }
+;  ""
+; TABLE# #POPS
+; .
+; Which create the following animation:
+; #UDGTABLE { #UDGARRAY#(#ANIMATE$08,$17(transition)) } TABLE#
 @label=TransitionEffect
-c$68B8 LD B,$02      ; #REGb=#N$02.
-*$68BA PUSH BC       ; Stash #REGbc on the stack.
- $68BB LD DE,$0109   ; #REGde=#N$0109.
- $68BE LD HL,$596B   ; #REGhl=#N$596B (attribute buffer location).
- $68C1 LD A,B        ; {Compare #REGb with #N$01.
+c$68B8 LD B,$02      ; Set an iteration counter in #REGb for #N$02 animations.
+@label=TransitionEffect_Loop
+*$68BA PUSH BC       ; Stash the iteration counter on the stack.
+ $68BB LD DE,$0109   ; Set #REGde to initial frame dimensions (width=#N$09,
+                     ; height=#N$01).
+ $68BE LD HL,$596B   ; #REGhl=#N$596B (starting attribute buffer location).
+; Determine the attribute color for this iteration.
+ $68C1 LD A,B        ; {Check if this is iteration #N$01?
  $68C2 CP $01        ; }
- $68C4 LD A,$00      ; #REGa=#INK$00.
- $68C6 JR Z,$68D3    ; Jump to #R$68D3 if #REGb was equal to #N$01.
- $68C8 LD A,($66F1)  ; #REGa=*#R$66F1.
- $68CB ADD A,$03     ; #REGa+=#N$03.
- $68CD CP $07        ; {Jump to #R$68D3 if #REGa is not equal to #N$07.
- $68CF JR NZ,$68D3   ; }
- $68D1 LD A,$43      ; #REGa=#COLOUR$43.
-*$68D3 LD B,$0C      ; #REGb=#N$0C.
-*$68D5 PUSH BC       ; Stash #REGbc on the stack.
- $68D6 LD B,E        ; #REGb=#REGe.
-*$68D7 LD (HL),A     ; Write #REGa to *#REGhl.
+; The second time this loops around, the rectangular frame "erases"
+; itself (which is just achieved by doing the same thing again but in #INK$00).
+ $68C4 LD A,$00      ; Set the iteration colour to: #COLOUR$00.
+ $68C6 JR Z,$68D3    ; Jump to #R$68D3 if this is iteration #N$01.
+; Else, this is the first loop - so set the INK based on the current
+; phase.
+; .
+; #TABLE(default,centre,centre)
+;   { =h Phase | =h Colour }
+;   #FOR$00,$04(x,{ #Nx | #COLOUR(#MAP(x)(x+$03,$04:$43)) })
+; TABLE#
+ $68C8 LD A,($66F1)  ; {Set the iteration colour to: *#R$66F1+#N$03.
+ $68CB ADD A,$03     ; }
+ $68CD CP $07        ; {Jump to #R$68D3 unless the colour is #INK$07 (for phase
+ $68CF JR NZ,$68D3   ; #N$04).}
+; Phase #N$04 uses #COLOUR$43 instead of #INK$07.
+ $68D1 LD A,$43      ; Set the iteration colour to: #COLOUR$43.
+; There are #N$0C frames to fill the whole screen.
+@label=TransitionEffect_DrawFrame
+*$68D3 LD B,$0C      ; Set a counter in #REGb for #N$0C frames.
+@label=TransitionEffect_FrameLoop
+*$68D5 PUSH BC       ; Stash the frame counter on the stack.
+ $68D6 LD B,E        ; Set the horizontal counter from #REGe (frame width).
+; Draw the top edge of the frame (left to right).
+@label=TransitionEffect_TopEdge
+*$68D7 LD (HL),A     ; Write the attribute byte to the attribute buffer.
  $68D8 CALL $68A1    ; Call #R$68A1.
- $68DB INC HL        ; Increment #REGhl by one.
- $68DC DJNZ $68D7    ; Decrease counter by one and loop back to #R$68D7 until
-                     ; counter is zero.
- $68DE LD B,D        ; #REGb=#REGd.
-*$68DF PUSH BC       ; Stash #REGbc on the stack.
- $68E0 LD (HL),A     ; Write #REGa to *#REGhl.
+ $68DB INC HL        ; Move the attribute address pointer right one block.
+ $68DC DJNZ $68D7    ; Decrease the horizontal counter by one and loop back to #R$68D7
+                     ; until the top edge of the frame has been drawn.
+ $68DE LD B,D        ; Set the vertical counter from #REGd (frame height).
+; Draw the right edge of the frame (top to bottom).
+@label=TransitionEffect_RightEdge
+*$68DF PUSH BC       ; Stash the vertical counter on the stack.
+ $68E0 LD (HL),A     ; Write the attribute byte to the attribute buffer.
  $68E1 CALL $68A1    ; Call #R$68A1.
- $68E4 LD BC,$0020   ; {#REGhl+=#N($0020,$04,$04).
- $68E7 ADD HL,BC     ; }
- $68E8 POP BC        ; Restore #REGbc from the stack.
- $68E9 DJNZ $68DF    ; Decrease counter by one and loop back to #R$68DF until
-                     ; counter is zero.
- $68EB LD B,E        ; #REGb=#REGe.
-*$68EC LD (HL),A     ; Write #REGa to *#REGhl.
+ $68E4 LD BC,$0020   ; {Move down one row (add #N($0020,$04,$04) to the
+ $68E7 ADD HL,BC     ; attribute address).}
+ $68E8 POP BC        ; Restore the vertical counter from the stack.
+ $68E9 DJNZ $68DF    ; Decrease the vertical counter by one and loop back to #R$68DF until
+                     ; the right edge of the frame has been drawn.
+ $68EB LD B,E        ; Set the horizontal counter from #REGe (frame width).
+; Draw the bottom edge of the frame (right to left).
+@label=TransitionEffect_BottomEdge
+*$68EC LD (HL),A     ; Write the attribute byte to the attribute buffer.
  $68ED CALL $68A1    ; Call #R$68A1.
- $68F0 DEC HL        ; Decrease #REGhl by one.
- $68F1 DJNZ $68EC    ; Decrease counter by one and loop back to #R$68EC until
-                     ; counter is zero.
- $68F3 LD B,D        ; #REGb=#REGd.
-*$68F4 PUSH BC       ; Stash #REGbc on the stack.
- $68F5 LD (HL),A     ; Write #REGa to *#REGhl.
+ $68F0 DEC HL        ; Move the attribute address pointer left one block.
+ $68F1 DJNZ $68EC    ; Decrease the horizontal counter by one and loop back to #R$68EC
+                     ; until the bottom edge of the frame has been drawn.
+ $68F3 LD B,D        ; Set the vertical counter from #REGd (frame height).
+; Draw the left edge of the frame (bottom to top).
+@label=TransitionEffect_LeftEdge
+*$68F4 PUSH BC       ; Stash the vertical counter on the stack.
+ $68F5 LD (HL),A     ; Write the attribute byte to the attribute buffer.
  $68F6 CALL $68A1    ; Call #R$68A1.
- $68F9 LD BC,$0020   ; {#REGhl-=#N($0020,$04,$04).
- $68FC AND A         ;
+ $68F9 LD BC,$0020   ; {Move up one row (subtract #N($0020,$04,$04) from the attribute
+ $68FC AND A         ; address).
  $68FD SBC HL,BC     ; }
- $68FF POP BC        ; Restore #REGbc from the stack.
- $6900 DJNZ $68F4    ; Decrease counter by one and loop back to #R$68F4 until
-                     ; counter is zero.
- $6902 LD C,$21      ; #REGc=#N$21.
- $6904 SBC HL,BC     ; #REGhl-=#REGbc.
- $6906 INC E         ; {Increment #REGe by two.
+ $68FF POP BC        ; Restore the vertical counter from the stack.
+ $6900 DJNZ $68F4    ; Decrease the vertical counter by one and loop back to #R$68F4 until
+                     ; the left edge of the frame has been drawn.
+; Move outward to the next frame.
+ $6902 LD C,$21      ; {Move up one row and left one block (subtract #N($0021,$04,$04) from
+ $6904 SBC HL,BC     ; the attribute address).}
+; Increase the frame dimensions.
+ $6906 INC E         ; {Increment frame width by two.
  $6907 INC E         ; }
- $6908 INC D         ; {Increment #REGd by two.
+ $6908 INC D         ; {Increment the frame height by two.
  $6909 INC D         ; }
- $690A PUSH AF       ; Stash #REGaf on the stack.
- $690B LD BC,$000A   ; #REGbc=#N($000A,$04,$04).
-*$690E DJNZ $690E    ; Decrease counter by one and loop back to #R$690E until
-                     ; counter is zero.
- $6910 DEC C         ; Decrease #REGc by one.
- $6911 JR NZ,$690E   ; Jump to #R$690E if #REGc is not equal to #REGa.
- $6913 POP AF        ; {Restore #REGaf and #REGbc from the stack.
- $6914 POP BC        ; }
+; Action a delay between the frames.
+ $690A PUSH AF       ; Stash the attribute byte on the stack.
+ $690B LD BC,$000A   ; Set a frame delay counter in #REGbc to #N$100*#N$0A
+                     ; loops.
+@label=TransitionEffect_FrameDelay
+*$690E DJNZ $690E    ; Decrease the inner loop counter by one and loop back to #R$690E
+                     ; until the inner loop counter is zero.
+ $6910 DEC C         ; Decrease the outer loop counter by one.
+ $6911 JR NZ,$690E   ; Jump back to #R$690E until the outer loop counter is
+                     ; zero.
+; Process the next frame loop (or pass through when it's completed).
+ $6913 POP AF        ; {Restore the attribute byte and frame counter from the
+ $6914 POP BC        ; stack.}
  $6915 DJNZ $68D5    ; Decrease counter by one and loop back to #R$68D5 until
                      ; counter is zero.
- $6917 LD BC,$0032   ; #REGbc=#N($0032,$04,$04).
-*$691A DJNZ $691A    ; Decrease counter by one and loop back to #R$691A until
-                     ; counter is zero.
- $691C DEC C         ; Decrease #REGc by one.
- $691D JR NZ,$691A   ; Jump to #R$691A until #REGc is zero.
- $691F POP BC        ; Restore #REGbc from the stack.
- $6920 DJNZ $68BA    ; Decrease counter by one and loop back to #R$68BA until
-                     ; counter is zero.
+; Action a delay between the iterations.
+ $6917 LD BC,$0032   ; Set an iteration delay counter in #REGbc to #N$100*#N$32
+                     ; loops.
+@label=TransitionEffect_DelayLoop
+*$691A DJNZ $691A    ; Decrease the inner loop counter by one and loop back to #R$691A
+                     ; until the inner loop counter is zero.
+ $691C DEC C         ; Decrease the outer loop counter by one.
+ $691D JR NZ,$691A   ; Jump back to #R$691A until the outer loop counter is
+                     ; zero.
+; Process the next iteration animation (or pass through and end).
+ $691F POP BC        ; Restore the iteration counter from the stack.
+ $6920 DJNZ $68BA    ; Decrease the iteration counter by one and loop back to #R$68BA
+                     ; until the animation is complete.
+; All done, clear the screen and return.
  $6922 CALL $6720    ; Call #R$6720.
  $6925 RET           ; Return.
 
@@ -3612,7 +3677,7 @@ c$6926 PUSH BC       ; Stash #REGbc on the stack.
  $6938 LD A,IXl      ; #REGa=the low byte of #REGix.
  $693A CP $02        ; {Jump to #R$6942 if #REGa is equal to #N$02.
  $693C JR Z,$6942    ; }
- $693E LD A,$40      ; #REGa=#N$40.
+ $693E LD A,$40      ; Set the attribute byte to: #COLOUR$40.
  $6940 JR $6943      ; Jump to #R$6943.
 @label=Handler_ShipExplosion_SetAttribute
 *$6942 LD A,B        ; Load #REGa with the attribute byte from #REGb.
@@ -3636,9 +3701,10 @@ c$6926 PUSH BC       ; Stash #REGbc on the stack.
                      ; stack.
 ; Advance to the next explosion frame. If the frame counter reaches #N$03,
 ; reset it to #N$00 to loop the animation.
- $6957 INC A         ; Increment #REGa by one.
- $6958 CP $03        ; {Jump to #R$695D if #REGa is not equal to #N$03.
+ $6957 INC A         ; Increment the frame counter.
+ $6958 CP $03        ; {Jump to #R$695D until the frame counter is #N$03.
  $695A JR NZ,$695D   ; }
+; There is no frame #N$03, so reset the frame counter back to #N$00.
  $695C XOR A         ; Point to frame #N$00.
 @label=Handler_ShipExplosion_SetFrame
 *$695D LD ($66A3),A  ; Write the frame number to *#R$66A3.
