@@ -29,11 +29,11 @@ Prev: <a href="7030.html">7030</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#7159">Map</a></td>
 <td class="next">
-Next: <a href="7200.html">7200</a>
+Next: <a href="71BE.html">71BE</a>
 </td>
 </tr>
 </table>
-<div class="description">7159: Routine at 7159</div>
+<div class="description">7159: Handler: Bullet Collision</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -45,10 +45,10 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 </td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision</td>
 <td class="address-2"><span id="7159"></span>7159</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7159.html#7176">7176</a> if this *<a href="66F1.html">Phase</a> is either 02 or 03.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7159.html#7176">Handler_BulletCollision_0</a> if this *<a href="66F1.html">Phase</a> is either 02 or 03.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -58,7 +58,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="715e"></span>715E</td>
-<td class="instruction">JR NZ,<a href="7159.html#7176">$7176</a></td>
+<td class="instruction">JR NZ,<a href="7159.html#7176">Handler_BulletCollision_0</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -70,7 +70,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7164"></span>7164</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7159.html#7176">7176</a> if *<span class="register">HL</span> is not equal to <span class="register">D</span>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7159.html#7176">Handler_BulletCollision_0</a> if *<span class="register">HL</span> is not equal to <span class="register">D</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -80,7 +80,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7166"></span>7166</td>
-<td class="instruction">JR NZ,<a href="7159.html#7176">$7176</a></td>
+<td class="instruction">JR NZ,<a href="7159.html#7176">Handler_BulletCollision_0</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -104,12 +104,12 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="716b"></span>716B</td>
 <td class="instruction">CP E</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7159.html#717f">717F</a> if <span class="register">A</span> is equal to <span class="register">E</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="7159.html#717f">Handler_BulletCollision_1</a> if <span class="register">A</span> is equal to <span class="register">E</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="716c"></span>716C</td>
-<td class="instruction">JR Z,<a href="7159.html#717f">$717F</a></td>
+<td class="instruction">JR Z,<a href="7159.html#717f">Handler_BulletCollision_1</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -133,12 +133,12 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7171"></span>7171</td>
 <td class="instruction">CP E</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7159.html#717f">717F</a> if <span class="register">A</span> is equal to <span class="register">E</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="7159.html#717f">Handler_BulletCollision_1</a> if <span class="register">A</span> is equal to <span class="register">E</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7172"></span>7172</td>
-<td class="instruction">JR Z,<a href="7159.html#717f">$717F</a></td>
+<td class="instruction">JR Z,<a href="7159.html#717f">Handler_BulletCollision_1</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -152,10 +152,10 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="instruction">INC HL</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision_0</td>
 <td class="address-2"><span id="7176"></span>7176</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7159.html#71be">71BE</a> if *<span class="register">HL</span> is not equal to 06.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="71BE.html">Handler_CollisionEffects</a> if *<span class="register">HL</span> is not equal to 06.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -165,7 +165,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7179"></span>7179</td>
-<td class="instruction">JR NZ,<a href="7159.html#71be">$71BE</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html">Handler_CollisionEffects</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -185,7 +185,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="instruction">SBC HL,BC</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision_1</td>
 <td class="address-2"><span id="717f"></span>717F</td>
 <td class="instruction">PUSH HL</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
@@ -229,8 +229,8 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="718e"></span>718E</td>
-<td class="instruction">JR NZ,<a href="7159.html#7192">$7192</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7159.html#7192">7192</a> if <span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="7159.html#7192">Handler_BulletCollision_2</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7159.html#7192">Handler_BulletCollision_2</a> if <span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -239,10 +239,10 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=0F.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision_2</td>
 <td class="address-2"><span id="7192"></span>7192</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7159.html#719c">719C</a> if *<span class="register">HL</span> is equal to <span class="register">E</span>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7159.html#719c">Handler_BulletCollision_4</a> if *<span class="register">HL</span> is equal to <span class="register">E</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -252,7 +252,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7194"></span>7194</td>
-<td class="instruction">JR Z,<a href="7159.html#719c">$719C</a></td>
+<td class="instruction">JR Z,<a href="7159.html#719c">Handler_BulletCollision_4</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -261,15 +261,15 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="comment-1" rowspan="2">Increment <span class="register">HL</span> by two.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision_3</td>
 <td class="address-2"><span id="7197"></span>7197</td>
 <td class="instruction">INC HL</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7198"></span>7198</td>
-<td class="instruction">DJNZ <a href="7159.html#7192">$7192</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7159.html#7192">7192</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="7159.html#7192">Handler_BulletCollision_2</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7159.html#7192">Handler_BulletCollision_2</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -284,7 +284,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="comment-1" rowspan="1">Return.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision_4</td>
 <td class="address-2"><span id="719c"></span>719C</td>
 <td class="instruction">INC HL</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
@@ -323,21 +323,21 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="71a3"></span>71A3</td>
 <td class="instruction">CP D</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7159.html#71a8">71A8</a> if <span class="register">A</span> is equal to <span class="register">D</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="7159.html#71a8">Handler_BulletCollision_5</a> if <span class="register">A</span> is equal to <span class="register">D</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71a4"></span>71A4</td>
-<td class="instruction">JR Z,<a href="7159.html#71a8">$71A8</a></td>
+<td class="instruction">JR Z,<a href="7159.html#71a8">Handler_BulletCollision_5</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71a6"></span>71A6</td>
-<td class="instruction">JR <a href="7159.html#7197">$7197</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7159.html#7197">7197</a>.</td>
+<td class="instruction">JR <a href="7159.html#7197">Handler_BulletCollision_3</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7159.html#7197">Handler_BulletCollision_3</a>.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">Handler_BulletCollision_5</td>
 <td class="address-2"><span id="71a8"></span>71A8</td>
 <td class="instruction">LD (HL),$00</td>
 <td class="comment-1" rowspan="1">Write 00 to *<span class="register">HL</span>.</td>
@@ -365,13 +365,13 @@ Noting that ... this doesn't check for an "end" so has the potential to overwrit
 </td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">FindEmptySlot</td>
 <td class="address-2"><span id="71ab"></span>71AB</td>
 <td class="instruction">LD HL,$66D5</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="66D5.html">Table_AlienExplosions</a>.</td>
 </tr>
 <tr>
-<td class="asm-label"></td>
+<td class="asm-label">FindEmptySlot_Loop</td>
 <td class="address-2"><span id="71ae"></span>71AE</td>
 <td class="instruction">LD A,(HL)</td>
 <td class="comment-1" rowspan="3">Jump to <a href="7159.html#71b7">ActivateExplosion</a> if the active flag of this slot is marked as inactive.</td>
@@ -405,8 +405,8 @@ Noting that ... this doesn't check for an "end" so has the potential to overwrit
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71b5"></span>71B5</td>
-<td class="instruction">JR <a href="7159.html#71ae">$71AE</a></td>
-<td class="comment-1" rowspan="1">Jump back to <a href="7159.html#71ae">71AE</a>.</td>
+<td class="instruction">JR <a href="7159.html#71ae">FindEmptySlot_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="7159.html#71ae">FindEmptySlot_Loop</a>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -451,220 +451,6 @@ Activate this explosion slot.
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>
 </tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-2"><span id="71be"></span>71BE</td>
-<td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7159.html#71ec">71EC</a> if bit 1 of *<a href="66F1.html">Phase</a> is not set.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71c1"></span>71C1</td>
-<td class="instruction">BIT 1,A</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71c3"></span>71C3</td>
-<td class="instruction">JR Z,<a href="7159.html#71ec">$71EC</a></td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71c5"></span>71C5</td>
-<td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71c6"></span>71C6</td>
-<td class="instruction">CP $43</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7159.html#71d1">71D1</a> if <span class="register">A</span> is equal to 43.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71c8"></span>71C8</td>
-<td class="instruction">JR Z,<a href="7159.html#71d1">$71D1</a></td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71ca"></span>71CA</td>
-<td class="instruction">CP $41</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7159.html#71d1">71D1</a> if <span class="register">A</span> is equal to 41.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71cc"></span>71CC</td>
-<td class="instruction">JR Z,<a href="7159.html#71d1">$71D1</a></td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71ce"></span>71CE</td>
-<td class="instruction">CP $05</td>
-<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 05.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71d0"></span>71D0</td>
-<td class="instruction">RET NZ</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-2"><span id="71d1"></span>71D1</td>
-<td class="instruction">LD A,($66F3)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="66F3.html">Flag_ActiveDemoMode</a> is active.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71d4"></span>71D4</td>
-<td class="instruction">OR A</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71d5"></span>71D5</td>
-<td class="instruction">RET NZ</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71d6"></span>71D6</td>
-<td class="instruction">LD B,$18</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=18.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71d8"></span>71D8</td>
-<td class="instruction">LD HL,$0122</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=0122.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-2"><span id="71db"></span>71DB</td>
-<td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71dc"></span>71DC</td>
-<td class="instruction">PUSH HL</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71dd"></span>71DD</td>
-<td class="instruction">LD DE,$0001</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=0001.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e0"></span>71E0</td>
-<td class="instruction">CALL $03B5</td>
-<td class="comment-1" rowspan="1">Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e3"></span>71E3</td>
-<td class="instruction">DI</td>
-<td class="comment-1" rowspan="1">Disable interrupts.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e4"></span>71E4</td>
-<td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e5"></span>71E5</td>
-<td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="3">Increment <span class="register">HL</span> by three.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e6"></span>71E6</td>
-<td class="instruction">INC HL</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e7"></span>71E7</td>
-<td class="instruction">INC HL</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e8"></span>71E8</td>
-<td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71e9"></span>71E9</td>
-<td class="instruction">DJNZ <a href="7159.html#71db">$71DB</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7159.html#71db">71DB</a> until counter is zero.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71eb"></span>71EB</td>
-<td class="instruction">RET</td>
-<td class="comment-1" rowspan="1">Return.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-2"><span id="71ec"></span>71EC</td>
-<td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 04.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71ee"></span>71EE</td>
-<td class="instruction">RET NZ</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71ef"></span>71EF</td>
-<td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7159.html#71f8">71F8</a> if *<span class="register">HL</span> is not equal to 01.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71f0"></span>71F0</td>
-<td class="instruction">CP $01</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71f2"></span>71F2</td>
-<td class="instruction">JR NZ,<a href="7159.html#71f8">$71F8</a></td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71f4"></span>71F4</td>
-<td class="instruction">LD (HL),$40</td>
-<td class="comment-1" rowspan="1">Write 40 to *<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71f6"></span>71F6</td>
-<td class="instruction">JR <a href="7200.html#721e">$721E</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7200.html#721e">721E</a>.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-2"><span id="71f8"></span>71F8</td>
-<td class="instruction">CP $0F</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7200.html">7200</a> if <span class="register">A</span> is not equal to 0F.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71fa"></span>71FA</td>
-<td class="instruction">JR NZ,<a href="7200.html">$7200</a></td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71fc"></span>71FC</td>
-<td class="instruction">LD (HL),$01</td>
-<td class="comment-1" rowspan="1">Write 01 to *<span class="register">HL</span>.</td>
-</tr>
-<tr>
-<td class="asm-label"></td>
-<td class="address-1"><span id="71fe"></span>71FE</td>
-<td class="instruction">JR <a href="7200.html#7229">$7229</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7200.html#7229">7229</a>.</td>
-</tr>
 </table>
 <table class="asm-navigation">
 <tr>
@@ -673,7 +459,7 @@ Prev: <a href="7030.html">7030</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#7159">Map</a></td>
 <td class="next">
-Next: <a href="7200.html">7200</a>
+Next: <a href="71BE.html">71BE</a>
 </td>
 </tr>
 </table>

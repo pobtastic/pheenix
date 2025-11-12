@@ -39,7 +39,20 @@ Next: <a href="67F6.html">67F6</a>
 <td class="routine-comment" colspan="5">
 <div class="details">
 <div class="paragraph">
-Used by the routines at <a href="7200.html">7200</a>, <a href="730D.html">Handler_DisplayBonus</a> and <a href="79B2.html">Handler_AlienExplosions</a>.
+Used by the routines at <a href="71BE.html">Handler_CollisionEffects</a>, <a href="730D.html">Handler_DisplayBonus</a> and <a href="79B2.html">Handler_AlienExplosions</a>.
+</div>
+<div class="paragraph">
+Adds points to the current score and awards a bonus life if the score reaches 10,000 points.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="67b6"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the game is running in demo mode.
 </div>
 </div>
 </td>
@@ -80,13 +93,23 @@ Demo mode is active, so just reset the score.
 <td class="asm-label"></td>
 <td class="address-1"><span id="67bf"></span>67BF</td>
 <td class="instruction">LD B,$00</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=00.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">B</span> to 00 to skip any scoring addition.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67c1"></span>67C1</td>
 <td class="instruction">JR <a href="67B6.html#67dd">Reset_ScoreBuffer</a></td>
 <td class="comment-1" rowspan="1">Jump to <a href="67B6.html#67dd">Reset_ScoreBuffer</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="67c3"></span>
+<div class="comments">
+<div class="paragraph">
+Proceed with adding the points to the current score.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label">AddToScore</td>
@@ -127,7 +150,7 @@ Demo mode is active, so just reset the score.
 <td class="asm-label"></td>
 <td class="address-1"><span id="67cf"></span>67CF</td>
 <td class="instruction">CP $3A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="67B6.html#67d8">AddToScore_Store</a> if <span class="register">A</span> is less than 3A.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="67B6.html#67d8">AddToScore_Store</a> if the result is less than 3A (no carry).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -138,49 +161,49 @@ Demo mode is active, so just reset the score.
 <td class="asm-label"></td>
 <td class="address-1"><span id="67d3"></span>67D3</td>
 <td class="instruction">SUB $0A</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>-=0A.</td>
+<td class="comment-1" rowspan="1">Subtract 0A to handle the carry.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67d5"></span>67D5</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next higher digit position.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67d6"></span>67D6</td>
 <td class="instruction">INC (HL)</td>
-<td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Add the carry to the next higher digit.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67d7"></span>67D7</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move back to the current digit position.</td>
 </tr>
 <tr>
 <td class="asm-label">AddToScore_Store</td>
 <td class="address-2"><span id="67d8"></span>67D8</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the resulting digit to the score.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67d9"></span>67D9</td>
 <td class="instruction">DEC DE</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">DE</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the previous points digit in the points buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67da"></span>67DA</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the previous digit in the score.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="67db"></span>67DB</td>
 <td class="instruction">DJNZ <a href="67B6.html#67cb">AddToScore_Loop</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="67B6.html#67cb">AddToScore_Loop</a> until counter is zero.</td>
+<td class="comment-1" rowspan="1">Decrease the score digit counter by one and loop back to <a href="67B6.html#67cb">AddToScore_Loop</a> until all of the scoring digits have been processed.</td>
 </tr>
 <tr>
 <td class="asm-label">Reset_ScoreBuffer</td>
@@ -231,7 +254,7 @@ Check if the score is at least "10,000".
 <td class="asm-label"></td>
 <td class="address-1"><span id="67e6"></span>67E6</td>
 <td class="instruction">LD A,($6515)</td>
-<td class="comment-1" rowspan="3">Return if *<a href="6514.html">6515</a> is not equal to 31 ("&#49;").</td>
+<td class="comment-1" rowspan="3">Return if *<a href="6514.html">6515</a> (the "ten-thousands" digit) is not equal to 31 ("&#49;").</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

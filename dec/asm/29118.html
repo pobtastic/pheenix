@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 29118</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="29017.html">29017</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#29118">Map</a></td>
+<td class="next">
+Next: <a href="29268.html">29268</a>
+</td>
+</tr>
+</table>
+<div class="description">29118: Handler: Special Collision Effects</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="29017.html">Handler_BulletCollision</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects</td>
+<td class="address-2"><span id="29118"></span>29118</td>
+<td class="instruction">LD A,(26353)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29118.html#29164">Handler_CollisionEffects_2</a> if bit 1 of *<a href="26353.html">Phase</a> is not set.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29121"></span>29121</td>
+<td class="instruction">BIT 1,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29123"></span>29123</td>
+<td class="instruction">JR Z,<a href="29118.html#29164">Handler_CollisionEffects_2</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29125"></span>29125</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29126"></span>29126</td>
+<td class="instruction">CP 67</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29118.html#29137">Handler_CollisionEffects_0</a> if <span class="register">A</span> is equal to 67.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29128"></span>29128</td>
+<td class="instruction">JR Z,<a href="29118.html#29137">Handler_CollisionEffects_0</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29130"></span>29130</td>
+<td class="instruction">CP 65</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29118.html#29137">Handler_CollisionEffects_0</a> if <span class="register">A</span> is equal to 65.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29132"></span>29132</td>
+<td class="instruction">JR Z,<a href="29118.html#29137">Handler_CollisionEffects_0</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29134"></span>29134</td>
+<td class="instruction">CP 5</td>
+<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 5.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29136"></span>29136</td>
+<td class="instruction">RET NZ</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_0</td>
+<td class="address-2"><span id="29137"></span>29137</td>
+<td class="instruction">LD A,(26355)</td>
+<td class="comment-1" rowspan="3">Return if *<a href="26355.html">Flag_ActiveDemoMode</a> is active.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29140"></span>29140</td>
+<td class="instruction">OR A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29141"></span>29141</td>
+<td class="instruction">RET NZ</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29142"></span>
+<div class="comments">
+<div class="paragraph">
+<audio controls="" src="../../audio/ship-explosion.wav">
+<p>Your browser doesn't support HTML5 audio. Here is a <a href="../../audio/ship-explosion.wav">link to the audio</a> instead.</p>
+</audio>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29142"></span>29142</td>
+<td class="instruction">LD B,24</td>
+<td class="comment-1" rowspan="1">Set a counter <span class="register">B</span> for 24 loops.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29144"></span>29144</td>
+<td class="instruction">LD HL,290</td>
+<td class="comment-1" rowspan="1">Set the loop delay counter to 0290.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_1</td>
+<td class="address-2"><span id="29147"></span>29147</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash the loop and loop delay counters on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29148"></span>29148</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29149"></span>29149</td>
+<td class="instruction">LD DE,1</td>
+<td class="comment-1" rowspan="1">Set the sound duration to 0001.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29152"></span>29152</td>
+<td class="instruction">CALL 949</td>
+<td class="comment-1" rowspan="1">Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29155"></span>29155</td>
+<td class="instruction">DI</td>
+<td class="comment-1" rowspan="1">Disable interrupts.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29156"></span>29156</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29157"></span>29157</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="3">Increment <span class="register">HL</span> by three.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29158"></span>29158</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29159"></span>29159</td>
+<td class="instruction">INC HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29160"></span>29160</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29161"></span>29161</td>
+<td class="instruction">DJNZ <a href="29118.html#29147">Handler_CollisionEffects_1</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29118.html#29147">Handler_CollisionEffects_1</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29163"></span>29163</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_2</td>
+<td class="address-2"><span id="29164"></span>29164</td>
+<td class="instruction">CP 4</td>
+<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 4.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29166"></span>29166</td>
+<td class="instruction">RET NZ</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29167"></span>29167</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29118.html#29176">Handler_CollisionEffects_3</a> if *<span class="register">HL</span> is not equal to 1.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29168"></span>29168</td>
+<td class="instruction">CP 1</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29170"></span>29170</td>
+<td class="instruction">JR NZ,<a href="29118.html#29176">Handler_CollisionEffects_3</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29172"></span>29172</td>
+<td class="instruction">LD (HL),64</td>
+<td class="comment-1" rowspan="1">Write 64 to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29174"></span>29174</td>
+<td class="instruction">JR <a href="29118.html#29214">Handler_CollisionEffects_7</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29118.html#29214">Handler_CollisionEffects_7</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_3</td>
+<td class="address-2"><span id="29176"></span>29176</td>
+<td class="instruction">CP 15</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29118.html#29184">Handler_CollisionEffects_4</a> if <span class="register">A</span> is not equal to 15.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29178"></span>29178</td>
+<td class="instruction">JR NZ,<a href="29118.html#29184">Handler_CollisionEffects_4</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29180"></span>29180</td>
+<td class="instruction">LD (HL),1</td>
+<td class="comment-1" rowspan="1">Write 1 to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29182"></span>29182</td>
+<td class="instruction">JR <a href="29118.html#29225">Handler_CollisionEffects_9</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29118.html#29225">Handler_CollisionEffects_9</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_4</td>
+<td class="address-2"><span id="29184"></span>29184</td>
+<td class="instruction">CP 2</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29118.html#29219">Handler_CollisionEffects_8</a> if <span class="register">A</span> is not equal to 2.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29186"></span>29186</td>
+<td class="instruction">JR NZ,<a href="29118.html#29219">Handler_CollisionEffects_8</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29188"></span>29188</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29189"></span>29189</td>
+<td class="instruction">LD A,L</td>
+<td class="comment-1" rowspan="3"><span class="register">L</span>-=32.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29190"></span>29190</td>
+<td class="instruction">SUB 32</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29192"></span>29192</td>
+<td class="instruction">LD L,A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29193"></span>29193</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29194"></span>29194</td>
+<td class="instruction">CP 16</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29118.html#29211">Handler_CollisionEffects_6</a> if <span class="register">A</span> is not equal to 16.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29196"></span>29196</td>
+<td class="instruction">JR NZ,<a href="29118.html#29211">Handler_CollisionEffects_6</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29198"></span>29198</td>
+<td class="instruction">LD H,77</td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=77.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29200"></span>29200</td>
+<td class="instruction">LD B,3</td>
+<td class="comment-1" rowspan="1"><span class="register">B</span>=3.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29202"></span>29202</td>
+<td class="instruction">LD DE,25071</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="25067.html#25071">25071</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_5</td>
+<td class="address-2"><span id="29205"></span>29205</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">DE</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29206"></span>29206</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29207"></span>29207</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29208"></span>29208</td>
+<td class="instruction">DEC DE</td>
+<td class="comment-1" rowspan="1">Decrease <span class="register">DE</span> by one.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29209"></span>29209</td>
+<td class="instruction">DJNZ <a href="29118.html#29205">Handler_CollisionEffects_5</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29118.html#29205">Handler_CollisionEffects_5</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_6</td>
+<td class="address-2"><span id="29211"></span>29211</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29212"></span>29212</td>
+<td class="instruction">LD (HL),0</td>
+<td class="comment-1" rowspan="1">Write 0 to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_7</td>
+<td class="address-2"><span id="29214"></span>29214</td>
+<td class="instruction">LD DE,15616</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">15616</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29217"></span>29217</td>
+<td class="instruction">JR <a href="29118.html#29228">Handler_CollisionEffects_10</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29118.html#29228">Handler_CollisionEffects_10</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_8</td>
+<td class="address-2"><span id="29219"></span>29219</td>
+<td class="instruction">CP 16</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29118.html#29253">Handler_CollisionEffects_12</a> if <span class="register">A</span> is not equal to 16.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29221"></span>29221</td>
+<td class="instruction">JR NZ,<a href="29118.html#29253">Handler_CollisionEffects_12</a></td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29223"></span>29223</td>
+<td class="instruction">LD (HL),2</td>
+<td class="comment-1" rowspan="1">Write 2 to *<span class="register">HL</span>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_9</td>
+<td class="address-2"><span id="29225"></span>29225</td>
+<td class="instruction">LD DE,25067</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="25067.html">Graphics_UDGs</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_10</td>
+<td class="address-2"><span id="29228"></span>29228</td>
+<td class="instruction">LD H,72</td>
+<td class="comment-1" rowspan="1"><span class="register">H</span>=72.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29230"></span>29230</td>
+<td class="instruction">LD B,8</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_11</td>
+<td class="address-2"><span id="29232"></span>29232</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29233"></span>29233</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29234"></span>29234</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29235"></span>29235</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29236"></span>29236</td>
+<td class="instruction">DJNZ <a href="29118.html#29232">Handler_CollisionEffects_11</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="29118.html#29232">Handler_CollisionEffects_11</a> until all 8 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29238"></span>29238</td>
+<td class="instruction">LD A,53</td>
+<td class="comment-1" rowspan="2">Write 53 to *<a href="25896.html#25902">25902</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29240"></span>29240</td>
+<td class="instruction">LD (25902),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29243"></span>29243</td>
+<td class="instruction">CALL <a href="26550.html">Handler_Score</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26550.html">Handler_Score</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29246"></span>29246</td>
+<td class="instruction">CALL <a href="26537.html">PrintScore</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26537.html">PrintScore</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29249"></span>29249</td>
+<td class="instruction">CALL <a href="26652.html">PrintLives</a></td>
+<td class="comment-1" rowspan="1">Call <a href="26652.html">PrintLives</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29252"></span>29252</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_CollisionEffects_12</td>
+<td class="address-2"><span id="29253"></span>29253</td>
+<td class="instruction">CP 64</td>
+<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 64.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29255"></span>29255</td>
+<td class="instruction">RET NZ</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29256"></span>29256</td>
+<td class="instruction">RES 5,L</td>
+<td class="comment-1" rowspan="1">Reset bit 5 of <span class="register">L</span>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29258"></span>29258</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="3">Return if *<span class="register">HL</span> is not equal to 66.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29259"></span>29259</td>
+<td class="instruction">CP 66</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29261"></span>29261</td>
+<td class="instruction">RET NZ</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29262"></span>29262</td>
+<td class="instruction">LD A,1</td>
+<td class="comment-1" rowspan="2">Write 1 to *<a href="26323.html">26323</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29264"></span>29264</td>
+<td class="instruction">LD (26323),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="29267"></span>29267</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="29017.html">29017</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#29118">Map</a></td>
+<td class="next">
+Next: <a href="29268.html">29268</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../../asm/71BE.html">Switch to hexadecimal</a>.</div>
+</footer>
+</body>
+</html>

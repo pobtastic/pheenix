@@ -25,7 +25,7 @@ gtag('config', 'G-75RERFCHBG');
 <table class="asm-navigation">
 <tr>
 <td class="prev">
-Prev: <a href="29184.html">29184</a>
+Prev: <a href="29118.html">29118</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#29268">Map</a></td>
 <td class="next">
@@ -33,7 +33,7 @@ Next: <a href="29385.html">29385</a>
 </td>
 </tr>
 </table>
-<div class="description">29268: Routine at 7254</div>
+<div class="description">29268: Handler: Level Reset</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -41,254 +41,309 @@ Next: <a href="29385.html">29385</a>
 <div class="paragraph">
 Used by the routines at <a href="31874.html">TitleScreen</a> and <a href="32217.html">StartGame</a>.
 </div>
+<div class="paragraph">
+Reset the level after the player death, clearing aliens and restoring states.
+</div>
 </div>
 </td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset</td>
 <td class="address-2"><span id="29268"></span>29268</td>
 <td class="instruction">LD A,(26276)</td>
 <td class="comment-1" rowspan="3">Jump to <a href="29453.html">Handler_DisplayBonus</a> if *<a href="26276.html">Flag_Collision</a> is not equal to 2.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29271"></span>29271</td>
 <td class="instruction">CP 2</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29273"></span>29273</td>
 <td class="instruction">JP NZ,<a href="29453.html">Handler_DisplayBonus</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29276"></span>29276</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29303">29303</a> if *<a href="26353.html">Phase</a> is not equal to 4.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29303">Handler_LevelReset_1</a> if *<a href="26353.html">Phase</a> is not equal to 4.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29279"></span>29279</td>
 <td class="instruction">CP 4</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29281"></span>29281</td>
-<td class="instruction">JR NZ,<a href="29268.html#29303">29303</a></td>
+<td class="instruction">JR NZ,<a href="29268.html#29303">Handler_LevelReset_1</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29283"></span>29283</td>
 <td class="instruction">LD HL,26077</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29286"></span>29286</td>
 <td class="instruction">LD B,8</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset_0</td>
 <td class="address-2"><span id="29288"></span>29288</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29289"></span>29289</td>
 <td class="instruction">LD E,(HL)</td>
 <td class="comment-1" rowspan="1"><span class="register">E</span>=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29290"></span>29290</td>
 <td class="instruction">INC HL</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29291"></span>29291</td>
 <td class="instruction">LD D,(HL)</td>
 <td class="comment-1" rowspan="1"><span class="register">D</span>=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29292"></span>29292</td>
 <td class="instruction">INC HL</td>
 <td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29293"></span>29293</td>
 <td class="instruction">PUSH HL</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29294"></span>29294</td>
 <td class="instruction">BIT 6,D</td>
-<td class="comment-1" rowspan="2">Call <a href="30052.html">30052</a> if bit 6 of <span class="register">D</span> is active.</td>
+<td class="comment-1" rowspan="2">Call <a href="30052.html">ClearSpriteArea</a> if bit 6 of <span class="register">D</span> is active.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29296"></span>29296</td>
-<td class="instruction">CALL NZ,<a href="30052.html">30052</a></td>
+<td class="instruction">CALL NZ,<a href="30052.html">ClearSpriteArea</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29299"></span>29299</td>
 <td class="instruction">POP HL</td>
 <td class="comment-1" rowspan="2">Restore <span class="register">HL</span> and <span class="register">BC</span> from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29300"></span>29300</td>
 <td class="instruction">POP BC</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29301"></span>29301</td>
-<td class="instruction">DJNZ <a href="29268.html#29288">29288</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29268.html#29288">29288</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29268.html#29288">Handler_LevelReset_0</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29268.html#29288">Handler_LevelReset_0</a> until counter is zero.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset_1</td>
 <td class="address-2"><span id="29303"></span>29303</td>
 <td class="instruction">LD HL,26240</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26240.html">26240</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29306"></span>29306</td>
 <td class="instruction">LD DE,26241</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="26240.html">26241</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29309"></span>29309</td>
 <td class="instruction">LD BC,108</td>
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0108.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29312"></span>29312</td>
 <td class="instruction">LD (HL),B</td>
 <td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29313"></span>29313</td>
 <td class="instruction">LDIR</td>
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29315"></span>29315</td>
 <td class="instruction">LD HL,26077</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29318"></span>29318</td>
 <td class="instruction">LD DE,26078</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="26077.html">26078</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29321"></span>29321</td>
 <td class="instruction">PUSH HL</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29322"></span>29322</td>
 <td class="instruction">LD C,29</td>
 <td class="comment-1" rowspan="1"><span class="register">C</span>=29.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29324"></span>29324</td>
 <td class="instruction">LD (HL),B</td>
 <td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29325"></span>29325</td>
 <td class="instruction">LDIR</td>
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29327"></span>29327</td>
 <td class="instruction">LD HL,26167</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26167.html">Table_AlienWaveData_02_03</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29330"></span>29330</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29341">29341</a> if *<a href="26353.html">Phase</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29268.html#29341">Handler_LevelReset_2</a> if *<a href="26353.html">Phase</a> is not zero.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29333"></span>29333</td>
 <td class="instruction">OR A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29334"></span>29334</td>
-<td class="instruction">JR NZ,<a href="29268.html#29341">29341</a></td>
+<td class="instruction">JR NZ,<a href="29268.html#29341">Handler_LevelReset_2</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29336"></span>29336</td>
 <td class="instruction">LD HL,26107</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26107.html">Table_AlienWaveData_00</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29339"></span>29339</td>
-<td class="instruction">JR <a href="29268.html#29357">29357</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="29268.html#29357">29357</a>.</td>
+<td class="instruction">JR <a href="29268.html#29357">Handler_LevelReset_4</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29268.html#29357">Handler_LevelReset_4</a>.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset_2</td>
 <td class="address-2"><span id="29341"></span>29341</td>
 <td class="instruction">CP 1</td>
-<td class="comment-1" rowspan="2">Jump to <a href="29268.html#29350">29350</a> if <span class="register">A</span> is not equal to 1.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29268.html#29350">Handler_LevelReset_3</a> if <span class="register">A</span> is not equal to 1.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29343"></span>29343</td>
-<td class="instruction">JR NZ,<a href="29268.html#29350">29350</a></td>
+<td class="instruction">JR NZ,<a href="29268.html#29350">Handler_LevelReset_3</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29345"></span>29345</td>
 <td class="instruction">LD HL,26137</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26137.html">Table_AlienWaveData_01</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29348"></span>29348</td>
-<td class="instruction">JR <a href="29268.html#29357">29357</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="29268.html#29357">29357</a>.</td>
+<td class="instruction">JR <a href="29268.html#29357">Handler_LevelReset_4</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29268.html#29357">Handler_LevelReset_4</a>.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset_3</td>
 <td class="address-2"><span id="29350"></span>29350</td>
 <td class="instruction">CP 4</td>
-<td class="comment-1" rowspan="2">Jump to <a href="29268.html#29357">29357</a> if <span class="register">A</span> is not equal to 4.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="29268.html#29357">Handler_LevelReset_4</a> if <span class="register">A</span> is not equal to 4.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29352"></span>29352</td>
-<td class="instruction">JR NZ,<a href="29268.html#29357">29357</a></td>
+<td class="instruction">JR NZ,<a href="29268.html#29357">Handler_LevelReset_4</a></td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29354"></span>29354</td>
 <td class="instruction">LD HL,26183</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26183.html">Table_AlienWaveData_04</a>.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset_4</td>
 <td class="address-2"><span id="29357"></span>29357</td>
 <td class="instruction">POP DE</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">DE</span> from the stack.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29358"></span>29358</td>
 <td class="instruction">LD A,(26239)</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26239.html">AlienCount</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29361"></span>29361</td>
 <td class="instruction">ADD A,A</td>
 <td class="comment-1" rowspan="1">Multiply <span class="register">A</span> by 2.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29362"></span>29362</td>
-<td class="instruction">JR Z,<a href="29268.html#29367">29367</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="29268.html#29367">29367</a> if <span class="register">A</span> is zero.</td>
+<td class="instruction">JR Z,<a href="29268.html#29367">Handler_LevelReset_5</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29268.html#29367">Handler_LevelReset_5</a> if <span class="register">A</span> is zero.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29364"></span>29364</td>
 <td class="instruction">LD C,A</td>
 <td class="comment-1" rowspan="1"><span class="register">C</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29365"></span>29365</td>
 <td class="instruction">LDIR</td>
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="asm-label">Handler_LevelReset_5</td>
 <td class="address-2"><span id="29367"></span>29367</td>
 <td class="instruction">LD HL,26349</td>
 <td class="comment-1" rowspan="2">Write 206 to *<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29370"></span>29370</td>
 <td class="instruction">LD (HL),206</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29372"></span>29372</td>
 <td class="instruction">LD HL,26352</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26352.html">Player_Lives</a>.</td>
@@ -304,20 +359,24 @@ See <a href="../reference/pokes.html#infinite-lives">Infinite Lives</a>.
 </td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29375"></span>29375</td>
 <td class="instruction">DEC (HL)</td>
 <td class="comment-1" rowspan="1">Decrease <a href="26352.html">Player_Lives</a> by one.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29376"></span>29376</td>
 <td class="instruction">LD A,(HL)</td>
 <td class="comment-1" rowspan="3">Jump to <a href="29385.html">Handler_LevelComplete</a> if *<a href="26352.html">Player_Lives</a> indicates the player still has lives left.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29377"></span>29377</td>
 <td class="instruction">OR A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29378"></span>29378</td>
 <td class="instruction">JR NZ,<a href="29385.html">Handler_LevelComplete</a></td>
 </tr>
@@ -332,15 +391,18 @@ Player has lost all their lives, set the *<a href="26357.html">Flag_GameOver</a>
 </td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29380"></span>29380</td>
 <td class="instruction">INC A</td>
 <td class="comment-1" rowspan="2">Write 1 to *<a href="26357.html">Flag_GameOver</a>.</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29381"></span>29381</td>
 <td class="instruction">LD (26357),A</td>
 </tr>
 <tr>
+<td class="asm-label"></td>
 <td class="address-1"><span id="29384"></span>29384</td>
 <td class="instruction">RET</td>
 <td class="comment-1" rowspan="1">Return.</td>
@@ -349,7 +411,7 @@ Player has lost all their lives, set the *<a href="26357.html">Flag_GameOver</a>
 <table class="asm-navigation">
 <tr>
 <td class="prev">
-Prev: <a href="29184.html">29184</a>
+Prev: <a href="29118.html">29118</a>
 </td>
 <td class="up">Up: <a href="../maps/all.html#29268">Map</a></td>
 <td class="next">

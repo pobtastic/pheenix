@@ -724,7 +724,7 @@ The bullet position isn't already occupied, so colour this attribute block.
 <td class="address-1"><span id="28869"></span>28869</td>
 <td class="instruction">LD (HL),71</td>
 <td class="comment-1" rowspan="1">Write INK:WHITE,
-PAPER:BLACK(BRIGHT) to the bullet attribute buffer position.</td>
+PAPER:BLACK (BRIGHT) to the bullet attribute buffer position.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -906,7 +906,7 @@ Update active bullet position.
 <td class="address-1"><span id="28917"></span>28917</td>
 <td class="instruction">LD A,(DE)</td>
 <td class="comment-1" rowspan="2">Fetch the current attribute applied to the bullet, check if it is: INK:WHITE,
-PAPER:BLACK(BRIGHT)?</td>
+PAPER:BLACK (BRIGHT)?</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -924,7 +924,7 @@ PAPER:BLACK(BRIGHT)?</td>
 <td class="address-1"><span id="28921"></span>28921</td>
 <td class="instruction">JR NZ,<a href="28720.html#28980">PlayerBullets_Collision</a></td>
 <td class="comment-1" rowspan="1">Jump to <a href="28720.html#28980">PlayerBullets_Collision</a> if the bullet has hit something, i.e. is no longer INK:WHITE,
-PAPER:BLACK(BRIGHT).</td>
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1171,8 +1171,8 @@ The bullet has hit something so handle the collision.
 <tr>
 <td class="asm-label">PlayerBullets_Collision</td>
 <td class="address-2"><span id="28980"></span>28980</td>
-<td class="instruction">CALL <a href="29017.html">29017</a></td>
-<td class="comment-1" rowspan="1">Call <a href="29017.html">29017</a>.</td>
+<td class="instruction">CALL <a href="29017.html">Handler_BulletCollision</a></td>
+<td class="comment-1" rowspan="1">Call <a href="29017.html">Handler_BulletCollision</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1197,7 +1197,7 @@ The bullet has hit something so handle the collision.
 <td class="address-2"><span id="28989"></span>28989</td>
 <td class="instruction">LD (HL),71</td>
 <td class="comment-1" rowspan="1">Mark the new position with the attribute INK:WHITE,
-PAPER:BLACK(BRIGHT).</td>
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

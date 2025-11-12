@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pheenix: Routine at 6856</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="../skoolkit.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-dark.css" />
+<link rel="stylesheet" type="text/css" href="../skoolkit-wide.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75RERFCHBG"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75RERFCHBG');
+</script>
+</head>
+<body class="Asm-c">
+<table class="header">
+<tr>
+<td class="logo"><a href="../index.html"><img alt="logo" src="../images/logo.png" /></a></td>
+<td class="page-header">Routines</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="6853.html">6853</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#6856">Map</a></td>
+<td class="next">
+Next: <a href="6890.html">6890</a>
+</td>
+</tr>
+</table>
+<div class="description">6856: Handler: Eggsplosion</div>
+<table class="disassembly">
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="details">
+<div class="paragraph">
+Used by the routine at <a href="684E.html">Handler_EggsplosionLeft</a>.
+</div>
+<div class="paragraph">
+Common handler for both left and right shell parts.
+</div>
+</div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">DE</td>
+<td class="register-desc">Attribute buffer destination</td>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Pointer to eggsplosion graphic data</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion</td>
+<td class="address-2"><span id="6856"></span>6856</td>
+<td class="instruction">LD IX,$0200</td>
+<td class="comment-1" rowspan="1">Set <span class="register">IX</span> to target BLACK attributes with a RED replacement attribute.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="685a"></span>
+<div class="comments">
+<div class="paragraph">
+This entry point is used by the routine at <a href="6845.html">Handler_Mask</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion_Draw</td>
+<td class="address-2"><span id="685a"></span>685A</td>
+<td class="instruction">PUSH DE</td>
+<td class="comment-1" rowspan="1">Stash the attribute buffer pointer on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="685b"></span>685B</td>
+<td class="instruction">EX DE,HL</td>
+<td class="comment-1" rowspan="1">Switch the registers, <span class="register">DE</span> and <span class="register">HL</span>, containing the attribute buffer pointer and attribute buffer destination.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="685c"></span>685C</td>
+<td class="instruction">LD B,$02</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 02 rows.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion_RowLoop</td>
+<td class="address-2"><span id="685e"></span>685E</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="2">Stash the row counter and attribute buffer pointer on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="685f"></span>685F</td>
+<td class="instruction">PUSH HL</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6860"></span>6860</td>
+<td class="instruction">LD B,$02</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 02 columns.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion_ColumnLoop</td>
+<td class="address-2"><span id="6862"></span>6862</td>
+<td class="instruction">PUSH BC</td>
+<td class="comment-1" rowspan="1">Stash the column counter on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6863"></span>6863</td>
+<td class="instruction">LD A,(HL)</td>
+<td class="comment-1" rowspan="2">Check if the attribute at this attribute buffer position matches the target colour (the low byte of <span class="register">IX</span>).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6864"></span>6864</td>
+<td class="instruction">CP IXl</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6866"></span>6866</td>
+<td class="instruction">PUSH HL</td>
+<td class="comment-1" rowspan="1">Stash the attribute buffer pointer on the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6867"></span>6867</td>
+<td class="instruction">JR NZ,<a href="6856.html#6879">Handler_Eggsplosion_SkipDraw</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6856.html#6879">Handler_Eggsplosion_SkipDraw</a> if the attribute byte doesn't match the target attribute.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6869"></span>6869</td>
+<td class="instruction">LD A,IXh</td>
+<td class="comment-1" rowspan="1">Load the replacement attribute byte (the high byte of <span class="register">IX</span>).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="686b"></span>686B</td>
+<td class="instruction">LD (HL),A</td>
+<td class="comment-1" rowspan="1">Write the replacement attribute byte to this position.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="686c"></span>686C</td>
+<td class="instruction">CALL <a href="6704.html">ConvertAttributeToScreenBufferAddress</a></td>
+<td class="comment-1" rowspan="1">Call <a href="6704.html">ConvertAttributeToScreenBufferAddress</a>.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="686f"></span>686F</td>
+<td class="instruction">LD B,$08</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (08 lines in a UDG).</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion_LineLoop</td>
+<td class="address-2"><span id="6871"></span>6871</td>
+<td class="instruction">LD A,(DE)</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6872"></span>6872</td>
+<td class="instruction">LD (HL),A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6873"></span>6873</td>
+<td class="instruction">INC H</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6874"></span>6874</td>
+<td class="instruction">INC DE</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6875"></span>6875</td>
+<td class="instruction">DJNZ <a href="6856.html#6871">Handler_Eggsplosion_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="6856.html#6871">Handler_Eggsplosion_LineLoop</a> until all 08 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6877"></span>6877</td>
+<td class="instruction">JR <a href="6856.html#6880">Handler_Eggsplosion_NextColumn</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6856.html#6880">Handler_Eggsplosion_NextColumn</a>.</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion_SkipDraw</td>
+<td class="address-2"><span id="6879"></span>6879</td>
+<td class="instruction">LD HL,$0008</td>
+<td class="comment-1" rowspan="4">Add 0008 bytes to skip past this graphics data.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="687c"></span>687C</td>
+<td class="instruction">AND A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="687d"></span>687D</td>
+<td class="instruction">ADC HL,DE</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="687f"></span>687F</td>
+<td class="instruction">EX DE,HL</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Eggsplosion_NextColumn</td>
+<td class="address-2"><span id="6880"></span>6880</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore the attribute buffer pointer from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6881"></span>6881</td>
+<td class="instruction">INC HL</td>
+<td class="comment-1" rowspan="1">Move right one attribute block.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6882"></span>6882</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the column counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6883"></span>6883</td>
+<td class="instruction">DJNZ <a href="6856.html#6862">Handler_Eggsplosion_ColumnLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the column counter by one and loop back to <a href="6856.html#6862">Handler_Eggsplosion_ColumnLoop</a> until both columns have been processed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6885"></span>6885</td>
+<td class="instruction">POP HL</td>
+<td class="comment-1" rowspan="1">Restore the attribute buffer pointer from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6886"></span>6886</td>
+<td class="instruction">LD C,$20</td>
+<td class="comment-1" rowspan="3">Move down one row in the attribute buffer (add 0020).</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6888"></span>6888</td>
+<td class="instruction">AND A</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="6889"></span>6889</td>
+<td class="instruction">ADC HL,BC</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="688b"></span>688B</td>
+<td class="instruction">POP BC</td>
+<td class="comment-1" rowspan="1">Restore the row counter from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="688c"></span>688C</td>
+<td class="instruction">DJNZ <a href="6856.html#685e">Handler_Eggsplosion_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="6856.html#685e">Handler_Eggsplosion_RowLoop</a> until both rows have been processed.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="688e"></span>688E</td>
+<td class="instruction">POP DE</td>
+<td class="comment-1" rowspan="1">Restore the original attribute buffer pointer from the stack.</td>
+</tr>
+<tr>
+<td class="asm-label"></td>
+<td class="address-1"><span id="688f"></span>688F</td>
+<td class="instruction">RET</td>
+<td class="comment-1" rowspan="1">Return.</td>
+</tr>
+</table>
+<table class="asm-navigation">
+<tr>
+<td class="prev">
+Prev: <a href="6853.html">6853</a>
+</td>
+<td class="up">Up: <a href="../maps/all.html#6856">Map</a></td>
+<td class="next">
+Next: <a href="6890.html">6890</a>
+</td>
+</tr>
+</table>
+<footer>
+<div class="release"></div>
+<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
+<div><a href="../dec/asm/26710.html">Switch to decimal</a>.</div>
+</footer>
+</body>
+</html>

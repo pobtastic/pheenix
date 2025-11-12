@@ -141,7 +141,8 @@ PAPER:YELLOW.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27197"></span>27197</td>
 <td class="instruction">LD (HL),3</td>
-<td class="comment-1" rowspan="1">Write 3 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write INK:MAGENTA,
+PAPER:BLACK to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -153,7 +154,8 @@ PAPER:YELLOW.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27200"></span>27200</td>
 <td class="instruction">LD (HL),192</td>
-<td class="comment-1" rowspan="1">Write 192 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write INK:BLACK,
+PAPER:BLACK (BRIGHT) FLASH: ON to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -192,7 +194,7 @@ PAPER:YELLOW.</td>
 <td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_0</td>
+<td class="asm-label">Handler_Mothership_ScrollLoop</td>
 <td class="address-2"><span id="27215"></span>27215</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
@@ -264,8 +266,8 @@ PAPER:YELLOW.</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27230"></span>27230</td>
-<td class="instruction">DJNZ <a href="27171.html#27215">Handler_Mothership_0</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="27171.html#27215">Handler_Mothership_0</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="27171.html#27215">Handler_Mothership_ScrollLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="27171.html#27215">Handler_Mothership_ScrollLoop</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -514,7 +516,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=0003.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_1</td>
+<td class="asm-label">Handler_Mothership_BulletLoop</td>
 <td class="address-2"><span id="27297"></span>27297</td>
 <td class="instruction">PUSH HL</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
@@ -586,12 +588,12 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27312"></span>27312</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27337">Handler_Mothership_3</a> if <span class="register">A</span> is not zero.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27337">Handler_Mothership_BulletActive</a> if <span class="register">A</span> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27313"></span>27313</td>
-<td class="instruction">JR NZ,<a href="27171.html#27337">Handler_Mothership_3</a></td>
+<td class="instruction">JR NZ,<a href="27171.html#27337">Handler_Mothership_BulletActive</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -609,12 +611,12 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27320"></span>27320</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27328">Handler_Mothership_2</a> if <span class="register">A</span> is not zero.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27328">Handler_Mothership_0</a> if <span class="register">A</span> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27321"></span>27321</td>
-<td class="instruction">JR NZ,<a href="27171.html#27328">Handler_Mothership_2</a></td>
+<td class="instruction">JR NZ,<a href="27171.html#27328">Handler_Mothership_0</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -629,7 +631,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1">Jump to <a href="27171.html#27378">Mothership_Bullet_Collision</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_2</td>
+<td class="asm-label">Handler_Mothership_0</td>
 <td class="address-2"><span id="27328"></span>27328</td>
 <td class="instruction">CP 3</td>
 <td class="comment-1" rowspan="2">Jump to <a href="27171.html#27429">Handler_Mothership_SaveBulletPosition</a> if <span class="register">A</span> is not equal to 3.</td>
@@ -652,7 +654,17 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1">Jump to <a href="27171.html#27378">Mothership_Bullet_Collision</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_3</td>
+<td class="routine-comment" colspan="5">
+<span id="27337"></span>
+<div class="comments">
+<div class="paragraph">
+Update active bullet position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_Mothership_BulletActive</td>
 <td class="address-2"><span id="27337"></span>27337</td>
 <td class="instruction">LD A,(HL)</td>
 <td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
@@ -667,12 +679,12 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27340"></span>27340</td>
 <td class="instruction">CP 6</td>
-<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27360">Handler_Mothership_5</a> if <span class="register">A</span> is not equal to 6.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27360">Handler_Mothership_2</a> if <span class="register">A</span> is not equal to 6.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27342"></span>27342</td>
-<td class="instruction">JR NZ,<a href="27171.html#27360">Handler_Mothership_5</a></td>
+<td class="instruction">JR NZ,<a href="27171.html#27360">Handler_Mothership_2</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -717,7 +729,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="2">Write 0 to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_4</td>
+<td class="asm-label">Handler_Mothership_1</td>
 <td class="address-2"><span id="27355"></span>27355</td>
 <td class="instruction">LD (HL),A</td>
 </tr>
@@ -730,8 +742,8 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27357"></span>27357</td>
-<td class="instruction">DJNZ <a href="27171.html#27355">Handler_Mothership_4</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="27171.html#27355">Handler_Mothership_4</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="27171.html#27355">Handler_Mothership_1</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="27171.html#27355">Handler_Mothership_1</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -740,7 +752,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_5</td>
+<td class="asm-label">Handler_Mothership_2</td>
 <td class="address-2"><span id="27360"></span>27360</td>
 <td class="instruction">LD BC,32</td>
 <td class="comment-1" rowspan="2"><span class="register">HL</span>+=0032.</td>
@@ -786,7 +798,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1">Jump to <a href="27171.html#27378">Mothership_Bullet_Collision</a> if <span class="register">H</span> is less than <span class="register">A</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_6</td>
+<td class="asm-label">Handler_Mothership_DeactivateBullet</td>
 <td class="address-2"><span id="27374"></span>27374</td>
 <td class="instruction">LD H,0</td>
 <td class="comment-1" rowspan="1"><span class="register">H</span>=0.</td>
@@ -817,19 +829,19 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27383"></span>27383</td>
 <td class="instruction">CP 70</td>
-<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27397">Handler_Mothership_7</a> if *<span class="register">HL</span> is not equal to INK:YELLOW,
-PAPER:BLACK(BRIGHT).</td>
+<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27397">Handler_Mothership_CheckGround</a> if *<span class="register">HL</span> is not equal to INK:YELLOW,
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27385"></span>27385</td>
-<td class="instruction">JR NZ,<a href="27171.html#27397">Handler_Mothership_7</a></td>
+<td class="instruction">JR NZ,<a href="27171.html#27397">Handler_Mothership_CheckGround</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27387"></span>27387</td>
 <td class="instruction">LD A,(26259)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="27171.html#27374">Handler_Mothership_6</a> if *<a href="26259.html">Flag_Shield</a> is active.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="27171.html#27374">Handler_Mothership_DeactivateBullet</a> if *<a href="26259.html">Flag_Shield</a> is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -839,7 +851,7 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27391"></span>27391</td>
-<td class="instruction">JR NZ,<a href="27171.html#27374">Handler_Mothership_6</a></td>
+<td class="instruction">JR NZ,<a href="27171.html#27374">Handler_Mothership_DeactivateBullet</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -850,11 +862,11 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27395"></span>27395</td>
-<td class="instruction">JR <a href="27171.html#27405">Handler_Mothership_8</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27405">Handler_Mothership_8</a>.</td>
+<td class="instruction">JR <a href="27171.html#27405">Handler_Mothership_DrawBullet</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27405">Handler_Mothership_DrawBullet</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_7</td>
+<td class="asm-label">Handler_Mothership_CheckGround</td>
 <td class="address-2"><span id="27397"></span>27397</td>
 <td class="instruction">AND %00000111</td>
 <td class="comment-1" rowspan="1">Keep only bits 0-2.</td>
@@ -862,8 +874,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27399"></span>27399</td>
-<td class="instruction">JR NZ,<a href="27171.html#27374">Handler_Mothership_6</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27374">Handler_Mothership_6</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="27171.html#27374">Handler_Mothership_DeactivateBullet</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27374">Handler_Mothership_DeactivateBullet</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -884,7 +896,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_8</td>
+<td class="asm-label">Handler_Mothership_DrawBullet</td>
 <td class="address-2"><span id="27405"></span>27405</td>
 <td class="instruction">PUSH HL</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
@@ -947,7 +959,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_Mothership_9</td>
+<td class="asm-label">Handler_Mothership_BulletDrawLoop</td>
 <td class="address-2"><span id="27422"></span>27422</td>
 <td class="instruction">LD A,(HL)</td>
 <td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
@@ -972,8 +984,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27426"></span>27426</td>
-<td class="instruction">DJNZ <a href="27171.html#27422">Handler_Mothership_9</a></td>
-<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="27171.html#27422">Handler_Mothership_9</a> until all 8 lines of the UDG character have been drawn.</td>
+<td class="instruction">DJNZ <a href="27171.html#27422">Handler_Mothership_BulletDrawLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="27171.html#27422">Handler_Mothership_BulletDrawLoop</a> until all 8 lines of the UDG character have been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -1029,8 +1041,8 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27437"></span>27437</td>
-<td class="instruction">JP NZ,<a href="27171.html#27297">Handler_Mothership_1</a></td>
-<td class="comment-1" rowspan="1">Jump back to <a href="27171.html#27297">Handler_Mothership_1</a> until there are no more bullets left to process.</td>
+<td class="instruction">JP NZ,<a href="27171.html#27297">Handler_Mothership_BulletLoop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="27171.html#27297">Handler_Mothership_BulletLoop</a> until there are no more bullets left to process.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
