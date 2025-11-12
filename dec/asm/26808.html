@@ -42,9 +42,107 @@ Next: <a href="26918.html">26918</a>
 Used by the routines at <a href="29708.html">InitialiseLevel</a>, <a href="30105.html">GameEntryPoint</a> and <a href="31874.html">TitleScreen</a>.
 </div>
 <div class="paragraph">
-<table class="">
+Creates a transition effect where a rectangular frame grows outwards from the center of the screen, the colour varies depending on the current phase. Once the frame fills the whole screen, it then "erases" from the center outwards again.
+</div>
+<div class="paragraph">
+This animation is also present in Phoenix, the arcade game this game is based on.
+</div>
+</div>
+</td>
+</tr>
 <tr>
-<td class="" colspan="1" rowspan="1"><img alt="asterisk" src="../../images/scr/asterisk.png" /></td>
+<td class="routine-comment" colspan="5">
+<span id="26808"></span>
+<div class="comments">
+<div class="paragraph">
+Demonstrating the transition using INK:MAGENTA,
+PAPER:BLACK(BRIGHT):  
+
+ <table class="">
+<tr>
+<th colspan="4" rowspan="1">First Animation</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 0</th>
+<th colspan="1" rowspan="1">Frame 1</th>
+<th colspan="1" rowspan="1">Frame 2</th>
+<th colspan="1" rowspan="1">Frame 3</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-0" src="../../images/scr/transition-0.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-1" src="../../images/scr/transition-1.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-2" src="../../images/scr/transition-2.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-3" src="../../images/scr/transition-3.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 4</th>
+<th colspan="1" rowspan="1">Frame 5</th>
+<th colspan="1" rowspan="1">Frame 6</th>
+<th colspan="1" rowspan="1">Frame 7</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-4" src="../../images/scr/transition-4.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-5" src="../../images/scr/transition-5.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-6" src="../../images/scr/transition-6.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-7" src="../../images/scr/transition-7.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 8</th>
+<th colspan="1" rowspan="1">Frame 9</th>
+<th colspan="1" rowspan="1">Frame 10</th>
+<th colspan="1" rowspan="1">Frame 11</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-8" src="../../images/scr/transition-8.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-9" src="../../images/scr/transition-9.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-10" src="../../images/scr/transition-10.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-11" src="../../images/scr/transition-11.png" /></td>
+</tr>
+<tr>
+<th colspan="4" rowspan="1">Second Animation</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 0</th>
+<th colspan="1" rowspan="1">Frame 1</th>
+<th colspan="1" rowspan="1">Frame 2</th>
+<th colspan="1" rowspan="1">Frame 3</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-12" src="../../images/scr/transition-12.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-13" src="../../images/scr/transition-13.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-14" src="../../images/scr/transition-14.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-15" src="../../images/scr/transition-15.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 4</th>
+<th colspan="1" rowspan="1">Frame 5</th>
+<th colspan="1" rowspan="1">Frame 6</th>
+<th colspan="1" rowspan="1">Frame 7</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-16" src="../../images/scr/transition-16.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-17" src="../../images/scr/transition-17.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-18" src="../../images/scr/transition-18.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-19" src="../../images/scr/transition-19.png" /></td>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">Frame 8</th>
+<th colspan="1" rowspan="1">Frame 9</th>
+<th colspan="1" rowspan="1">Frame 10</th>
+<th colspan="1" rowspan="1">Frame 11</th>
+</tr>
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-20" src="../../images/scr/transition-20.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-21" src="../../images/scr/transition-21.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-22" src="../../images/scr/transition-22.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="transition-23" src="../../images/scr/transition-23.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Which create the following animation: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="transition-animation" src="../../images/udgs/transition-animation.png" /></td>
 </tr>
 </table>
 </div>
@@ -55,31 +153,41 @@ Used by the routines at <a href="29708.html">InitialiseLevel</a>, <a href="30105
 <td class="asm-label">TransitionEffect</td>
 <td class="address-2"><span id="26808"></span>26808</td>
 <td class="instruction">LD B,2</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=2.</td>
+<td class="comment-1" rowspan="1">Set an iteration counter in <span class="register">B</span> for 2 animations.</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_0</td>
+<td class="asm-label">TransitionEffect_Loop</td>
 <td class="address-2"><span id="26810"></span>26810</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the iteration counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26811"></span>26811</td>
 <td class="instruction">LD DE,265</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=265.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">DE</span> to initial frame dimensions (width=9 height=1).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26814"></span>26814</td>
 <td class="instruction">LD HL,22891</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=22891 (attribute buffer location).</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=22891 (starting attribute buffer location).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26817"></span>
+<div class="comments">
+<div class="paragraph">
+Determine the attribute color for this iteration.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26817"></span>26817</td>
 <td class="instruction">LD A,B</td>
-<td class="comment-1" rowspan="2">Compare <span class="register">B</span> with 1.</td>
+<td class="comment-1" rowspan="2">Check if this is iteration 1?</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -87,70 +195,149 @@ Used by the routines at <a href="29708.html">InitialiseLevel</a>, <a href="30105
 <td class="instruction">CP 1</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="26820"></span>
+<div class="comments">
+<div class="paragraph">
+The second time this loops around, the rectangular frame "erases" itself (which is just achieved by doing the same thing again but in BLACK).
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26820"></span>26820</td>
 <td class="instruction">LD A,0</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=BLACK.</td>
+<td class="comment-1" rowspan="1">Set the iteration colour to: INK:BLACK,
+PAPER:BLACK.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26822"></span>26822</td>
-<td class="instruction">JR Z,<a href="26808.html#26835">TransitionEffect_1</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="26808.html#26835">TransitionEffect_1</a> if <span class="register">B</span> was equal to 1.</td>
+<td class="instruction">JR Z,<a href="26808.html#26835">TransitionEffect_DrawFrame</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="26808.html#26835">TransitionEffect_DrawFrame</a> if this is iteration 1.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26824"></span>
+<div class="comments">
+<div class="paragraph">
+Else, this is the first loop - so set the INK based on the current phase.
+</div>
+<div class="paragraph">
+<table class="default">
+<tr>
+<th colspan="1" rowspan="1">Phase</th>
+<th colspan="1" rowspan="1">Colour</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">0</td>
+<td class="centre" colspan="1" rowspan="1">INK:MAGENTA, PAPER:BLACK</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1">INK:GREEN, PAPER:BLACK</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1">INK:CYAN, PAPER:BLACK</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">3</td>
+<td class="centre" colspan="1" rowspan="1">INK:YELLOW, PAPER:BLACK</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">4</td>
+<td class="centre" colspan="1" rowspan="1">INK:MAGENTA, PAPER:BLACK(BRIGHT)</td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26824"></span>26824</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26353.html">Phase</a>.</td>
+<td class="comment-1" rowspan="2">Set the iteration colour to: *<a href="26353.html">Phase</a>+3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26827"></span>26827</td>
 <td class="instruction">ADD A,3</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=3.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26829"></span>26829</td>
 <td class="instruction">CP 7</td>
-<td class="comment-1" rowspan="2">Jump to <a href="26808.html#26835">TransitionEffect_1</a> if <span class="register">A</span> is not equal to 7.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="26808.html#26835">TransitionEffect_DrawFrame</a> unless the colour is WHITE (for phase 4).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26831"></span>26831</td>
-<td class="instruction">JR NZ,<a href="26808.html#26835">TransitionEffect_1</a></td>
+<td class="instruction">JR NZ,<a href="26808.html#26835">TransitionEffect_DrawFrame</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26833"></span>
+<div class="comments">
+<div class="paragraph">
+Phase 4 uses INK:MAGENTA,
+PAPER:BLACK(BRIGHT) instead of WHITE.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26833"></span>26833</td>
 <td class="instruction">LD A,67</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=INK:MAGENTA,
+<td class="comment-1" rowspan="1">Set the iteration colour to: INK:MAGENTA,
 PAPER:BLACK(BRIGHT).</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_1</td>
-<td class="address-2"><span id="26835"></span>26835</td>
-<td class="instruction">LD B,12</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=12.</td>
+<td class="routine-comment" colspan="5">
+<span id="26835"></span>
+<div class="comments">
+<div class="paragraph">
+There are 12 frames to fill the whole screen.
+</div>
+</div>
+</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_2</td>
+<td class="asm-label">TransitionEffect_DrawFrame</td>
+<td class="address-2"><span id="26835"></span>26835</td>
+<td class="instruction">LD B,12</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 12 frames.</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_FrameLoop</td>
 <td class="address-2"><span id="26837"></span>26837</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the frame counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26838"></span>26838</td>
 <td class="instruction">LD B,E</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">E</span>.</td>
+<td class="comment-1" rowspan="1">Set the horizontal counter from <span class="register">E</span> (frame width).</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_3</td>
+<td class="routine-comment" colspan="5">
+<span id="26839"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the top edge of the frame (left to right).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_TopEdge</td>
 <td class="address-2"><span id="26839"></span>26839</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -162,31 +349,41 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26843"></span>26843</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move the attribute address pointer right one block.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26844"></span>26844</td>
-<td class="instruction">DJNZ <a href="26808.html#26839">TransitionEffect_3</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26839">TransitionEffect_3</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26839">TransitionEffect_TopEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the horizontal counter by one and loop back to <a href="26808.html#26839">TransitionEffect_TopEdge</a> until the top edge of the frame has been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26846"></span>26846</td>
 <td class="instruction">LD B,D</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">D</span>.</td>
+<td class="comment-1" rowspan="1">Set the vertical counter from <span class="register">D</span> (frame height).</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_4</td>
+<td class="routine-comment" colspan="5">
+<span id="26847"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the right edge of the frame (top to bottom).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_RightEdge</td>
 <td class="address-2"><span id="26847"></span>26847</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the vertical counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26848"></span>26848</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -198,7 +395,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26852"></span>26852</td>
 <td class="instruction">LD BC,32</td>
-<td class="comment-1" rowspan="2"><span class="register">HL</span>+=0032.</td>
+<td class="comment-1" rowspan="2">Move down one row (add 0032 to the attribute address).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -209,25 +406,35 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26856"></span>26856</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the vertical counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26857"></span>26857</td>
-<td class="instruction">DJNZ <a href="26808.html#26847">TransitionEffect_4</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26847">TransitionEffect_4</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26847">TransitionEffect_RightEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the vertical counter by one and loop back to <a href="26808.html#26847">TransitionEffect_RightEdge</a> until the right edge of the frame has been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26859"></span>26859</td>
 <td class="instruction">LD B,E</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">E</span>.</td>
+<td class="comment-1" rowspan="1">Set the horizontal counter from <span class="register">E</span> (frame width).</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_5</td>
+<td class="routine-comment" colspan="5">
+<span id="26860"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the bottom edge of the frame (right to left).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_BottomEdge</td>
 <td class="address-2"><span id="26860"></span>26860</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -239,31 +446,41 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26864"></span>26864</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move the attribute address pointer left one block.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26865"></span>26865</td>
-<td class="instruction">DJNZ <a href="26808.html#26860">TransitionEffect_5</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26860">TransitionEffect_5</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26860">TransitionEffect_BottomEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the horizontal counter by one and loop back to <a href="26808.html#26860">TransitionEffect_BottomEdge</a> until the bottom edge of the frame has been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26867"></span>26867</td>
 <td class="instruction">LD B,D</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">D</span>.</td>
+<td class="comment-1" rowspan="1">Set the vertical counter from <span class="register">D</span> (frame height).</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_6</td>
+<td class="routine-comment" colspan="5">
+<span id="26868"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the left edge of the frame (bottom to top).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">TransitionEffect_LeftEdge</td>
 <td class="address-2"><span id="26868"></span>26868</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the vertical counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26869"></span>26869</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -275,7 +492,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26873"></span>26873</td>
 <td class="instruction">LD BC,32</td>
-<td class="comment-1" rowspan="3"><span class="register">HL</span>-=0032.</td>
+<td class="comment-1" rowspan="3">Move up one row (subtract 0032 from the attribute address).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -291,31 +508,50 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26879"></span>26879</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the vertical counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26880"></span>26880</td>
-<td class="instruction">DJNZ <a href="26808.html#26868">TransitionEffect_6</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26868">TransitionEffect_6</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26868">TransitionEffect_LeftEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the vertical counter by one and loop back to <a href="26808.html#26868">TransitionEffect_LeftEdge</a> until the left edge of the frame has been drawn.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26882"></span>
+<div class="comments">
+<div class="paragraph">
+Move outward to the next frame.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26882"></span>26882</td>
 <td class="instruction">LD C,33</td>
-<td class="comment-1" rowspan="1"><span class="register">C</span>=33.</td>
+<td class="comment-1" rowspan="2">Move up one row and left one block (subtract 0033 from the attribute address).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26884"></span>26884</td>
 <td class="instruction">SBC HL,BC</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>-=<span class="register">BC</span>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26886"></span>
+<div class="comments">
+<div class="paragraph">
+Increase the frame dimensions.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26886"></span>26886</td>
 <td class="instruction">INC E</td>
-<td class="comment-1" rowspan="2">Increment <span class="register">E</span> by two.</td>
+<td class="comment-1" rowspan="2">Increment frame width by two.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -326,7 +562,7 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26888"></span>26888</td>
 <td class="instruction">INC D</td>
-<td class="comment-1" rowspan="2">Increment <span class="register">D</span> by two.</td>
+<td class="comment-1" rowspan="2">Increment the frame height by two.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -334,40 +570,60 @@ PAPER:BLACK(BRIGHT).</td>
 <td class="instruction">INC D</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="26890"></span>
+<div class="comments">
+<div class="paragraph">
+Action a delay between the frames.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26890"></span>26890</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the attribute byte on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26891"></span>26891</td>
 <td class="instruction">LD BC,10</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0010.</td>
+<td class="comment-1" rowspan="1">Set a frame delay counter in <span class="register">BC</span> to 256*10 loops.</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_7</td>
+<td class="asm-label">TransitionEffect_FrameDelay</td>
 <td class="address-2"><span id="26894"></span>26894</td>
-<td class="instruction">DJNZ <a href="26808.html#26894">TransitionEffect_7</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26894">TransitionEffect_7</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26894">TransitionEffect_FrameDelay</a></td>
+<td class="comment-1" rowspan="1">Decrease the inner loop counter by one and loop back to <a href="26808.html#26894">TransitionEffect_FrameDelay</a> until the inner loop counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26896"></span>26896</td>
 <td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+<td class="comment-1" rowspan="1">Decrease the outer loop counter by one.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26897"></span>26897</td>
-<td class="instruction">JR NZ,<a href="26808.html#26894">TransitionEffect_7</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="26808.html#26894">TransitionEffect_7</a> if <span class="register">C</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="26808.html#26894">TransitionEffect_FrameDelay</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="26808.html#26894">TransitionEffect_FrameDelay</a> until the outer loop counter is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26899"></span>
+<div class="comments">
+<div class="paragraph">
+Process the next frame loop (or pass through when it's completed).
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26899"></span>26899</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="2">Restore <span class="register">AF</span> and <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the attribute byte and frame counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -377,44 +633,74 @@ PAPER:BLACK(BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26901"></span>26901</td>
-<td class="instruction">DJNZ <a href="26808.html#26837">TransitionEffect_2</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26837">TransitionEffect_2</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26837">TransitionEffect_FrameLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26837">TransitionEffect_FrameLoop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26903"></span>
+<div class="comments">
+<div class="paragraph">
+Action a delay between the iterations.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26903"></span>26903</td>
 <td class="instruction">LD BC,50</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0050.</td>
+<td class="comment-1" rowspan="1">Set an iteration delay counter in <span class="register">BC</span> to 256*50 loops.</td>
 </tr>
 <tr>
-<td class="asm-label">TransitionEffect_8</td>
+<td class="asm-label">TransitionEffect_DelayLoop</td>
 <td class="address-2"><span id="26906"></span>26906</td>
-<td class="instruction">DJNZ <a href="26808.html#26906">TransitionEffect_8</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26906">TransitionEffect_8</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26906">TransitionEffect_DelayLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the inner loop counter by one and loop back to <a href="26808.html#26906">TransitionEffect_DelayLoop</a> until the inner loop counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26908"></span>26908</td>
 <td class="instruction">DEC C</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">C</span> by one.</td>
+<td class="comment-1" rowspan="1">Decrease the outer loop counter by one.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26909"></span>26909</td>
-<td class="instruction">JR NZ,<a href="26808.html#26906">TransitionEffect_8</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="26808.html#26906">TransitionEffect_8</a> until <span class="register">C</span> is zero.</td>
+<td class="instruction">JR NZ,<a href="26808.html#26906">TransitionEffect_DelayLoop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="26808.html#26906">TransitionEffect_DelayLoop</a> until the outer loop counter is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26911"></span>
+<div class="comments">
+<div class="paragraph">
+Process the next iteration animation (or pass through and end).
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26911"></span>26911</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the iteration counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26912"></span>26912</td>
-<td class="instruction">DJNZ <a href="26808.html#26810">TransitionEffect_0</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="26808.html#26810">TransitionEffect_0</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="26808.html#26810">TransitionEffect_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the iteration counter by one and loop back to <a href="26808.html#26810">TransitionEffect_Loop</a> until the animation is complete.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="26914"></span>
+<div class="comments">
+<div class="paragraph">
+All done, clear the screen and return.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

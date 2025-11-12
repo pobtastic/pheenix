@@ -69,7 +69,7 @@ Used by the routines at <a href="7C82.html">TitleScreen</a> and <a href="7DD9.ht
 <td class="asm-label"></td>
 <td class="address-1"><span id="6cf6"></span>6CF6</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="4">Jump to <a href="6CEE.html#6d00">GameOver</a> if *<a href="66A5.html">Explosion_FlashCounter</a> is not equal to 40.</td>
+<td class="comment-1" rowspan="4">Jump to <a href="6CEE.html#6d00">GameOver</a> if *<a href="66A5.html">Explosion_Counter</a> is not equal to 40.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -744,7 +744,7 @@ Animate the explosion effect.
 <td class="asm-label"></td>
 <td class="address-1"><span id="6db1"></span>6DB1</td>
 <td class="instruction">LD A,($66A5)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A5.html">Explosion_FlashCounter</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A5.html">Explosion_Counter</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

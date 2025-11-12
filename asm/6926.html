@@ -76,7 +76,7 @@ Calculate a flashing attribute for the explosion. The PAPER colour from the flas
 <td class="asm-label"></td>
 <td class="address-1"><span id="6927"></span>6927</td>
 <td class="instruction">LD A,($66A5)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A5.html">Explosion_FlashCounter</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A5.html">Explosion_Counter</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -155,7 +155,8 @@ Check if this is the second frame of the explosion animation to decide whether t
 <td class="asm-label"></td>
 <td class="address-1"><span id="693e"></span>693E</td>
 <td class="instruction">LD A,$40</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=40.</td>
+<td class="comment-1" rowspan="1">Set the attribute byte to: INK:BLACK,
+PAPER:BLACK(BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -266,18 +267,28 @@ Advance to the next explosion frame. If the frame counter reaches 03 reset it to
 <td class="asm-label"></td>
 <td class="address-1"><span id="6957"></span>6957</td>
 <td class="instruction">INC A</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
+<td class="comment-1" rowspan="1">Increment the frame counter.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6958"></span>6958</td>
 <td class="instruction">CP $03</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6926.html#695d">Handler_ShipExplosion_SetFrame</a> if <span class="register">A</span> is not equal to 03.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="6926.html#695d">Handler_ShipExplosion_SetFrame</a> until the frame counter is 03.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="695a"></span>695A</td>
 <td class="instruction">JR NZ,<a href="6926.html#695d">Handler_ShipExplosion_SetFrame</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="695c"></span>
+<div class="comments">
+<div class="paragraph">
+There is no frame 03 so reset the frame counter back to 00.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
