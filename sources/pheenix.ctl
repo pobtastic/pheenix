@@ -674,41 +674,59 @@ R $676F B String length
 R $676F C Attribute value of string
 R $676F DE Screen buffer address
 R $676F HL Pointer to string data
+N $676F #HTML(This routine differs from #R$6775 and #R$677B as the code
+. self-modifies the address pointed to by #REGix, whereas the other two
+. routines are always pointed to #R$6253(#N$6153) and
+. <a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
   $676F,$04 #REGix=#R$6253(#N$6153).
   $6773,$02 Jump to #R$677F.
-
+N $6775 #HTML(Print using:
+. <a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
 @ $6775 label=SpectrumFont_PrintString
   $6775,$04 #HTML(#REGix=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
   $6779,$02 Jump to #R$677F.
-
+N $677B Print using: #R$6253(#N$6153).
 @ $677B label=CustomFont_PrintString
   $677B,$04 #REGix=#R$6253(#N$6153).
+N $677F Print the string to the screen buffer.
 @ $677F label=PrintString
-  $677F,$05 Stash #REGde, #REGbc, #REGbc, #REGde and #REGhl on the stack.
+  $677F,$02 Stash the screen position and character counter/ attribute value on
+. the stack
+@ $6781 label=PrintString_CharacterLoop
+  $6781,$03 Stash the character counter/ attribute value, screen position and
+. string pointer on the stack.
+N $6784 Calculate the address in the font data for the current character.
   $6784,$03 Store the offset for the UDG data look-up in #REGhl.
-  $6787,$03 Multiply #REGhl by #N$08.
-  $678A,$03 #REGbc=#REGix (using the stack).
-  $678D,$01 Add #REGbc to #REGhl.
-  $678E,$02 Set a counter in #REGb for #N$08 rows.
+  $6787,$03 Multiply #REGhl by #N$08 (as each character is #N$08 bytes in
+. length).
+  $678A,$03 Copy #REGix containing the font base into #REGbc (using the stack).
+  $678D,$01 Add the font base to #REGhl so it now points at the correct font
+. data for the currently processed character.
+  $678E,$02 Set a counter in #REGb for #N$08 bytes/ data lines.
 @ $6790 label=PrintString_Loop
-  $6790,$02 Copy one row of graphics data to the screen buffer.
+  $6790,$02 Copy one line of graphics data to the screen buffer.
   $6792,$01 Move to the next byte of graphics data.
   $6793,$01 Move down one pixel row.
-  $6794,$02 Decrease the row counter by one and loop back to #R$6790 until counter is zero.
-  $6796,$02 Restore #REGhl and #REGde from the stack.
-  $6798,$01 Increment #REGde by one.
-  $6799,$01 Increment #REGhl by one.
-  $679A,$01 Restore #REGbc from the stack.
-  $679B,$02 Decrease counter by one and loop back to #R$6781 until counter is zero.
-  $679D,$01 Decrease #REGde by one.
+  $6794,$02 Decrease the row counter by one and loop back to #R$6790 until all
+. #N$08 lines of graphic data have been written to the screen.
+  $6796,$02 Restore the screen position pointer and screen position from the
+. stack.
+  $6798,$01 Move to the next screen buffer position.
+  $6799,$01 Move to the next character in the string.
+  $679A,$01 Restore the character counter from the stack.
+  $679B,$02 Decrease the character counter by one and loop back to #R$6781
+. until all of the characters have been printed.
+N $679D Apply attribute colours to the printed string.
+  $679D,$01 Move left one block to the last character position.
   $679E,$03 Call #R$66F7.
-  $67A1,$01 Restore #REGbc from the stack.
-  $67A2,$01 Fetch the attribute colour.
+  $67A1,$01 Restore the character counter from the stack.
+  $67A2,$01 Fetch the attribute colour byte.
 @ $67A3 label=ColourPrintString_Loop
-  $67A3,$01 Write #REGa to the attribute buffer.
-  $67A4,$01 Move backwards one attribute block.
-  $67A5,$02 Decrease counter by one and loop back to #R$67A3 until counter is zero.
-  $67A7,$01 Restore #REGde from the stack.
+  $67A3,$01 Write the attribute colour byte to the attribute buffer.
+  $67A4,$01 Move left one attribute block.
+  $67A5,$02 Decrease the character counter by one and loop back to #R$67A3
+. until the whole string is now the desired attribute colouring.
+  $67A7,$01 Restore the original screen buffer position from the stack.
   $67A8,$01 Return.
 
 c $67A9 Print Score
@@ -722,11 +740,15 @@ c $67A9 Print Score
 
 c $67B6 Handler: Score
 @ $67B6 label=Handler_Score
+D $67B6 Adds points to the current score and awards a bonus life if the score
+. reaches 10,000 points.
+N $67B6 Check if the game is running in demo mode.
   $67B6,$06 Jump to #R$67C3 if *#R$66F3 is not active.
 N $67BC Demo mode is active, so just reset the score.
   $67BC,$03 #REGde=#R$6528.
-  $67BF,$02 #REGb=#N$00.
+  $67BF,$02 Set #REGb to #N$00 to skip any scoring addition.
   $67C1,$02 Jump to #R$67DD.
+N $67C3 Proceed with adding the points to the current score.
 @ $67C3 label=AddToScore
   $67C3,$03 Point #REGhl at #R$6514(#N$6519) (the current score).
   $67C6,$03 Point #REGde at #R$6528(#N$652E) (the points to add).
@@ -734,16 +756,17 @@ N $67BC Demo mode is active, so just reset the score.
 @ $67CB label=AddToScore_Loop
   $67CB,$02 Fetch the points digit and add it to the corresponding score digit.
   $67CD,$02 Convert the value from ASCII by subtracing #N$30.
-  $67CF,$04 Jump to #R$67D8 if #REGa is less than #N$3A.
-  $67D3,$02 #REGa-=#N$0A.
-  $67D5,$01 Decrease #REGhl by one.
-  $67D6,$01 Increment *#REGhl by one.
-  $67D7,$01 Increment #REGhl by one.
+  $67CF,$04 Jump to #R$67D8 if the result is less than #N$3A (no carry).
+  $67D3,$02 Subtract #N$0A to handle the carry.
+  $67D5,$01 Move to the next higher digit position.
+  $67D6,$01 Add the carry to the next higher digit.
+  $67D7,$01 Move back to the current digit position.
 @ $67D8 label=AddToScore_Store
-  $67D8,$01 Write #REGa to *#REGhl.
-  $67D9,$01 Decrease #REGde by one.
-  $67DA,$01 Decrease #REGhl by one.
-  $67DB,$02 Decrease counter by one and loop back to #R$67CB until counter is zero.
+  $67D8,$01 Write the resulting digit to the score.
+  $67D9,$01 Move to the previous points digit in the points buffer.
+  $67DA,$01 Move to the previous digit in the score.
+  $67DB,$02 Decrease the score digit counter by one and loop back to #R$67CB
+. until all of the scoring digits have been processed.
 @ $67DD label=Reset_ScoreBuffer
   $67DD,$02 Copy the score buffer pointer to #REGhl (using the stack).
   $67DF,$01 Increment the score buffer destination pointer by one.
@@ -752,7 +775,8 @@ N $67BC Demo mode is active, so just reset the score.
   $67E4,$02 Copy #N$30 ("#CHR$30") across the remaining five score buffer
 . digits.
 N $67E6 Check if the score is at least "10,000".
-  $67E6,$06 Return if *#R$6514(#N$6515) is not equal to #N$31 ("#CHR$31").
+  $67E6,$06 Return if *#R$6514(#N$6515) (the "ten-thousands" digit) is not
+. equal to #N$31 ("#CHR$31").
   $67EC,$06 Return if #R$66EF says that no extra life should be awarded.
 N $67F2 Award an extra life to the player.
   $67F2,$01 Reset #R$66EF as an extra life has been "awarded".
@@ -840,29 +864,36 @@ R $684E DE Attribute buffer destination
 c $6853 Handler: Eggsplosion Right
 @ $6853 label=Handler_EggsplosionRight
 D $6853 Handler for the right half of the Eggsplosion.
+E $6853 Continue on to #R$6856.
 N $6853 #CLS$00 #SIM(start=$67F6,stop=$6818)
 . #SIM(start=$6853,stop=$688F,de=$598F)#SCR$02(screen-eggsplosion-right)
 R $6853 DE Attribute buffer destination
   $6853,$03 #REGhl=#R$608E.
-N $6856 Common handler for both left and right shell parts.
+
+c $6856 Handler: Eggsplosion
 @ $6856 label=Handler_Eggsplosion
+D $6856 Common handler for both left and right shell parts.
+R $6856 DE Attribute buffer destination
+R $6856 HL Pointer to eggsplosion graphic data
   $6856,$04 Set #REGix to target #INK$00 attributes with a #INK$02 replacement
 . attribute.
 @ $685A label=Handler_Eggsplosion_Draw
   $685A,$01 Stash the attribute buffer pointer on the stack.
-  $685B,$01 Exchange the #REGde and #REGhl registers.
+  $685B,$01 Switch the registers, #REGde and #REGhl, containing the attribute
+. buffer pointer and attribute buffer destination.
   $685C,$02 Set a counter in #REGb for #N$02 rows.
 @ $685E label=Handler_Eggsplosion_RowLoop
-  $685E,$02 Stash the row counter and attribute pointer on the stack.
+  $685E,$02 Stash the row counter and attribute buffer pointer on the stack.
   $6860,$02 Set a counter in #REGb for #N$02 columns.
 @ $6862 label=Handler_Eggsplosion_ColumnLoop
   $6862,$01 Stash the column counter on the stack.
   $6863,$03 Check if the attribute at this attribute buffer position matches
 . the target colour (the low byte of #REGix).
-  $6866,$01 Stash #REGhl on the stack.
-  $6867,$02 Jump to #R$6879 if #REGa is not equal to the low byte of #REGix.
-  $6869,$02 #REGa=the high byte of #REGix.
-  $686B,$01 Write #REGa to *#REGhl.
+  $6866,$01 Stash the attribute buffer pointer on the stack.
+  $6867,$02 Jump to #R$6879 if the attribute byte doesn't match the target
+. attribute.
+  $6869,$02 Load the replacement attribute byte (the high byte of #REGix).
+  $686B,$01 Write the replacement attribute byte to this position.
   $686C,$03 Call #R$6704.
   $686F,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
 @ $6871 label=Handler_Eggsplosion_LineLoop
@@ -873,17 +904,19 @@ N $6856 Common handler for both left and right shell parts.
 . #N$08 lines of the UDG character have been drawn.
   $6877,$02 Jump to #R$6880.
 @ $6879 label=Handler_Eggsplosion_SkipDraw
-  $6879,$07 #REGde+=#N($0008,$04,$04).
+  $6879,$07 Add #N($0008,$04,$04) bytes to skip past this graphics data.
 @ $6880 label=Handler_Eggsplosion_NextColumn
-  $6880,$01 Restore #REGhl from the stack.
-  $6881,$01 Increment #REGhl by one.
-  $6882,$01 Restore #REGbc from the stack.
-  $6883,$02 Decrease counter by one and loop back to #R$6862 until counter is zero.
-  $6885,$01 Restore #REGhl from the stack.
-  $6886,$05 #REGhl+=#N($0020,$04,$04) (with carry).
-  $688B,$01 Restore #REGbc from the stack.
-  $688C,$02 Decrease counter by one and loop back to #R$685E until counter is zero.
-  $688E,$01 Restore #REGde from the stack.
+  $6880,$01 Restore the attribute buffer pointer from the stack.
+  $6881,$01 Move right one attribute block.
+  $6882,$01 Restore the column counter from the stack.
+  $6883,$02 Decrease the column counter by one and loop back to #R$6862 until
+. both columns have been processed.
+  $6885,$01 Restore the attribute buffer pointer from the stack.
+  $6886,$05 Move down one row in the attribute buffer (add #N($0020,$04,$04)).
+  $688B,$01 Restore the row counter from the stack.
+  $688C,$02 Decrease the row counter by one and loop back to #R$685E until both
+. rows have been processed.
+  $688E,$01 Restore the original attribute buffer pointer from the stack.
   $688F,$01 Return.
 
 c $6890 Difficulty Delay?
@@ -1010,7 +1043,8 @@ N $6906 Increase the frame dimensions.
   $6908,$02 Increment the frame height by two.
 N $690A Action a delay between the frames.
   $690A,$01 Stash the attribute byte on the stack.
-  $690B,$03 Set a frame delay counter in #REGbc to #N$100*#N$0A loops.
+  $690B,$03 Set a frame delay counter in #REGbc to #N($0100,$04,$04)*#N$0A
+. loops.
 @ $690E label=TransitionEffect_FrameDelay
   $690E,$02 Decrease the inner loop counter by one and loop back to #R$690E
 . until the inner loop counter is zero.
@@ -1020,7 +1054,8 @@ N $6913 Process the next frame loop (or pass through when it's completed).
   $6913,$02 Restore the attribute byte and frame counter from the stack.
   $6915,$02 Decrease counter by one and loop back to #R$68D5 until counter is zero.
 N $6917 Action a delay between the iterations.
-  $6917,$03 Set an iteration delay counter in #REGbc to #N$100*#N$32 loops.
+  $6917,$03 Set an iteration delay counter in #REGbc to #N($0100,$04,$04)*#N$32
+. loops.
 @ $691A label=TransitionEffect_DelayLoop
   $691A,$02 Decrease the inner loop counter by one and loop back to #R$691A
 . until the inner loop counter is zero.
@@ -1255,15 +1290,16 @@ N $6A23 Prints the top part of the alien mothership:
   $6A39,$02,b$01 Flip bits 0-2.
   $6A3B,$01 #REGa+=#REGh.
   $6A3C,$01 #REGh=#REGa.
-  $6A3D,$02 Write #N$03 to *#REGhl.
+  $6A3D,$02 Write #COLOUR$03 to *#REGhl.
   $6A3F,$01 Increment #REGhl by one.
-  $6A40,$02 Write #N$C0 to *#REGhl.
+  $6A40,$02 Write #COLOUR$C0 to *#REGhl.
   $6A42,$01 Restore #REGaf from the stack.
   $6A43,$02,b$01 Keep only bits 0-1.
   $6A45,$02 Jump to #R$6A69 if #REGhl is not equal to #N$00.
   $6A47,$03 #REGhl=#N$4837 (screen buffer location).
   $6A4A,$03 #REGde=#N$4838 (screen buffer location).
   $6A4D,$02 #REGb=#N$08.
+@ $6A4F label=Handler_Mothership_ScrollLoop
   $6A4F,$01 Stash #REGbc on the stack.
   $6A50,$01 #REGa=*#REGde.
   $6A51,$02 Stash #REGhl and #REGde on the stack.
@@ -1325,6 +1361,7 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
 @ $6A99 label=Handler_Mothership_ProcessBullets
   $6A99,$05 Return if *#R$6695 is not zero.
   $6A9E,$03 #REGhl=#N($0003,$04,$04).
+@ $6AA1 label=Handler_Mothership_BulletLoop
   $6AA1,$01 Stash #REGhl on the stack.
   $6AA2,$03 #REGix=#REGhl (using the stack).
   $6AA5,$05 Multiply #REGhl by #N$02 and add #R$66BA.
@@ -1344,7 +1381,8 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
   $6AC0,$04 Jump to #R$6B25 if #REGa is not equal to #N$03.
   $6AC4,$03 #REGhl=#N$5950 (attribute buffer location).
   $6AC7,$02 Jump to #R$6AF2.
-
+N $6AC9 Update active bullet position.
+@ $6AC9 label=Handler_Mothership_BulletActive
   $6AC9,$01 #REGa=*#REGhl.
   $6ACA,$02,b$01 Keep only bits 0-2, 6.
   $6ACC,$04 Jump to #R$6AE0 if #REGa is not equal to #N$06.
@@ -1364,6 +1402,7 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
   $6AE8,$03 #REGhl-=#REGbc.
   $6AEB,$01 Restore #REGhl from the stack.
   $6AEC,$02 Jump to #R$6AF2 if #REGh is less than #REGa.
+@ $6AEE label=Handler_Mothership_DeactivateBullet
   $6AEE,$02 #REGh=#N$00.
   $6AF0,$02 Jump to #R$6B25.
 
@@ -1373,12 +1412,13 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
   $6AFB,$06 Jump to #R$6AEE if *#R$6693 is active.
   $6B01,$02 Write #INK$06 to *#REGhl.
   $6B03,$02 Jump to #R$6B0D.
-
+@ $6B05 label=Handler_Mothership_CheckGround
   $6B05,$02,b$01 Keep only bits 0-2.
   $6B07,$02 Jump to #R$6AEE if #REGa is not equal to #REGa.
   $6B09,$01 #REGa=*#REGhl.
   $6B0A,$02 #REGa+=#N$06.
   $6B0C,$01 Write #REGa to *#REGhl.
+@ $6B0D label=Handler_Mothership_DrawBullet
   $6B0D,$01 Stash #REGhl on the stack.
   $6B0E,$03 Call #R$6704.
   $6B11,$01 Exchange the #REGde and #REGhl registers.
@@ -1387,6 +1427,7 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
   $6B18,$03 Multiply #REGhl by #N$08.
   $6B1B,$01 #REGhl+=#REGbc.
   $6B1C,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $6B1E label=Handler_Mothership_BulletDrawLoop
   $6B1E,$02 Copy the UDG data to the screen buffer.
   $6B20,$01 Move down one pixel line in the screen buffer.
   $6B21,$01 Move to the next UDG graphic data byte.
@@ -2282,7 +2323,8 @@ N $714E Housekeeping; move onto the next bullet.
   $7155,$03 Jump to #R$7040 until all of the bullets have been processed.
   $7158,$01 Return.
 
-c $7159
+c $7159 Handler: Bullet Collision
+@ $7159 label=Handler_BulletCollision
   $7159,$03 #REGa=*#R$66F1.
   $715C,$02,b$01 Keep only bit 1.
   $715E,$02 Jump to #R$7176 if the result is not zero.
@@ -2331,7 +2373,9 @@ M $7159,$07 Jump to #R$7176 if this *#R$66F1 is either #N$02 or #N$03.
 N $71AB Locate an empty explosion slot.
 N $71AB Noting that ... this doesn't check for an "end" so has the potential to
 . overwrite data!
+@ $71AB label=FindEmptySlot
   $71AB,$03 #REGhl=#R$66D5.
+@ $71AE label=FindEmptySlot_Loop
   $71AE,$04 Jump to #R$71B7 if the active flag of this slot is marked as
 . inactive.
   $71B2,$03 Move to the next set of explosion data.
@@ -2342,16 +2386,19 @@ N $71B7 Activate this explosion slot.
   $71B9,$04 Write the position held by #REGde to the explosion slot data.
   $71BD,$01 Return.
 
+c $71BE Handler: Special Collision Effects
+@ $71BE label=Handler_CollisionEffects
   $71BE,$07 Jump to #R$71EC if bit 1 of *#R$66F1 is not set.
   $71C5,$01 #REGa=*#REGhl.
   $71C6,$04 Jump to #R$71D1 if #REGa is equal to #N$43.
   $71CA,$04 Jump to #R$71D1 if #REGa is equal to #N$41.
   $71CE,$03 Return if #REGa is not equal to #N$05.
   $71D1,$05 Return if *#R$66F3 is active.
-  $71D6,$02 #REGb=#N$18.
-  $71D8,$03 #REGhl=#N($0122,$04,$04).
-  $71DB,$02 Stash #REGbc and #REGhl on the stack.
-  $71DD,$03 #REGde=#N($0001,$04,$04).
+N $71D6 #HTML(#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
+  $71D6,$02 Set a counter #REGb for #N$18 loops.
+  $71D8,$03 Set the loop delay counter to #N($0122,$04,$04).
+  $71DB,$02 Stash the loop and loop delay counters on the stack.
+  $71DD,$03 Set the sound duration to #N($0001,$04,$04).
   $71E0,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
   $71E3,$01 Disable interrupts.
   $71E4,$01 Restore #REGhl from the stack.
@@ -2368,7 +2415,6 @@ N $71B7 Activate this explosion slot.
   $71FC,$02 Write #N$01 to *#REGhl.
   $71FE,$02 Jump to #R$7229.
 
-c $7200
   $7200,$04 Jump to #R$7223 if #REGa is not equal to #N$02.
   $7204,$01 Stash #REGhl on the stack.
   $7205,$04 #REGl-=#N$20.
@@ -2409,7 +2455,10 @@ c $7200
   $724E,$05 Write #N$01 to *#R$66D3.
   $7253,$01 Return.
 
-c $7254
+c $7254 Handler: Level Reset
+@ $7254 label=Handler_LevelReset
+D $7254 Reset the level after the player death, clearing aliens and restoring
+. states.
   $7254,$08 Jump to #R$730D if *#R$66A4 is not equal to #N$02.
   $725C,$07 Jump to #R$7277 if *#R$66F1 is not equal to #N$04.
   $7263,$03 #REGhl=#R$65DD.
@@ -2886,22 +2935,30 @@ N $7558 The animation is finished.
   $7561,$02 Jump to #R$755E until #REGc is zero.
   $7563,$01 Return.
 
-c $7564
+c $7564 Clear Sprite Area
+@ $7564 label=ClearSpriteArea
+D $7564 Clears a sprite area from the screen, skipping positions occupied by
+. the player ship (#COLOUR$46) or (#INK$07).
+R $7564 DE Screen buffer address
   $7564,$03 Call #R$66F7.
   $7567,$01 Exchange the #REGde and #REGhl registers.
-  $7568,$02 #REGe=#N$01.
-  $756A,$02 #REGb=#N$03.
-  $756C,$01 Stash #REGbc on the stack.
+  $7568,$02 Set the row counter to #N$01.
+  $756A,$02 Set a column counter in #REGb for #N$03 columns.
+@ $756C label=ClearSpriteArea_ColumnLoop
+  $756C,$01 Stash the column counter on the stack.
   $756D,$09 Jump to #R$7584 if *#REGhl is equal to #COLOUR$46 or #INK$07.
   $7576,$02 Write #N$00 to *#REGhl.
   $7578,$01 Stash #REGhl on the stack.
   $7579,$03 Call #R$6704.
-  $757C,$02 #REGb=#N$08.
+  $757C,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
   $757E,$01 #REGa=#N$00.
+@ $757F label=ClearSpriteArea_LineLoop
   $757F,$01 Write #REGa to *#REGhl.
   $7580,$01 Increment #REGh by one.
-  $7581,$02 Decrease counter by one and loop back to #R$757F until counter is zero.
+  $7581,$02 Decrease the line counter by one and loop back to #R$757F until all
+. #N$08 lines of the UDG character have been cleared.
   $7583,$01 Restore #REGhl from the stack.
+@ $7584 label=ClearSpriteArea_NextColumn
   $7584,$01 Increment #REGhl by one.
   $7585,$01 Restore #REGbc from the stack.
   $7586,$02 Decrease counter by one and loop back to #R$756C until counter is zero.

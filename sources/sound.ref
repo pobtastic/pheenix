@@ -19,3 +19,7 @@
 [Audio:Shield]
 
 #AUDIO(shield.wav)(#INCLUDE(Shield))
+
+[Audio:ShipExplosion]
+
+#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion))

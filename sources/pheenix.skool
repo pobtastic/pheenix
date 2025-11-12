@@ -3074,7 +3074,7 @@ c$66F7 LD A,D        ; {Extract bits 3-4 from #REGd (the character row within th
 
 ; Convert Attribute Address To Screen Buffer Address
 ;
-; Used by the routines at #R$6853, #R$68A1, #R$6926, #R$6A23, #R$7030, #R$7159,
+; Used by the routines at #R$6856, #R$68A1, #R$6926, #R$6A23, #R$7030, #R$7159,
 ; #R$72C9, #R$7564, #R$75B7, #R$7616, #R$79B2 and #R$7B67.
 ; .
 ; Converts an attribute buffer address to its corresponding screen buffer
@@ -3178,62 +3178,78 @@ c$672E LD HL,$5820   ; {Clear #N$02E0 bytes of the attribute buffer from #N$5820
 ; C Attribute value of string
 ; DE Screen buffer address
 ; HL Pointer to string data
+;
+; #HTML(This routine differs from #R$6775 and #R$677B as the code
+; self-modifies the address pointed to by #REGix, whereas the other two
+; routines are always pointed to #R$6253(#N$6153) and
+; <a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
 @label=Configurable_PrintString
 c$676F LD IX,$6153   ; #REGix=#R$6253(#N$6153).
  $6773 JR $677F      ; Jump to #R$677F.
 ; This entry point is used by the routines at #R$696A, #R$6B4F, #R$79B2 and
 ; #R$7C82.
+; .
+; #HTML(Print using:
+; <a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
 @label=SpectrumFont_PrintString
 *$6775 LD IX,$3C00   ; #HTML(#REGix=<a rel="noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3C00</a>.)
  $6779 JR $677F      ; Jump to #R$677F.
 ; This entry point is used by the routines at #R$696A, #R$6A23 and #R$79B2.
+; .
+; Print using: #R$6253(#N$6153).
 @label=CustomFont_PrintString
 *$677B LD IX,$6153   ; #REGix=#R$6253(#N$6153).
+; Print the string to the screen buffer.
 @label=PrintString
-*$677F PUSH DE       ; {Stash #REGde, #REGbc, #REGbc, #REGde and #REGhl on the
- $6780 PUSH BC       ; stack.
-*$6781 PUSH BC       ;
- $6782 PUSH DE       ;
+*$677F PUSH DE       ; {Stash the screen position and character counter/ attribute value on
+ $6780 PUSH BC       ; the stack}
+@label=PrintString_CharacterLoop
+*$6781 PUSH BC       ; {Stash the character counter/ attribute value, screen position and
+ $6782 PUSH DE       ; string pointer on the stack.
  $6783 PUSH HL       ; }
+; Calculate the address in the font data for the current character.
  $6784 LD L,(HL)     ; {Store the offset for the UDG data look-up in #REGhl.
  $6785 LD H,$00      ; }
- $6787 ADD HL,HL     ; {Multiply #REGhl by #N$08.
- $6788 ADD HL,HL     ;
+ $6787 ADD HL,HL     ; {Multiply #REGhl by #N$08 (as each character is #N$08 bytes in
+ $6788 ADD HL,HL     ; length).
  $6789 ADD HL,HL     ; }
- $678A PUSH IX       ; {#REGbc=#REGix (using the stack).
- $678C POP BC        ; }
- $678D ADD HL,BC     ; Add #REGbc to #REGhl.
- $678E LD B,$08      ; Set a counter in #REGb for #N$08 rows.
+ $678A PUSH IX       ; {Copy #REGix containing the font base into #REGbc (using
+ $678C POP BC        ; the stack).}
+ $678D ADD HL,BC     ; Add the font base to #REGhl so it now points at the correct font
+                     ; data for the currently processed character.
+ $678E LD B,$08      ; Set a counter in #REGb for #N$08 bytes/ data lines.
 @label=PrintString_Loop
-*$6790 LD A,(HL)     ; {Copy one row of graphics data to the screen buffer.
+*$6790 LD A,(HL)     ; {Copy one line of graphics data to the screen buffer.
  $6791 LD (DE),A     ; }
  $6792 INC HL        ; Move to the next byte of graphics data.
  $6793 INC D         ; Move down one pixel row.
- $6794 DJNZ $6790    ; Decrease the row counter by one and loop back to #R$6790
-                     ; until counter is zero.
- $6796 POP HL        ; {Restore #REGhl and #REGde from the stack.
- $6797 POP DE        ; }
- $6798 INC DE        ; Increment #REGde by one.
- $6799 INC HL        ; Increment #REGhl by one.
- $679A POP BC        ; Restore #REGbc from the stack.
- $679B DJNZ $6781    ; Decrease counter by one and loop back to #R$6781 until
-                     ; counter is zero.
- $679D DEC DE        ; Decrease #REGde by one.
+ $6794 DJNZ $6790    ; Decrease the row counter by one and loop back to #R$6790 until all
+                     ; #N$08 lines of graphic data have been written to the screen.
+ $6796 POP HL        ; {Restore the screen position pointer and screen position from the
+ $6797 POP DE        ; stack.}
+ $6798 INC DE        ; Move to the next screen buffer position.
+ $6799 INC HL        ; Move to the next character in the string.
+ $679A POP BC        ; Restore the character counter from the stack.
+ $679B DJNZ $6781    ; Decrease the character counter by one and loop back to #R$6781
+                     ; until all of the characters have been printed.
+; Apply attribute colours to the printed string.
+ $679D DEC DE        ; Move left one block to the last character position.
  $679E CALL $66F7    ; Call #R$66F7.
- $67A1 POP BC        ; Restore #REGbc from the stack.
- $67A2 LD A,C        ; Fetch the attribute colour.
+ $67A1 POP BC        ; Restore the character counter from the stack.
+ $67A2 LD A,C        ; Fetch the attribute colour byte.
 @label=ColourPrintString_Loop
-*$67A3 LD (DE),A     ; Write #REGa to the attribute buffer.
- $67A4 DEC DE        ; Move backwards one attribute block.
- $67A5 DJNZ $67A3    ; Decrease counter by one and loop back to #R$67A3 until
-                     ; counter is zero.
- $67A7 POP DE        ; Restore #REGde from the stack.
+*$67A3 LD (DE),A     ; Write the attribute colour byte to the attribute buffer.
+ $67A4 DEC DE        ; Move left one attribute block.
+ $67A5 DJNZ $67A3    ; Decrease the character counter by one and loop back to #R$67A3
+                     ; until the whole string is now the desired attribute colouring.
+ $67A7 POP DE        ; Restore the original screen buffer position from the
+                     ; stack.
  $67A8 RET           ; Return.
 
 ; Print Score
 ;
-; Used by the routines at #R$67F6, #R$7200 and #R$79B2.
+; Used by the routines at #R$67F6, #R$71BE and #R$79B2.
 @label=PrintScore
 c$67A9 LD DE,$4000   ; Set the screen buffer address to #N$4000.
  $67AC LD HL,$6514   ; Point #REGhl to #R$6514.
@@ -3244,15 +3260,23 @@ c$67A9 LD DE,$4000   ; Set the screen buffer address to #N$4000.
 
 ; Handler: Score
 ;
-; Used by the routines at #R$7200, #R$730D and #R$79B2.
+; Used by the routines at #R$71BE, #R$730D and #R$79B2.
+; .
+; Adds points to the current score and awards a bonus life if the score
+; reaches 10,000 points.
+;
+; .
+;
+; Check if the game is running in demo mode.
 @label=Handler_Score
 c$67B6 LD A,($66F3)  ; {Jump to #R$67C3 if *#R$66F3 is not active.
  $67B9 OR A          ;
  $67BA JR Z,$67C3    ; }
 ; Demo mode is active, so just reset the score.
  $67BC LD DE,$6528   ; #REGde=#R$6528.
- $67BF LD B,$00      ; #REGb=#N$00.
+ $67BF LD B,$00      ; Set #REGb to #N$00 to skip any scoring addition.
  $67C1 JR $67DD      ; Jump to #R$67DD.
+; Proceed with adding the points to the current score.
 @label=AddToScore
 *$67C3 LD HL,$6519   ; Point #REGhl at #R$6514(#N$6519) (the current score).
  $67C6 LD DE,$652E   ; Point #REGde at #R$6528(#N$652E) (the points to add).
@@ -3261,18 +3285,18 @@ c$67B6 LD A,($66F3)  ; {Jump to #R$67C3 if *#R$66F3 is not active.
 *$67CB LD A,(DE)     ; {Fetch the points digit and add it to the corresponding
  $67CC ADD A,(HL)    ; score digit.}
  $67CD SUB $30       ; Convert the value from ASCII by subtracing #N$30.
- $67CF CP $3A        ; {Jump to #R$67D8 if #REGa is less than #N$3A.
- $67D1 JR C,$67D8    ; }
- $67D3 SUB $0A       ; #REGa-=#N$0A.
- $67D5 DEC HL        ; Decrease #REGhl by one.
- $67D6 INC (HL)      ; Increment *#REGhl by one.
- $67D7 INC HL        ; Increment #REGhl by one.
+ $67CF CP $3A        ; {Jump to #R$67D8 if the result is less than #N$3A (no
+ $67D1 JR C,$67D8    ; carry).}
+ $67D3 SUB $0A       ; Subtract #N$0A to handle the carry.
+ $67D5 DEC HL        ; Move to the next higher digit position.
+ $67D6 INC (HL)      ; Add the carry to the next higher digit.
+ $67D7 INC HL        ; Move back to the current digit position.
 @label=AddToScore_Store
-*$67D8 LD (HL),A     ; Write #REGa to *#REGhl.
- $67D9 DEC DE        ; Decrease #REGde by one.
- $67DA DEC HL        ; Decrease #REGhl by one.
- $67DB DJNZ $67CB    ; Decrease counter by one and loop back to #R$67CB until
-                     ; counter is zero.
+*$67D8 LD (HL),A     ; Write the resulting digit to the score.
+ $67D9 DEC DE        ; Move to the previous points digit in the points buffer.
+ $67DA DEC HL        ; Move to the previous digit in the score.
+ $67DB DJNZ $67CB    ; Decrease the score digit counter by one and loop back to #R$67CB
+                     ; until all of the scoring digits have been processed.
 @label=Reset_ScoreBuffer
 *$67DD PUSH DE       ; {Copy the score buffer pointer to #REGhl (using the
  $67DE POP HL        ; stack).}
@@ -3282,8 +3306,8 @@ c$67B6 LD A,($66F3)  ; {Jump to #R$67C3 if *#R$66F3 is not active.
  $67E4 LDIR          ; Copy #N$30 ("#CHR$30") across the remaining five score buffer
                      ; digits.
 ; Check if the score is at least "10,000".
- $67E6 LD A,($6515)  ; {Return if *#R$6514(#N$6515) is not equal to #N$31
- $67E9 CP $31        ; ("#CHR$31").
+ $67E6 LD A,($6515)  ; {Return if *#R$6514(#N$6515) (the "ten-thousands" digit) is not
+ $67E9 CP $31        ; equal to #N$31 ("#CHR$31").
  $67EB RET NZ        ; }
  $67EC LD HL,$66EF   ; {Return if #R$66EF says that no extra life should be
  $67EF LD A,(HL)     ; awarded.
@@ -3327,7 +3351,7 @@ c$67F6 CALL $67A9    ; Call #R$67A9.
 
 ; Print Lives
 ;
-; Used by the routines at #R$67F6, #R$7200, #R$72C9 and #R$79B2.
+; Used by the routines at #R$67F6, #R$71BE, #R$72C9 and #R$79B2.
 @label=PrintLives
 c$681C LD DE,$4008   ; Set the screen buffer position to #N$4008 (where the life icons
                      ; start being displayed).
@@ -3406,30 +3430,39 @@ c$684E LD HL,$606E   ; #REGhl=#R$606E.
 ; #SIM(start=$6853,stop=$688F,de=$598F)#SCR$02(screen-eggsplosion-right)
 @label=Handler_EggsplosionRight
 c$6853 LD HL,$608E   ; #REGhl=#R$608E.
-; This entry point is used by the routine at #R$684E.
+; Continue on to #R$6856.
+
+; Handler: Eggsplosion
+;
+; Used by the routine at #R$684E.
 ; .
 ; Common handler for both left and right shell parts.
+;
+; DE Attribute buffer destination
+; HL Pointer to eggsplosion graphic data
 @label=Handler_Eggsplosion
-*$6856 LD IX,$0200   ; Set #REGix to target #INK$00 attributes with a #INK$02 replacement
+c$6856 LD IX,$0200   ; Set #REGix to target #INK$00 attributes with a #INK$02 replacement
                      ; attribute.
 ; This entry point is used by the routine at #R$6845.
 @label=Handler_Eggsplosion_Draw
 *$685A PUSH DE       ; Stash the attribute buffer pointer on the stack.
- $685B EX DE,HL      ; Exchange the #REGde and #REGhl registers.
+ $685B EX DE,HL      ; Switch the registers, #REGde and #REGhl, containing the attribute
+                     ; buffer pointer and attribute buffer destination.
  $685C LD B,$02      ; Set a counter in #REGb for #N$02 rows.
 @label=Handler_Eggsplosion_RowLoop
-*$685E PUSH BC       ; {Stash the row counter and attribute pointer on the
- $685F PUSH HL       ; stack.}
+*$685E PUSH BC       ; {Stash the row counter and attribute buffer pointer on
+ $685F PUSH HL       ; the stack.}
  $6860 LD B,$02      ; Set a counter in #REGb for #N$02 columns.
 @label=Handler_Eggsplosion_ColumnLoop
 *$6862 PUSH BC       ; Stash the column counter on the stack.
  $6863 LD A,(HL)     ; {Check if the attribute at this attribute buffer position matches
  $6864 CP IXl        ; the target colour (the low byte of #REGix).}
- $6866 PUSH HL       ; Stash #REGhl on the stack.
- $6867 JR NZ,$6879   ; Jump to #R$6879 if #REGa is not equal to the low byte of
-                     ; #REGix.
- $6869 LD A,IXh      ; #REGa=the high byte of #REGix.
- $686B LD (HL),A     ; Write #REGa to *#REGhl.
+ $6866 PUSH HL       ; Stash the attribute buffer pointer on the stack.
+ $6867 JR NZ,$6879   ; Jump to #R$6879 if the attribute byte doesn't match the target
+                     ; attribute.
+ $6869 LD A,IXh      ; Load the replacement attribute byte (the high byte of
+                     ; #REGix).
+ $686B LD (HL),A     ; Write the replacement attribute byte to this position.
  $686C CALL $6704    ; Call #R$6704.
  $686F LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
 @label=Handler_Eggsplosion_LineLoop
@@ -3441,24 +3474,25 @@ c$6853 LD HL,$608E   ; #REGhl=#R$608E.
                      ; #N$08 lines of the UDG character have been drawn.
  $6877 JR $6880      ; Jump to #R$6880.
 @label=Handler_Eggsplosion_SkipDraw
-*$6879 LD HL,$0008   ; {#REGde+=#N($0008,$04,$04).
- $687C AND A         ;
+*$6879 LD HL,$0008   ; {Add #N($0008,$04,$04) bytes to skip past this graphics
+ $687C AND A         ; data.
  $687D ADC HL,DE     ;
  $687F EX DE,HL      ; }
 @label=Handler_Eggsplosion_NextColumn
-*$6880 POP HL        ; Restore #REGhl from the stack.
- $6881 INC HL        ; Increment #REGhl by one.
- $6882 POP BC        ; Restore #REGbc from the stack.
- $6883 DJNZ $6862    ; Decrease counter by one and loop back to #R$6862 until
-                     ; counter is zero.
- $6885 POP HL        ; Restore #REGhl from the stack.
- $6886 LD C,$20      ; {#REGhl+=#N($0020,$04,$04) (with carry).
- $6888 AND A         ;
+*$6880 POP HL        ; Restore the attribute buffer pointer from the stack.
+ $6881 INC HL        ; Move right one attribute block.
+ $6882 POP BC        ; Restore the column counter from the stack.
+ $6883 DJNZ $6862    ; Decrease the column counter by one and loop back to #R$6862 until
+                     ; both columns have been processed.
+ $6885 POP HL        ; Restore the attribute buffer pointer from the stack.
+ $6886 LD C,$20      ; {Move down one row in the attribute buffer (add
+ $6888 AND A         ; #N($0020,$04,$04)).
  $6889 ADC HL,BC     ; }
- $688B POP BC        ; Restore #REGbc from the stack.
- $688C DJNZ $685E    ; Decrease counter by one and loop back to #R$685E until
-                     ; counter is zero.
- $688E POP DE        ; Restore #REGde from the stack.
+ $688B POP BC        ; Restore the row counter from the stack.
+ $688C DJNZ $685E    ; Decrease the row counter by one and loop back to #R$685E until both
+                     ; rows have been processed.
+ $688E POP DE        ; Restore the original attribute buffer pointer from the
+                     ; stack.
  $688F RET           ; Return.
 
 ; Difficulty Delay?
@@ -3618,7 +3652,7 @@ c$68B8 LD B,$02      ; Set an iteration counter in #REGb for #N$02 animations.
  $6909 INC D         ; }
 ; Action a delay between the frames.
  $690A PUSH AF       ; Stash the attribute byte on the stack.
- $690B LD BC,$000A   ; Set a frame delay counter in #REGbc to #N$100*#N$0A
+ $690B LD BC,$000A   ; Set a frame delay counter in #REGbc to #N($0100,$04,$04)*#N$0A
                      ; loops.
 @label=TransitionEffect_FrameDelay
 *$690E DJNZ $690E    ; Decrease the inner loop counter by one and loop back to #R$690E
@@ -3632,7 +3666,7 @@ c$68B8 LD B,$02      ; Set an iteration counter in #REGb for #N$02 animations.
  $6915 DJNZ $68D5    ; Decrease counter by one and loop back to #R$68D5 until
                      ; counter is zero.
 ; Action a delay between the iterations.
- $6917 LD BC,$0032   ; Set an iteration delay counter in #REGbc to #N$100*#N$32
+ $6917 LD BC,$0032   ; Set an iteration delay counter in #REGbc to #N($0100,$04,$04)*#N$32
                      ; loops.
 @label=TransitionEffect_DelayLoop
 *$691A DJNZ $691A    ; Decrease the inner loop counter by one and loop back to #R$691A
@@ -3947,15 +3981,16 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6A39 XOR %00000111 ; Flip bits 0-2.
  $6A3B ADD A,H       ; #REGa+=#REGh.
  $6A3C LD H,A        ; #REGh=#REGa.
- $6A3D LD (HL),$03   ; Write #N$03 to *#REGhl.
+ $6A3D LD (HL),$03   ; Write #COLOUR$03 to *#REGhl.
  $6A3F INC HL        ; Increment #REGhl by one.
- $6A40 LD (HL),$C0   ; Write #N$C0 to *#REGhl.
+ $6A40 LD (HL),$C0   ; Write #COLOUR$C0 to *#REGhl.
  $6A42 POP AF        ; Restore #REGaf from the stack.
  $6A43 AND %00000011 ; Keep only bits 0-1.
  $6A45 JR NZ,$6A69   ; Jump to #R$6A69 if #REGhl is not equal to #N$00.
  $6A47 LD HL,$4837   ; #REGhl=#N$4837 (screen buffer location).
  $6A4A LD DE,$4838   ; #REGde=#N$4838 (screen buffer location).
  $6A4D LD B,$08      ; #REGb=#N$08.
+@label=Handler_Mothership_ScrollLoop
 *$6A4F PUSH BC       ; Stash #REGbc on the stack.
  $6A50 LD A,(DE)     ; #REGa=*#REGde.
  $6A51 PUSH HL       ; {Stash #REGhl and #REGde on the stack.
@@ -4024,6 +4059,7 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6A9C OR A          ;
  $6A9D RET NZ        ; }
  $6A9E LD HL,$0003   ; #REGhl=#N($0003,$04,$04).
+@label=Handler_Mothership_BulletLoop
 *$6AA1 PUSH HL       ; Stash #REGhl on the stack.
  $6AA2 PUSH HL       ; {#REGix=#REGhl (using the stack).
  $6AA3 POP IX        ; }
@@ -4048,6 +4084,8 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6AC2 JR NZ,$6B25   ; }
  $6AC4 LD HL,$5950   ; #REGhl=#N$5950 (attribute buffer location).
  $6AC7 JR $6AF2      ; Jump to #R$6AF2.
+; Update active bullet position.
+@label=Handler_Mothership_BulletActive
 *$6AC9 LD A,(HL)     ; #REGa=*#REGhl.
  $6ACA AND %01000111 ; Keep only bits 0-2, 6.
  $6ACC CP $06        ; {Jump to #R$6AE0 if #REGa is not equal to #N$06.
@@ -4072,6 +4110,7 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6AE9 SBC HL,BC     ; }
  $6AEB POP HL        ; Restore #REGhl from the stack.
  $6AEC JR C,$6AF2    ; Jump to #R$6AF2 if #REGh is less than #REGa.
+@label=Handler_Mothership_DeactivateBullet
 *$6AEE LD H,$00      ; #REGh=#N$00.
  $6AF0 JR $6B25      ; Jump to #R$6B25.
 @label=Mothership_Bullet_Collision
@@ -4085,11 +4124,13 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6AFF JR NZ,$6AEE   ; }
  $6B01 LD (HL),$06   ; Write #INK$06 to *#REGhl.
  $6B03 JR $6B0D      ; Jump to #R$6B0D.
+@label=Handler_Mothership_CheckGround
 *$6B05 AND %00000111 ; Keep only bits 0-2.
  $6B07 JR NZ,$6AEE   ; Jump to #R$6AEE if #REGa is not equal to #REGa.
  $6B09 LD A,(HL)     ; #REGa=*#REGhl.
  $6B0A ADD A,$06     ; #REGa+=#N$06.
  $6B0C LD (HL),A     ; Write #REGa to *#REGhl.
+@label=Handler_Mothership_DrawBullet
 *$6B0D PUSH HL       ; Stash #REGhl on the stack.
  $6B0E CALL $6704    ; Call #R$6704.
  $6B11 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
@@ -4101,6 +4142,7 @@ c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
  $6B1A ADD HL,HL     ; }
  $6B1B ADD HL,BC     ; #REGhl+=#REGbc.
  $6B1C LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+@label=Handler_Mothership_BulletDrawLoop
 *$6B1E LD A,(HL)     ; {Copy the UDG data to the screen buffer.
  $6B1F LD (DE),A     ; }
  $6B20 INC D         ; Move down one pixel line in the screen buffer.
@@ -5276,9 +5318,10 @@ c$7030 LD HL,$6695   ; #REGhl=#R$6695.
                      ; processed.
  $7158 RET           ; Return.
 
-; Routine at 7159
+; Handler: Bullet Collision
 ;
 ; Used by the routine at #R$7030.
+@label=Handler_BulletCollision
 c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
  $715C AND %00000010 ; #N$03.
  $715E JR NZ,$7176   ; }
@@ -5339,7 +5382,9 @@ c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
 ; .
 ; Noting that ... this doesn't check for an "end" so has the potential to
 ; overwrite data!
+@label=FindEmptySlot
 *$71AB LD HL,$66D5   ; #REGhl=#R$66D5.
+@label=FindEmptySlot_Loop
 *$71AE LD A,(HL)     ; {Jump to #R$71B7 if the active flag of this slot is marked as
  $71AF OR A          ; inactive.
  $71B0 JR Z,$71B7    ; }
@@ -5355,7 +5400,12 @@ c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
  $71BB INC HL        ;
  $71BC LD (HL),D     ; }
  $71BD RET           ; Return.
-*$71BE LD A,($66F1)  ; {Jump to #R$71EC if bit 1 of *#R$66F1 is not set.
+
+; Handler: Special Collision Effects
+;
+; Used by the routine at #R$7159.
+@label=Handler_CollisionEffects
+c$71BE LD A,($66F1)  ; {Jump to #R$71EC if bit 1 of *#R$66F1 is not set.
  $71C1 BIT 1,A       ;
  $71C3 JR Z,$71EC    ; }
  $71C5 LD A,(HL)     ; #REGa=*#REGhl.
@@ -5368,11 +5418,12 @@ c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
 *$71D1 LD A,($66F3)  ; {Return if *#R$66F3 is active.
  $71D4 OR A          ;
  $71D5 RET NZ        ; }
- $71D6 LD B,$18      ; #REGb=#N$18.
- $71D8 LD HL,$0122   ; #REGhl=#N($0122,$04,$04).
-*$71DB PUSH BC       ; {Stash #REGbc and #REGhl on the stack.
+; #HTML(#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
+ $71D6 LD B,$18      ; Set a counter #REGb for #N$18 loops.
+ $71D8 LD HL,$0122   ; Set the loop delay counter to #N($0122,$04,$04).
+*$71DB PUSH BC       ; {Stash the loop and loop delay counters on the stack.
  $71DC PUSH HL       ; }
- $71DD LD DE,$0001   ; #REGde=#N($0001,$04,$04).
+ $71DD LD DE,$0001   ; Set the sound duration to #N($0001,$04,$04).
  $71E0 CALL $03B5    ; #HTML(Call <a "noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
  $71E3 DI            ; Disable interrupts.
@@ -5395,11 +5446,7 @@ c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
  $71FA JR NZ,$7200   ; }
  $71FC LD (HL),$01   ; Write #N$01 to *#REGhl.
  $71FE JR $7229      ; Jump to #R$7229.
-
-; Routine at 7200
-;
-; Used by the routine at #R$7159.
-c$7200 CP $02        ; {Jump to #R$7223 if #REGa is not equal to #N$02.
+*$7200 CP $02        ; {Jump to #R$7223 if #REGa is not equal to #N$02.
  $7202 JR NZ,$7223   ; }
  $7204 PUSH HL       ; Stash #REGhl on the stack.
  $7205 LD A,L        ; {#REGl-=#N$20.
@@ -5419,14 +5466,12 @@ c$7200 CP $02        ; {Jump to #R$7223 if #REGa is not equal to #N$02.
                      ; counter is zero.
 *$721B POP HL        ; Restore #REGhl from the stack.
  $721C LD (HL),$00   ; Write #N$00 to *#REGhl.
-; This entry point is used by the routine at #R$7159.
 *$721E LD DE,$3D00   ; #HTML(#REGde=<a rel="noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3D00</a>.)
  $7221 JR $722C      ; Jump to #R$722C.
 *$7223 CP $10        ; {Jump to #R$7245 if #REGa is not equal to #N$10.
  $7225 JR NZ,$7245   ; }
  $7227 LD (HL),$02   ; Write #N$02 to *#REGhl.
-; This entry point is used by the routine at #R$7159.
 *$7229 LD DE,$61EB   ; #REGde=#R$61EB.
 *$722C LD H,$48      ; #REGh=#N$48.
  $722E LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
@@ -5452,9 +5497,13 @@ c$7200 CP $02        ; {Jump to #R$7223 if #REGa is not equal to #N$02.
  $7250 LD ($66D3),A  ; }
  $7253 RET           ; Return.
 
-; Routine at 7254
+; Handler: Level Reset
 ;
 ; Used by the routines at #R$7C82 and #R$7DD9.
+; .
+; Reset the level after the player death, clearing aliens and restoring
+; states.
+@label=Handler_LevelReset
 c$7254 LD A,($66A4)  ; {Jump to #R$730D if *#R$66A4 is not equal to #N$02.
  $7257 CP $02        ;
  $7259 JP NZ,$730D   ; }
@@ -6060,14 +6109,21 @@ c$74A4 CALL $6720    ; Call #R$6720.
  $7561 JR NZ,$755E   ; Jump to #R$755E until #REGc is zero.
  $7563 RET           ; Return.
 
-; Routine at 7564
+; Clear Sprite Area
 ;
 ; Used by the routines at #R$7254, #R$7616 and #R$79B2.
+; .
+; Clears a sprite area from the screen, skipping positions occupied by
+; the player ship (#COLOUR$46) or (#INK$07).
+;
+; DE Screen buffer address
+@label=ClearSpriteArea
 c$7564 CALL $66F7    ; Call #R$66F7.
  $7567 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
- $7568 LD E,$01      ; #REGe=#N$01.
- $756A LD B,$03      ; #REGb=#N$03.
-*$756C PUSH BC       ; Stash #REGbc on the stack.
+ $7568 LD E,$01      ; Set the row counter to #N$01.
+ $756A LD B,$03      ; Set a column counter in #REGb for #N$03 columns.
+@label=ClearSpriteArea_ColumnLoop
+*$756C PUSH BC       ; Stash the column counter on the stack.
  $756D LD A,(HL)     ; {Jump to #R$7584 if *#REGhl is equal to #COLOUR$46 or
  $756E CP $46        ; #INK$07.
  $7570 JR Z,$7584    ;
@@ -6076,13 +6132,15 @@ c$7564 CALL $66F7    ; Call #R$66F7.
  $7576 LD (HL),$00   ; Write #N$00 to *#REGhl.
  $7578 PUSH HL       ; Stash #REGhl on the stack.
  $7579 CALL $6704    ; Call #R$6704.
- $757C LD B,$08      ; #REGb=#N$08.
+ $757C LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
  $757E XOR A         ; #REGa=#N$00.
+@label=ClearSpriteArea_LineLoop
 *$757F LD (HL),A     ; Write #REGa to *#REGhl.
  $7580 INC H         ; Increment #REGh by one.
- $7581 DJNZ $757F    ; Decrease counter by one and loop back to #R$757F until
-                     ; counter is zero.
+ $7581 DJNZ $757F    ; Decrease the line counter by one and loop back to #R$757F until all
+                     ; #N$08 lines of the UDG character have been cleared.
  $7583 POP HL        ; Restore #REGhl from the stack.
+@label=ClearSpriteArea_NextColumn
 *$7584 INC HL        ; Increment #REGhl by one.
  $7585 POP BC        ; Restore #REGbc from the stack.
  $7586 DJNZ $756C    ; Decrease counter by one and loop back to #R$756C until
