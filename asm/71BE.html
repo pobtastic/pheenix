@@ -33,7 +33,7 @@ Next: <a href="7254.html">7254</a>
 </td>
 </tr>
 </table>
-<div class="description">71BE: Handler: Special Collision Effects</div>
+<div class="description">71BE: Handler: Bullet Collision Effects</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -42,13 +42,32 @@ Next: <a href="7254.html">7254</a>
 Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 </div>
 </div>
+<table class="input">
+<tr class="asm-input-header">
+<th colspan="2">Input</th>
+</tr>
+<tr>
+<td class="register">HL</td>
+<td class="register-desc">Bullet attribute buffer address</td>
+</tr>
+</table>
 </td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects</td>
+<td class="routine-comment" colspan="5">
+<span id="71be"></span>
+<div class="comments">
+<div class="paragraph">
+Check if this is phase 0, 1 or 4. The first section targets only the Pheenix aliens in phase 2 and 3.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_BulletCollisionEffects</td>
 <td class="address-2"><span id="71be"></span>71BE</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="71BE.html#71ec">Handler_CollisionEffects_2</a> if bit 1 of *<a href="66F1.html">Phase</a> is not set.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="71BE.html#71ec">BulletCollisionWithMothership</a> if bit 1 of *<a href="66F1.html">Phase</a> is not set (phases 0, 1, 4).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -58,41 +77,80 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71c3"></span>71C3</td>
-<td class="instruction">JR Z,<a href="71BE.html#71ec">Handler_CollisionEffects_2</a></td>
+<td class="instruction">JR Z,<a href="71BE.html#71ec">BulletCollisionWithMothership</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="71c5"></span>
+<div class="comments">
+<div class="paragraph">
+Handle the Pheenix aliens in either phase 2 or 3.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71c5"></span>71C5</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Load the attribute value from the bullet attribute buffer address.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="71c6"></span>
+<div class="comments">
+<div class="paragraph">
+Check for the Pheenix wing attribute values from either phase.
+</div>
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="pheenix-04-blue" src="../images/udgs/pheenix-04-blue.png" /></td>
+<td class="" colspan="1" rowspan="1"><img alt="pheenix-04-magenta" src="../images/udgs/pheenix-04-magenta.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71c6"></span>71C6</td>
 <td class="instruction">CP $43</td>
-<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#71d1">Handler_CollisionEffects_0</a> if <span class="register">A</span> is equal to 43.</td>
+<td class="comment-1" rowspan="4">Jump to <a href="71BE.html#71d1">PlayWingHitSound</a> if the attribute value is either INK:MAGENTA,
+PAPER:BLACK (BRIGHT) or INK:BLUE,
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71c8"></span>71C8</td>
-<td class="instruction">JR Z,<a href="71BE.html#71d1">Handler_CollisionEffects_0</a></td>
+<td class="instruction">JR Z,<a href="71BE.html#71d1">PlayWingHitSound</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71ca"></span>71CA</td>
 <td class="instruction">CP $41</td>
-<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#71d1">Handler_CollisionEffects_0</a> if <span class="register">A</span> is equal to 41.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71cc"></span>71CC</td>
-<td class="instruction">JR Z,<a href="71BE.html#71d1">Handler_CollisionEffects_0</a></td>
+<td class="instruction">JR Z,<a href="71BE.html#71d1">PlayWingHitSound</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="71ce"></span>
+<div class="comments">
+<div class="paragraph">
+Return if the bullet is just passing over background.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71ce"></span>71CE</td>
 <td class="instruction">CP $05</td>
-<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 05.</td>
+<td class="comment-1" rowspan="2">Return if the attribute value is not CYAN.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -100,7 +158,17 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="instruction">RET NZ</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_0</td>
+<td class="routine-comment" colspan="5">
+<span id="71d1"></span>
+<div class="comments">
+<div class="paragraph">
+Play a sound when the Pheenix wings are hit (but not in demo mode).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">PlayWingHitSound</td>
 <td class="address-2"><span id="71d1"></span>71D1</td>
 <td class="instruction">LD A,($66F3)</td>
 <td class="comment-1" rowspan="3">Return if *<a href="66F3.html">Flag_ActiveDemoMode</a> is active.</td>
@@ -120,8 +188,8 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <span id="71d6"></span>
 <div class="comments">
 <div class="paragraph">
-<audio controls="" src="../audio/ship-explosion.wav">
-<p>Your browser doesn't support HTML5 audio. Here is a <a href="../audio/ship-explosion.wav">link to the audio</a> instead.</p>
+<audio controls="" src="../audio/wing-hit.wav">
+<p>Your browser doesn't support HTML5 audio. Here is a <a href="../audio/wing-hit.wav">link to the audio</a> instead.</p>
 </audio>
 </div>
 </div>
@@ -137,13 +205,13 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="71d8"></span>71D8</td>
 <td class="instruction">LD HL,$0122</td>
-<td class="comment-1" rowspan="1">Set the loop delay counter to 0122.</td>
+<td class="comment-1" rowspan="1">Set the initial pitch to 0122.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_1</td>
+<td class="asm-label">WingHitSound_Loop</td>
 <td class="address-2"><span id="71db"></span>71DB</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash the loop and loop delay counters on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the loop counter and pitch on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -172,13 +240,13 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="71e4"></span>71E4</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the pitch from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71e5"></span>71E5</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="3">Increment <span class="register">HL</span> by three.</td>
+<td class="comment-1" rowspan="3">Increment the pitch by three.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -194,13 +262,13 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="71e8"></span>71E8</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the loop counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71e9"></span>71E9</td>
-<td class="instruction">DJNZ <a href="71BE.html#71db">Handler_CollisionEffects_1</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="71BE.html#71db">Handler_CollisionEffects_1</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="71BE.html#71db">WingHitSound_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the loop counter by one and loop back to <a href="71BE.html#71db">WingHitSound_Loop</a> until all the sound loops are complete.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -209,10 +277,20 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="comment-1" rowspan="1">Return.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_2</td>
+<td class="routine-comment" colspan="5">
+<span id="71ec"></span>
+<div class="comments">
+<div class="paragraph">
+The only other special bullet handling is when bullets hit the hull of the mothership (only in phase 4).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">BulletCollisionWithMothership</td>
 <td class="address-2"><span id="71ec"></span>71EC</td>
 <td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 04.</td>
+<td class="comment-1" rowspan="2">Return if *<a href="66F1.html">Phase</a> is not phase 04.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -220,78 +298,149 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="instruction">RET NZ</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="71ef"></span>
+<div class="comments">
+<div class="paragraph">
+<table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership" src="../images/scr/mothership.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Start by handling the final stage of the rotating blue strip.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71ef"></span>71EF</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="71BE.html#71f8">Handler_CollisionEffects_3</a> if *<span class="register">HL</span> is not equal to 01.</td>
+<td class="comment-1" rowspan="1">Load the attribute value from the bullet attribute buffer address.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71f0"></span>71F0</td>
 <td class="instruction">CP $01</td>
+<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#71f8">MothershipRotatingStrip</a> if the attribute value is not equal to BLUE.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71f2"></span>71F2</td>
-<td class="instruction">JR NZ,<a href="71BE.html#71f8">Handler_CollisionEffects_3</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html#71f8">MothershipRotatingStrip</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="71f4"></span>
+<div class="comments">
+<div class="paragraph">
+This part of the ship is BLUE - so it's the rotating strip about to be destroyed (so destroy it).
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71f4"></span>71F4</td>
 <td class="instruction">LD (HL),$40</td>
-<td class="comment-1" rowspan="1">Write 40 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write INK:BLACK,
+PAPER:BLACK (BRIGHT) to the bullet/ rotating strip attribute pointer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71f6"></span>71F6</td>
-<td class="instruction">JR <a href="71BE.html#721e">Handler_CollisionEffects_7</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="71BE.html#721e">Handler_CollisionEffects_7</a>.</td>
+<td class="instruction">JR <a href="71BE.html#721e">MothershipHull_ClearUDG</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="71BE.html#721e">MothershipHull_ClearUDG</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_3</td>
+<td class="routine-comment" colspan="5">
+<span id="71f8"></span>
+<div class="comments">
+<div class="paragraph">
+Handle a first hit on the rotating blue strip.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipRotatingStrip</td>
 <td class="address-2"><span id="71f8"></span>71F8</td>
 <td class="instruction">CP $0F</td>
-<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#7200">Handler_CollisionEffects_4</a> if <span class="register">A</span> is not equal to 0F.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#7200">MothershipHull_Stage_02</a> if the attribute value is not equal to INK:WHITE,
+PAPER:BLUE.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71fa"></span>71FA</td>
-<td class="instruction">JR NZ,<a href="71BE.html#7200">Handler_CollisionEffects_4</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html#7200">MothershipHull_Stage_02</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="71fc"></span>
+<div class="comments">
+<div class="paragraph">
+This part of the ship is INK:WHITE,
+PAPER:BLUE - so it's a "fresh" part of the rotating strip.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71fc"></span>71FC</td>
 <td class="instruction">LD (HL),$01</td>
-<td class="comment-1" rowspan="1">Write 01 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write BLUE to the bullet/ rotating strip attribute pointer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="71fe"></span>71FE</td>
-<td class="instruction">JR <a href="71BE.html#7229">Handler_CollisionEffects_9</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="71BE.html#7229">Handler_CollisionEffects_9</a>.</td>
+<td class="instruction">JR <a href="71BE.html#7229">MothershipHull_DrawLargeDent</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="71BE.html#7229">MothershipHull_DrawLargeDent</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_4</td>
+<td class="routine-comment" colspan="5">
+<span id="7200"></span>
+<div class="comments">
+<div class="paragraph">
+Handle the second stage of the hull being shot.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipHull_Stage_02</td>
 <td class="address-2"><span id="7200"></span>7200</td>
 <td class="instruction">CP $02</td>
-<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#7223">Handler_CollisionEffects_8</a> if <span class="register">A</span> is not equal to 02.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#7223">MothershipHull_Stage_01</a> if the attribute value is not equal to RED.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7202"></span>7202</td>
-<td class="instruction">JR NZ,<a href="71BE.html#7223">Handler_CollisionEffects_8</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html#7223">MothershipHull_Stage_01</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7204"></span>
+<div class="comments">
+<div class="paragraph">
+This part of the ship is RED so has been hit once already.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7204"></span>7204</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the attribute buffer pointer on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7205"></span>7205</td>
 <td class="instruction">LD A,L</td>
-<td class="comment-1" rowspan="3"><span class="register">L</span>-=20.</td>
+<td class="comment-1" rowspan="3">Move up one row in the attribute buffer (subtract 20).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -307,81 +456,118 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7209"></span>7209</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Load the attribute value from the new attribute buffer address.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="720a"></span>720A</td>
 <td class="instruction">CP $10</td>
-<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#721b">Handler_CollisionEffects_6</a> if <span class="register">A</span> is not equal to 10.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#721b">MothershipHull_ClearAttribute</a> if the attribute value is not equal to INK:BLACK,
+PAPER:RED.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="720c"></span>720C</td>
-<td class="instruction">JR NZ,<a href="71BE.html#721b">Handler_CollisionEffects_6</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html#721b">MothershipHull_ClearAttribute</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="720e"></span>720E</td>
 <td class="instruction">LD H,$4D</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=4D.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">H</span> to 4D (screen buffer).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7210"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the degraded hull partial sprite: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="$61EF" src="../images/udgs/$61EF.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Note that the "move to the next UDG graphic data byte" moves backwards not forwards as you'd expect.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7210"></span>7210</td>
 <td class="instruction">LD B,$03</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=03.</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> for 03 (this is a partial graphic from the larger <a href="61EB.html">Graphics_MothershipDegradedHull_01</a>).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7212"></span>7212</td>
 <td class="instruction">LD DE,$61EF</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61EB.html#61ef">61EF</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61EB.html#61ef">Graphics_MothershipDegradedHull_02</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_5</td>
+<td class="asm-label">MothershipHull_DrawLoop</td>
 <td class="address-2"><span id="7215"></span>7215</td>
 <td class="instruction">LD A,(DE)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">DE</span>.</td>
+<td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7216"></span>7216</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7217"></span>7217</td>
 <td class="instruction">INC H</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7218"></span>7218</td>
 <td class="instruction">DEC DE</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">DE</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next UDG graphic data byte.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7219"></span>7219</td>
-<td class="instruction">DJNZ <a href="71BE.html#7215">Handler_CollisionEffects_5</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="71BE.html#7215">Handler_CollisionEffects_5</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="71BE.html#7215">MothershipHull_DrawLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="71BE.html#7215">MothershipHull_DrawLoop</a> until all 03 lines of the UDG character have been drawn.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_6</td>
+<td class="routine-comment" colspan="5">
+<span id="721b"></span>
+<div class="comments">
+<div class="paragraph">
+Set the attribute value to BLACK now that this section of the hull has been destroyed.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipHull_ClearAttribute</td>
 <td class="address-2"><span id="721b"></span>721B</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the attribute buffer pointer from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="721c"></span>721C</td>
 <td class="instruction">LD (HL),$00</td>
-<td class="comment-1" rowspan="1">Write 00 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write BLACK to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_7</td>
+<td class="routine-comment" colspan="5">
+<span id="721e"></span>
+<div class="comments">
+<div class="paragraph">
+Point to the "SPACE" (empty UDG graphic) in the ZX Spectrum font to clear the whole UDG area of the hull.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipHull_ClearUDG</td>
 <td class="address-2"><span id="721e"></span>721E</td>
 <td class="instruction">LD DE,$3D00</td>
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">3D00</a>.</td>
@@ -389,37 +575,62 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7221"></span>7221</td>
-<td class="instruction">JR <a href="71BE.html#722c">Handler_CollisionEffects_10</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="71BE.html#722c">Handler_CollisionEffects_10</a>.</td>
+<td class="instruction">JR <a href="71BE.html#722c">MothershipHull_DrawUDG</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="71BE.html#722c">MothershipHull_DrawUDG</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_8</td>
+<td class="routine-comment" colspan="5">
+<span id="7223"></span>
+<div class="comments">
+<div class="paragraph">
+Handle the first stage of the hull being shot.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipHull_Stage_01</td>
 <td class="address-2"><span id="7223"></span>7223</td>
 <td class="instruction">CP $10</td>
-<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#7245">Handler_CollisionEffects_12</a> if <span class="register">A</span> is not equal to 10.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="71BE.html#7245">MothershipHull_IsAlienShot</a> if the attribute value is not equal to INK:BLACK,
+PAPER:RED.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7225"></span>7225</td>
-<td class="instruction">JR NZ,<a href="71BE.html#7245">Handler_CollisionEffects_12</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html#7245">MothershipHull_IsAlienShot</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7227"></span>7227</td>
 <td class="instruction">LD (HL),$02</td>
-<td class="comment-1" rowspan="1">Write 02 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write RED to the bullet/ hull attribute pointer.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_9</td>
+<td class="routine-comment" colspan="5">
+<span id="7229"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the degraded hull large sprite: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="udg25067_2x4" src="../images/udgs/udg25067_2x4.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipHull_DrawLargeDent</td>
 <td class="address-2"><span id="7229"></span>7229</td>
 <td class="instruction">LD DE,$61EB</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61EB.html">Graphics_UDGs</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="61EB.html">Graphics_MothershipDegradedHull_01</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_10</td>
+<td class="asm-label">MothershipHull_DrawUDG</td>
 <td class="address-2"><span id="722c"></span>722C</td>
 <td class="instruction">LD H,$48</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=48.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">H</span> to 48 (screen buffer).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -428,7 +639,7 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (08 lines in a UDG).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_11</td>
+<td class="asm-label">MothershipHull_DrawUDG_Loop</td>
 <td class="address-2"><span id="7230"></span>7230</td>
 <td class="instruction">LD A,(DE)</td>
 <td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
@@ -453,8 +664,18 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7234"></span>7234</td>
-<td class="instruction">DJNZ <a href="71BE.html#7230">Handler_CollisionEffects_11</a></td>
-<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="71BE.html#7230">Handler_CollisionEffects_11</a> until all 08 lines of the UDG character have been drawn.</td>
+<td class="instruction">DJNZ <a href="71BE.html#7230">MothershipHull_DrawUDG_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="71BE.html#7230">MothershipHull_DrawUDG_Loop</a> until all 08 lines of the UDG character have been drawn.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7236"></span>
+<div class="comments">
+<div class="paragraph">
+Award 35 points for damaging the hull.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -492,10 +713,24 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="comment-1" rowspan="1">Return.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_CollisionEffects_12</td>
+<td class="routine-comment" colspan="5">
+<span id="7245"></span>
+<div class="comments">
+<div class="paragraph">
+Handle checking if the mothership alien has been shot?
+</div>
+<div class="paragraph">
+Is this empty space within the mothership graphic?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MothershipHull_IsAlienShot</td>
 <td class="address-2"><span id="7245"></span>7245</td>
 <td class="instruction">CP $40</td>
-<td class="comment-1" rowspan="2">Return if <span class="register">A</span> is not equal to 40.</td>
+<td class="comment-1" rowspan="2">Return if the attribute value is not equal to INK:BLACK,
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -503,16 +738,52 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="instruction">RET NZ</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="7248"></span>
+<div class="comments">
+<div class="paragraph">
+Check the attribute block above where the bullet is positioned.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7248"></span>7248</td>
 <td class="instruction">RES 5,L</td>
-<td class="comment-1" rowspan="1">Reset bit 5 of <span class="register">L</span>.</td>
+<td class="comment-1" rowspan="1">Clear bit 5 of <span class="register">L</span> to move up one row to the alien attribute position.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="724a"></span>
+<div class="comments">
+<div class="paragraph">
+Has the bullet reached the mothership alien? <table class="default">
+<tr>
+<th colspan="1" rowspan="1">Graphic</th>
+<th colspan="1" rowspan="1">Attribute Byte</th>
+<th colspan="1" rowspan="1">Attribute Colour</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="2"><img alt="mothership-alien-01" src="../images/udgs/mothership-alien-01.png" /></td>
+<td class="centre" colspan="1" rowspan="1">44</td>
+<td class="centre" colspan="1" rowspan="1">INK:GREEN, PAPER:BLACK (BRIGHT)</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">42</td>
+<td class="centre" colspan="1" rowspan="1">INK:RED, PAPER:BLACK (BRIGHT)</td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="724a"></span>724A</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Return if *<span class="register">HL</span> is not equal to 42.</td>
+<td class="comment-1" rowspan="3">Return if the attribute value at the new position is not equal to INK:RED,
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -525,10 +796,20 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <td class="instruction">RET NZ</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="724e"></span>
+<div class="comments">
+<div class="paragraph">
+The bullet has hit the mothership alien.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="724e"></span>724E</td>
 <td class="instruction">LD A,$01</td>
-<td class="comment-1" rowspan="2">Write 01 to *<a href="66D3.html">66D3</a>.</td>
+<td class="comment-1" rowspan="2">Write 01 to *<a href="66D3.html">MothershipAlienState</a> to mark that the mothership alien has been shot (and so phase 4 is now complete).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

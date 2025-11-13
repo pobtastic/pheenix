@@ -155,7 +155,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <td class="asm-label">Handler_BulletCollision_0</td>
 <td class="address-2"><span id="7176"></span>7176</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="71BE.html">Handler_CollisionEffects</a> if *<span class="register">HL</span> is not equal to 06.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="71BE.html">Handler_BulletCollisionEffects</a> if *<span class="register">HL</span> is not equal to 06.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -165,7 +165,7 @@ Used by the routine at <a href="7030.html">Handler_PlayerBullets</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7179"></span>7179</td>
-<td class="instruction">JR NZ,<a href="71BE.html">Handler_CollisionEffects</a></td>
+<td class="instruction">JR NZ,<a href="71BE.html">Handler_BulletCollisionEffects</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>

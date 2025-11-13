@@ -366,8 +366,24 @@ Used by the routine at <a href="../asm/6926.html">Handler_ShipExplosion</a>.
 <td class="map-g"><span id="66d3"></span><a href="../asm/66D3.html">66D3</a></td>
 <td class="map-length">1</td>
 <td class="map-g-desc">
-<div class="map-entry-title-11"><a class="map-entry-title" href="../asm/66D3.html">Game status buffer entry at 66D3</a></div>
+<div class="map-entry-title-11"><a class="map-entry-title" href="../asm/66D3.html">Mothership Alien State</a></div>
 <div class="map-entry-desc">
+<div class="paragraph">
+Holds the mothership alien state which is used only in phase 4 to indicate if the phase has been completed or not (and then shows the bonus): <table class="default">
+<tr>
+<th colspan="1" rowspan="1">Byte</th>
+<th colspan="1" rowspan="1">State</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">00</td>
+<td class="centre" colspan="1" rowspan="1">Alive</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">01</td>
+<td class="centre" colspan="1" rowspan="1">Dead</td>
+</tr>
+</table>
+</div>
 </div>
 </td>
 </tr>
