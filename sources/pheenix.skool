@@ -1825,15 +1825,16 @@ b$61E3 DEFB %11111111 ; {#UDGTABLE { #UDG(#PC) } TABLE#
  $61E9 DEFB %10000001 ;
  $61EA DEFB %11111111 ; }
 
-; Graphics: UDGs
-@label=Graphics_UDGs
-b$61EB DEFB %11111111 ; {#UDGTABLE { #UDG(#PC) } TABLE#
- $61EC DEFB %11111011 ;
+; Graphics: Mothership Degraded Hull
+@label=Graphics_MothershipDegradedHull_01
+b$61EB DEFB %11111111 ; {The full UDG and a partial are used for showing the mothership
+ $61EC DEFB %11111011 ; hull "degrading" after being shot by the player:
  $61ED DEFB %01111011 ;
- $61EE DEFB %01011010 ;
- $61EF DEFB %00010010 ;
- $61F0 DEFB %00010000 ;
- $61F1 DEFB %00010000 ;
+ $61EE DEFB %01011010 ; #UDGTABLE(default,centre,centre) { =h Address | =h Graphic }
+@label=Graphics_MothershipDegradedHull_02
+ $61EF DEFB %00010010 ;   { #N$61EB | #UDG($61EB,$02) }
+ $61F0 DEFB %00010000 ;   { #N$61EF | #UDG($61ED,$02){$00,$00,$20,$0C}($61EF) }
+ $61F1 DEFB %00010000 ; TABLE#
  $61F2 DEFB %00000000 ; }
  $61F3 DEFB %11111111 ; {#UDGTABLE { #UDG(#PC) } TABLE#
  $61F4 DEFB %11111100 ;
@@ -2967,7 +2968,16 @@ g$66C3 DEFB $00
 g$66C4 DEFB $00,$00,$00,$00,$00,$00,$00,$00
  $66CC DEFB $00,$00,$00,$00,$00,$00,$00
 
-; Game status buffer entry at 66D3
+; Mothership Alien State
+;
+; Holds the mothership alien state which is used only in phase 4 to
+; indicate if the phase has been completed or not (and then shows the bonus):
+; #TABLE(default,centre,centre)
+; { =h Byte | =h State }
+; { #N$00 | Alive }
+; { #N$01 | Dead }
+; TABLE#
+@label=MothershipAlienState
 g$66D3 DEFB $00
 
 ; Mothership Animation Counter
@@ -5401,100 +5411,180 @@ c$7159 LD A,($66F1)  ; {Jump to #R$7176 if this *#R$66F1 is either #N$02 or
  $71BC LD (HL),D     ; }
  $71BD RET           ; Return.
 
-; Handler: Special Collision Effects
+; Handler: Bullet Collision Effects
 ;
 ; Used by the routine at #R$7159.
-@label=Handler_CollisionEffects
-c$71BE LD A,($66F1)  ; {Jump to #R$71EC if bit 1 of *#R$66F1 is not set.
- $71C1 BIT 1,A       ;
+;
+; HL Bullet attribute buffer address
+;
+; Check if this is phase 0, 1 or 4. The first section targets only the
+; Pheenix aliens in phase 2 and 3.
+@label=Handler_BulletCollisionEffects
+c$71BE LD A,($66F1)  ; {Jump to #R$71EC if bit 1 of *#R$66F1 is not set (phases
+ $71C1 BIT 1,A       ; 0, 1, 4).
  $71C3 JR Z,$71EC    ; }
- $71C5 LD A,(HL)     ; #REGa=*#REGhl.
- $71C6 CP $43        ; {Jump to #R$71D1 if #REGa is equal to #N$43.
- $71C8 JR Z,$71D1    ; }
- $71CA CP $41        ; {Jump to #R$71D1 if #REGa is equal to #N$41.
+; Handle the Pheenix aliens in either phase 2 or 3.
+ $71C5 LD A,(HL)     ; Load the attribute value from the bullet attribute
+                     ; buffer address.
+; Check for the Pheenix wing attribute values from either phase.
+; .
+; #UDGTABLE {
+; #UDGS$03,$02(pheenix-04-blue)(
+;   #LET(addr=#IF($y==1)(#IF($x==1)($6173,$617B),#PC+$08*$x))
+;   #UDG({addr},#IF($y==0)($41,$06))(*udg)
+;   udg
+; ) |
+; #UDGS$03,$02(pheenix-04-magenta)(
+;   #LET(addr=#IF($y==1)(#IF($x==1)($6173,$617B),#PC+$08*$x))
+;   #UDG({addr},#IF($y==0)($43,$06))(*udg)
+;   udg
+; ) } TABLE#
+ $71C6 CP $43        ; {Jump to #R$71D1 if the attribute value is either #COLOUR$43 or
+ $71C8 JR Z,$71D1    ; #COLOUR$41.
+ $71CA CP $41        ;
  $71CC JR Z,$71D1    ; }
- $71CE CP $05        ; {Return if #REGa is not equal to #N$05.
+; Return if the bullet is just passing over background.
+ $71CE CP $05        ; {Return if the attribute value is not #INK$05.
  $71D0 RET NZ        ; }
+; Play a sound when the Pheenix wings are hit (but not in demo mode).
+@label=PlayWingHitSound
 *$71D1 LD A,($66F3)  ; {Return if *#R$66F3 is active.
  $71D4 OR A          ;
  $71D5 RET NZ        ; }
-; #HTML(#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
+; #HTML(#AUDIO(wing-hit.wav)(#INCLUDE(WingHit)))
  $71D6 LD B,$18      ; Set a counter #REGb for #N$18 loops.
- $71D8 LD HL,$0122   ; Set the loop delay counter to #N($0122,$04,$04).
-*$71DB PUSH BC       ; {Stash the loop and loop delay counters on the stack.
+ $71D8 LD HL,$0122   ; Set the initial pitch to #N($0122,$04,$04).
+@label=WingHitSound_Loop
+*$71DB PUSH BC       ; {Stash the loop counter and pitch on the stack.
  $71DC PUSH HL       ; }
  $71DD LD DE,$0001   ; Set the sound duration to #N($0001,$04,$04).
  $71E0 CALL $03B5    ; #HTML(Call <a "noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
  $71E3 DI            ; Disable interrupts.
- $71E4 POP HL        ; Restore #REGhl from the stack.
- $71E5 INC HL        ; {Increment #REGhl by three.
+ $71E4 POP HL        ; Restore the pitch from the stack.
+ $71E5 INC HL        ; {Increment the pitch by three.
  $71E6 INC HL        ;
  $71E7 INC HL        ; }
- $71E8 POP BC        ; Restore #REGbc from the stack.
- $71E9 DJNZ $71DB    ; Decrease counter by one and loop back to #R$71DB until
-                     ; counter is zero.
+ $71E8 POP BC        ; Restore the loop counter from the stack.
+ $71E9 DJNZ $71DB    ; Decrease the loop counter by one and loop back to #R$71DB until all
+                     ; the sound loops are complete.
  $71EB RET           ; Return.
-*$71EC CP $04        ; {Return if #REGa is not equal to #N$04.
+; The only other special bullet handling is when bullets hit the hull of
+; the mothership (only in phase 4).
+@label=BulletCollisionWithMothership
+*$71EC CP $04        ; {Return if *#R$66F1 is not phase #N$04.
  $71EE RET NZ        ; }
- $71EF LD A,(HL)     ; {Jump to #R$71F8 if *#REGhl is not equal to #N$01.
- $71F0 CP $01        ;
- $71F2 JR NZ,$71F8   ; }
- $71F4 LD (HL),$40   ; Write #N$40 to *#REGhl.
+; #PUSHS #CLS($05) #SIM(start=$67F6,stop=$6818) #UDGTABLE {
+;   #SIM(start=$696A,stop=$6A22)#SCR$02(mothership)
+; } TABLE# #POPS
+; .
+; Start by handling the final stage of the rotating blue strip.
+ $71EF LD A,(HL)     ; Load the attribute value from the bullet attribute
+                     ; buffer address.
+ $71F0 CP $01        ; {Jump to #R$71F8 if the attribute value is not equal to
+ $71F2 JR NZ,$71F8   ; #INK$01.}
+; This part of the ship is #INK$01 - so it's the rotating strip about to
+; be destroyed (so destroy it).
+ $71F4 LD (HL),$40   ; Write #COLOUR$40 to the bullet/ rotating strip attribute
+                     ; pointer.
  $71F6 JR $721E      ; Jump to #R$721E.
-*$71F8 CP $0F        ; {Jump to #R$7200 if #REGa is not equal to #N$0F.
- $71FA JR NZ,$7200   ; }
- $71FC LD (HL),$01   ; Write #N$01 to *#REGhl.
+; Handle a first hit on the rotating blue strip.
+@label=MothershipRotatingStrip
+*$71F8 CP $0F        ; {Jump to #R$7200 if the attribute value is not equal to
+ $71FA JR NZ,$7200   ; #COLOUR$0F.}
+; This part of the ship is #COLOUR$0F - so it's a "fresh" part of the
+; rotating strip.
+ $71FC LD (HL),$01   ; Write #INK$01 to the bullet/ rotating strip attribute
+                     ; pointer.
  $71FE JR $7229      ; Jump to #R$7229.
-*$7200 CP $02        ; {Jump to #R$7223 if #REGa is not equal to #N$02.
- $7202 JR NZ,$7223   ; }
- $7204 PUSH HL       ; Stash #REGhl on the stack.
- $7205 LD A,L        ; {#REGl-=#N$20.
- $7206 SUB $20       ;
+; Handle the second stage of the hull being shot.
+@label=MothershipHull_Stage_02
+*$7200 CP $02        ; {Jump to #R$7223 if the attribute value is not equal to
+ $7202 JR NZ,$7223   ; #INK$02.}
+; This part of the ship is #INK$02 so has been hit once already.
+ $7204 PUSH HL       ; Stash the attribute buffer pointer on the stack.
+ $7205 LD A,L        ; {Move up one row in the attribute buffer (subtract
+ $7206 SUB $20       ; #N$20).
  $7208 LD L,A        ; }
- $7209 LD A,(HL)     ; #REGa=*#REGhl.
- $720A CP $10        ; {Jump to #R$721B if #REGa is not equal to #N$10.
- $720C JR NZ,$721B   ; }
- $720E LD H,$4D      ; #REGh=#N$4D.
- $7210 LD B,$03      ; #REGb=#N$03.
+ $7209 LD A,(HL)     ; Load the attribute value from the new attribute buffer
+                     ; address.
+ $720A CP $10        ; {Jump to #R$721B if the attribute value is not equal to
+ $720C JR NZ,$721B   ; #COLOUR$10.}
+ $720E LD H,$4D      ; Set #REGh to #N$4D (screen buffer).
+; Draw the degraded hull partial sprite:
+; #UDGTABLE { #UDG($61ED,$02){$00,$00,$20,$0C}($61EF) } TABLE#
+; .
+; Note that the "move to the next UDG graphic data byte" moves backwards
+; not forwards as you'd expect.
+ $7210 LD B,$03      ; Set a line counter in #REGb for #N$03 (this is a partial graphic
+                     ; from the larger #R$61EB).
  $7212 LD DE,$61EF   ; #REGde=#R$61EF.
-*$7215 LD A,(DE)     ; #REGa=*#REGde.
- $7216 LD (HL),A     ; Write #REGa to *#REGhl.
- $7217 INC H         ; Increment #REGh by one.
- $7218 DEC DE        ; Decrease #REGde by one.
- $7219 DJNZ $7215    ; Decrease counter by one and loop back to #R$7215 until
-                     ; counter is zero.
-*$721B POP HL        ; Restore #REGhl from the stack.
- $721C LD (HL),$00   ; Write #N$00 to *#REGhl.
+@label=MothershipHull_DrawLoop
+*$7215 LD A,(DE)     ; {Copy the UDG data to the screen buffer.
+ $7216 LD (HL),A     ; }
+ $7217 INC H         ; Move down one pixel line in the screen buffer.
+ $7218 DEC DE        ; Move to the next UDG graphic data byte.
+ $7219 DJNZ $7215    ; Decrease the line counter by one and loop back to #R$7215 until all
+                     ; #N$03 lines of the UDG character have been drawn.
+; Set the attribute value to #INK$00 now that this section of the hull
+; has been destroyed.
+@label=MothershipHull_ClearAttribute
+*$721B POP HL        ; Restore the attribute buffer pointer from the stack.
+ $721C LD (HL),$00   ; Write #INK$00 to *#REGhl.
+; Point to the "SPACE" (empty UDG graphic) in the ZX Spectrum font to
+; clear the whole UDG area of the hull.
+@label=MothershipHull_ClearUDG
 *$721E LD DE,$3D00   ; #HTML(#REGde=<a rel="noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html">#N$3D00</a>.)
  $7221 JR $722C      ; Jump to #R$722C.
-*$7223 CP $10        ; {Jump to #R$7245 if #REGa is not equal to #N$10.
- $7225 JR NZ,$7245   ; }
- $7227 LD (HL),$02   ; Write #N$02 to *#REGhl.
+; Handle the first stage of the hull being shot.
+@label=MothershipHull_Stage_01
+*$7223 CP $10        ; {Jump to #R$7245 if the attribute value is not equal to
+ $7225 JR NZ,$7245   ; #COLOUR$10.}
+ $7227 LD (HL),$02   ; Write #INK$02 to the bullet/ hull attribute pointer.
+; Draw the degraded hull large sprite:
+; #UDGTABLE { #UDG($61EB,$02) } TABLE#
+@label=MothershipHull_DrawLargeDent
 *$7229 LD DE,$61EB   ; #REGde=#R$61EB.
-*$722C LD H,$48      ; #REGh=#N$48.
+@label=MothershipHull_DrawUDG
+*$722C LD H,$48      ; Set #REGh to #N$48 (screen buffer).
  $722E LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+@label=MothershipHull_DrawUDG_Loop
 *$7230 LD A,(DE)     ; {Copy the UDG data to the screen buffer.
  $7231 LD (HL),A     ; }
  $7232 INC DE        ; Move to the next UDG graphic data byte.
  $7233 INC H         ; Move down one pixel line in the screen buffer.
  $7234 DJNZ $7230    ; Decrease the line counter by one and loop back to #R$7230 until all
                      ; #N$08 lines of the UDG character have been drawn.
+; Award #N$35 points for damaging the hull.
  $7236 LD A,$35      ; {Write #N$35 to *#R$652E.
  $7238 LD ($652E),A  ; }
  $723B CALL $67B6    ; Call #R$67B6.
  $723E CALL $67A9    ; Call #R$67A9.
  $7241 CALL $681C    ; Call #R$681C.
  $7244 RET           ; Return.
-*$7245 CP $40        ; {Return if #REGa is not equal to #N$40.
- $7247 RET NZ        ; }
- $7248 RES 5,L       ; Reset bit 5 of #REGl.
- $724A LD A,(HL)     ; {Return if *#REGhl is not equal to #N$42.
- $724B CP $42        ;
+; Handle checking if the mothership alien has been shot?
+; .
+; Is this empty space within the mothership graphic?
+@label=MothershipHull_IsAlienShot
+*$7245 CP $40        ; {Return if the attribute value is not equal to
+ $7247 RET NZ        ; #COLOUR$40.}
+; Check the attribute block above where the bullet is positioned.
+ $7248 RES 5,L       ; Clear bit 5 of #REGl to move up one row to the alien attribute
+                     ; position.
+; Has the bullet reached the mothership alien?
+; #UDGTABLE(default,centre,centre,centre)
+; { =h Graphic | =h Attribute Byte | =h Attribute Colour }
+; { =r2 #UDGS$02,$02(mothership-alien-01)(
+;   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+;   udg
+; ) | #N$44 | #COLOUR$44 } { #N$42 | #COLOUR$42 } TABLE#
+ $724A LD A,(HL)     ; {Return if the attribute value at the new position is not equal to
+ $724B CP $42        ; #COLOUR$42.
  $724D RET NZ        ; }
- $724E LD A,$01      ; {Write #N$01 to *#R$66D3.
- $7250 LD ($66D3),A  ; }
+; The bullet has hit the mothership alien.
+ $724E LD A,$01      ; {Write #N$01 to *#R$66D3 to mark that the mothership alien has been
+ $7250 LD ($66D3),A  ; shot (and so phase 4 is now complete).}
  $7253 RET           ; Return.
 
 ; Handler: Level Reset

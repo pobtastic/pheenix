@@ -20,6 +20,6 @@
 
 #AUDIO(shield.wav)(#INCLUDE(Shield))
 
-[Audio:ShipExplosion]
+[Audio:WingHit]
 
-#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion))
+#AUDIO(wing-hit.wav)(#INCLUDE(WingHit))
