@@ -39,7 +39,10 @@ Next: <a href="74A4.html">74A4</a>
 <td class="routine-comment" colspan="5">
 <div class="details">
 <div class="paragraph">
-Used by the routines at <a href="72C9.html">Handler_LevelComplete</a>, <a href="730D.html">Handler_DisplayBonus</a>, <a href="7C82.html">TitleScreen</a> and <a href="7DD9.html">StartGame</a>.
+Used by the routines at <a href="72C9.html">Handler_LevelComplete</a>, <a href="730D.html">Handler_DisplayMothershipBonus</a>, <a href="7C82.html">TitleScreen</a> and <a href="7DD9.html">StartGame</a>.
+</div>
+<div class="paragraph">
+Initialises a new level, setting up the phase data, alien colours and player position.
 </div>
 </div>
 </td>
@@ -48,31 +51,37 @@ Used by the routines at <a href="72C9.html">Handler_LevelComplete</a>, <a href="
 <td class="asm-label">InitialiseLevel</td>
 <td class="address-2"><span id="740c"></span>740C</td>
 <td class="instruction">LD HL,$6680</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6680.html">6680</a>.</td>
+<td class="comment-1" rowspan="5">Clear 006C bytes from <a href="6680.html">6680</a> onwards.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="740f"></span>740F</td>
 <td class="instruction">LD DE,$6681</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6680.html">6681</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7412"></span>7412</td>
 <td class="instruction">LD BC,$006C</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=006C.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7415"></span>7415</td>
 <td class="instruction">LD (HL),B</td>
-<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7416"></span>7416</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7418"></span>
+<div class="comments">
+<div class="paragraph">
+Evaluate the last phase.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -89,7 +98,7 @@ Used by the routines at <a href="72C9.html">Handler_LevelComplete</a>, <a href="
 <td class="asm-label"></td>
 <td class="address-1"><span id="741c"></span>741C</td>
 <td class="instruction">SUB $04</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>-=04.</td>
+<td class="comment-1" rowspan="1">Subtract 04 from *<a href="66F1.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
@@ -111,34 +120,63 @@ Point to the bullet count.
 <td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="7030.html#703e">703F</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="7421"></span>
+<div class="comments">
+<div class="paragraph">
+Is this the last phase?..
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7421"></span>7421</td>
 <td class="instruction">JR NZ,<a href="740C.html#742d">NextPhase</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="740C.html#742d">NextPhase</a> if <span class="register">A</span> is not equal to 00.</td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#742d">NextPhase</a> if *<a href="66F1.html">Phase</a> minus 04 is not equal to 00.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7423"></span>
+<div class="comments">
+<div class="paragraph">
+The last phase was phase 04 so reset back to phase 00.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7423"></span>7423</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write 00 to *<a href="66F1.html">Phase</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7424"></span>
+<div class="comments">
+<div class="paragraph">
+Update the bullet count back to one shot.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7424"></span>7424</td>
 <td class="instruction">INC A</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
+<td class="comment-1" rowspan="2">Write 01 to *<a href="7030.html#703e">703F</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7425"></span>7425</td>
 <td class="instruction">LD (DE),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">DE</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7426"></span>7426</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the phase pointer on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -150,25 +188,45 @@ Point to the bullet count.
 <td class="asm-label"></td>
 <td class="address-1"><span id="742a"></span>742A</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the phase pointer from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="742b"></span>742B</td>
-<td class="instruction">JR <a href="740C.html#7431">InitialiseLevel_0</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="740C.html#7431">InitialiseLevel_0</a>.</td>
+<td class="instruction">JR <a href="740C.html#7431">SetPhaseAlienCount</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#7431">SetPhaseAlienCount</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="742d"></span>
+<div class="comments">
+<div class="paragraph">
+Move onto the next phase.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label">NextPhase</td>
 <td class="address-2"><span id="742d"></span>742D</td>
 <td class="instruction">INC (HL)</td>
-<td class="comment-1" rowspan="1">Increment *<span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Increment *<a href="66F1.html">Phase</a> by one.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="742e"></span>
+<div class="comments">
+<div class="paragraph">
+Update the bullet count to four shots.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="742e"></span>742E</td>
 <td class="instruction">LD A,$04</td>
-<td class="comment-1" rowspan="2">Write 04 to *<span class="register">DE</span>.</td>
+<td class="comment-1" rowspan="2">Write 04 to *<a href="7030.html#703e">703F</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -176,22 +234,46 @@ Point to the bullet count.
 <td class="instruction">LD (DE),A</td>
 </tr>
 <tr>
-<td class="asm-label">InitialiseLevel_0</td>
+<td class="routine-comment" colspan="5">
+<span id="7431"></span>
+<div class="comments">
+<div class="paragraph">
+Set up the number of aliens.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">SetPhaseAlienCount</td>
 <td class="address-2"><span id="7431"></span>7431</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66F1.html">Phase</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7432"></span>7432</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the current phase on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7433"></span>7433</td>
 <td class="instruction">AND %00000110</td>
-<td class="comment-1" rowspan="1">Keep only bits 1-2.</td>
+<td class="comment-1" rowspan="1">Keep only bits 1-2 to single out the following phases: <ul class="">
+<li>02</li>
+<li>03</li>
+<li>04</li>
+</ul></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7435"></span>
+<div class="comments">
+<div class="paragraph">
+Set the default number of aliens.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -207,8 +289,18 @@ Point to the bullet count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="743a"></span>743A</td>
-<td class="instruction">JR NZ,<a href="740C.html#743e">SetAlienWaveData</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="740C.html#743e">SetAlienWaveData</a> if *<span class="register">HL</span> is not equal to 04.</td>
+<td class="instruction">JR NZ,<a href="740C.html#743e">SetAlienPhaseData</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#743e">SetAlienPhaseData</a> if *<a href="66F1.html">Phase</a> is either 02 03 or 04.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="743c"></span>
+<div class="comments">
+<div class="paragraph">
+Else, set the numher of aliens for phases 00 and 01.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -217,91 +309,130 @@ Point to the bullet count.
 <td class="comment-1" rowspan="1">Set *<a href="667F.html">AlienCount</a> to 0F aliens.</td>
 </tr>
 <tr>
-<td class="asm-label">SetAlienWaveData</td>
+<td class="routine-comment" colspan="5">
+<span id="743e"></span>
+<div class="comments">
+<div class="paragraph">
+Now set up the phase data.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">SetAlienPhaseData</td>
 <td class="address-2"><span id="743e"></span>743E</td>
 <td class="instruction">LD HL,$6637</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6637.html">Table_AlienWaveData_02_03</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6637.html">Table_AlienPhaseData_02_03</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7441"></span>7441</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the current phase from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7442"></span>7442</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="740C.html#744a">InitialiseLevel_1</a> if *<span class="register">HL</span> is not equal to <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#744a">InitialisePhase01</a> if the current phase is not 00.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7443"></span>7443</td>
-<td class="instruction">JR NZ,<a href="740C.html#744a">InitialiseLevel_1</a></td>
+<td class="instruction">JR NZ,<a href="740C.html#744a">InitialisePhase01</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7445"></span>7445</td>
 <td class="instruction">LD HL,$65FB</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65FB.html">Table_AlienWaveData_00</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65FB.html">Table_AlienPhaseData_00</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7448"></span>7448</td>
-<td class="instruction">JR <a href="740C.html#745a">CopyWaveData</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="740C.html#745a">CopyWaveData</a>.</td>
+<td class="instruction">JR <a href="740C.html#745a">CopyPhaseData</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#745a">CopyPhaseData</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">InitialiseLevel_1</td>
+<td class="routine-comment" colspan="5">
+<span id="744a"></span>
+<div class="comments">
+<div class="paragraph">
+If this is phase 01 initialise it.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">InitialisePhase01</td>
 <td class="address-2"><span id="744a"></span>744A</td>
 <td class="instruction">CP $01</td>
-<td class="comment-1" rowspan="2">Jump to <a href="740C.html#7453">InitialiseLevel_2</a> if <span class="register">A</span> is not equal to 01.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#7453">InitialisePhase04</a> if the current phase is not 01.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="744c"></span>744C</td>
-<td class="instruction">JR NZ,<a href="740C.html#7453">InitialiseLevel_2</a></td>
+<td class="instruction">JR NZ,<a href="740C.html#7453">InitialisePhase04</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="744e"></span>744E</td>
 <td class="instruction">LD HL,$6619</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6619.html">Table_AlienWaveData_01</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6619.html">Table_AlienPhaseData_01</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7451"></span>7451</td>
-<td class="instruction">JR <a href="740C.html#745a">CopyWaveData</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="740C.html#745a">CopyWaveData</a>.</td>
+<td class="instruction">JR <a href="740C.html#745a">CopyPhaseData</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="740C.html#745a">CopyPhaseData</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">InitialiseLevel_2</td>
+<td class="routine-comment" colspan="5">
+<span id="7453"></span>
+<div class="comments">
+<div class="paragraph">
+If this is phase 04 initialise it.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">InitialisePhase04</td>
 <td class="address-2"><span id="7453"></span>7453</td>
 <td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="2">Jump to <a href="740C.html#745a">CopyWaveData</a> if <span class="register">A</span> is not equal to 04.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="740C.html#745a">CopyPhaseData</a> if the current phase is not 04.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7455"></span>7455</td>
-<td class="instruction">JR NZ,<a href="740C.html#745a">CopyWaveData</a></td>
+<td class="instruction">JR NZ,<a href="740C.html#745a">CopyPhaseData</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7457"></span>7457</td>
 <td class="instruction">LD HL,$6647</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6647.html">Table_AlienWaveData_04</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6647.html">Table_AlienPhaseData_04</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">CopyWaveData</td>
+<td class="routine-comment" colspan="5">
+<span id="745a"></span>
+<div class="comments">
+<div class="paragraph">
+Copy the phase data to the active phase data.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">CopyPhaseData</td>
 <td class="address-2"><span id="745a"></span>745A</td>
 <td class="instruction">LD DE,$65DD</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="65DD.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="5">Copy *<a href="667F.html">AlienCount</a> multiplied by 02 bytes from the phase data to <a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="745d"></span>745D</td>
 <td class="instruction">LD A,($667F)</td>
-<td class="comment-1" rowspan="3"><span class="register">C</span>=*<a href="667F.html">AlienCount</a> multiplied by 02.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -317,7 +448,6 @@ Point to the bullet count.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7462"></span>7462</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">

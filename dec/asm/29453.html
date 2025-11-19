@@ -33,7 +33,7 @@ Next: <a href="29703.html">29703</a>
 </td>
 </tr>
 </table>
-<div class="description">29453: Handler: Display Bonus</div>
+<div class="description">29453: Handler: Display Mothership Bonus</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
@@ -41,11 +41,28 @@ Next: <a href="29703.html">29703</a>
 <div class="paragraph">
 Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 </div>
+<div class="paragraph">
+Displays the bonus screen after completing the mothership level (phase 4).
+</div>
 </div>
 </td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus</td>
+<td class="routine-comment" colspan="5">
+<span id="29453"></span>
+<div class="comments">
+<div class="paragraph">
+Only continue if; <ul class="">
+<li>*<a href="26276.html">Flag_Collision</a> has no collision detected</li>
+<li>*<a href="26353.html">Phase</a> is phase 4</li>
+<li>*<a href="26323.html">MothershipAlienState</a> has been hit</li>
+</ul>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Handler_DisplayMothershipBonus</td>
 <td class="address-2"><span id="29453"></span>29453</td>
 <td class="instruction">LD A,(26276)</td>
 <td class="comment-1" rowspan="3">Return if *<a href="26276.html">Flag_Collision</a> is equal to 1.</td>
@@ -97,9 +114,22 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <span id="29472"></span>
 <div class="comments">
 <div class="paragraph">
-<table class="">
+Display a bonus screen with star background.
+</div>
+<div class="paragraph">
+First fill the screen with the star UDG character (note they're written in INK:BLACK,
+PAPER:BLACK so they're not yet visible - this is just an example in INK:CYAN,
+PAPER:BLACK (BRIGHT) to show what is happening at this point).
+</div>
+<div class="paragraph">
+<table class="default">
 <tr>
-<td class="" colspan="1" rowspan="1"><img alt="fgkjfdg" src="../../images/scr/fgkjfdg.png" /></td>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="fill-3" src="../../images/scr/fill-3.png" /></td>
 </tr>
 </table>
 </div>
@@ -125,6 +155,25 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="comment-1" rowspan="1">Call <a href="27441.html">FillScreenWithUDG</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="29481"></span>
+<div class="comments">
+<div class="paragraph">
+Print the bonus score text. <table class="default">
+<tr>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-1" src="../../images/scr/bonus-1.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29481"></span>29481</td>
 <td class="instruction">LD DE,18542</td>
@@ -134,37 +183,47 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29484"></span>29484</td>
 <td class="instruction">LD BC,1093</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=1093.</td>
+<td class="comment-1" rowspan="1">Printing 4 characters in INK:CYAN,
+PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29487"></span>29487</td>
 <td class="instruction">LD HL,25899</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25896.html#25899">25899</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25896.html#25899">BonusScoreBuffer</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29490"></span>
+<div class="comments">
+<div class="paragraph">
+Calculate the bonus digit.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29490"></span>29490</td>
 <td class="instruction">LD A,(26239)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26239.html">AlienCount</a>.</td>
+<td class="comment-1" rowspan="1">Load *<a href="26239.html">AlienCount</a> (the number of aliens in the current level) into <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29493"></span>29493</td>
 <td class="instruction">SRA A</td>
-<td class="comment-1" rowspan="1">Shift <span class="register">A</span> right (with carry).</td>
+<td class="comment-1" rowspan="2">Divide by 2 and add 52 (ASCII "4").</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29495"></span>29495</td>
 <td class="instruction">ADD A,52</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=52.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29497"></span>29497</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the result to the score buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -173,22 +232,41 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="comment-1" rowspan="1">Call <a href="26479.html">Configurable_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="29501"></span>
+<div class="comments">
+<div class="paragraph">
+Print it again... <table class="default">
+<tr>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">3</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-2" src="../../images/scr/bonus-2.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29501"></span>29501</td>
 <td class="instruction">LD HL,25899</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25896.html#25899">25899</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25896.html#25899">BonusScoreBuffer</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29504"></span>29504</td>
 <td class="instruction">LD E,142</td>
-<td class="comment-1" rowspan="1"><span class="register">E</span>=142.</td>
+<td class="comment-1" rowspan="1">Update the printing location to 18574.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29506"></span>29506</td>
 <td class="instruction">LD B,4</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=4.</td>
+<td class="comment-1" rowspan="1">Printing 4 characters.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -197,13 +275,42 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="comment-1" rowspan="1">Call <a href="26479.html">Configurable_PrintString</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="29511"></span>
+<div class="comments">
+<div class="paragraph">
+Smoosh the top score down: <table class="default">
+<tr>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">4</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-3" src="../../images/scr/bonus-3.png" /></td>
+<td class="centre" colspan="1" rowspan="1">5</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-4" src="../../images/scr/bonus-4.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">6</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-5" src="../../images/scr/bonus-5.png" /></td>
+<td class="centre" colspan="1" rowspan="1">7</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-6" src="../../images/scr/bonus-6.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29511"></span>29511</td>
 <td class="instruction">LD C,4</td>
-<td class="comment-1" rowspan="1"><span class="register">C</span>=4.</td>
+<td class="comment-1" rowspan="1">Set a row counter in <span class="register">C</span> to 4.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_0</td>
+<td class="asm-label">BonusScrollTop_RowLoop</td>
 <td class="address-2"><span id="29513"></span>29513</td>
 <td class="instruction">LD HL,20075</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=20075 (screen buffer location).</td>
@@ -218,10 +325,10 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29519"></span>29519</td>
 <td class="instruction">LD B,8</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_1</td>
+<td class="asm-label">BonusScrollTop_LineLoop</td>
 <td class="address-2"><span id="29521"></span>29521</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -276,8 +383,8 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29533"></span>29533</td>
-<td class="instruction">DJNZ <a href="29453.html#29521">Handler_DisplayBonus_1</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29521">Handler_DisplayBonus_1</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29521">BonusScrollTop_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29521">BonusScrollTop_LineLoop</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -288,8 +395,37 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29536"></span>29536</td>
-<td class="instruction">JR NZ,<a href="29453.html#29513">Handler_DisplayBonus_0</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="29453.html#29513">Handler_DisplayBonus_0</a> if <span class="register">C</span> is not equal to 8.</td>
+<td class="instruction">JR NZ,<a href="29453.html#29513">BonusScrollTop_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29453.html#29513">BonusScrollTop_RowLoop</a> until <span class="register">C</span> is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29538"></span>
+<div class="comments">
+<div class="paragraph">
+Smoosh the bottom score up: <table class="default">
+<tr>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">8</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-7" src="../../images/scr/bonus-7.png" /></td>
+<td class="centre" colspan="1" rowspan="1">9</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-8" src="../../images/scr/bonus-8.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">10</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-9" src="../../images/scr/bonus-9.png" /></td>
+<td class="centre" colspan="1" rowspan="1">11</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="bonus-10" src="../../images/scr/bonus-10.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -298,7 +434,7 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="comment-1" rowspan="1"><span class="register">C</span>=4.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_2</td>
+<td class="asm-label">BonusScrollBottom_RowLoop</td>
 <td class="address-2"><span id="29540"></span>29540</td>
 <td class="instruction">LD HL,18827</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=18827 (screen buffer location).</td>
@@ -316,7 +452,7 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="comment-1" rowspan="1"><span class="register">B</span>=7.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_3</td>
+<td class="asm-label">BonusScrollBottom_LineLoop</td>
 <td class="address-2"><span id="29548"></span>29548</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
@@ -371,8 +507,8 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29560"></span>29560</td>
-<td class="instruction">DJNZ <a href="29453.html#29548">Handler_DisplayBonus_3</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29548">Handler_DisplayBonus_3</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29548">BonusScrollBottom_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29548">BonusScrollBottom_LineLoop</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -383,14 +519,24 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29563"></span>29563</td>
-<td class="instruction">JR NZ,<a href="29453.html#29540">Handler_DisplayBonus_2</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="29453.html#29540">Handler_DisplayBonus_2</a> if <span class="register">C</span> is not equal to 7.</td>
+<td class="instruction">JR NZ,<a href="29453.html#29540">BonusScrollBottom_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="29453.html#29540">BonusScrollBottom_RowLoop</a> until <span class="register">C</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29565"></span>29565</td>
 <td class="instruction">CALL <a href="26550.html">Handler_Score</a></td>
 <td class="comment-1" rowspan="1">Call <a href="26550.html">Handler_Score</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29568"></span>
+<div class="comments">
+<div class="paragraph">
+Animate the bonus frame shimmering effect.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -402,25 +548,25 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29572"></span>29572</td>
 <td class="instruction">LD B,16</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=16.</td>
+<td class="comment-1" rowspan="1">Set an outer counter to 16.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_4</td>
+<td class="asm-label">BonusAnimation_OuterLoop</td>
 <td class="address-2"><span id="29574"></span>29574</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the outer counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29575"></span>29575</td>
 <td class="instruction">LD B,11</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=11.</td>
+<td class="comment-1" rowspan="1">Set an inner counter to 11.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_5</td>
+<td class="asm-label">BonusAnimation_InnerLoop</td>
 <td class="address-2"><span id="29577"></span>29577</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the inner counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -438,28 +584,26 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29583"></span>29583</td>
 <td class="instruction">LD DE,779</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=0779.</td>
+<td class="comment-1" rowspan="1">Set <span class="register">DE</span> to initial frame dimensions (width=11, height=3).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29586"></span>29586</td>
 <td class="instruction">LD A,12</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=12.</td>
+<td class="comment-1" rowspan="3"><span class="register">B</span>=12-<span class="register">B</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29588"></span>29588</td>
 <td class="instruction">SUB B</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>-=<span class="register">B</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29589"></span>29589</td>
 <td class="instruction">LD B,A</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">A</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_6</td>
+<td class="asm-label">BonusAnimation_FrameLoop</td>
 <td class="address-2"><span id="29590"></span>29590</td>
 <td class="instruction">PUSH BC</td>
 <td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
@@ -480,49 +624,69 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29595"></span>29595</td>
 <td class="instruction">LD B,E</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">E</span>.</td>
+<td class="comment-1" rowspan="1">Set the horizontal counter from <span class="register">E</span> (frame width).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_7</td>
+<td class="routine-comment" colspan="5">
+<span id="29596"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the top edge of the frame (left to right).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">BonusAnimation_TopEdge</td>
 <td class="address-2"><span id="29596"></span>29596</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29597"></span>29597</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move the attribute address pointer right one block.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29598"></span>29598</td>
-<td class="instruction">DJNZ <a href="29453.html#29596">Handler_DisplayBonus_7</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29596">Handler_DisplayBonus_7</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29596">BonusAnimation_TopEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the horizontal counter by one and loop back to <a href="29453.html#29596">BonusAnimation_TopEdge</a> until the top edge of the frame has been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29600"></span>29600</td>
 <td class="instruction">LD B,D</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">D</span>.</td>
+<td class="comment-1" rowspan="1">Set the vertical counter from <span class="register">D</span> (frame height).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_8</td>
+<td class="routine-comment" colspan="5">
+<span id="29601"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the right edge of the frame (top to bottom).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">BonusAnimation_RightEdge</td>
 <td class="address-2"><span id="29601"></span>29601</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the vertical counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29602"></span>29602</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29603"></span>29603</td>
 <td class="instruction">LD BC,32</td>
-<td class="comment-1" rowspan="2"><span class="register">HL</span>+=0032.</td>
+<td class="comment-1" rowspan="2">Move down one row (add 0032 to the attribute address).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -533,61 +697,81 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29607"></span>29607</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the vertical counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29608"></span>29608</td>
-<td class="instruction">DJNZ <a href="29453.html#29601">Handler_DisplayBonus_8</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29601">Handler_DisplayBonus_8</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29601">BonusAnimation_RightEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the vertical counter by one and loop back to <a href="29453.html#29601">BonusAnimation_RightEdge</a> until the right edge of the frame has been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29610"></span>29610</td>
 <td class="instruction">LD B,E</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">E</span>.</td>
+<td class="comment-1" rowspan="1">Set the horizontal counter from <span class="register">E</span> (frame width).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_9</td>
+<td class="routine-comment" colspan="5">
+<span id="29611"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the bottom edge of the frame (right to left).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">BonusAnimation_BottomEdge</td>
 <td class="address-2"><span id="29611"></span>29611</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29612"></span>29612</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move the attribute address pointer left one block.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29613"></span>29613</td>
-<td class="instruction">DJNZ <a href="29453.html#29611">Handler_DisplayBonus_9</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29611">Handler_DisplayBonus_9</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29611">BonusAnimation_BottomEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the horizontal counter by one and loop back to <a href="29453.html#29611">BonusAnimation_BottomEdge</a> until the bottom edge of the frame has been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29615"></span>29615</td>
 <td class="instruction">LD B,D</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">D</span>.</td>
+<td class="comment-1" rowspan="1">Set the vertical counter from <span class="register">D</span> (frame height).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_10</td>
+<td class="routine-comment" colspan="5">
+<span id="29616"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the left edge of the frame (bottom to top).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">BonusAnimation_LeftEdge</td>
 <td class="address-2"><span id="29616"></span>29616</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the vertical counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29617"></span>29617</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the attribute byte to the attribute buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29618"></span>29618</td>
 <td class="instruction">LD BC,32</td>
-<td class="comment-1" rowspan="2"><span class="register">HL</span>-=0032.</td>
+<td class="comment-1" rowspan="2">Move up one row (subtract 0032 from the attribute address).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -598,31 +782,50 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29623"></span>29623</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the vertical counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29624"></span>29624</td>
-<td class="instruction">DJNZ <a href="29453.html#29616">Handler_DisplayBonus_10</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29616">Handler_DisplayBonus_10</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29616">BonusAnimation_LeftEdge</a></td>
+<td class="comment-1" rowspan="1">Decrease the vertical counter by one and loop back to <a href="29453.html#29616">BonusAnimation_LeftEdge</a> until the left edge of the frame has been drawn.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29626"></span>
+<div class="comments">
+<div class="paragraph">
+Move outward to the next frame.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29626"></span>29626</td>
 <td class="instruction">LD C,33</td>
-<td class="comment-1" rowspan="1"><span class="register">C</span>=33.</td>
+<td class="comment-1" rowspan="2">Move up one row and left one block (subtract 0033 from the attribute address).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29628"></span>29628</td>
 <td class="instruction">SBC HL,BC</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>-=<span class="register">BC</span>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29630"></span>
+<div class="comments">
+<div class="paragraph">
+Increase the frame dimensions.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29630"></span>29630</td>
 <td class="instruction">INC E</td>
-<td class="comment-1" rowspan="2">Increment <span class="register">E</span> by two.</td>
+<td class="comment-1" rowspan="2">Increment frame width by two.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -633,7 +836,7 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29632"></span>29632</td>
 <td class="instruction">INC D</td>
-<td class="comment-1" rowspan="2">Increment <span class="register">D</span> by two.</td>
+<td class="comment-1" rowspan="2">Increment the frame height by two.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -655,8 +858,26 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29637"></span>29637</td>
-<td class="instruction">DJNZ <a href="29453.html#29590">Handler_DisplayBonus_6</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29590">Handler_DisplayBonus_6</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29590">BonusAnimation_FrameLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29590">BonusAnimation_FrameLoop</a> until counter is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29639"></span>
+<div class="comments">
+<div class="paragraph">
+Play a sound effect for the animation.
+</div>
+<div class="paragraph">
+Note this sample is the whole thing, obviously it loops round.
+</div>
+<div class="paragraph">
+<audio controls="" src="../../audio/bonus.wav">
+<p>Your browser doesn't support HTML5 audio. Here is a <a href="../../audio/bonus.wav">link to the audio</a> instead.</p>
+</audio>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -729,13 +950,13 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29652"></span>29652</td>
 <td class="instruction">LD B,7</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=7.</td>
+<td class="comment-1" rowspan="1">Set a sound iteration counter to 7 loops.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_11</td>
+<td class="asm-label">BonusAnimation_SoundLoop</td>
 <td class="address-2"><span id="29654"></span>29654</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the sound iteration counter and pitch on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -746,7 +967,7 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29656"></span>29656</td>
 <td class="instruction">LD DE,2</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=0002.</td>
+<td class="comment-1" rowspan="1">Set sound duration to 0002.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -764,13 +985,13 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29663"></span>29663</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the pitch value from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29664"></span>29664</td>
 <td class="instruction">LD BC,20</td>
-<td class="comment-1" rowspan="2"><span class="register">HL</span>+=0020.</td>
+<td class="comment-1" rowspan="2">Increase the pitch value by 0020.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -781,13 +1002,13 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29668"></span>29668</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the sound iteration counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29669"></span>29669</td>
-<td class="instruction">DJNZ <a href="29453.html#29654">Handler_DisplayBonus_11</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29654">Handler_DisplayBonus_11</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29654">BonusAnimation_SoundLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the sound iteration counter by one and loop back to <a href="29453.html#29654">BonusAnimation_SoundLoop</a> until the sound has played out.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -805,25 +1026,25 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29675"></span>29675</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the inner counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29676"></span>29676</td>
-<td class="instruction">DJNZ <a href="29453.html#29577">Handler_DisplayBonus_5</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29577">Handler_DisplayBonus_5</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29577">BonusAnimation_InnerLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the inner counter by one and loop back to <a href="29453.html#29577">BonusAnimation_InnerLoop</a> until the counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29678"></span>29678</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the outer counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29679"></span>29679</td>
-<td class="instruction">DJNZ <a href="29453.html#29574">Handler_DisplayBonus_4</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29574">Handler_DisplayBonus_4</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29574">BonusAnimation_OuterLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the outer counter by one and loop back to <a href="29453.html#29574">BonusAnimation_OuterLoop</a> until the counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -838,10 +1059,10 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="comment-1" rowspan="1"><span class="register">BC</span>=0200.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_DisplayBonus_12</td>
+<td class="asm-label">BonusDelay_Loop</td>
 <td class="address-2"><span id="29687"></span>29687</td>
-<td class="instruction">DJNZ <a href="29453.html#29687">Handler_DisplayBonus_12</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29687">Handler_DisplayBonus_12</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="29453.html#29687">BonusDelay_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="29453.html#29687">BonusDelay_Loop</a> until counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -852,8 +1073,18 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29690"></span>29690</td>
-<td class="instruction">JR NZ,<a href="29453.html#29687">Handler_DisplayBonus_12</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="29453.html#29687">Handler_DisplayBonus_12</a> if <span class="register">C</span> is not equal to 7.</td>
+<td class="instruction">JR NZ,<a href="29453.html#29687">BonusDelay_Loop</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="29453.html#29687">BonusDelay_Loop</a> until <span class="register">C</span> is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="29692"></span>
+<div class="comments">
+<div class="paragraph">
+Self-modifying code; decrease the difficulty delay so the levels play faster.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -865,7 +1096,7 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29695"></span>29695</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29708.html">InitialiseLevel</a> if *<span class="register">HL</span> is less than 4.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29708.html">InitialiseLevel</a> if the current difficulty delay is less than 4.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -881,7 +1112,7 @@ Used by the routine at <a href="29268.html">Handler_LevelReset</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29700"></span>29700</td>
 <td class="instruction">DEC (HL)</td>
-<td class="comment-1" rowspan="1">Decrease *<span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Decrease the difficulty delay by one.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

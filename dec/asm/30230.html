@@ -80,7 +80,7 @@ Skip over drawing the alien mothership unless this is phase 4.
 <td class="asm-label">SkipHandler_Mothership</td>
 <td class="address-2"><span id="30240"></span>30240</td>
 <td class="instruction">LD DE,26077</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="26077.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -92,7 +92,7 @@ Skip over drawing the alien mothership unless this is phase 4.
 <td class="asm-label"></td>
 <td class="address-1"><span id="30246"></span>30246</td>
 <td class="instruction">LD A,(26257)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="30230.html#30284">Aliens_LoadWaveData</a> if *<a href="26257.html">26257</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="30230.html#30284">Aliens_LoadPhaseData</a> if *<a href="26257.html">26257</a> is not zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -102,14 +102,14 @@ Skip over drawing the alien mothership unless this is phase 4.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="30250"></span>30250</td>
-<td class="instruction">JR NZ,<a href="30230.html#30284">Aliens_LoadWaveData</a></td>
+<td class="instruction">JR NZ,<a href="30230.html#30284">Aliens_LoadPhaseData</a></td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">
 <span id="30252"></span>
 <div class="comments">
 <div class="paragraph">
-Check if all the aliens are spawned for the current wave.
+Check if all the aliens are spawned for the current phase.
 </div>
 </div>
 </td>
@@ -172,12 +172,12 @@ Check if all the aliens are spawned for the current wave.
 <td class="asm-label"></td>
 <td class="address-1"><span id="30266"></span>30266</td>
 <td class="instruction">CP L</td>
-<td class="comment-1" rowspan="2">Jump to <a href="30230.html#30284">Aliens_LoadWaveData</a> if <span class="register">A</span> is not equal to <span class="register">L</span>.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="30230.html#30284">Aliens_LoadPhaseData</a> if <span class="register">A</span> is not equal to <span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="30267"></span>30267</td>
-<td class="instruction">JR NZ,<a href="30230.html#30284">Aliens_LoadWaveData</a></td>
+<td class="instruction">JR NZ,<a href="30230.html#30284">Aliens_LoadPhaseData</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -218,8 +218,8 @@ Check if all the aliens are spawned for the current wave.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="30278"></span>30278</td>
-<td class="instruction">JR NZ,<a href="30230.html#30284">Aliens_LoadWaveData</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="30230.html#30284">Aliens_LoadWaveData</a> if *<span class="register">HL</span> is not equal to <span class="register">L</span>.</td>
+<td class="instruction">JR NZ,<a href="30230.html#30284">Aliens_LoadPhaseData</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="30230.html#30284">Aliens_LoadPhaseData</a> if *<span class="register">HL</span> is not equal to <span class="register">L</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -234,7 +234,7 @@ Check if all the aliens are spawned for the current wave.
 <td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26257.html">26257</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Aliens_LoadWaveData</td>
+<td class="asm-label">Aliens_LoadPhaseData</td>
 <td class="address-2"><span id="30284"></span>30284</td>
 <td class="instruction">ADD HL,HL</td>
 <td class="comment-1" rowspan="1"><span class="register">HL</span>+=<span class="register">HL</span>.</td>
@@ -1458,7 +1458,7 @@ PAPER:BLACK (BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="30665"></span>30665</td>
 <td class="instruction">LD DE,26077</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="26077.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

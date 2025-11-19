@@ -51,7 +51,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label">Handler_LevelReset</td>
 <td class="address-2"><span id="7254"></span>7254</td>
 <td class="instruction">LD A,($66A4)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="730D.html">Handler_DisplayBonus</a> if *<a href="66A4.html">Flag_Collision</a> is not equal to 02.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="730D.html">Handler_DisplayMothershipBonus</a> if *<a href="66A4.html">Flag_Collision</a> is not equal to 02.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -61,7 +61,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7259"></span>7259</td>
-<td class="instruction">JP NZ,<a href="730D.html">Handler_DisplayBonus</a></td>
+<td class="instruction">JP NZ,<a href="730D.html">Handler_DisplayMothershipBonus</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -83,7 +83,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7263"></span>7263</td>
 <td class="instruction">LD HL,$65DD</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -189,7 +189,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7283"></span>7283</td>
 <td class="instruction">LD HL,$65DD</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -225,7 +225,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="728f"></span>728F</td>
 <td class="instruction">LD HL,$6637</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6637.html">Table_AlienWaveData_02_03</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6637.html">Table_AlienPhaseData_02_03</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -247,7 +247,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7298"></span>7298</td>
 <td class="instruction">LD HL,$65FB</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65FB.html">Table_AlienWaveData_00</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65FB.html">Table_AlienPhaseData_00</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -270,7 +270,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="72a1"></span>72A1</td>
 <td class="instruction">LD HL,$6619</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6619.html">Table_AlienWaveData_01</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6619.html">Table_AlienPhaseData_01</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -293,7 +293,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="72aa"></span>72AA</td>
 <td class="instruction">LD HL,$6647</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6647.html">Table_AlienWaveData_04</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6647.html">Table_AlienPhaseData_04</a>.</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_LevelReset_4</td>

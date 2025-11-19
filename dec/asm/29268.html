@@ -51,7 +51,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label">Handler_LevelReset</td>
 <td class="address-2"><span id="29268"></span>29268</td>
 <td class="instruction">LD A,(26276)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29453.html">Handler_DisplayBonus</a> if *<a href="26276.html">Flag_Collision</a> is not equal to 2.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29453.html">Handler_DisplayMothershipBonus</a> if *<a href="26276.html">Flag_Collision</a> is not equal to 2.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -61,7 +61,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="29273"></span>29273</td>
-<td class="instruction">JP NZ,<a href="29453.html">Handler_DisplayBonus</a></td>
+<td class="instruction">JP NZ,<a href="29453.html">Handler_DisplayMothershipBonus</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -83,7 +83,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29283"></span>29283</td>
 <td class="instruction">LD HL,26077</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -189,7 +189,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29315"></span>29315</td>
 <td class="instruction">LD HL,26077</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_AlienWaveData</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26077.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -225,7 +225,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29327"></span>29327</td>
 <td class="instruction">LD HL,26167</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26167.html">Table_AlienWaveData_02_03</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26167.html">Table_AlienPhaseData_02_03</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -247,7 +247,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29336"></span>29336</td>
 <td class="instruction">LD HL,26107</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26107.html">Table_AlienWaveData_00</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26107.html">Table_AlienPhaseData_00</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -270,7 +270,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29345"></span>29345</td>
 <td class="instruction">LD HL,26137</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26137.html">Table_AlienWaveData_01</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26137.html">Table_AlienPhaseData_01</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -293,7 +293,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="29354"></span>29354</td>
 <td class="instruction">LD HL,26183</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26183.html">Table_AlienWaveData_04</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="26183.html">Table_AlienPhaseData_04</a>.</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_LevelReset_4</td>
