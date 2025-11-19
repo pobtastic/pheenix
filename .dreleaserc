@@ -1,4 +1,4 @@
 GAME=pheenix
 SRCFILES=$(echo pheenix.skool {pheenix,analytics,bases,changelog,data,facts,graphics,pokes,sound}.ref {dark,wide}.css)
 SKOOL2BINOPTS="-i 30105"
-WAVCONVERT="bullets.wav death.wav explosion-01.wav explosion-02.wav intro.wav shield.wav wing-hit.wav"
+WAVCONVERT="bonus.wav bullets.wav death.wav explosion-01.wav explosion-02.wav intro.wav shield.wav ship-explosion.wav wing-hit.wav"

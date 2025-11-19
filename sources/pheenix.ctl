@@ -306,6 +306,7 @@ N $6527 This isn't separate, it's part of the above.
 
 g $6528 Score Buffer
 @ $6528 label=ScoreBuffer
+@ $652B label=BonusScoreBuffer
 B $6528,$06,$01
 
 g $652F Table: Explosion UDGs
@@ -430,28 +431,28 @@ g $65DB Random Number Seed
 D $65DB Used by the routine at #R$670E.
 W $65DB,$02
 
-g $65DD Active Alien Wave Data Buffer
-@ $65DD label=Table_AlienWaveData
+g $65DD Current Alien Phase Data Buffer
+@ $65DD label=Table_CurrentAlienPhaseData
 W $65DD,$02 Alien position: #N($01+(#PC-$65DD)/$02).
 L $65DD,$02,$0F
 
-g $65FB Table: Phase #N$00 Alien Wave Data
-@ $65FB label=Table_AlienWaveData_00
+g $65FB Table: Phase #N$00 Alien Phase Data
+@ $65FB label=Table_AlienPhaseData_00
 W $65FB,$02 Alien position: #N($01+(#PC-$65FB)/$02).
 L $65FB,$02,$0F
 
-g $6619 Table: Phase #N$01 Alien Wave Data
-@ $6619 label=Table_AlienWaveData_01
+g $6619 Table: Phase #N$01 Alien Phase Data
+@ $6619 label=Table_AlienPhaseData_01
 W $6619,$02 Alien position: #N($01+(#PC-$6619)/$02).
 L $6619,$02,$0F
 
-g $6637 Table: Phase #N$02/ #N$03 Alien Wave Data
-@ $6637 label=Table_AlienWaveData_02_03
+g $6637 Table: Phase #N$02/ #N$03 Alien Phase Data
+@ $6637 label=Table_AlienPhaseData_02_03
 W $6637,$02 Alien position: #N($01+(#PC-$6637)/$02).
 L $6637,$02,$08
 
-g $6647 Table: Phase #N$04 Alien Wave Data
-@ $6647 label=Table_AlienWaveData_04
+g $6647 Table: Phase #N$04 Alien Phase Data
+@ $6647 label=Table_AlienPhaseData_04
 D $6647 Mothership level.
 W $6647,$02 Alien position: #N($01+(#PC-$6647)/$02).
 L $6647,$02,$08
@@ -993,7 +994,8 @@ N $68B8 Which create the following animation:
   $68B8,$02 Set an iteration counter in #REGb for #N$02 animations.
 @ $68BA label=TransitionEffect_Loop
   $68BA,$01 Stash the iteration counter on the stack.
-  $68BB,$03 Set #REGde to initial frame dimensions (width=#N$09, height=#N$01).
+  $68BB,$03 Set #REGde to initial frame dimensions (width=#N$09#RAW(,)
+. height=#N$01).
   $68BE,$03 #REGhl=#N$596B (starting attribute buffer location).
 N $68C1 Determine the attribute color for this iteration.
   $68C1,$03 Check if this is iteration #N$01?
@@ -1778,19 +1780,20 @@ N $6D29 Animate the explosion effect.
   $6DB1,$03 #REGa=*#R$66A5.
   $6DB4,$02,b$01 Keep only bits 0-1.
   $6DB6,$03 Jump to #R$7030 if the result is not equal to zero.
+N $6DB9 #HTML(#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
   $6DB9,$02 Set sound loop counter to #N$08.
 @ $6DBB label=GameOver_SoundLoop
-  $6DBB,$01 #REGa=#REGb.
-  $6DBC,$02 #REGa+=#N$19.
+  $6DBB,$03 Copy the sound loop counter into #REGa and add #N$19.
   $6DBE,$02,b$01 Keep only bits 3-4.
   $6DC0,$01 Disable interrupts.
-  $6DC1,$02 Set border to the colour held by #REGa.
-  $6DC3,$01 Stash #REGbc on the stack.
+  $6DC1,$02 Send to the speaker.
+  $6DC3,$01 Stash the sound loop counter on the stack.
 @ $6DC4 label=GameOver_SoundDelay
   $6DC4,$02 Decrease the delay loop counter by one and loop back to #R$6DC4
 . until the counter is zero.
-  $6DC6,$01 Restore #REGbc from the stack.
-  $6DC7,$02 Decrease counter by one and loop back to #R$6DBB until counter is zero.
+  $6DC6,$01 Restore the sound loop counter from the stack.
+  $6DC7,$02 Decrease the sound loop counter by one and loop back to #R$6DBB
+. until the sound has played out.
   $6DC9,$03 Turn the speaker off.
   $6DCC,$03 Jump to #R$7030.
 
@@ -2642,36 +2645,65 @@ N $730A Redraw the players ship on the screen.
 @ $730A label=LevelComplete_DrawShip
   $730A,$03 Call #R$6CC9.
 
-c $730D Handler: Display Bonus
-@ $730D label=Handler_DisplayBonus
+c $730D Handler: Display Mothership Bonus
+@ $730D label=Handler_DisplayMothershipBonus
+D $730D Displays the bonus screen after completing the mothership level (phase
+. 4).
+N $730D Only continue if;
+. #LIST
+. { *#R$66A4 has no collision detected }
+. { *#R$66F1 is phase 4 }
+. { *#R$66D3 has been hit }
+. LIST#
   $730D,$06 Return if *#R$66A4 is equal to #N$01.
   $7313,$08 Jump to #R$7407 if *#R$66F1 is not equal to #N$04.
   $731B,$05 Return if *#R$66D3 is zero.
-
-N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
-. #SIM(start=$74A4,stop=$74B9) #UDGTABLE {
-.   #SIM(start=$72C9,stop=$6FDB)
-.   #SIM(start=$7320,stop=$737D)#SCR$01(fgkjfdg)
-. } TABLE# #POPS
+N $7320 Display a bonus screen with star background.
+N $7320 First fill the screen with the star UDG character (note they're written
+. in #COLOUR$00 so they're not yet visible - this is just an example in
+. #COLOUR$45 to show what is happening at this point).
+N $7320 #PUSHS #POKES$667F,$04#CLS($45)#SIM(start=$7323,stop=$6B35)
+. #UDGTABLE(default,centre,centre) { =h Frame | =h Output }
+.   { #N$01 | #SIM(start=$6B35,stop=$6B4E)#SCR$01(fill-3) }
+. TABLE#
   $7320,$03 Call #R$6720.
   $7323,$03 #REGde=#R$61DB.
   $7326,$03 Call #R$6B31.
+N $7329 Print the bonus score text.
+. #UDGTABLE(default,centre,centre) { =h Frame | =h Output }
+.   { #N$02 | #SIM(start=$7320,stop=$733D)#SCR$01(bonus-1) }
+. TABLE#
   $7329,$03 #REGde=#N$486E (screen buffer location).
-  $732C,$03 #REGbc=#N$0445.
+  $732C,$03 Printing #N$04 characters in #COLOUR$45.
   $732F,$03 #REGhl=#R$652B.
-  $7332,$03 #REGa=*#R$667F.
-  $7335,$02 Shift #REGa right (with carry).
-  $7337,$02 #REGa+=#N$34.
-  $7339,$01 Write #REGa to *#REGhl.
+N $7332 Calculate the bonus digit.
+  $7332,$03 Load *#R$667F (the number of aliens in the current level) into
+. #REGa.
+  $7335,$04 Divide by #N$02 and add #N$34 (ASCII "4").
+  $7339,$01 Write the result to the score buffer.
   $733A,$03 Call #R$676F.
+N $733D Print it again...
+. #UDGTABLE(default,centre,centre) { =h Frame | =h Output }
+.   { #N$03 | #SIM(start=$733D,stop=$7347)#SCR$01(bonus-2) }
+. TABLE#
   $733D,$03 #REGhl=#R$652B.
-  $7340,$02 #REGe=#N$8E.
-  $7342,$02 #REGb=#N$04.
+  $7340,$02 Update the printing location to #N$488E.
+  $7342,$02 Printing #N$04 characters.
   $7344,$03 Call #R$676F.
-  $7347,$02 #REGc=#N$04.
+N $7347 Smoosh the top score down:
+. #UDGTABLE(default,centre,centre,centre,centre)
+.   { =h Frame | =h Output | =h Frame | =h Output }
+.   { #N$04 | #SIM(start=$7347,stop=$7360)#SCR$01(bonus-3) |
+.     #N$05 | #SIM(start=$7349,stop=$7360)#SCR$01(bonus-4) }
+.   { #N$06 | #SIM(start=$7349,stop=$7360)#SCR$01(bonus-5) |
+.     #N$07 | #SIM(start=$7349,stop=$7360)#SCR$01(bonus-6) }
+. TABLE#
+  $7347,$02 Set a row counter in #REGc to #N$04.
+@ $7349 label=BonusScrollTop_RowLoop
   $7349,$03 #REGhl=#N$4E6B (screen buffer location).
   $734C,$03 #REGde=#N$4F6B (screen buffer location).
-  $734F,$02 #REGb=#N$08.
+  $734F,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $7351 label=BonusScrollTop_LineLoop
   $7351,$02 Stash #REGbc and #REGhl on the stack.
   $7353,$03 #REGbc=#N($000A,$04,$04).
   $7356,$02 LDIR.
@@ -2682,11 +2714,21 @@ N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
   $735C,$01 Restore #REGbc from the stack.
   $735D,$02 Decrease counter by one and loop back to #R$7351 until counter is zero.
   $735F,$01 Decrease #REGc by one.
-  $7360,$02 Jump to #R$7349 if #REGc is not equal to #N$08.
+  $7360,$02 Jump to #R$7349 until #REGc is zero.
+N $7362 Smoosh the bottom score up:
+. #UDGTABLE(default,centre,centre,centre,centre)
+.   { =h Frame | =h Output | =h Frame | =h Output }
+.   { #N$08 | #SIM(start=$7362,stop=$737B)#SCR$01(bonus-7) |
+.     #N$09 | #SIM(start=$7364,stop=$737B)#SCR$01(bonus-8) }
+.   { #N$0A | #SIM(start=$7364,stop=$737B)#SCR$01(bonus-9) |
+.     #N$0B | #SIM(start=$7364,stop=$737B)#SCR$01(bonus-10) }
+. TABLE# #POPS
   $7362,$02 #REGc=#N$04.
+@ $7364 label=BonusScrollBottom_RowLoop
   $7364,$03 #REGhl=#N$498B (screen buffer location).
   $7367,$03 #REGde=#N$488B (screen buffer location).
   $736A,$02 #REGb=#N$07.
+@ $736C label=BonusScrollBottom_LineLoop
   $736C,$02 Stash #REGbc and #REGhl on the stack.
   $736E,$03 #REGbc=#N($000A,$04,$04).
   $7371,$02 LDIR.
@@ -2697,49 +2739,71 @@ N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
   $7377,$01 Restore #REGbc from the stack.
   $7378,$02 Decrease counter by one and loop back to #R$736C until counter is zero.
   $737A,$01 Decrease #REGc by one.
-  $737B,$02 Jump to #R$7364 if #REGc is not equal to #N$07.
+  $737B,$02 Jump back to #R$7364 until #REGc is zero.
   $737D,$03 Call #R$67B6.
+N $7380 Animate the bonus frame shimmering effect.
   $7380,$04 #REGix=#N($0000,$04,$04).
-  $7384,$02 #REGb=#N$10.
-  $7386,$01 Stash #REGbc on the stack.
-  $7387,$02 #REGb=#N$0B.
-  $7389,$01 Stash #REGbc on the stack.
+  $7384,$02 Set an outer counter to #N$10.
+@ $7386 label=BonusAnimation_OuterLoop
+  $7386,$01 Stash the outer counter on the stack.
+  $7387,$02 Set an inner counter to #N$0B.
+@ $7389 label=BonusAnimation_InnerLoop
+  $7389,$01 Stash the inner counter on the stack.
   $738A,$02 Stash #REGix on the stack.
   $738C,$03 #REGhl=#N$594A (attribute buffer location).
-  $738F,$03 #REGde=#N($030B,$04,$04).
-  $7392,$02 #REGa=#N$0C.
-  $7394,$01 #REGa-=#REGb.
-  $7395,$01 #REGb=#REGa.
+  $738F,$03 Set #REGde to initial frame dimensions (width=#N$0B#RAW(,)
+. height=#N$03).
+  $7392,$04 #REGb=#N$0C-#REGb.
+@ $7396 label=BonusAnimation_FrameLoop
   $7396,$01 Stash #REGbc on the stack.
   $7397,$02 #REGa=the low byte of #REGix.
   $7399,$02,b$01 Keep only bits 0-5.
-  $739B,$01 #REGb=#REGe.
-  $739C,$01 Write #REGa to *#REGhl.
-  $739D,$01 Increment #REGhl by one.
-  $739E,$02 Decrease counter by one and loop back to #R$739C until counter is zero.
-  $73A0,$01 #REGb=#REGd.
-  $73A1,$01 Stash #REGbc on the stack.
-  $73A2,$01 Write #REGa to *#REGhl.
-  $73A3,$04 #REGhl+=#N($0020,$04,$04).
-  $73A7,$01 Restore #REGbc from the stack.
-  $73A8,$02 Decrease counter by one and loop back to #R$73A1 until counter is zero.
-  $73AA,$01 #REGb=#REGe.
-  $73AB,$01 Write #REGa to *#REGhl.
-  $73AC,$01 Decrease #REGhl by one.
-  $73AD,$02 Decrease counter by one and loop back to #R$73AB until counter is zero.
-  $73AF,$01 #REGb=#REGd.
-  $73B0,$01 Stash #REGbc on the stack.
-  $73B1,$01 Write #REGa to *#REGhl.
-  $73B2,$05 #REGhl-=#N($0020,$04,$04).
-  $73B7,$01 Restore #REGbc from the stack.
-  $73B8,$02 Decrease counter by one and loop back to #R$73B0 until counter is zero.
-  $73BA,$02 #REGc=#N$21.
-  $73BC,$02 #REGhl-=#REGbc.
-  $73BE,$02 Increment #REGe by two.
-  $73C0,$02 Increment #REGd by two.
+  $739B,$01 Set the horizontal counter from #REGe (frame width).
+N $739C Draw the top edge of the frame (left to right).
+@ $739C label=BonusAnimation_TopEdge
+  $739C,$01 Write the attribute byte to the attribute buffer.
+  $739D,$01 Move the attribute address pointer right one block.
+  $739E,$02 Decrease the horizontal counter by one and loop back to #R$739C
+. until the top edge of the frame has been drawn.
+  $73A0,$01 Set the vertical counter from #REGd (frame height).
+N $73A1 Draw the right edge of the frame (top to bottom).
+@ $73A1 label=BonusAnimation_RightEdge
+  $73A1,$01 Stash the vertical counter on the stack.
+  $73A2,$01 Write the attribute byte to the attribute buffer.
+  $73A3,$04 Move down one row (add #N($0020,$04,$04) to the attribute address).
+  $73A7,$01 Restore the vertical counter from the stack.
+  $73A8,$02 Decrease the vertical counter by one and loop back to #R$73A1 until
+. the right edge of the frame has been drawn.
+  $73AA,$01 Set the horizontal counter from #REGe (frame width).
+N $73AB Draw the bottom edge of the frame (right to left).
+@ $73AB label=BonusAnimation_BottomEdge
+  $73AB,$01 Write the attribute byte to the attribute buffer.
+  $73AC,$01 Move the attribute address pointer left one block.
+  $73AD,$02 Decrease the horizontal counter by one and loop back to #R$73AB
+. until the bottom edge of the frame has been drawn.
+  $73AF,$01 Set the vertical counter from #REGd (frame height).
+N $73B0 Draw the left edge of the frame (bottom to top).
+@ $73B0 label=BonusAnimation_LeftEdge
+  $73B0,$01 Stash the vertical counter on the stack.
+  $73B1,$01 Write the attribute byte to the attribute buffer.
+  $73B2,$05 Move up one row (subtract #N($0020,$04,$04) from the attribute
+. address).
+  $73B7,$01 Restore the vertical counter from the stack.
+  $73B8,$02 Decrease the vertical counter by one and loop back to #R$73B0 until
+. the left edge of the frame has been drawn.
+N $73BA Move outward to the next frame.
+  $73BA,$04 Move up one row and left one block (subtract #N($0021,$04,$04) from
+. the attribute address).
+N $73BE Increase the frame dimensions.
+  $73BE,$02 Increment frame width by two.
+  $73C0,$02 Increment the frame height by two.
   $73C2,$02 Increment #REGix by one.
   $73C4,$01 Restore #REGbc from the stack.
   $73C5,$02 Decrease counter by one and loop back to #R$7396 until counter is zero.
+N $73C7 Play a sound effect for the animation.
+N $73C7 Note this sample is the whole thing, obviously it loops round.
+.
+. #AUDIO(bonus.wav)(#INCLUDE(Bonus))
   $73C7,$01 Restore #REGhl from the stack.
   $73C8,$01 Stash #REGhl on the stack.
   $73C9,$01 #REGa=#REGl.
@@ -2747,29 +2811,36 @@ N $7320 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
   $73CC,$01 #REGl=#REGa.
   $73CD,$01 #REGh=#REGb.
   $73CE,$06 Multiply #REGhl by #N$64.
-  $73D4,$02 #REGb=#N$07.
-  $73D6,$02 Stash #REGbc and #REGhl on the stack.
-  $73D8,$03 #REGde=#N($0002,$04,$04).
+  $73D4,$02 Set a sound iteration counter to #N$07 loops.
+@ $73D6 label=BonusAnimation_SoundLoop
+  $73D6,$02 Stash the sound iteration counter and pitch on the stack.
+  $73D8,$03 Set sound duration to #N($0002,$04,$04).
   $73DB,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
   $73DE,$01 Disable interrupts.
-  $73DF,$01 Restore #REGhl from the stack.
-  $73E0,$04 #REGhl+=#N($0014,$04,$04).
-  $73E4,$01 Restore #REGbc from the stack.
-  $73E5,$02 Decrease counter by one and loop back to #R$73D6 until counter is zero.
+  $73DF,$01 Restore the pitch value from the stack.
+  $73E0,$04 Increase the pitch value by #N($0014,$04,$04).
+  $73E4,$01 Restore the sound iteration counter from the stack.
+  $73E5,$02 Decrease the sound iteration counter by one and loop back to
+. #R$73D6 until the sound has played out.
   $73E7,$02 Restore #REGix from the stack.
   $73E9,$02 Decrease #REGix by one.
-  $73EB,$01 Restore #REGbc from the stack.
-  $73EC,$02 Decrease counter by one and loop back to #R$7389 until counter is zero.
-  $73EE,$01 Restore #REGbc from the stack.
-  $73EF,$02 Decrease counter by one and loop back to #R$7386 until counter is zero.
+  $73EB,$01 Restore the inner counter from the stack.
+  $73EC,$02 Decrease the inner counter by one and loop back to #R$7389 until
+. the counter is zero.
+  $73EE,$01 Restore the outer counter from the stack.
+  $73EF,$02 Decrease the outer counter by one and loop back to #R$7386 until
+. the counter is zero.
   $73F1,$03 Call #R$6720.
   $73F4,$03 #REGbc=#N($00C8,$04,$04).
+@ $73F7 label=BonusDelay_Loop
   $73F7,$02 Decrease counter by one and loop back to #R$73F7 until counter is zero.
   $73F9,$01 Decrease #REGc by one.
-  $73FA,$02 Jump to #R$73F7 if #REGc is not equal to #N$07.
+  $73FA,$02 Jump to #R$73F7 until #REGc is zero.
+N $73FC Self-modifying code; decrease the difficulty delay so the levels play
+. faster.
   $73FC,$03 #REGhl=#R$6897(#N$6898).
-  $73FF,$05 Jump to #R$740C if *#REGhl is less than #N$04.
-  $7404,$01 Decrease *#REGhl by one.
+  $73FF,$05 Jump to #R$740C if the current difficulty delay is less than #N$04.
+  $7404,$01 Decrease the difficulty delay by one.
   $7405,$02 Jump to #R$740C.
 
 c $7407 New Level Check
@@ -2781,49 +2852,61 @@ N $7407 Only initialise a new level when there are no more active aliens left
 
 c $740C Initialise Level
 @ $740C label=InitialiseLevel
-  $740C,$03 #REGhl=#R$6680.
-  $740F,$03 #REGde=#R$6680(#N$6681).
-  $7412,$03 #REGbc=#N($006C,$04,$04).
-  $7415,$01 Write #REGb to *#REGhl.
-  $7416,$02 LDIR.
+D $740C Initialises a new level, setting up the phase data, alien colours and
+. player position.
+  $740C,$0C Clear #N($006C,$04,$04) bytes from #R$6680 onwards.
+N $7418 Evaluate the last phase.
   $7418,$04 #REGa=*#R$66F1.
-  $741C,$02 #REGa-=#N$04.
+  $741C,$02 Subtract #N$04 from *#R$66F1.
 N $741E Self-modifying code; see #R$703E.
 N $741E Point to the bullet count.
   $741E,$03 #REGde=#R$703E(#N$703F).
-  $7421,$02 Jump to #R$742D if #REGa is not equal to #N$00.
-  $7423,$01 Write #REGa to *#REGhl.
-  $7424,$01 Increment #REGa by one.
-  $7425,$01 Write #REGa to *#REGde.
-  $7426,$01 Stash #REGhl on the stack.
+N $7421 Is this the last phase?..
+  $7421,$02 Jump to #R$742D if *#R$66F1 minus #N$04 is not equal to #N$00.
+N $7423 The last phase was phase #N$04 so reset back to phase #N$00.
+  $7423,$01 Write #N$00 to *#R$66F1.
+N $7424 Update the bullet count back to one shot.
+  $7424,$02 Write #N$01 to *#R$703E(#N$703F).
+  $7426,$01 Stash the phase pointer on the stack.
   $7427,$03 Call #R$74A4.
-  $742A,$01 Restore #REGhl from the stack.
+  $742A,$01 Restore the phase pointer from the stack.
   $742B,$02 Jump to #R$7431.
-
+N $742D Move onto the next phase.
 @ $742D label=NextPhase
-  $742D,$01 Increment *#REGhl by one.
-  $742E,$03 Write #N$04 to *#REGde.
-  $7431,$01 #REGa=*#REGhl.
-  $7432,$01 Stash #REGaf on the stack.
-  $7433,$02,b$01 Keep only bits 1-2.
+  $742D,$01 Increment *#R$66F1 by one.
+N $742E Update the bullet count to four shots.
+  $742E,$03 Write #N$04 to *#R$703E(#N$703F).
+N $7431 Set up the number of aliens.
+@ $7431 label=SetPhaseAlienCount
+  $7431,$01 #REGa=*#R$66F1.
+  $7432,$01 Stash the current phase on the stack.
+  $7433,$02,b$01 Keep only bits 1-2 to single out the following phases:
+. #LIST { #N$02 } { #N$03 } { #N$04 } LIST#
+N $7435 Set the default number of aliens.
   $7435,$05 Set *#R$667F to #N$08 aliens.
-  $743A,$02 Jump to #R$743E if *#REGhl is not equal to #N$04.
+  $743A,$02 Jump to #R$743E if *#R$66F1 is either #N$02, #N$03 or #N$04.
+N $743C Else, set the numher of aliens for phases #N$00 and #N$01.
   $743C,$02 Set *#R$667F to #N$0F aliens.
-@ $743E label=SetAlienWaveData
+N $743E Now set up the phase data.
+@ $743E label=SetAlienPhaseData
   $743E,$03 #REGhl=#R$6637.
-  $7441,$01 Restore #REGaf from the stack.
-  $7442,$03 Jump to #R$744A if *#REGhl is not equal to #REGa.
+  $7441,$01 Restore the current phase from the stack.
+  $7442,$03 Jump to #R$744A if the current phase is not #N$00.
   $7445,$03 #REGhl=#R$65FB.
   $7448,$02 Jump to #R$745A.
-  $744A,$04 Jump to #R$7453 if #REGa is not equal to #N$01.
+N $744A If this is phase #N$01, initialise it.
+@ $744A label=InitialisePhase01
+  $744A,$04 Jump to #R$7453 if the current phase is not #N$01.
   $744E,$03 #REGhl=#R$6619.
   $7451,$02 Jump to #R$745A.
-  $7453,$04 Jump to #R$745A if #REGa is not equal to #N$04.
+N $7453 If this is phase #N$04, initialise it.
+@ $7453 label=InitialisePhase04
+  $7453,$04 Jump to #R$745A if the current phase is not #N$04.
   $7457,$03 #REGhl=#R$6647.
-@ $745A label=CopyWaveData
-  $745A,$03 #REGde=#R$65DD.
-  $745D,$05 #REGc=*#R$667F multiplied by #N$02.
-  $7462,$02 LDIR.
+N $745A Copy the phase data to the active phase data.
+@ $745A label=CopyPhaseData
+  $745A,$0A Copy *#R$667F multiplied by #N$02 bytes from the phase data to
+. #R$65DD.
 N $7464 Is this phase #N$01?
   $7464,$07 Jump to #R$7470 if *#R$66F1 is not equal to #N$01.
 N $746B Set the alien colouring for phase #N$01.
@@ -3188,7 +3271,7 @@ N $7616 Skip over drawing the alien mothership unless this is phase #N$04.
   $7620,$03 #REGde=#R$65DD.
   $7623,$03 #REGhl=*#R$668F.
   $7626,$06 Jump to #R$764C if *#R$6691 is not zero.
-N $762C Check if all the aliens are spawned for the current wave.
+N $762C Check if all the aliens are spawned for the current phase.
   $762C,$03 #REGa=*#R$66F1.
   $762F,$02,b$01 Keep only bit 2.
   $7631,$02 Set the alien spawn limit to #N$07.
@@ -3209,7 +3292,7 @@ N $762C Check if all the aliens are spawned for the current wave.
   $7646,$02 Jump to #R$764C if *#REGhl is not equal to #REGl.
   $7648,$01 Increment #REGa by one.
   $7649,$03 Write #REGa to *#R$6691.
-@ $764C label=Aliens_LoadWaveData
+@ $764C label=Aliens_LoadPhaseData
   $764C,$01 #REGhl+=#REGhl.
   $764D,$01 #REGhl+=#REGde.
   $764E,$01 Stash #REGhl on the stack.

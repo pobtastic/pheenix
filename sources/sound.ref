@@ -4,6 +4,10 @@
 
 #AUDIO(intro.wav)(#INCLUDE(Intro))
 
+[Audio:Bonus]
+
+#AUDIO(bonus.wav)(#INCLUDE(Bonus))
+
 [Audio:Bullets]
 
 #AUDIO(bullets.wav)(#INCLUDE(Bullets))
@@ -19,6 +23,10 @@
 [Audio:Shield]
 
 #AUDIO(shield.wav)(#INCLUDE(Shield))
+
+[Audio:ship-explosion:Ship Explosion]
+
+#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion))
 
 [Audio:WingHit]
 
