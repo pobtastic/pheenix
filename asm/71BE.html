@@ -58,7 +58,7 @@ Used by the routine at <a href="7159.html">Handler_BulletCollision</a>.
 <span id="71be"></span>
 <div class="comments">
 <div class="paragraph">
-Check if this is phase 0, 1 or 4. The first section targets only the Pheenix aliens in phase 2 and 3.
+Check if this is phase 00 01 or 04. The first section targets only the Pheenix aliens in phase 02 and 03.
 </div>
 </div>
 </td>
@@ -67,7 +67,11 @@ Check if this is phase 0, 1 or 4. The first section targets only the Pheenix ali
 <td class="asm-label">Handler_BulletCollisionEffects</td>
 <td class="address-2"><span id="71be"></span>71BE</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="71BE.html#71ec">BulletCollisionWithMothership</a> if bit 1 of *<a href="66F1.html">Phase</a> is not set (phases 0, 1, 4).</td>
+<td class="comment-1" rowspan="3">Jump to <a href="71BE.html#71ec">BulletCollisionWithMothership</a> if bit 1 of *<a href="66F1.html">Phase</a> is not set, so phases <ul class="">
+<li>00</li>
+<li>01</li>
+<li>04</li>
+</ul></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -84,7 +88,7 @@ Check if this is phase 0, 1 or 4. The first section targets only the Pheenix ali
 <span id="71c5"></span>
 <div class="comments">
 <div class="paragraph">
-Handle the Pheenix aliens in either phase 2 or 3.
+Handle the Pheenix aliens in either phase 02 or 03.
 </div>
 </div>
 </td>
@@ -281,7 +285,7 @@ Play a sound when the Pheenix wings are hit (but not in demo mode).
 <span id="71ec"></span>
 <div class="comments">
 <div class="paragraph">
-The only other special bullet handling is when bullets hit the hull of the mothership (only in phase 4).
+The only other special bullet handling is when bullets hit the hull of the mothership (only in phase 04).
 </div>
 </div>
 </td>
@@ -809,7 +813,7 @@ The bullet has hit the mothership alien.
 <td class="asm-label"></td>
 <td class="address-1"><span id="724e"></span>724E</td>
 <td class="instruction">LD A,$01</td>
-<td class="comment-1" rowspan="2">Write 01 to *<a href="66D3.html">MothershipAlienState</a> to mark that the mothership alien has been shot (and so phase 4 is now complete).</td>
+<td class="comment-1" rowspan="2">Write 01 to *<a href="66D3.html">MothershipAlienState</a> to mark that the mothership alien has been shot (and so phase 04 is now complete).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

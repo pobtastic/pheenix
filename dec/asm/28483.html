@@ -41,6 +41,19 @@ Next: <a href="28563.html">28563</a>
 <div class="paragraph">
 Used by the routine at <a href="28408.html">Handler_ShipMovement</a>.
 </div>
+<div class="paragraph">
+Handles moving the player's ship left by animating the ship graphic and updating the ship position. The movement is frame-based, controlled by the movement animation frame counter.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28483"></span>
+<div class="comments">
+<div class="paragraph">
+Check if the ship is at the left edge of the screen and if movement should be skipped this frame.
+</div>
 </div>
 </td>
 </tr>
@@ -54,18 +67,18 @@ Used by the routine at <a href="28408.html">Handler_ShipMovement</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28484"></span>28484</td>
 <td class="instruction">CP 192</td>
-<td class="comment-1" rowspan="2">Jump to <a href="28483.html#28498">Handler_MoveShip_Left_0</a> if <span class="register">A</span> is not equal to 192.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="28483.html#28498">MoveShipLeft_Animate</a> if the player position is not at the left edge (192).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28486"></span>28486</td>
-<td class="instruction">JR NZ,<a href="28483.html#28498">Handler_MoveShip_Left_0</a></td>
+<td class="instruction">JR NZ,<a href="28483.html#28498">MoveShipLeft_Animate</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28488"></span>28488</td>
 <td class="instruction">LD A,(26278)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28563.html">Handler_UpdateShipPosition</a> if *<a href="26278.html">BulletIndex</a> is equal to 3.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28563.html">Handler_UpdateShipPosition</a> if the movement animation frame counter at *<a href="26278.html">MovementAnimationFrameCounter</a> is equal to 3 (skip movement this frame).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -78,27 +91,58 @@ Used by the routine at <a href="28408.html">Handler_ShipMovement</a>.
 <td class="instruction">JR Z,<a href="28563.html">Handler_UpdateShipPosition</a></td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="28495"></span>
+<div class="comments">
+<div class="paragraph">
+The ship is at the left edge, so load the player position to prepare for animation.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28495"></span>28495</td>
 <td class="instruction">LD A,(26349)</td>
-<td class="comment-1" rowspan="2"><span class="register">L</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
+<td class="comment-1" rowspan="1">Load the low byte of the player position from <a href="26349.html">PlayerAttributeBufferPosition</a> into <span class="register">L</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_0</td>
+<td class="routine-comment" colspan="5">
+<span id="28498"></span>
+<div class="comments">
+<div class="paragraph">
+Set up the screen position and animate the ship graphic by shifting pixels left. This entry point is used both when at the edge and when not at the edge.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MoveShipLeft_Animate</td>
 <td class="address-2"><span id="28498"></span>28498</td>
 <td class="instruction">LD L,A</td>
+<td class="comment-1" rowspan="1">Load <span class="register">L</span> with the low byte of the player position.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28499"></span>28499</td>
 <td class="instruction">LD B,2</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=2.</td>
+<td class="comment-1" rowspan="1">Set a height counter in <span class="register">B</span> for 2 rows (the ship height).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_1</td>
+<td class="routine-comment" colspan="5">
+<span id="28501"></span>
+<div class="comments">
+<div class="paragraph">
+Process each row of the ship graphic, shifting all pixels left by one position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MoveShipLeft_RowLoop</td>
 <td class="address-2"><span id="28501"></span>28501</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the row counter and screen position on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -109,13 +153,23 @@ Used by the routine at <a href="28408.html">Handler_ShipMovement</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28503"></span>28503</td>
 <td class="instruction">LD B,8</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_2</td>
+<td class="routine-comment" colspan="5">
+<span id="28505"></span>
+<div class="comments">
+<div class="paragraph">
+Process each pixel line within the current row.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MoveShipLeft_LineLoop</td>
 <td class="address-2"><span id="28505"></span>28505</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the line counter and screen position on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -126,121 +180,161 @@ Used by the routine at <a href="28408.html">Handler_ShipMovement</a>.
 <td class="asm-label"></td>
 <td class="address-1"><span id="28507"></span>28507</td>
 <td class="instruction">LD B,3</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=3.</td>
+<td class="comment-1" rowspan="1">Set a width counter in <span class="register">B</span> for 3 bytes (the ship width).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_3</td>
+<td class="routine-comment" colspan="5">
+<span id="28509"></span>
+<div class="comments">
+<div class="paragraph">
+Shift each byte of the ship graphic left by one pixel, propagating the carry bit between bytes to create smooth scrolling.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">MoveShipLeft_ByteLoop</td>
 <td class="address-2"><span id="28509"></span>28509</td>
 <td class="instruction">SLA (HL)</td>
-<td class="comment-1" rowspan="1">Shift *<span class="register">HL</span> left (with carry).</td>
+<td class="comment-1" rowspan="1">Shift the byte at *<span class="register">HL</span> left by one bit.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28511"></span>28511</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next byte in the ship graphic.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28512"></span>28512</td>
 <td class="instruction">BIT 7,(HL)</td>
-<td class="comment-1" rowspan="1">Test bit 7 of *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Test bit 7 of the next byte to check if a bit was carried over.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28514"></span>28514</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move back to the previous byte.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28515"></span>28515</td>
-<td class="instruction">JR Z,<a href="28483.html#28519">Handler_MoveShip_Left_4</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28483.html#28519">Handler_MoveShip_Left_4</a> if <span class="register">HL</span> is equal to 3.</td>
+<td class="instruction">JR Z,<a href="28483.html#28519">MoveShipLeft_NextByte</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28483.html#28519">MoveShipLeft_NextByte</a> if bit 7 was not set (no carry).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28517"></span>28517</td>
 <td class="instruction">SET 0,(HL)</td>
-<td class="comment-1" rowspan="1">Set bit 0 of *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Set bit 0 of the current byte (propagate the carry from the previous byte).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_4</td>
+<td class="asm-label">MoveShipLeft_NextByte</td>
 <td class="address-2"><span id="28519"></span>28519</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next byte in the ship graphic.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28520"></span>28520</td>
-<td class="instruction">DJNZ <a href="28483.html#28509">Handler_MoveShip_Left_3</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28483.html#28509">Handler_MoveShip_Left_3</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28483.html#28509">MoveShipLeft_ByteLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the width counter by one and loop back to <a href="28483.html#28509">MoveShipLeft_ByteLoop</a> until all 3 bytes are shifted.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28522"></span>
+<div class="comments">
+<div class="paragraph">
+Clean up after shifting the bytes in this line.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28522"></span>28522</td>
 <td class="instruction">DEC HL</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move back to the last byte.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28523"></span>28523</td>
 <td class="instruction">RES 0,(HL)</td>
-<td class="comment-1" rowspan="1">Reset bit 0 of *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Reset bit 0 of the last byte (clear any overflow).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28525"></span>28525</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the screen position from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28526"></span>28526</td>
 <td class="instruction">INC H</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">H</span> by one.</td>
+<td class="comment-1" rowspan="1">Move down one pixel line in the screen buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28527"></span>28527</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the line counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28528"></span>28528</td>
-<td class="instruction">DJNZ <a href="28483.html#28505">Handler_MoveShip_Left_2</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28483.html#28505">Handler_MoveShip_Left_2</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28483.html#28505">MoveShipLeft_LineLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="28483.html#28505">MoveShipLeft_LineLoop</a> until all 8 lines have been processed.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28530"></span>
+<div class="comments">
+<div class="paragraph">
+Move to the next row and continue processing.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28530"></span>28530</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the screen position from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28531"></span>28531</td>
 <td class="instruction">SET 5,L</td>
-<td class="comment-1" rowspan="1">Set bit 5 of <span class="register">L</span>.</td>
+<td class="comment-1" rowspan="1">Move to the next row position (set bit 5 of <span class="register">L</span>, add 32).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28533"></span>28533</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the row counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28534"></span>28534</td>
-<td class="instruction">DJNZ <a href="28483.html#28501">Handler_MoveShip_Left_1</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="28483.html#28501">Handler_MoveShip_Left_1</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="28483.html#28501">MoveShipLeft_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="28483.html#28501">MoveShipLeft_RowLoop</a> until both rows are processed.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28536"></span>
+<div class="comments">
+<div class="paragraph">
+Update the movement animation frame counter. The counter cycles from 0 to 7 and the ship position is only updated when the counter completes a full cycle (wraps from 7 to 0).
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28536"></span>28536</td>
 <td class="instruction">LD A,(26278)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="28483.html#28546">Handler_MoveShip_Left_5</a> if *<a href="26278.html">BulletIndex</a> is equal to 7.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="28483.html#28546">MoveShipLeft_ResetCounter</a> if the movement animation frame counter at *<a href="26278.html">MovementAnimationFrameCounter</a> is equal to 7 (wrap to 0).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -250,67 +344,77 @@ Used by the routine at <a href="28408.html">Handler_ShipMovement</a>.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28541"></span>28541</td>
-<td class="instruction">JR Z,<a href="28483.html#28546">Handler_MoveShip_Left_5</a></td>
+<td class="instruction">JR Z,<a href="28483.html#28546">MoveShipLeft_ResetCounter</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28543"></span>28543</td>
 <td class="instruction">INC A</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">A</span> by one.</td>
+<td class="comment-1" rowspan="1">Increment the movement animation frame counter.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28544"></span>28544</td>
-<td class="instruction">JR <a href="28483.html#28547">Handler_MoveShip_Left_6</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28483.html#28547">Handler_MoveShip_Left_6</a>.</td>
+<td class="instruction">JR <a href="28483.html#28547">MoveShipLeft_UpdatePosition</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28483.html#28547">MoveShipLeft_UpdatePosition</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_5</td>
+<td class="asm-label">MoveShipLeft_ResetCounter</td>
 <td class="address-2"><span id="28546"></span>28546</td>
 <td class="instruction">XOR A</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=0.</td>
+<td class="comment-1" rowspan="1">Reset the movement animation frame counter to 0 (complete cycle).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_6</td>
+<td class="asm-label">MoveShipLeft_UpdatePosition</td>
 <td class="address-2"><span id="28547"></span>28547</td>
 <td class="instruction">LD (26278),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26278.html">BulletIndex</a>.</td>
+<td class="comment-1" rowspan="1">Write the updated movement animation frame counter to *<a href="26278.html">MovementAnimationFrameCounter</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28550"></span>28550</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="1">Test if the counter is zero (movement frame complete).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28551"></span>28551</td>
 <td class="instruction">LD A,(26349)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
+<td class="comment-1" rowspan="1">Load the player position from <a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28554"></span>28554</td>
-<td class="instruction">JR NZ,<a href="28483.html#28557">Handler_MoveShip_Left_7</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="28483.html#28557">Handler_MoveShip_Left_7</a> if <span class="register">A</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="28483.html#28557">MoveShipLeft_SavePosition</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="28483.html#28557">MoveShipLeft_SavePosition</a> if the counter is not zero (don't move position yet).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="28556"></span>
+<div class="comments">
+<div class="paragraph">
+The movement animation frame counter has completed a cycle, so update the ship position.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28556"></span>28556</td>
 <td class="instruction">DEC A</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">A</span> by one.</td>
+<td class="comment-1" rowspan="1">Decrease the player position by one (move ship left).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_MoveShip_Left_7</td>
+<td class="asm-label">MoveShipLeft_SavePosition</td>
 <td class="address-2"><span id="28557"></span>28557</td>
 <td class="instruction">LD (26349),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
+<td class="comment-1" rowspan="1">Write the updated player position to *<a href="26349.html">PlayerAttributeBufferPosition</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="28560"></span>28560</td>
 <td class="instruction">CALL <a href="27805.html">CheckCollision</a></td>
-<td class="comment-1" rowspan="1">Call <a href="27805.html">CheckCollision</a>.</td>
+<td class="comment-1" rowspan="1">Call the collision detection routine at <a href="27805.html">CheckCollision</a>.</td>
 </tr>
 <tr>
 <td class="routine-comment" colspan="5">

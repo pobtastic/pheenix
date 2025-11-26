@@ -293,6 +293,26 @@ Set and handled by the routine at <a href="../asm/6DCF.html#6e1b">Shield_Activat
 <td class="map-g-desc">
 <div class="map-entry-title-11"><a class="map-entry-title" href="../asm/66A4.html">Collision Flag</a></div>
 <div class="map-entry-desc">
+<div class="paragraph">
+<table class="default">
+<tr>
+<th colspan="1" rowspan="1">Byte</th>
+<th colspan="1" rowspan="1">Meaning</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">00</td>
+<td class="centre" colspan="1" rowspan="1">No Collision</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">01</td>
+<td class="centre" colspan="1" rowspan="1">Collision Detected</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">02</td>
+<td class="centre" colspan="1" rowspan="1">Explosion Complete</td>
+</tr>
+</table>
+</div>
 </div>
 </td>
 </tr>
@@ -312,8 +332,11 @@ Used by the routine at <a href="../asm/6926.html">Handler_ShipExplosion</a>.
 <td class="map-g"><span id="66a6"></span><a href="../asm/66A6.html">66A6</a></td>
 <td class="map-length">1</td>
 <td class="map-g-desc">
-<div class="map-entry-title-11"><a class="map-entry-title" href="../asm/66A6.html">Bullet Index</a></div>
+<div class="map-entry-title-11"><a class="map-entry-title" href="../asm/66A6.html">Movement Animation Frame Counter</a></div>
 <div class="map-entry-desc">
+<div class="paragraph">
+A counter that cycles from 00 to 07 controlling ship movement animation timing. Movement is skipped when the counter is 03. Also used as a timer in shield drawing routines.
+</div>
 </div>
 </td>
 </tr>
@@ -369,7 +392,7 @@ Used by the routine at <a href="../asm/6926.html">Handler_ShipExplosion</a>.
 <div class="map-entry-title-11"><a class="map-entry-title" href="../asm/66D3.html">Mothership Alien State</a></div>
 <div class="map-entry-desc">
 <div class="paragraph">
-Holds the mothership alien state which is used only in phase 4 to indicate if the phase has been completed or not (and then shows the bonus): <table class="default">
+Holds the mothership alien state which is used only in phase 04 to indicate if the phase has been completed or not (and then shows the bonus): <table class="default">
 <tr>
 <th colspan="1" rowspan="1">Byte</th>
 <th colspan="1" rowspan="1">State</th>

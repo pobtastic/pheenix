@@ -33,16 +33,19 @@ Next: <a href="66A7.html">66A7</a>
 </td>
 </tr>
 </table>
-<div class="description">66A6: Bullet Index</div>
+<div class="description">66A6: Movement Animation Frame Counter</div>
 <table class="disassembly">
 <tr>
 <td class="routine-comment" colspan="5">
 <div class="details">
+<div class="paragraph">
+A counter that cycles from 00 to 07 controlling ship movement animation timing. Movement is skipped when the counter is 03. Also used as a timer in shield drawing routines.
+</div>
 </div>
 </td>
 </tr>
 <tr>
-<td class="asm-label">BulletIndex</td>
+<td class="asm-label">MovementAnimationFrameCounter</td>
 <td class="address-1"><span id="66a6"></span>66A6</td>
 <td class="instruction">DEFB $00</td>
 <td class="comment-0" rowspan="1"></td>

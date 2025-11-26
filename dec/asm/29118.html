@@ -58,7 +58,7 @@ Used by the routine at <a href="29017.html">Handler_BulletCollision</a>.
 <span id="29118"></span>
 <div class="comments">
 <div class="paragraph">
-Check if this is phase 0, 1 or 4. The first section targets only the Pheenix aliens in phase 2 and 3.
+Check if this is phase 0 1 or 4. The first section targets only the Pheenix aliens in phase 2 and 3.
 </div>
 </div>
 </td>
@@ -67,7 +67,11 @@ Check if this is phase 0, 1 or 4. The first section targets only the Pheenix ali
 <td class="asm-label">Handler_BulletCollisionEffects</td>
 <td class="address-2"><span id="29118"></span>29118</td>
 <td class="instruction">LD A,(26353)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="29118.html#29164">BulletCollisionWithMothership</a> if bit 1 of *<a href="26353.html">Phase</a> is not set (phases 0, 1, 4).</td>
+<td class="comment-1" rowspan="3">Jump to <a href="29118.html#29164">BulletCollisionWithMothership</a> if bit 1 of *<a href="26353.html">Phase</a> is not set, so phases <ul class="">
+<li>0</li>
+<li>1</li>
+<li>4</li>
+</ul></td>
 </tr>
 <tr>
 <td class="asm-label"></td>

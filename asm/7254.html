@@ -51,7 +51,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label">Handler_LevelReset</td>
 <td class="address-2"><span id="7254"></span>7254</td>
 <td class="instruction">LD A,($66A4)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="730D.html">Handler_DisplayMothershipBonus</a> if *<a href="66A4.html">Flag_Collision</a> is not equal to 02.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="730D.html">Handler_DisplayMothershipBonus</a> if *<a href="66A4.html">Flag_Collision</a> is not 02 ("explosion complete").</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -67,7 +67,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="725c"></span>725C</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7254.html#7277">Handler_LevelReset_1</a> if *<a href="66F1.html">Phase</a> is not equal to 04.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7254.html#7277">LevelReset_ClearGameState</a> if *<a href="66F1.html">Phase</a> is not phase 04.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -77,55 +77,63 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7261"></span>7261</td>
-<td class="instruction">JR NZ,<a href="7254.html#7277">Handler_LevelReset_1</a></td>
+<td class="instruction">JR NZ,<a href="7254.html#7277">LevelReset_ClearGameState</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7263"></span>
+<div class="comments">
+<div class="paragraph">
+This is phase 04 - the mothership phase.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7263"></span>7263</td>
 <td class="instruction">LD HL,$65DD</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
+<td class="comment-1" rowspan="1">Point <span class="register">HL</span> to <a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7266"></span>7266</td>
 <td class="instruction">LD B,$08</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=08.</td>
+<td class="comment-1" rowspan="1">Set a counter in <span class="register">B</span> for 08 aliens.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_LevelReset_0</td>
+<td class="asm-label">LevelReset_ClearMothership_Loop</td>
 <td class="address-2"><span id="7268"></span>7268</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the alien counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7269"></span>7269</td>
 <td class="instruction">LD E,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">E</span>=*<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="3">Load the alien position into <span class="register">DE</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="726a"></span>726A</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="726b"></span>726B</td>
 <td class="instruction">LD D,(HL)</td>
-<td class="comment-1" rowspan="1"><span class="register">D</span>=*<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="726c"></span>726C</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move the alien data pointer to the next alien.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="726d"></span>726D</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the alien data pointer on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -142,7 +150,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7273"></span>7273</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="2">Restore <span class="register">HL</span> and <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the alien data pointer and alien counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -152,44 +160,50 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7275"></span>7275</td>
-<td class="instruction">DJNZ <a href="7254.html#7268">Handler_LevelReset_0</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="7254.html#7268">Handler_LevelReset_0</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="7254.html#7268">LevelReset_ClearMothership_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the alien counter by one and loop back to <a href="7254.html#7268">LevelReset_ClearMothership_Loop</a> until all of the aliens have been reset.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_LevelReset_1</td>
+<td class="routine-comment" colspan="5">
+<span id="7277"></span>
+<div class="comments">
+<div class="paragraph">
+Clear game state data.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">LevelReset_ClearGameState</td>
 <td class="address-2"><span id="7277"></span>7277</td>
 <td class="instruction">LD HL,$6680</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6680.html">6680</a>.</td>
+<td class="comment-1" rowspan="5">Clear 006C bytes from <a href="6680.html">6680</a> onwards.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="727a"></span>727A</td>
 <td class="instruction">LD DE,$6681</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="6680.html">6681</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="727d"></span>727D</td>
 <td class="instruction">LD BC,$006C</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=006C.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7280"></span>7280</td>
 <td class="instruction">LD (HL),B</td>
-<td class="comment-1" rowspan="1">Write <span class="register">B</span> to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7281"></span>7281</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7283"></span>7283</td>
 <td class="instruction">LD HL,$65DD</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
+<td class="comment-1" rowspan="1">Point <span class="register">HL</span> to <a href="65DD.html">Table_CurrentAlienPhaseData</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -222,6 +236,19 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="728f"></span>
+<div class="comments">
+<div class="paragraph">
+Reset the alien positions back to defaults.
+</div>
+<div class="paragraph">
+Start by setting a phase default (data for phases 02 and 03).
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="728f"></span>728F</td>
 <td class="instruction">LD HL,$6637</td>
@@ -231,7 +258,7 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="7292"></span>7292</td>
 <td class="instruction">LD A,($66F1)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="7254.html#729d">Handler_LevelReset_2</a> if *<a href="66F1.html">Phase</a> is not zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="7254.html#729d">LevelReset_CheckPhase_01</a> if *<a href="66F1.html">Phase</a> is not phase 00.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -241,7 +268,17 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="7296"></span>7296</td>
-<td class="instruction">JR NZ,<a href="7254.html#729d">Handler_LevelReset_2</a></td>
+<td class="instruction">JR NZ,<a href="7254.html#729d">LevelReset_CheckPhase_01</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="7298"></span>
+<div class="comments">
+<div class="paragraph">
+This is phase 00 so set accordingly.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -252,19 +289,39 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="729b"></span>729B</td>
-<td class="instruction">JR <a href="7254.html#72ad">Handler_LevelReset_4</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7254.html#72ad">Handler_LevelReset_4</a>.</td>
+<td class="instruction">JR <a href="7254.html#72ad">LevelReset_CopyWaveData</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7254.html#72ad">LevelReset_CopyWaveData</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_LevelReset_2</td>
+<td class="routine-comment" colspan="5">
+<span id="729d"></span>
+<div class="comments">
+<div class="paragraph">
+Is this phase 01?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">LevelReset_CheckPhase_01</td>
 <td class="address-2"><span id="729d"></span>729D</td>
 <td class="instruction">CP $01</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7254.html#72a6">Handler_LevelReset_3</a> if <span class="register">A</span> is not equal to 01.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="7254.html#72a6">LevelReset_CheckPhase_04</a> if *<a href="66F1.html">Phase</a> is not phase 01.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="729f"></span>729F</td>
-<td class="instruction">JR NZ,<a href="7254.html#72a6">Handler_LevelReset_3</a></td>
+<td class="instruction">JR NZ,<a href="7254.html#72a6">LevelReset_CheckPhase_04</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="72a1"></span>
+<div class="comments">
+<div class="paragraph">
+This is phase 01 so set accordingly.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -275,19 +332,39 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="72a4"></span>72A4</td>
-<td class="instruction">JR <a href="7254.html#72ad">Handler_LevelReset_4</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7254.html#72ad">Handler_LevelReset_4</a>.</td>
+<td class="instruction">JR <a href="7254.html#72ad">LevelReset_CopyWaveData</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7254.html#72ad">LevelReset_CopyWaveData</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_LevelReset_3</td>
+<td class="routine-comment" colspan="5">
+<span id="72a6"></span>
+<div class="comments">
+<div class="paragraph">
+Is this phase 04?
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">LevelReset_CheckPhase_04</td>
 <td class="address-2"><span id="72a6"></span>72A6</td>
 <td class="instruction">CP $04</td>
-<td class="comment-1" rowspan="2">Jump to <a href="7254.html#72ad">Handler_LevelReset_4</a> if <span class="register">A</span> is not equal to 04.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="7254.html#72ad">LevelReset_CopyWaveData</a> if *<a href="66F1.html">Phase</a> is not phase 04.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="72a8"></span>72A8</td>
-<td class="instruction">JR NZ,<a href="7254.html#72ad">Handler_LevelReset_4</a></td>
+<td class="instruction">JR NZ,<a href="7254.html#72ad">LevelReset_CopyWaveData</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="72aa"></span>
+<div class="comments">
+<div class="paragraph">
+This is phase 04 so set accordingly.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -296,7 +373,17 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="6647.html">Table_AlienPhaseData_04</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_LevelReset_4</td>
+<td class="routine-comment" colspan="5">
+<span id="72ad"></span>
+<div class="comments">
+<div class="paragraph">
+Copy the phase default data to the active table.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">LevelReset_CopyWaveData</td>
 <td class="address-2"><span id="72ad"></span>72AD</td>
 <td class="instruction">POP DE</td>
 <td class="comment-1" rowspan="1">Restore <span class="register">DE</span> from the stack.</td>
@@ -316,8 +403,8 @@ Reset the level after the player death, clearing aliens and restoring states.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="72b2"></span>72B2</td>
-<td class="instruction">JR Z,<a href="7254.html#72b7">Handler_LevelReset_5</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7254.html#72b7">Handler_LevelReset_5</a> if <span class="register">A</span> is zero.</td>
+<td class="instruction">JR Z,<a href="7254.html#72b7">LevelReset_ResetPlayerPosition</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="7254.html#72b7">LevelReset_ResetPlayerPosition</a> if <span class="register">A</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -332,7 +419,17 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_LevelReset_5</td>
+<td class="routine-comment" colspan="5">
+<span id="72b7"></span>
+<div class="comments">
+<div class="paragraph">
+Reset player position.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">LevelReset_ResetPlayerPosition</td>
 <td class="address-2"><span id="72b7"></span>72B7</td>
 <td class="instruction">LD HL,$66ED</td>
 <td class="comment-1" rowspan="2">Write CE to *<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
@@ -341,6 +438,16 @@ Reset the level after the player death, clearing aliens and restoring states.
 <td class="asm-label"></td>
 <td class="address-1"><span id="72ba"></span>72BA</td>
 <td class="instruction">LD (HL),$CE</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="72bc"></span>
+<div class="comments">
+<div class="paragraph">
+Handle "spending a life".
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

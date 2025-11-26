@@ -41,6 +41,21 @@ Next: <a href="6FDD.html">6FDD</a>
 <div class="paragraph">
 Used by the routines at <a href="6CC9.html">DrawShip</a>, <a href="6EF8.html">Handler_ShipMovement</a>, <a href="6F43.html">Handler_MoveShip_Left</a> and <a href="6FDD.html">Handler_MoveShip_Right</a>.
 </div>
+<div class="paragraph">
+Updates the two attribute rows that surround the player's ship. If the shield is active and bit 2 of the shield timer is set, white (INK:WHITE,
+PAPER:BLACK) is used to create a flashing visual effect; otherwise the default colour (INK:YELLOW,
+PAPER:BLACK (BRIGHT)) is written.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="6f93"></span>
+<div class="comments">
+<div class="paragraph">
+Bail out if a collision/ explosion is active, otherwise fetch the player attribute position and check the shield flags.
+</div>
 </div>
 </td>
 </tr>
@@ -64,13 +79,13 @@ Used by the routines at <a href="6CC9.html">DrawShip</a>, <a href="6EF8.html">Ha
 <td class="asm-label"></td>
 <td class="address-1"><span id="6f9a"></span>6F9A</td>
 <td class="instruction">LD HL,($66ED)</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=*<a href="66ED.html">PlayerAttributeBufferPosition</a>.</td>
+<td class="comment-1" rowspan="1">Load the player attribute address from <a href="66ED.html">PlayerAttributeBufferPosition</a> into <span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6f9d"></span>6F9D</td>
 <td class="instruction">LD A,($6693)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="6F93.html#6fae">Handler_UpdateShipPosition_0</a> if *<a href="6693.html">Flag_Shield</a> is zero.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6F93.html#6fae">UpdateShip_SetDefaultColour</a> if the shield flag *<a href="6693.html">Flag_Shield</a> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -80,13 +95,13 @@ Used by the routines at <a href="6CC9.html">DrawShip</a>, <a href="6EF8.html">Ha
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fa1"></span>6FA1</td>
-<td class="instruction">JR Z,<a href="6F93.html#6fae">Handler_UpdateShipPosition_0</a></td>
+<td class="instruction">JR Z,<a href="6F93.html#6fae">UpdateShip_SetDefaultColour</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fa3"></span>6FA3</td>
 <td class="instruction">LD A,($6694)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="6F93.html#6fae">Handler_UpdateShipPosition_0</a> if bit 2 of *<a href="6694.html">ShieldTimer</a> is not set.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="6F93.html#6fae">UpdateShip_SetDefaultColour</a> if bit 2 of the shield timer *<a href="6694.html">ShieldTimer</a> is clear.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -96,38 +111,71 @@ Used by the routines at <a href="6CC9.html">DrawShip</a>, <a href="6EF8.html">Ha
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fa8"></span>6FA8</td>
-<td class="instruction">JR Z,<a href="6F93.html#6fae">Handler_UpdateShipPosition_0</a></td>
+<td class="instruction">JR Z,<a href="6F93.html#6fae">UpdateShip_SetDefaultColour</a></td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="6faa"></span>
+<div class="comments">
+<div class="paragraph">
+Choose the attribute byte to write: white (INK:WHITE,
+PAPER:BLACK) when shield is active with timer bit 2 set, or default (INK:YELLOW,
+PAPER:BLACK (BRIGHT)).
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6faa"></span>6FAA</td>
 <td class="instruction">LD A,$07</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=07.</td>
+<td class="comment-1" rowspan="1">Load INK:WHITE,
+PAPER:BLACK into <span class="register">A</span> (white for shield effect).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fac"></span>6FAC</td>
-<td class="instruction">JR <a href="6F93.html#6fb0">Handler_UpdateShipPosition_1</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="6F93.html#6fb0">Handler_UpdateShipPosition_1</a>.</td>
+<td class="instruction">JR <a href="6F93.html#6fb0">UpdateShip_SetupRows</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="6F93.html#6fb0">UpdateShip_SetupRows</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_0</td>
+<td class="routine-comment" colspan="5">
+<span id="6fae"></span>
+<div class="comments">
+<div class="paragraph">
+The shield is not active - use the standard ship colour.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">UpdateShip_SetDefaultColour</td>
 <td class="address-2"><span id="6fae"></span>6FAE</td>
 <td class="instruction">LD A,$46</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=INK:YELLOW,
-PAPER:BLACK (BRIGHT).</td>
+<td class="comment-1" rowspan="1">Load INK:YELLOW,
+PAPER:BLACK (BRIGHT) into <span class="register">A</span>.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_1</td>
+<td class="routine-comment" colspan="5">
+<span id="6fb0"></span>
+<div class="comments">
+<div class="paragraph">
+Prepare to write two rows of attributes (above and below the ship).
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">UpdateShip_SetupRows</td>
 <td class="address-2"><span id="6fb0"></span>6FB0</td>
 <td class="instruction">LD B,$02</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=02.</td>
+<td class="comment-1" rowspan="1">Set a row counter in <span class="register">B</span> for 02 rows.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_2</td>
+<td class="asm-label">UpdateShip_RowLoop</td>
 <td class="address-2"><span id="6fb2"></span>6FB2</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">BC</span> and <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the row counter and attribute pointer on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -138,90 +186,100 @@ PAPER:BLACK (BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fb4"></span>6FB4</td>
 <td class="instruction">DEC L</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">L</span> by one.</td>
+<td class="comment-1" rowspan="1">Move left one attribute cell (point to column before ship).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fb5"></span>6FB5</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the attribute byte on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fb6"></span>6FB6</td>
 <td class="instruction">CP $46</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fbe">Handler_UpdateShipPosition_3</a> if <span class="register">A</span> is equal to INK:YELLOW,
+<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fbe">UpdateShip_BlankLeft</a> if the colour is INK:YELLOW,
 PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fb8"></span>6FB8</td>
-<td class="instruction">JR Z,<a href="6F93.html#6fbe">Handler_UpdateShipPosition_3</a></td>
+<td class="instruction">JR Z,<a href="6F93.html#6fbe">UpdateShip_BlankLeft</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fba"></span>6FBA</td>
 <td class="instruction">CP $07</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fc0">Handler_UpdateShipPosition_4</a> if <span class="register">A</span> is not equal to WHITE.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fc0">UpdateShip_WriteRow</a> if the colour is not WHITE (no need to blank).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fbc"></span>6FBC</td>
-<td class="instruction">JR NZ,<a href="6F93.html#6fc0">Handler_UpdateShipPosition_4</a></td>
+<td class="instruction">JR NZ,<a href="6F93.html#6fc0">UpdateShip_WriteRow</a></td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_3</td>
+<td class="asm-label">UpdateShip_BlankLeft</td>
 <td class="address-2"><span id="6fbe"></span>6FBE</td>
 <td class="instruction">LD (HL),$00</td>
-<td class="comment-1" rowspan="1">Write 00 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write 00 to the left neighbour attribute (clear highlight).</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_4</td>
+<td class="asm-label">UpdateShip_WriteRow</td>
 <td class="address-2"><span id="6fc0"></span>6FC0</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the attribute byte from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fc1"></span>6FC1</td>
 <td class="instruction">INC L</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">L</span> by one.</td>
+<td class="comment-1" rowspan="1">Move right to the first ship column.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fc2"></span>6FC2</td>
 <td class="instruction">LD B,$03</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=03.</td>
+<td class="comment-1" rowspan="1">Set a width counter in <span class="register">B</span> for 03 columns.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_5</td>
+<td class="asm-label">UpdateShip_WriteColumns</td>
 <td class="address-2"><span id="6fc4"></span>6FC4</td>
 <td class="instruction">LD (HL),A</td>
-<td class="comment-1" rowspan="1">Write <span class="register">A</span> to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write the chosen colour to *<span class="register">HL</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fc5"></span>6FC5</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next column.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fc6"></span>6FC6</td>
-<td class="instruction">DJNZ <a href="6F93.html#6fc4">Handler_UpdateShipPosition_5</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6F93.html#6fc4">Handler_UpdateShipPosition_5</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="6F93.html#6fc4">UpdateShip_WriteColumns</a></td>
+<td class="comment-1" rowspan="1">Decrease the width counter by one and loop back to <a href="6F93.html#6fc4">UpdateShip_WriteColumns</a> until all 03 columns are updated.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="6fc8"></span>
+<div class="comments">
+<div class="paragraph">
+Clean up the right-hand neighbour attribute if required.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fc8"></span>6FC8</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the attribute byte on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fc9"></span>6FC9</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="6F93.html#6fd2">Handler_UpdateShipPosition_6</a> if *<span class="register">HL</span> is equal to INK:YELLOW,
+<td class="comment-1" rowspan="3">Jump to <a href="6F93.html#6fd2">UpdateShip_BlankRight</a> if the neighbour already holds INK:YELLOW,
 PAPER:BLACK (BRIGHT).</td>
 </tr>
 <tr>
@@ -232,30 +290,30 @@ PAPER:BLACK (BRIGHT).</td>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fcc"></span>6FCC</td>
-<td class="instruction">JR Z,<a href="6F93.html#6fd2">Handler_UpdateShipPosition_6</a></td>
+<td class="instruction">JR Z,<a href="6F93.html#6fd2">UpdateShip_BlankRight</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fce"></span>6FCE</td>
 <td class="instruction">CP $07</td>
-<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fd4">Handler_UpdateShipPosition_7</a> if *<span class="register">HL</span> is not equal to WHITE.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="6F93.html#6fd4">UpdateShip_NextRow</a> if the neighbour is not WHITE (nothing to clear).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fd0"></span>6FD0</td>
-<td class="instruction">JR NZ,<a href="6F93.html#6fd4">Handler_UpdateShipPosition_7</a></td>
+<td class="instruction">JR NZ,<a href="6F93.html#6fd4">UpdateShip_NextRow</a></td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_6</td>
+<td class="asm-label">UpdateShip_BlankRight</td>
 <td class="address-2"><span id="6fd2"></span>6FD2</td>
 <td class="instruction">LD (HL),$00</td>
-<td class="comment-1" rowspan="1">Write 00 to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="1">Write 00 to the right neighbour attribute.</td>
 </tr>
 <tr>
-<td class="asm-label">Handler_UpdateShipPosition_7</td>
+<td class="asm-label">UpdateShip_NextRow</td>
 <td class="address-2"><span id="6fd4"></span>6FD4</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="2">Restore <span class="register">AF</span> and <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the attribute byte and attribute pointer from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -266,25 +324,34 @@ PAPER:BLACK (BRIGHT).</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fd6"></span>6FD6</td>
 <td class="instruction">SET 5,L</td>
-<td class="comment-1" rowspan="1">Set bit 5 of <span class="register">L</span>.</td>
+<td class="comment-1" rowspan="1">Move down one attribute row (set bit 5 of <span class="register">L</span>).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fd8"></span>6FD8</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the row counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fd9"></span>6FD9</td>
-<td class="instruction">DJNZ <a href="6F93.html#6fb2">Handler_UpdateShipPosition_2</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="6F93.html#6fb2">Handler_UpdateShipPosition_2</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="6F93.html#6fb2">UpdateShip_RowLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="6F93.html#6fb2">UpdateShip_RowLoop</a> until both rows are processed.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="6fdb"></span>6FDB</td>
 <td class="instruction">JR <a href="7030.html">Handler_PlayerBullets</a></td>
 <td class="comment-1" rowspan="1">Jump to <a href="7030.html">Handler_PlayerBullets</a>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<div class="comments">
+<div class="paragraph">
+Continue on to <a href="7030.html">Handler_PlayerBullets</a>.
+</div>
+</div>
+</td>
 </tr>
 </table>
 <table class="asm-navigation">

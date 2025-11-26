@@ -293,6 +293,26 @@ Set and handled by the routine at <a href="../asm/28111.html#28187">Shield_Activ
 <td class="map-g-desc">
 <div class="map-entry-title-11"><a class="map-entry-title" href="../asm/26276.html">Collision Flag</a></div>
 <div class="map-entry-desc">
+<div class="paragraph">
+<table class="default">
+<tr>
+<th colspan="1" rowspan="1">Byte</th>
+<th colspan="1" rowspan="1">Meaning</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">0</td>
+<td class="centre" colspan="1" rowspan="1">No Collision</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1">Collision Detected</td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1">Explosion Complete</td>
+</tr>
+</table>
+</div>
 </div>
 </td>
 </tr>
@@ -312,8 +332,11 @@ Used by the routine at <a href="../asm/26918.html">Handler_ShipExplosion</a>.
 <td class="map-g"><span id="26278"></span><a href="../asm/26278.html">26278</a></td>
 <td class="map-length">1</td>
 <td class="map-g-desc">
-<div class="map-entry-title-11"><a class="map-entry-title" href="../asm/26278.html">Bullet Index</a></div>
+<div class="map-entry-title-11"><a class="map-entry-title" href="../asm/26278.html">Movement Animation Frame Counter</a></div>
 <div class="map-entry-desc">
+<div class="paragraph">
+A counter that cycles from 0 to 7 controlling ship movement animation timing. Movement is skipped when the counter is 3. Also used as a timer in shield drawing routines.
+</div>
 </div>
 </td>
 </tr>
