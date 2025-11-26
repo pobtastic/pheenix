@@ -523,6 +523,12 @@ B $66A3,$01
 
 g $66A4 Collision Flag
 @ $66A4 label=Flag_Collision
+D $66A4 #TABLE(default,centre,centre)
+. { =h Byte | =h Meaning }
+. { #N$00 | No Collision }
+. { #N$01 | Collision Detected }
+. { #N$02 | Explosion Complete }
+. TABLE#
 B $66A4,$01
 
 g $66A5 Explosion Counter
@@ -530,8 +536,11 @@ g $66A5 Explosion Counter
 D $66A5 Used by the routine at #R$6926.
 B $66A5,$01
 
-g $66A6 Bullet Index
-@ $66A6 label=BulletIndex
+g $66A6 Movement Animation Frame Counter
+@ $66A6 label=MovementAnimationFrameCounter
+D $66A6 A counter that cycles from #N$00 to #N$07, controlling ship movement
+. animation timing. Movement is skipped when the counter is #N$03. Also used
+. as a timer in shield drawing routines.
 B $66A6,$01
 
 g $66A7
@@ -548,7 +557,7 @@ g $66C4
 
 g $66D3 Mothership Alien State
 @ $66D3 label=MothershipAlienState
-D $66D3 Holds the mothership alien state which is used only in phase 4 to
+D $66D3 Holds the mothership alien state which is used only in phase #N$04 to
 . indicate if the phase has been completed or not (and then shows the bonus):
 . #TABLE(default,centre,centre)
 . { =h Byte | =h State }
@@ -874,8 +883,9 @@ R $6845 DE Attribute buffer destination
 c $684E Handler: Eggsplosion Left
 @ $684E label=Handler_EggsplosionLeft
 D $684E Handler for the left half of the Eggsplosion.
-N $684E #CLS$00 #SIM(start=$67F6,stop=$6818)
-. #SIM(start=$684E,stop=$688F,de=$598C)#SCR$02(screen-eggsplosion-left)
+N $684E #PUSHS #CLS$00 #SIM(start=$67F6,stop=$6818)
+. #SIM(start=$684E,stop=$688F,de=$598C)
+. #UDGTABLE { #SCR$02(screen-eggsplosion-left) } TABLE# #POPS
 R $684E DE Attribute buffer destination
   $684E,$03 #REGhl=#R$606E.
   $6851,$02 Jump to #R$6856.
@@ -884,8 +894,9 @@ c $6853 Handler: Eggsplosion Right
 @ $6853 label=Handler_EggsplosionRight
 D $6853 Handler for the right half of the Eggsplosion.
 E $6853 Continue on to #R$6856.
-N $6853 #CLS$00 #SIM(start=$67F6,stop=$6818)
-. #SIM(start=$6853,stop=$688F,de=$598F)#SCR$02(screen-eggsplosion-right)
+N $6853 #PUSHS #CLS$00 #SIM(start=$67F6,stop=$6818)
+. #SIM(start=$6853,stop=$688F,de=$598F)
+. #UDGTABLE { #SCR$02(screen-eggsplosion-right) } TABLE# #POPS
 R $6853 DE Attribute buffer destination
   $6853,$03 #REGhl=#R$608E.
 
@@ -1094,6 +1105,12 @@ c $6926 Handler: Ship Explosion
 D $6926 Handles the ship explosion animation, including the flashing attribute
 . effect and cycling through the explosion sprite frames.
 R $6926 HL Attribute buffer address of the explosion
+N $6926 #PUSHS #CLS$05
+. #POKES$66A4,$01;$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
+. #SIM(start=$72C9,stop=$6FDB)
+. #UDGTABLE
+.   { #SIM(start=$6CEE,stop=$6969)#SCR$01(ship-explosion-1) }
+. TABLE# #POPS
   $6926,$01 Stash #REGbc on the stack.
 N $6927 Calculate a flashing attribute for the explosion. The PAPER colour from
 . the flash counter is used as the INK colour to create a visual effect. The
@@ -1147,11 +1164,11 @@ N $695C There is no frame #N$03, so reset the frame counter back to #N$00.
 
 c $696A Draw Alien Mothership
 @ $696A label=Draw_AlienMothership
-D $696A #PUSHS #CLS($05) #SIM(start=$67F6,stop=$6818) #UDGTABLE {
+D $696A #PUSHS #CLS$05 #SIM(start=$67F6,stop=$6818) #UDGTABLE {
 .   #SIM(start=$696A,stop=$6A22)#SCR$02(mothership)
 . } TABLE# #POPS
 N $696A Print the top of the mast.
-N $696A #PUSHS #CLS($05)
+N $696A #PUSHS #CLS$05
 . #UDGTABLE {
 .   #SIM(start=$696A,stop=$6976)#SCR$01(mothership-step-01)
 . } TABLE#
@@ -1466,7 +1483,7 @@ N $6AC9 Update active bullet position.
 
 c $6B31 Fill Screen With UDG
 @ $6B31 label=FillScreenWithUDG
-D $6B31 #PUSHS #CLS($45)#SIM(start=$7323,stop=$6B35)
+D $6B31 #PUSHS #CLS$45#SIM(start=$7323,stop=$6B35)
 . #UDGTABLE(default,centre,centre) { =h Loop Index | =h Screen Output }
 .   #FOR$01,$03(x,{ #Nx | #SIM(start=$6B35,stop=$6B4A)#SCR$01(fill-x) })
 . TABLE# #POPS
@@ -1647,7 +1664,7 @@ N $6CBF Move to the next attribute.
 c $6CC9 Draw Ship
 @ $6CC9 label=DrawShip
 D $6CC9 #PUSHS #POKES$66F3,$00;$74EF,$00;$74F0,$00;$74F1,$00
-. #CLS($05) #UDGTABLE {
+. #CLS$05 #UDGTABLE {
 .   #SIM(start=$72C9,stop=$6FDB)#SCR$02(ship)
 . } TABLE# #POPS
   $6CC9,$03 Point #REGhl to the ship graphic: #R$604E.
@@ -1874,95 +1891,149 @@ M $6E30,$0A Calculate the sound pitch: #N($00DE,$04,$04) + ((*#R$6694 & #N$07) Ã
   $6E3A,$02 Set the duration in #REGe to #N$04.
   $6E3C,$03 #HTML(Call <a "noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/03B5.html">BEEPER</a>.)
   $6E3F,$01 Disable interrupts.
-N $6E40 Draw shield graphic.
 @ $6E40 label=DrawShield
-  $6E40,$03 #REGhl=*#R$66ED.
-  $6E43,$02 #REGh=#N$52.
-  $6E45,$02 #REGb=#N$02.
-  $6E47,$03 #REGa=*#R$66A6.
-  $6E4A,$01 Stash #REGaf on the stack.
-  $6E4B,$01 Set the bits from #REGa.
-  $6E4C,$03 #REGde=#N($0000,$04,$04).
-  $6E4F,$02 Jump to #R$6E62 if #REGhl is not equal to #REGa.
-  $6E51,$07 Jump to #R$6E62 if bit 2 of *#R$6694 is not set.
-  $6E58,$03 #REGde=#N($0136,$04,$04).
-  $6E5B,$05 Jump to #R$6E62 if #REGb is not equal to #N$01.
-  $6E60,$02 #REGd=#N$80.
-  $6E62,$04 Write #REGde to *#R$6E87.
-  $6E66,$04 Write #REGde to *#R$6E9A.
-  $6E6A,$01 Restore #REGaf from the stack.
-  $6E6B,$01 Increment #REGa by one.
+N $6E40 Draws the shield graphic around the ship in the attribute buffer and
+. screen buffer. The shield consists of two segments (left and right) that are
+. drawn when the shield is active.
+  $6E40,$03 Load the player position from #R$66ED into #REGhl.
+  $6E43,$02 Set #REGh to #N$52 (attribute buffer base address).
+  $6E45,$02 Set counter in #REGb for #N$02 shield segments (left and right).
+  $6E47,$03 Load the movement animation frame counter from #R$66A6 into
+. #REGa.
+  $6E4A,$01 Stash the movement animation frame counter on the stack.
+@ $6E4B label=DrawShield_SegmentLoop
+N $6E4B Calculate a value to be used for this shield segment based on the shield
+. state and movement animation frame counter.
+  $6E4B,$01 Test if the movement animation frame counter value in #REGa is
+. zero.
+  $6E4C,$03 #HTML(Initialise the value to #N($0000,$04,$04)
+. ("<code>NOP NOP</code>").)
+  $6E4F,$02 Jump to #R$6E62 if the movement animation frame counter is zero
+. (use default value).
+  $6E51,$07 Jump to #R$6E62 if bit 2 of the shield state at *#R$6694 is not
+. set (shield not active).
+  $6E58,$03 #HTML(Set the value to #N($0136,$04,$04)
+. ("<code>LD (#REGhl),#N$01</code>").)
+  $6E5B,$05 Jump to #R$6E62 if this is not the second segment (#REGb is not
+. #N$01).
+  $6E60,$02 Set the high byte of the value to #N$80 for the second segment.
+@ $6E62 label=DrawShield_SetAttribute
+N $6E62 Store the calculated value for both shield segments using
+. self-modifying code.
+  $6E62,$04 Write the self-modifying code to the address used by the left segment (#R$6E87).
+  $6E66,$04 Write the self-modifying code to the address used by the right segment (#R$6E9A).
+  $6E6A,$01 Restore the movement animation frame counter from the stack.
+  $6E6B,$01 Increment the movement animation frame counter value in #REGa.
   $6E6C,$01 Stash #REGbc on the stack.
-  $6E6D,$01 #REGb=#REGa.
-  $6E6E,$01 Stash #REGhl on the stack.
-  $6E6F,$03 #REGhl=#R$6E85(#N$6E86).
-  $6E72,$03 #REGa=*#R$6694.
-  $6E75,$02 Test bit 2 of #REGa.
-  $6E77,$02 #REGa=#N$7E.
-  $6E79,$02 Jump to #R$6E7D if #REGa is equal to #N$7E.
-  $6E7B,$02 #REGa+=#N$40.
-  $6E7D,$02 #REGa+=#N$08.
-  $6E7F,$02 Decrease counter by one and loop back to #R$6E7D until counter is zero.
-  $6E81,$01 Write #REGa to *#REGhl.
-  $6E82,$01 Restore #REGhl from the stack.
-  $6E83,$02 #REGb=#N$06.
-  $6E85,$02 Set bit 0 of *#REGhl.
-  $6E87,$02 Write #N$01 to *#REGhl.
-  $6E89,$01 Increment #REGh by one.
-  $6E8A,$02 Decrease counter by one and loop back to #R$6E85 until counter is zero.
-  $6E8C,$03 #REGa=*#R$6E85(#N$6E86).
-  $6E8F,$03 Write #REGa to *#R$6E98(#N$6E99).
-  $6E92,$02 Set bit 5 of #REGl.
-  $6E94,$02 #REGh=#N$50.
-  $6E96,$02 #REGb=#N$08.
-  $6E98,$02 Set bit 0 of *#REGhl.
-  $6E9A,$02 Write #N$01 to *#REGhl.
-  $6E9C,$01 Increment #REGh by one.
-  $6E9D,$02 Decrease counter by one and loop back to #R$6E98 until counter is zero.
-  $6E9F,$03 #REGhl=*#R$66ED.
-  $6EA2,$02 #REGh=#N$52.
-  $6EA4,$02 Increment #REGl by two.
+  $6E6D,$01 Set the loop counter in #REGb to the movement animation frame
+. counter value.
+  $6E6E,$01 Stash the attribute buffer address in #REGhl on the stack.
+  $6E6F,$03 Load the address of the left segment code to modify at
+. (#R$6E85(#N$6E86)).
+N $6E72 Calculate an attribute byte value based on the movement animation frame
+. counter.
+  $6E72,$03 Load the shield state from *#R$6694.
+  $6E75,$02 Test bit 2 of the shield state to check if the shield is active.
+  $6E77,$02 Set the base attribute value to #COLOUR$7E.
+  $6E79,$02 Jump to #R$6E7D if the shield is not active (use base value).
+  $6E7B,$02 Add #N$40 to the base attribute value (set BRIGHT bit).
+@ $6E7D label=DrawShield_AttributeLoop
+  $6E7D,$02 Add #N$08 to the attribute value (increment PAPER colour).
+  $6E7F,$02 Decrease counter by one and loop back to #R$6E7D until counter is
+. zero.
+  $6E81,$01 Write the calculated attribute byte to the storage location.
+  $6E82,$01 Restore the attribute buffer address from the stack.
+N $6E83 Draw the left shield segment.
+  $6E83,$02 Set a counter in #REGb for #N$06 lines of the left shield segment.
+@ $6E85 label=DrawShield_LeftSegment_Loop
+  $6E85,$02 Set bit 0 of the attribute byte at *#REGhl (set INK bit 0).
+N $6E87 Modified by the code at #R$6E62.
+  $6E87,$02 Write #N$01 to the attribute buffer at *#REGhl.
+  $6E89,$01 Move down one line in the attribute buffer.
+  $6E8A,$02 Decrease the left segment loop counter by one and loop back to
+. #R$6E85 until all #N$06 lines are drawn.
+  $6E8C,$03 Load the attribute value from the storage location.
+  $6E8F,$03 Store the attribute value at the address used by the right segment.
+  $6E92,$02 Move to the right segment position (set bit 5 of #REGl, add #N$20).
+  $6E94,$02 Set #REGh to #N$50 (screen buffer base address).
+N $6E96 Draw the right shield segment.
+  $6E96,$02 Set a counter in #REGb for #N$08 lines of the right shield segment.
+@ $6E98 label=DrawShield_RightSegment_Loop
+  $6E98,$02 Set bit 0 of the pixel data at *#REGhl (set pixel bit 0).
+N $6E9A Modified by the code at #R$6E66.
+  $6E9A,$02 Write #N$01 to the screen buffer at *#REGhl.
+  $6E9C,$01 Move down one pixel line in the screen buffer.
+  $6E9D,$02 Decrease the right segment loop counter by one and loop back to
+. #R$6E98 until all #N$08 lines are drawn.
+  $6E9F,$03 Reload the player position from #R$66ED.
+  $6EA2,$02 Set #REGh back to #N$52 (attribute buffer base address).
+  $6EA4,$02 Move to the next shield segment position (increment #REGl by two).
   $6EA6,$01 Restore #REGbc from the stack.
-  $6EA7,$03 #REGa=*#R$66A6.
+  $6EA7,$03 Reload the movement animation frame counter from #R$66A6 into
+. #REGa.
   $6EAA,$01 Stash #REGaf on the stack.
-  $6EAB,$02 #REGa-=#N$07.
-  $6EAD,$02 Decrease counter by one and loop back to #R$6E4B until counter is zero.
+  $6EAB,$02 Decrease the movement animation frame counter by #N$07 to adjust
+. for the next iteration.
+  $6EAD,$02 Decrease counter by one and loop back to #R$6E4B until both shield
+. segments are drawn.
+N $6EAF Process the shield graphic data: copy the appropriate shield sprite to
+. the work buffer and apply bit manipulation if the shield timer is active.
   $6EAF,$01 Restore #REGaf from the stack.
-  $6EB0,$03 #REGa=*#R$6694.
-  $6EB3,$02 Test bit 2 of #REGa.
-  $6EB5,$03 #REGhl=#R$6014.
-  $6EB8,$02 Jump to #R$6EBD if #REGl is equal to #N$52.
-  $6EBA,$03 #REGhl=#R$601D.
-  $6EBD,$03 #REGde=#R$617B.
-  $6EC0,$02 #REGc=#N$09.
-  $6EC2,$02 LDIR.
-  $6EC4,$06 Jump to #R$6EE1 if *#R$66A6 is zero.
-  $6ECA,$01 #REGb=*#R$66A6.
-  $6ECB,$01 Stash #REGbc on the stack.
-  $6ECC,$03 #REGhl=#R$617B.
-  $6ECF,$02 #REGb=#N$09.
-  $6ED1,$02 Shift *#REGhl left (with carry).
-  $6ED3,$01 Increment #REGhl by one.
-  $6ED4,$02 Test bit 7 of *#REGhl.
-  $6ED6,$01 Decrease #REGhl by one.
-  $6ED7,$02 Jump to #R$6EDB if #REGhl is equal to #REGa.
-  $6ED9,$02 Set bit 0 of *#REGhl.
-  $6EDB,$01 Increment #REGhl by one.
-  $6EDC,$02 Decrease counter by one and loop back to #R$6ED1 until counter is zero.
-  $6EDE,$01 Restore #REGbc from the stack.
-  $6EDF,$02 Decrease counter by one and loop back to #R$6ECB until counter is zero.
-  $6EE1,$04 #REGde=*#R$66ED.
-  $6EE5,$02 #REGd=#N$50.
-  $6EE7,$03 #REGhl=#R$617B.
-  $6EEA,$02 Set counter in #REGb for #N$03 pixel rows.
+  $6EB0,$03 Load the shield state from *#R$6694.
+  $6EB3,$02 Test bit 2 of the shield state to check if the shield is active.
+N $6EB5 Select which shield sprite to use based on the shield state.
+  $6EB5,$03 Set #REGhl to point to the first shield sprite at #R$6014.
+  $6EB8,$02 Jump to #R$6EBD if the shield is not active (use first sprite).
+  $6EBA,$03 Set #REGhl to point to the second shield sprite at #R$601D.
+@ $6EBD label=DrawShield_CopySprite
+N $6EBD Copy the shield sprite data (#N$09 bytes) to the work buffer at
+. #R$617B.
+  $6EBD,$03 Set #REGde to point to the work buffer at #R$617B.
+  $6EC0,$02 Set the shield byte count in #REGc to #N$09.
+  $6EC2,$02 Copy the shield sprite data from #REGhl to the work buffer.
+  $6EC4,$06 Jump to #R$6EE1 if the movement animation frame counter at
+. *#R$66A6 is zero (skip bit manipulation).
+N $6ECA Apply bit manipulation to the shield graphic data based on the movement
+. animation frame counter value.
+  $6ECA,$01 Load the movement animation frame counter from *#R$66A6 into
+. #REGb (outer loop counter).
+@ $6ECB label=DrawShield_RotateLoop
+  $6ECB,$01 Stash the outer loop counter on the stack.
+  $6ECC,$03 Set #REGhl to point to the work buffer at #R$617B.
+  $6ECF,$02 Set counter in #REGb for #N$09 bytes (one complete pass).
+@ $6ED1 label=DrawShield_RotateByte
+  $6ED1,$02 Shift the byte at *#REGhl left by one bit.
+  $6ED3,$01 Move to the next byte in the work buffer.
+  $6ED4,$02 Test bit 7 of the next byte.
+  $6ED6,$01 Move back to the previous byte.
+  $6ED7,$02 Jump to #R$6EDB if bit 7 was not set (no carry to propagate).
+  $6ED9,$02 Set bit 0 of the current byte (propagate the carry).
+@ $6EDB label=DrawShield_RotateNext
+  $6EDB,$01 Move to the next byte in the work buffer.
+  $6EDC,$02 Decrease counter by one and loop back to #R$6ED1 until all #N$09
+. bytes are processed.
+  $6EDE,$01 Restore the outer loop counter from the stack.
+  $6EDF,$02 Decrease the outer loop counter by one and loop back to #R$6ECB
+. until the shield timer value is reached.
+@ $6EE1 label=DrawPlayersShip
+N $6EE1 Draws the player's ship sprite to the screen buffer. The ship graphic
+. is copied from the work buffer at #R$617B, which may have been modified by
+. the shield bit manipulation routine.
+  $6EE1,$04 Load the player position from #R$66ED.
+  $6EE5,$02 Set #REGd to #N$50 (screen buffer base address).
+  $6EE7,$03 Set #REGhl to point to the ship graphic data in the work buffer at
+. #R$617B.
+  $6EEA,$02 Set counter in #REGb for #N$03 pixel rows (ship sprite height).
 @ $6EEC label=DrawPlayersShip_Loop
-  $6EEC,$02 Stash the row counter and position on the stack.
-  $6EEE,$03 #REGbc=#N($0003,$04,$04).
-  $6EF1,$02 LDIR.
-  $6EF3,$01 Restore #REGde from the stack.
-  $6EF4,$01 Increment #REGd by one.
-  $6EF5,$01 Restore #REGbc from the stack.
-  $6EF6,$02 Decrease counter by one and loop back to #R$6EEC until counter is zero.
+N $6EEC Draw each row of the ship sprite (3 bytes per row, 3 rows total).
+  $6EEC,$02 Stash the row counter and screen position on the stack.
+  $6EEE,$03 Set a row counter in #REGbc to #N($0003,$04,$04) bytes.
+  $6EF1,$02 Copy the ship graphic row from #REGhl to the screen buffer.
+  $6EF3,$01 Restore the screen position from the stack.
+  $6EF4,$01 Move down one pixel line in the screen buffer.
+  $6EF5,$01 Restore the row counter from the stack.
+  $6EF6,$02 Decrease counter by one and loop back to #R$6EEC until all #N$03
+. rows are drawn.
 
 c $6EF8 Handler: Ship Movement
 @ $6EF8 label=Handler_ShipMovement
@@ -2022,125 +2093,220 @@ N $6F40 Handle when there's been no movement.
 
 c $6F43 Handler: Move Ship Left
 @ $6F43 label=Handler_MoveShip_Left
+D $6F43 Handles moving the player's ship left by animating the ship graphic and
+. updating the ship position. The movement is frame-based, controlled by the
+. movement animation frame counter.
 E $6F43 Continue on to #R$6F93.
+N $6F43 Check if the ship is at the left edge of the screen and if movement
+. should be skipped this frame.
   $6F43,$01 Restore the player position from the stack.
-  $6F44,$04 Jump to #R$6F52 if #REGa is not equal to #N$C0.
-  $6F48,$07 Jump to #R$6F93 if *#R$66A6 is equal to #N$03.
-  $6F4F,$04 #REGl=*#R$66ED.
-  $6F53,$02 #REGb=#N$02.
-  $6F55,$02 Stash #REGbc and #REGhl on the stack.
-  $6F57,$02 #REGb=#N$08.
-  $6F59,$02 Stash #REGbc and #REGhl on the stack.
-  $6F5B,$02 #REGb=#N$03.
-  $6F5D,$02 Shift *#REGhl left (with carry).
-  $6F5F,$01 Increment #REGhl by one.
-  $6F60,$02 Test bit 7 of *#REGhl.
-  $6F62,$01 Decrease #REGhl by one.
-  $6F63,$02 Jump to #R$6F67 if #REGhl is equal to #N$03.
-  $6F65,$02 Set bit 0 of *#REGhl.
-  $6F67,$01 Increment #REGhl by one.
-  $6F68,$02 Decrease counter by one and loop back to #R$6F5D until counter is zero.
-  $6F6A,$01 Decrease #REGhl by one.
-  $6F6B,$02 Reset bit 0 of *#REGhl.
-  $6F6D,$01 Restore #REGhl from the stack.
-  $6F6E,$01 Increment #REGh by one.
-  $6F6F,$01 Restore #REGbc from the stack.
-  $6F70,$02 Decrease counter by one and loop back to #R$6F59 until counter is zero.
-  $6F72,$01 Restore #REGhl from the stack.
-  $6F73,$02 Set bit 5 of #REGl.
-  $6F75,$01 Restore #REGbc from the stack.
-  $6F76,$02 Decrease counter by one and loop back to #R$6F55 until counter is zero.
-  $6F78,$07 Jump to #R$6F82 if *#R$66A6 is equal to #N$07.
-  $6F7F,$01 Increment #REGa by one.
+  $6F44,$04 Jump to #R$6F52 if the player position is not at the left edge
+. (#N$C0).
+  $6F48,$07 Jump to #R$6F93 if the movement animation frame counter at
+. *#R$66A6 is equal to #N$03 (skip movement this frame).
+N $6F4F The ship is at the left edge, so load the player position to prepare
+. for animation.
+  $6F4F,$03 Load the low byte of the player position from #R$66ED into
+. #REGl.
+@ $6F52 label=MoveShipLeft_Animate
+N $6F52 Set up the screen position and animate the ship graphic by shifting
+. pixels left. This entry point is used both when at the edge and when not at
+. the edge.
+  $6F52,$01 Load #REGl with the low byte of the player position.
+  $6F53,$02 Set a height counter in #REGb for #N$02 rows (the ship height).
+@ $6F55 label=MoveShipLeft_RowLoop
+N $6F55 Process each row of the ship graphic, shifting all pixels left by one
+. position.
+  $6F55,$02 Stash the row counter and screen position on the stack.
+  $6F57,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $6F59 label=MoveShipLeft_LineLoop
+N $6F59 Process each pixel line within the current row.
+  $6F59,$02 Stash the line counter and screen position on the stack.
+  $6F5B,$02 Set a width counter in #REGb for #N$03 bytes (the ship width).
+@ $6F5D label=MoveShipLeft_ByteLoop
+N $6F5D Shift each byte of the ship graphic left by one pixel, propagating
+. the carry bit between bytes to create smooth scrolling.
+  $6F5D,$02 Shift the byte at *#REGhl left by one bit.
+  $6F5F,$01 Move to the next byte in the ship graphic.
+  $6F60,$02 Test bit 7 of the next byte to check if a bit was carried over.
+  $6F62,$01 Move back to the previous byte.
+  $6F63,$02 Jump to #R$6F67 if bit 7 was not set (no carry).
+  $6F65,$02 Set bit 0 of the current byte (propagate the carry from the
+. previous byte).
+@ $6F67 label=MoveShipLeft_NextByte
+  $6F67,$01 Move to the next byte in the ship graphic.
+  $6F68,$02 Decrease the width counter by one and loop back to #R$6F5D until
+. all #N$03 bytes are shifted.
+N $6F6A Clean up after shifting the bytes in this line.
+  $6F6A,$01 Move back to the last byte.
+  $6F6B,$02 Reset bit 0 of the last byte (clear any overflow).
+  $6F6D,$01 Restore the screen position from the stack.
+  $6F6E,$01 Move down one pixel line in the screen buffer.
+  $6F6F,$01 Restore the line counter from the stack.
+  $6F70,$02 Decrease the line counter by one and loop back to #R$6F59 until all
+. #N$08 lines have been processed.
+N $6F72 Move to the next row and continue processing.
+  $6F72,$01 Restore the screen position from the stack.
+  $6F73,$02 Move to the next row position (set bit 5 of #REGl, add #N$20).
+  $6F75,$01 Restore the row counter from the stack.
+  $6F76,$02 Decrease the row counter by one and loop back to #R$6F55 until both
+. rows are processed.
+N $6F78 Update the movement animation frame counter. The counter cycles from
+. #N$00 to #N$07, and the ship position is only updated when the counter
+. completes a full cycle (wraps from #N$07 to #N$00).
+  $6F78,$07 Jump to #R$6F82 if the movement animation frame counter at
+. *#R$66A6 is equal to #N$07 (wrap to #N$00).
+  $6F7F,$01 Increment the movement animation frame counter.
   $6F80,$02 Jump to #R$6F83.
-  $6F82,$01 #REGa=#N$00.
-  $6F83,$03 Write #REGa to *#R$66A6.
-  $6F86,$01 Set the bits from #REGa.
-  $6F87,$03 #REGa=*#R$66ED.
-  $6F8A,$02 Jump to #R$6F8D if #REGa is not equal to #REGa.
-  $6F8C,$01 Decrease #REGa by one.
-  $6F8D,$03 Write #REGa to *#R$66ED.
-  $6F90,$03 Call #R$6C9D.
+@ $6F82 label=MoveShipLeft_ResetCounter
+  $6F82,$01 Reset the movement animation frame counter to #N$00 (complete
+. cycle).
+@ $6F83 label=MoveShipLeft_UpdatePosition
+  $6F83,$03 Write the updated movement animation frame counter to *#R$66A6.
+  $6F86,$01 Test if the counter is zero (movement frame complete).
+  $6F87,$03 Load the player position from #R$66ED.
+  $6F8A,$02 Jump to #R$6F8D if the counter is not zero (don't move position
+. yet).
+N $6F8C The movement animation frame counter has completed a cycle, so update
+. the ship position.
+  $6F8C,$01 Decrease the player position by one (move ship left).
+@ $6F8D label=MoveShipLeft_SavePosition
+  $6F8D,$03 Write the updated player position to *#R$66ED.
+  $6F90,$03 Call the collision detection routine at #R$6C9D.
 
 c $6F93 Handler: Update Ship Attributes
 @ $6F93 label=Handler_UpdateShipPosition
+D $6F93 Updates the two attribute rows that surround the player's ship. If the
+. shield is active and bit 2 of the shield timer is set, white (#COLOUR$07) is
+. used to create a flashing visual effect; otherwise the default colour
+. (#COLOUR$46) is written.
+E $6F93 Continue on to #R$7030.
+N $6F93 Bail out if a collision/ explosion is active, otherwise fetch the player
+. attribute position and check the shield flags.
   $6F93,$07 Jump to #R$7030 if *#R$66A4 is not zero.
-  $6F9A,$03 #REGhl=*#R$66ED.
-  $6F9D,$06 Jump to #R$6FAE if *#R$6693 is zero.
-  $6FA3,$07 Jump to #R$6FAE if bit 2 of *#R$6694 is not set.
-  $6FAA,$02 #REGa=#N$07.
+  $6F9A,$03 Load the player attribute address from #R$66ED into #REGhl.
+  $6F9D,$06 Jump to #R$6FAE if the shield flag *#R$6693 is zero.
+  $6FA3,$07 Jump to #R$6FAE if bit 2 of the shield timer *#R$6694 is clear.
+N $6FAA Choose the attribute byte to write: white (#COLOUR$07) when shield is
+. active with timer bit 2 set, or default (#COLOUR$46).
+  $6FAA,$02 Load #COLOUR$07 into #REGa (white for shield effect).
   $6FAC,$02 Jump to #R$6FB0.
-  $6FAE,$02 #REGa=#COLOUR$46.
-  $6FB0,$02 #REGb=#N$02.
-  $6FB2,$02 Stash #REGbc and #REGhl on the stack.
-  $6FB4,$01 Decrease #REGl by one.
-  $6FB5,$01 Stash #REGaf on the stack.
-  $6FB6,$04 Jump to #R$6FBE if #REGa is equal to #COLOUR$46.
-  $6FBA,$04 Jump to #R$6FC0 if #REGa is not equal to #INK$07.
-  $6FBE,$02 Write #N$00 to *#REGhl.
-  $6FC0,$01 Restore #REGaf from the stack.
-  $6FC1,$01 Increment #REGl by one.
-  $6FC2,$02 #REGb=#N$03.
-  $6FC4,$01 Write #REGa to *#REGhl.
-  $6FC5,$01 Increment #REGhl by one.
-  $6FC6,$02 Decrease counter by one and loop back to #R$6FC4 until counter is zero.
-  $6FC8,$01 Stash #REGaf on the stack.
-  $6FC9,$05 Jump to #R$6FD2 if *#REGhl is equal to #COLOUR$46.
-  $6FCE,$04 Jump to #R$6FD4 if *#REGhl is not equal to #INK$07.
-  $6FD2,$02 Write #N$00 to *#REGhl.
-  $6FD4,$02 Restore #REGaf and #REGhl from the stack.
-  $6FD6,$02 Set bit 5 of #REGl.
-  $6FD8,$01 Restore #REGbc from the stack.
-  $6FD9,$02 Decrease counter by one and loop back to #R$6FB2 until counter is zero.
+N $6FAE The shield is not active - use the standard ship colour.
+@ $6FAE label=UpdateShip_SetDefaultColour
+  $6FAE,$02 Load #COLOUR$46 into #REGa.
+@ $6FB0 label=UpdateShip_SetupRows
+N $6FB0 Prepare to write two rows of attributes (above and below the ship).
+  $6FB0,$02 Set a row counter in #REGb for #N$02 rows.
+@ $6FB2 label=UpdateShip_RowLoop
+  $6FB2,$02 Stash the row counter and attribute pointer on the stack.
+  $6FB4,$01 Move left one attribute cell (point to column before ship).
+  $6FB5,$01 Stash the attribute byte on the stack.
+  $6FB6,$04 Jump to #R$6FBE if the colour is #COLOUR$46.
+  $6FBA,$04 Jump to #R$6FC0 if the colour is not #INK$07 (no need to blank).
+@ $6FBE label=UpdateShip_BlankLeft
+  $6FBE,$02 Write #N$00 to the left neighbour attribute (clear highlight).
+@ $6FC0 label=UpdateShip_WriteRow
+  $6FC0,$01 Restore the attribute byte from the stack.
+  $6FC1,$01 Move right to the first ship column.
+  $6FC2,$02 Set a width counter in #REGb for #N$03 columns.
+@ $6FC4 label=UpdateShip_WriteColumns
+  $6FC4,$01 Write the chosen colour to *#REGhl.
+  $6FC5,$01 Move to the next column.
+  $6FC6,$02 Decrease the width counter by one and loop back to #R$6FC4 until
+. all #N$03 columns are updated.
+N $6FC8 Clean up the right-hand neighbour attribute if required.
+  $6FC8,$01 Stash the attribute byte on the stack.
+  $6FC9,$05 Jump to #R$6FD2 if the neighbour already holds #COLOUR$46.
+  $6FCE,$04 Jump to #R$6FD4 if the neighbour is not #INK$07 (nothing to clear).
+@ $6FD2 label=UpdateShip_BlankRight
+  $6FD2,$02 Write #N$00 to the right neighbour attribute.
+@ $6FD4 label=UpdateShip_NextRow
+  $6FD4,$02 Restore the attribute byte and attribute pointer from the stack.
+  $6FD6,$02 Move down one attribute row (set bit 5 of #REGl).
+  $6FD8,$01 Restore the row counter from the stack.
+  $6FD9,$02 Decrease the row counter by one and loop back to #R$6FB2 until both
+. rows are processed.
   $6FDB,$02 Jump to #R$7030.
 
 c $6FDD Handler: Move Ship Right
 @ $6FDD label=Handler_MoveShip_Right
+D $6FDD Moves the player's ship one pixel to the right by shifting the ship
+. graphic and updating the player position. Movement timing is controlled by
+. the movement animation frame counter (counts down from #N$07 to #N$00).
+E $6FDD Continue on to #R$6F93.
+N $6FDD Check if the ship is already at the right edge (#N$DD) and whether this
+. frame should perform a movement step.
   $6FDD,$01 Restore the player position from the stack.
   $6FDE,$02 Compare the player position with #N$DD.
-  $6FE0,$03 #REGa=*#R$66A6.
-  $6FE3,$02 Jump to #R$6FE8 if the player position is not equal to #N$DD.
-  $6FE5,$03 Jump to #R$6F93 if *#R$66A6 is zero.
-  $6FE8,$01 Set the bits from #REGa.
-  $6FE9,$02 Jump to #R$6FEE if #REGa is equal to #REGa.
-  $6FEB,$01 Decrease #REGa by one.
+  $6FE0,$03 Load the movement animation frame counter from #R$66A6.
+  $6FE3,$02 Jump to #R$6FE8 if the ship is not at the right edge.
+  $6FE5,$03 Jump to #R$6F93 if the movement animation frame counter is zero
+. (skip movement while touching the edge).
+@ $6FE8 label=MoveShipRight_UpdateCounter
+N $6FE8 Decrement the movement animation frame counter, wrapping from #N$00
+. back to #N$07. Only when the counter wraps (value #N$07) is the player
+. position updated.
+  $6FE8,$03 Jump to #R$6FEE if the movement animation frame counter is zero
+. (wrap to #N$07).
+  $6FEB,$01 Decrease the movement animation frame counter by one.
   $6FEC,$02 Jump to #R$6FF0.
-  $6FEE,$02 #REGa=#N$07.
-  $6FF0,$03 Write #REGa to *#R$66A6.
-  $6FF3,$02 Compare #REGa with #N$07.
-  $6FF5,$03 #REGa=*#R$66ED.
-  $6FF8,$02 Jump to #R$6FFE if #REGa is not equal to #N$07.
-  $6FFA,$01 Increment #REGa by one.
-  $6FFB,$03 Write #REGa to *#R$66ED.
-  $6FFE,$01 Stash #REGaf on the stack.
-  $6FFF,$02 #REGa+=#N$02.
-  $7001,$01 #REGl=#REGa.
-  $7002,$02 #REGb=#N$02.
-  $7004,$02 Stash #REGbc and #REGhl on the stack.
-  $7006,$02 #REGb=#N$08.
-  $7008,$02 Stash #REGbc and #REGhl on the stack.
-  $700A,$02 #REGb=#N$03.
-  $700C,$02 Shift *#REGhl right.
-  $700E,$01 Decrease #REGhl by one.
-  $700F,$02 Test bit 0 of *#REGhl.
-  $7011,$02 Reset bit 0 of *#REGhl.
-  $7013,$01 Increment #REGhl by one.
-  $7014,$02 Jump to #R$7018 if #REGhl is equal to #N$03.
-  $7016,$02 Set bit 7 of *#REGhl.
-  $7018,$01 Decrease #REGhl by one.
-  $7019,$02 Decrease counter by one and loop back to #R$700C until counter is zero.
-  $701B,$01 Increment #REGhl by one.
-  $701C,$02 Reset bit 7 of *#REGhl.
-  $701E,$01 Restore #REGhl from the stack.
-  $701F,$01 Increment #REGh by one.
-  $7020,$01 Restore #REGbc from the stack.
-  $7021,$02 Decrease counter by one and loop back to #R$7008 until counter is zero.
-  $7023,$01 Restore #REGhl from the stack.
-  $7024,$02 Set bit 5 of #REGl.
-  $7026,$01 Restore #REGbc from the stack.
-  $7027,$02 Decrease counter by one and loop back to #R$7004 until counter is zero.
-  $7029,$01 Restore #REGaf from the stack.
-  $702A,$03 Call #R$6C9D.
+@ $6FEE label=MoveShipRight_ResetCounter
+  $6FEE,$02 Load #N$07 into the movement animation frame counter.
+@ $6FF0 label=MoveShipRight_SaveCounter
+  $6FF0,$03 Write the updated counter back to *#R$66A6.
+N $6FF3 Move the ship only when the counter has just wrapped (value #N$07).
+  $6FF3,$02 Compare the counter with #N$07.
+  $6FF5,$03 Load the player position from #R$66ED.
+  $6FF8,$02 Jump to #R$6FFE if the counter is not #N$07 (no movement on this
+. frame).
+  $6FFA,$01 Increment the player position by one (move right).
+  $6FFB,$03 Write the updated position to *#R$66ED.
+@ $6FFE label=MoveShipRight_Setup
+N $6FFE Prepare the screen position and animate the ship graphic by shifting
+. pixels to the right.
+  $6FFE,$01 Stash the ship position on the stack.
+  $6FFF,$02 Add #N$02 to #REGa to point to the rightmost ship column.
+  $7001,$01 Copy the screen column into #REGl.
+  $7002,$02 Set a height counter in #REGb for #N$02 rows (ship height).
+@ $7004 label=MoveShipRight_RowLoop
+N $7004 Process each row of the ship graphic.
+  $7004,$02 Stash the row counter and screen position on the stack.
+  $7006,$02 Set a line counter in #REGb for #N$08 pixel lines.
+@ $7008 label=MoveShipRight_LineLoop
+N $7008 Process each pixel line in the current row.
+  $7008,$02 Stash the line counter and screen position on the stack.
+  $700A,$02 Set a width counter in #REGb for #N$03 bytes (ship width).
+@ $700C label=MoveShipRight_ByteLoop
+N $700C Shift each byte of the ship graphic right by one pixel, propagating
+. the carry between adjacent bytes.
+  $700C,$02 Shift the byte at *#REGhl right.
+  $700E,$01 Move to the previous byte in the ship graphic.
+  $700F,$02 Test bit 0 of the previous byte to see if a bit needs to carry.
+  $7011,$02 Clear bit 0 of that byte ready for the carry.
+  $7013,$01 Move back to the current byte.
+  $7014,$02 Jump to #R$7018 if the width counter has reached zero (no carry to
+. set).
+  $7016,$02 Set bit 7 of the current byte (propagate the carry from the left).
+@ $7018 label=MoveShipRight_NextByte
+  $7018,$01 Move to the previous byte again.
+  $7019,$02 Decrease the width counter by one and loop back to #R$700C until
+. the #N$03 bytes are shifted.
+N $701B Clean up after shifting the line.
+  $701B,$01 Move to the next byte.
+  $701C,$02 Clear bit 7 of that byte (remove any overflow).
+  $701E,$01 Restore the screen position from the stack.
+  $701F,$01 Move down one pixel line in the screen buffer.
+  $7020,$01 Restore the line counter from the stack.
+  $7021,$02 Decrease the line counter by one and loop back to #R$7008 until all
+. #N$08 lines are processed.
+N $7023 Move to the next row and continue processing.
+  $7023,$01 Restore the screen position from the stack.
+  $7024,$02 Move to the next row position (set bit 5 of #REGl, add #N$20).
+  $7026,$01 Restore the row counter from the stack.
+  $7027,$02 Decrease the row counter by one and loop back to #R$7004 until both
+. rows are processed.
+  $7029,$01 Restore the ship position from the stack.
+  $702A,$03 Call the collision detection routine at #R$6C9D.
   $702D,$03 Jump to #R$6F93.
 
 c $7030 Handler: Player Bullets
@@ -2158,7 +2324,7 @@ N $703E Modified by the code at #R$741E.
   $703E,$02 #HTML(Set a counter in #REGb for <em>nn</em> bullet(s).)
 @ $7040 label=PlayerBullets_Loop
   $7040,$02 Stash the bullet data pointer and bullet counter on the stack.
-  $7042,$03 Load the bullet position into #REGde.
+  $7042,$03 Load #REGde with the bullet position.
   $7045,$05 Jump to #R$70E7 if the bullet is active.
 N $704A Check if the player can fire a new bullet.
   $704A,$0E Jump to #R$714E if either *#R$66A4 or *#R$6693 are active.
@@ -2410,10 +2576,11 @@ N $71B7 Activate this explosion slot.
 c $71BE Handler: Bullet Collision Effects
 @ $71BE label=Handler_BulletCollisionEffects
 R $71BE HL Bullet attribute buffer address
-N $71BE Check if this is phase 0, 1 or 4. The first section targets only the
-. Pheenix aliens in phase 2 and 3.
-  $71BE,$07 Jump to #R$71EC if bit 1 of *#R$66F1 is not set (phases 0, 1, 4).
-N $71C5 Handle the Pheenix aliens in either phase 2 or 3.
+N $71BE Check if this is phase #N$00, #N$01 or #N$04. The first section targets
+. only the Pheenix aliens in phase #N$02 and #N$03.
+  $71BE,$07 Jump to #R$71EC if bit 1 of *#R$66F1 is not set, so phases
+. #LIST { #N$00 } { #N$01 } { #N$04 } LIST#
+N $71C5 Handle the Pheenix aliens in either phase #N$02 or #N$03.
   $71C5,$01 Load the attribute value from the bullet attribute buffer address.
 N $71C6 Check for the Pheenix wing attribute values from either phase.
 N $71C6 #UDGTABLE {
@@ -2449,10 +2616,10 @@ N $71D6 #HTML(#AUDIO(wing-hit.wav)(#INCLUDE(WingHit)))
 . the sound loops are complete.
   $71EB,$01 Return.
 N $71EC The only other special bullet handling is when bullets hit the hull of
-. the mothership (only in phase 4).
+. the mothership (only in phase #N$04).
 @ $71EC label=BulletCollisionWithMothership
   $71EC,$03 Return if *#R$66F1 is not phase #N$04.
-N $71EF #PUSHS #CLS($05) #SIM(start=$67F6,stop=$6818) #UDGTABLE {
+N $71EF #PUSHS #CLS$05 #SIM(start=$67F6,stop=$6818) #UDGTABLE {
 .   #SIM(start=$696A,stop=$6A22)#SCR$02(mothership)
 . } TABLE# #POPS
 N $71EF Start by handling the final stage of the rotating blue strip.
@@ -2542,53 +2709,66 @@ N $724A Has the bullet reached the mothership alien?
 . #COLOUR$42.
 N $724E The bullet has hit the mothership alien.
   $724E,$05 Write #N$01 to *#R$66D3 to mark that the mothership alien has been
-. shot (and so phase 4 is now complete).
+. shot (and so phase #N$04 is now complete).
   $7253,$01 Return.
 
 c $7254 Handler: Level Reset
 @ $7254 label=Handler_LevelReset
 D $7254 Reset the level after the player death, clearing aliens and restoring
 . states.
-  $7254,$08 Jump to #R$730D if *#R$66A4 is not equal to #N$02.
-  $725C,$07 Jump to #R$7277 if *#R$66F1 is not equal to #N$04.
-  $7263,$03 #REGhl=#R$65DD.
-  $7266,$02 #REGb=#N$08.
-  $7268,$01 Stash #REGbc on the stack.
-  $7269,$01 #REGe=*#REGhl.
-  $726A,$01 Increment #REGhl by one.
-  $726B,$01 #REGd=*#REGhl.
-  $726C,$01 Increment #REGhl by one.
-  $726D,$01 Stash #REGhl on the stack.
+  $7254,$08 Jump to #R$730D if *#R$66A4 is not #N$02 ("explosion complete").
+  $725C,$07 Jump to #R$7277 if *#R$66F1 is not phase #N$04.
+N $7263 This is phase #N$04 - the mothership phase.
+  $7263,$03 Point #REGhl to #R$65DD.
+  $7266,$02 Set a counter in #REGb for #N$08 aliens.
+@ $7268 label=LevelReset_ClearMothership_Loop
+  $7268,$01 Stash the alien counter on the stack.
+  $7269,$03 Load the alien position into #REGde.
+  $726C,$01 Move the alien data pointer to the next alien.
+  $726D,$01 Stash the alien data pointer on the stack.
   $726E,$05 Call #R$7564 if bit 6 of #REGd is active.
-  $7273,$02 Restore #REGhl and #REGbc from the stack.
-  $7275,$02 Decrease counter by one and loop back to #R$7268 until counter is zero.
-  $7277,$03 #REGhl=#R$6680.
-  $727A,$03 #REGde=#R$6680(#N$6681).
-  $727D,$03 #REGbc=#N($006C,$04,$04).
-  $7280,$01 Write #REGb to *#REGhl.
-  $7281,$02 LDIR.
-  $7283,$03 #REGhl=#R$65DD.
+  $7273,$02 Restore the alien data pointer and alien counter from the stack.
+  $7275,$02 Decrease the alien counter by one and loop back to #R$7268 until
+. all of the aliens have been reset.
+N $7277 Clear game state data.
+@ $7277 label=LevelReset_ClearGameState
+  $7277,$0C Clear #N($006C,$04,$04) bytes from #R$6680 onwards.
+  $7283,$03 Point #REGhl to #R$65DD.
   $7286,$03 #REGde=#R$65DD(#N$65DE).
   $7289,$01 Stash #REGhl on the stack.
   $728A,$02 #REGc=#N$1D.
   $728C,$01 Write #REGb to *#REGhl.
   $728D,$02 LDIR.
+N $728F Reset the alien positions back to defaults.
+N $728F Start by setting a phase default (data for phases #N$02 and #N$03).
   $728F,$03 #REGhl=#R$6637.
-  $7292,$06 Jump to #R$729D if *#R$66F1 is not zero.
+  $7292,$06 Jump to #R$729D if *#R$66F1 is not phase #N$00.
+N $7298 This is phase #N$00, so set accordingly.
   $7298,$03 #REGhl=#R$65FB.
   $729B,$02 Jump to #R$72AD.
-  $729D,$04 Jump to #R$72A6 if #REGa is not equal to #N$01.
+N $729D Is this phase #N$01?
+@ $729D label=LevelReset_CheckPhase_01
+  $729D,$04 Jump to #R$72A6 if *#R$66F1 is not phase #N$01.
+N $72A1 This is phase #N$01, so set accordingly.
   $72A1,$03 #REGhl=#R$6619.
   $72A4,$02 Jump to #R$72AD.
-  $72A6,$04 Jump to #R$72AD if #REGa is not equal to #N$04.
+N $72A6 Is this phase #N$04?
+@ $72A6 label=LevelReset_CheckPhase_04
+  $72A6,$04 Jump to #R$72AD if *#R$66F1 is not phase #N$04.
+N $72AA This is phase #N$04, so set accordingly.
   $72AA,$03 #REGhl=#R$6647.
+N $72AD Copy the phase default data to the active table.
+@ $72AD label=LevelReset_CopyWaveData
   $72AD,$01 Restore #REGde from the stack.
   $72AE,$03 #REGa=*#R$667F.
   $72B1,$01 Multiply #REGa by #N$02.
   $72B2,$02 Jump to #R$72B7 if #REGa is zero.
   $72B4,$01 #REGc=#REGa.
   $72B5,$02 LDIR.
+N $72B7 Reset player position.
+@ $72B7 label=LevelReset_ResetPlayerPosition
   $72B7,$05 Write #N$CE to *#R$66ED.
+N $72BC Handle "spending a life".
   $72BC,$03 #REGhl=#R$66F0.
 N $72BF See #POKE#infinite-lives(Infinite Lives).
   $72BF,$01 Decrease #R$66F0 by one.
@@ -2652,7 +2832,7 @@ D $730D Displays the bonus screen after completing the mothership level (phase
 N $730D Only continue if;
 . #LIST
 . { *#R$66A4 has no collision detected }
-. { *#R$66F1 is phase 4 }
+. { *#R$66F1 is phase #N$04 }
 . { *#R$66D3 has been hit }
 . LIST#
   $730D,$06 Return if *#R$66A4 is equal to #N$01.
@@ -2662,7 +2842,7 @@ N $7320 Display a bonus screen with star background.
 N $7320 First fill the screen with the star UDG character (note they're written
 . in #COLOUR$00 so they're not yet visible - this is just an example in
 . #COLOUR$45 to show what is happening at this point).
-N $7320 #PUSHS #POKES$667F,$04#CLS($45)#SIM(start=$7323,stop=$6B35)
+N $7320 #PUSHS #POKES$667F,$04#CLS$45#SIM(start=$7323,stop=$6B35)
 . #UDGTABLE(default,centre,centre) { =h Frame | =h Output }
 .   { #N$01 | #SIM(start=$6B35,stop=$6B4E)#SCR$01(fill-3) }
 . TABLE#
