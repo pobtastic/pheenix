@@ -41,6 +41,9 @@ Next: <a href="27441.html">27441</a>
 <div class="paragraph">
 Used by the routine at <a href="30230.html">Handler_AliensMovement_Spawning</a>.
 </div>
+<div class="paragraph">
+Renders and animates the mothership plasma thing, the rotating strip, the mothership alien and handles the bullets.
+</div>
 </div>
 </td>
 </tr>
@@ -49,9 +52,81 @@ Used by the routine at <a href="30230.html">Handler_AliensMovement_Spawning</a>.
 <span id="27171"></span>
 <div class="comments">
 <div class="paragraph">
-Prints the top part of the alien mothership: <table class="">
+Prints the top part of the alien mothership:  <table class="default">
 <tr>
-<td class="" colspan="1" rowspan="1"><img alt="mothership-05" src="../../images/udgs/mothership-05.png" /></td>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-0" src="../../images/scr/ripple-0.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-1" src="../../images/scr/ripple-1.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">3</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-2" src="../../images/scr/ripple-2.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">4</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-3" src="../../images/scr/ripple-3.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">5</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-4" src="../../images/scr/ripple-4.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">6</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-5" src="../../images/scr/ripple-5.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">7</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-6" src="../../images/scr/ripple-6.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">8</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-7" src="../../images/scr/ripple-7.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">9</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-8" src="../../images/scr/ripple-8.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">10</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-9" src="../../images/scr/ripple-9.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">11</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-10" src="../../images/scr/ripple-10.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">12</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-11" src="../../images/scr/ripple-11.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">13</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-12" src="../../images/scr/ripple-12.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">14</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-13" src="../../images/scr/ripple-13.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">15</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-14" src="../../images/scr/ripple-14.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">16</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="ripple-15" src="../../images/scr/ripple-15.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Which looks like this when animated: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="ripple-animation" src="../../images/udgs/ripple-animation.png" /></td>
 </tr>
 </table>
 </div>
@@ -62,25 +137,25 @@ Prints the top part of the alien mothership: <table class="">
 <td class="asm-label">Handler_Mothership</td>
 <td class="address-2"><span id="27171"></span>27171</td>
 <td class="instruction">LD DE,16591</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=16591 (screen buffer location).</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=16591 (left-hand UDG screen buffer target).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27174"></span>27174</td>
 <td class="instruction">PUSH DE</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">DE</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash this destination address on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27175"></span>27175</td>
 <td class="instruction">LD HL,25921</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25912.html#25921">Table_Mothership_Animation</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=<a href="25912.html#25921">Table_Mothership_Animation</a> (UDG graphics).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27178"></span>27178</td>
 <td class="instruction">LD BC,562</td>
-<td class="comment-1" rowspan="1">Set to print 2 characters in INK:RED,
+<td class="comment-1" rowspan="1">Configure the text routine to print the two UDG characters in INK:RED,
 PAPER:YELLOW.</td>
 </tr>
 <tr>
@@ -93,19 +168,29 @@ PAPER:YELLOW.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27184"></span>27184</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the original screen pointer from the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27185"></span>
+<div class="comments">
+<div class="paragraph">
+Apply a rippling graphic effect between the UDG tiles to imply charging plasma energy (timed from <a href="26324.html">MothershipAnimationCounter</a>).
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27185"></span>27185</td>
 <td class="instruction">LD A,(26324)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26324.html">MothershipAnimationCounter</a>.</td>
+<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="26324.html">MothershipAnimationCounter</a> (current ripple phase).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27188"></span>27188</td>
 <td class="instruction">PUSH AF</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">AF</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the animation counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -129,39 +214,56 @@ PAPER:YELLOW.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27195"></span>27195</td>
 <td class="instruction">ADD A,H</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>+=<span class="register">H</span>.</td>
+<td class="comment-1" rowspan="2">Add the result to <span class="register">H</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27196"></span>27196</td>
 <td class="instruction">LD H,A</td>
-<td class="comment-1" rowspan="1"><span class="register">H</span>=<span class="register">A</span>.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27197"></span>
+<div class="comments">
+<div class="paragraph">
+Draw the "line" between the two ... masts (?) obviously it's hard to tell exactly what this is supposed to represent - but I've always thought it's a tesla coil type thing.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27197"></span>27197</td>
-<td class="instruction">LD (HL),3</td>
-<td class="comment-1" rowspan="1">Write INK:MAGENTA,
-PAPER:BLACK to *<span class="register">HL</span>.</td>
+<td class="instruction">LD (HL),%00000011</td>
+<td class="comment-1" rowspan="1">Write 3 to draw two pixels on the left-hand UDG.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27199"></span>27199</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next position.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27200"></span>27200</td>
-<td class="instruction">LD (HL),192</td>
-<td class="comment-1" rowspan="1">Write INK:BLACK,
-PAPER:BLACK (BRIGHT) FLASH: ON to *<span class="register">HL</span>.</td>
+<td class="instruction">LD (HL),%11000000</td>
+<td class="comment-1" rowspan="1">Write 192 to draw two pixels on the right-hand UDG to complete the line.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27202"></span>27202</td>
 <td class="instruction">POP AF</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">AF</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the animation counter from the stack.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27203"></span>
+<div class="comments">
+<div class="paragraph">
+Decide whether to scroll the middle (blue) strip. This only happens when the lowest two counter bits are zero so the conveyor effect moves slowly.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -173,31 +275,68 @@ PAPER:BLACK (BRIGHT) FLASH: ON to *<span class="register">HL</span>.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27205"></span>27205</td>
 <td class="instruction">JR NZ,<a href="27171.html#27241">Handler_Mothership_UpdateCounter</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27241">Handler_Mothership_UpdateCounter</a> if <span class="register">HL</span> is not equal to 0.</td>
+<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27241">Handler_Mothership_UpdateCounter</a> if the bits aren’t both zero (skip scrolling).</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27207"></span>
+<div class="comments">
+<div class="paragraph">
+Scroll the middle (blue) strip right by one character line to keep the mothership interior "machinery" moving.
+</div>
+<div class="paragraph">
+<table class="default">
+<tr>
+<th colspan="1" rowspan="1">Frame</th>
+<th colspan="1" rowspan="1">Output</th>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">1</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="conveyor-0" src="../../images/scr/conveyor-0.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">2</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="conveyor-1" src="../../images/scr/conveyor-1.png" /></td>
+</tr>
+<tr>
+<td class="centre" colspan="1" rowspan="1">3</td>
+<td class="centre" colspan="1" rowspan="1"><img alt="conveyor-2" src="../../images/scr/conveyor-2.png" /></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+Which looks like this when animated: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="conveyor-animation" src="../../images/udgs/conveyor-animation.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27207"></span>27207</td>
 <td class="instruction">LD HL,18487</td>
-<td class="comment-1" rowspan="1"><span class="register">HL</span>=18487 (screen buffer location).</td>
+<td class="comment-1" rowspan="1"><span class="register">HL</span>=18487 (upper source row).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27210"></span>27210</td>
 <td class="instruction">LD DE,18488</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=18488 (screen buffer location).</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=18488 (destination one line below).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27213"></span>27213</td>
 <td class="instruction">LD B,8</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=8.</td>
+<td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
 <td class="asm-label">Handler_Mothership_ScrollLoop</td>
 <td class="address-2"><span id="27215"></span>27215</td>
 <td class="instruction">PUSH BC</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">BC</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the line counter on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -220,13 +359,12 @@ PAPER:BLACK (BRIGHT) FLASH: ON to *<span class="register">HL</span>.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27219"></span>27219</td>
 <td class="instruction">LD BC,17</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0017.</td>
+<td class="comment-1" rowspan="2">Copy 0017 bytes right-to-left (scroll left by one character).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27222"></span>27222</td>
 <td class="instruction">LDDR</td>
-<td class="comment-1" rowspan="1">LDDR.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -261,13 +399,23 @@ PAPER:BLACK (BRIGHT) FLASH: ON to *<span class="register">HL</span>.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27229"></span>27229</td>
 <td class="instruction">POP BC</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">BC</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the line counter from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27230"></span>27230</td>
 <td class="instruction">DJNZ <a href="27171.html#27215">Handler_Mothership_ScrollLoop</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="27171.html#27215">Handler_Mothership_ScrollLoop</a> until counter is zero.</td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="27171.html#27215">Handler_Mothership_ScrollLoop</a> until the counter is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27232"></span>
+<div class="comments">
+<div class="paragraph">
+Finish the scroll by copying the bottom line back to the top so the conveyor appears continuous.
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -310,7 +458,7 @@ PAPER:BLACK (BRIGHT) FLASH: ON to *<span class="register">HL</span>.</td>
 <span id="27241"></span>
 <div class="comments">
 <div class="paragraph">
-Update mothership animation counter.
+Update mothership animation state.
 </div>
 </div>
 </td>
@@ -325,7 +473,7 @@ Update mothership animation counter.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27244"></span>27244</td>
 <td class="instruction">LD A,(HL)</td>
-<td class="comment-1" rowspan="1">Fetch the counter and store it in <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="1">Fetch the animation counter.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -334,10 +482,20 @@ Update mothership animation counter.
 <td class="comment-1" rowspan="1">Increment *<a href="26324.html">MothershipAnimationCounter</a> by one.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="27246"></span>
+<div class="comments">
+<div class="paragraph">
+Display the mothership alien.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="27246"></span>27246</td>
 <td class="instruction">AND %00001111</td>
-<td class="comment-1" rowspan="2">Only animate the alien every 16th frame (when bits 0-3 are all zero) else jump to <a href="27171.html#27289">Handler_Mothership_ProcessBullets</a>.</td>
+<td class="comment-1" rowspan="2">Only animate the mothership alien every 16th frame (when bits 0-3 are all zero); otherwise skip to bullet processing (<a href="27171.html#27289">Handler_Mothership_ProcessBullets</a>).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -349,10 +507,7 @@ Update mothership animation counter.
 <span id="27250"></span>
 <div class="comments">
 <div class="paragraph">
-Draw the mothership alien in one of its two frames. Note; it is a 2x2 sprite.
-</div>
-<div class="paragraph">
-This is the 16th frame, now toggle between the two frames of the alien sprite.
+Select one of the two alien frames (2×2 sprite) based on bit 4 of the counter and draw it to the screen.
 </div>
 </div>
 </td>
@@ -361,7 +516,21 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27250"></span>27250</td>
 <td class="instruction">BIT 4,(HL)</td>
-<td class="comment-1" rowspan="1">Test bit 4 of the counter.</td>
+<td class="comment-1" rowspan="1">Test bit 4 of the animation counter to choose the frame.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27252"></span>
+<div class="comments">
+<div class="paragraph">
+Default to: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-alien-01" src="../../images/udgs/mothership-alien-01.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -373,7 +542,21 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27255"></span>27255</td>
 <td class="instruction">JR Z,<a href="27171.html#27260">Handler_Mothership_DrawAlien</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27260">Handler_Mothership_DrawAlien</a> if bit 4 isn't set.</td>
+<td class="comment-1" rowspan="1">Jump to <a href="27171.html#27260">Handler_Mothership_DrawAlien</a> if bit 4 is clear.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="27257"></span>
+<div class="comments">
+<div class="paragraph">
+Else use: <table class="">
+<tr>
+<td class="" colspan="1" rowspan="1"><img alt="mothership-alien-02" src="../../images/udgs/mothership-alien-02.png" /></td>
+</tr>
+</table>
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -385,7 +568,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label">Handler_Mothership_DrawAlien</td>
 <td class="address-2"><span id="27260"></span>27260</td>
 <td class="instruction">LD DE,16623</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=16623 (screen buffer location).</td>
+<td class="comment-1" rowspan="1"><span class="register">DE</span>=16623 (top-left screen cell for the alien).</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -494,6 +677,19 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1">Decrease the row counter by one and loop back to <a href="27171.html#27265">Handler_Mothership_RowLoop</a> until both rows have finished being drawn and the alien is complete.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="27289"></span>
+<div class="comments">
+<div class="paragraph">
+Handle the two mothership bullets (fire only when the player bullet limiter <a href="26261.html">Bullet_RateLimiter</a> is zero).
+</div>
+<div class="paragraph">
+See <a href="../reference/pokes.html#mothership-not-fire">Mothership Alien Doesn't Fire</a>.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label">Handler_Mothership_ProcessBullets</td>
 <td class="address-2"><span id="27289"></span>27289</td>
 <td class="instruction">LD A,(26261)</td>
@@ -588,7 +784,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="asm-label"></td>
 <td class="address-1"><span id="27312"></span>27312</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27337">Handler_Mothership_BulletActive</a> if <span class="register">A</span> is not zero.</td>
+<td class="comment-1" rowspan="2">Jump to <a href="27171.html#27337">Handler_Mothership_BulletActive</a> if the bullet slot is active.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -631,6 +827,16 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <td class="comment-1" rowspan="1">Jump to <a href="27171.html#27378">Mothership_Bullet_Collision</a>.</td>
 </tr>
 <tr>
+<td class="routine-comment" colspan="5">
+<span id="27328"></span>
+<div class="comments">
+<div class="paragraph">
+Only fire if the random nibble equals 3 otherwise skip the slot.
+</div>
+</div>
+</td>
+</tr>
+<tr>
 <td class="asm-label">Handler_Mothership_0</td>
 <td class="address-2"><span id="27328"></span>27328</td>
 <td class="instruction">CP 3</td>
@@ -658,7 +864,7 @@ This is the 16th frame, now toggle between the two frames of the alien sprite.
 <span id="27337"></span>
 <div class="comments">
 <div class="paragraph">
-Update active bullet position.
+Update an active bullet by erasing its old sprite and moving it down.
 </div>
 </div>
 </td>

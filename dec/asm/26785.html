@@ -94,7 +94,7 @@ Point to an asterisk in the ZX Spectrum font UDG data.
 <td class="comment-1" rowspan="1">Set a line counter in <span class="register">B</span> (8 lines in a UDG).</td>
 </tr>
 <tr>
-<td class="asm-label">Print_Asterisk_0</td>
+<td class="asm-label">Print_Asterisk_Loop</td>
 <td class="address-2"><span id="26797"></span>26797</td>
 <td class="instruction">LD A,(DE)</td>
 <td class="comment-1" rowspan="2">Copy the UDG data to the screen buffer.</td>
@@ -119,8 +119,8 @@ Point to an asterisk in the ZX Spectrum font UDG data.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="26801"></span>26801</td>
-<td class="instruction">DJNZ <a href="26785.html#26797">Print_Asterisk_0</a></td>
-<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="26918.html#26978">Handler_ShipExplosion_LineLoop</a> until all 8 lines of the UDG character have been drawn.</td>
+<td class="instruction">DJNZ <a href="26785.html#26797">Print_Asterisk_Loop</a></td>
+<td class="comment-1" rowspan="1">Decrease the line counter by one and loop back to <a href="26785.html#26797">Print_Asterisk_Loop</a> until all 8 lines of the UDG character have been drawn.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>

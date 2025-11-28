@@ -25,6 +25,7 @@ gtag('config', 'G-75RERFCHBG');
 <ul class="contents">
 <li><a href="#infinite-lives">Infinite Lives</a></li>
 <li><a href="#aliens-not-fire">Aliens Don't Fire</a></li>
+<li><a href="#mothership-not-fire">Mothership Alien Doesn't Fire</a></li>
 <li><a href="#immunity">Immunity</a></li>
 </ul>
 <div><span id="infinite-lives"></span></div>
@@ -70,8 +71,28 @@ Just RETurn immediately from the alien subroutine.
 </table>
 </div>
 </div>
-<div><span id="immunity"></span></div>
+<div><span id="mothership-not-fire"></span></div>
 <div class="box box-1">
+<div class="box-title">Mothership Alien Doesn't Fire</div>
+<div class="paragraph">
+POKE <a href="../asm/31591.html">31591</a>,201
+</div>
+<div class="paragraph">
+Just RETurn immediately from the mothership alien bullet subroutine.
+</div>
+<div class="paragraph">
+<table>
+<tbody>
+<tr>
+<td class="address-1"><a href="../asm/27171.html#27293">27293</a></td>
+<td class="instruction">RET</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div><span id="immunity"></span></div>
+<div class="box box-2">
 <div class="box-title">Immunity</div>
 <div class="paragraph">
 POKE <a href="../asm/27805.html#27831">27832</a>,0
