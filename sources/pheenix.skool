@@ -3554,11 +3554,12 @@ c$68A1 PUSH AF       ; {Stash #REGaf, #REGbc, #REGde and #REGhl on the stack.
  $68A8 LD DE,$3D50   ; #HTML(#REGde=<a rel="noopener nofollow"
                      ; href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html#3D50">CHARSET+#N$50</a>.)
  $68AB LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+@label=Print_Asterisk_Loop
 *$68AD LD A,(DE)     ; {Copy the UDG data to the screen buffer.
  $68AE LD (HL),A     ; }
  $68AF INC H         ; Move down one pixel line in the screen buffer.
  $68B0 INC DE        ; Move to the next UDG graphic data byte.
- $68B1 DJNZ $68AD    ; Decrease the line counter by one and loop back to #R$6962 until all
+ $68B1 DJNZ $68AD    ; Decrease the line counter by one and loop back to #R$68AD until all
                      ; #N$08 lines of the UDG character have been drawn.
  $68B3 POP HL        ; {Restore #REGhl, #REGde, #REGbc and #REGaf from the
  $68B4 POP DE        ; stack.
@@ -3687,8 +3688,8 @@ c$68B8 LD B,$02      ; Set an iteration counter in #REGb for #N$02 animations.
 ; Process the next frame loop (or pass through when it's completed).
  $6913 POP AF        ; {Restore the attribute byte and frame counter from the
  $6914 POP BC        ; stack.}
- $6915 DJNZ $68D5    ; Decrease counter by one and loop back to #R$68D5 until
-                     ; counter is zero.
+ $6915 DJNZ $68D5    ; Decrease the frame counter by one and loop back to #R$68D5 until
+                     ; the counter is zero.
 ; Action a delay between the iterations.
  $6917 LD BC,$0032   ; Set an iteration delay counter in #REGbc to #N($0100,$04,$04)*#N$32
                      ; loops.
@@ -3990,209 +3991,256 @@ c$696A LD HL,$6538   ; {Call #R$677B using #R$6538; printing #N$02 characters in
 ; Handler: Mothership
 ;
 ; Used by the routine at #R$7616.
+; .
+; Renders and animates the mothership plasma thing, the rotating strip,
+; the mothership alien and handles the bullets.
 ;
 ; .
 ;
 ; Prints the top part of the alien mothership:
-; #UDGTABLE { #UDGS$02,$01(mothership-05)(
-;   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
+; #PUSHS #UDGTABLE(default,centre,centre) { =h Frame | =h Output }
+;   #FOR$00,$0F""x"
+;     { #N(x+$01) | #SIM(start=$6A23,stop=$6A70)#SCR$04{$01E0,$C0,$40,$20}(ripple-x*) }
+;   ""
+; TABLE#
+; #POPS
+; .
+; Which looks like this when animated:
+; #UDGTABLE { #UDGARRAY#(#ANIMATE$04,$0F(ripple)) } TABLE#
+@label=Handler_Mothership
+c$6A23 LD DE,$40CF       ; #REGde=#N$40CF (left-hand UDG screen buffer target).
+ $6A26 PUSH DE           ; Stash this destination address on the stack.
+ $6A27 LD HL,$6541       ; #REGhl=#R$6541 (UDG graphics).
+ $6A2A LD BC,$0232       ; Configure the text routine to print the two UDG characters in
+                         ; #COLOUR$32.
+ $6A2D CALL $677B        ; Call #R$677B.
+ $6A30 POP HL            ; Restore the original screen pointer from the stack.
+; Apply a rippling graphic effect between the UDG tiles to imply
+; charging plasma energy (timed from #R$66D4).
+ $6A31 LD A,($66D4)      ; #REGa=*#R$66D4 (current ripple phase).
+ $6A34 PUSH AF           ; Stash the animation counter on the stack.
+ $6A35 SRA A             ; Shift #REGa right (with carry).
+ $6A37 AND %00000111     ; Keep only bits 0-2.
+ $6A39 XOR %00000111     ; Flip bits 0-2.
+ $6A3B ADD A,H           ; {Add the result to #REGh.
+ $6A3C LD H,A            ; }
+; Draw the "line" between the two ... masts (?) obviously it's hard to
+; tell exactly what this is supposed to represent - but I've always thought
+; it's a tesla coil type thing.
+ $6A3D LD (HL),%00000011 ; Write #N$03 to draw two pixels on the left-hand UDG.
+ $6A3F INC HL            ; Move to the next position.
+ $6A40 LD (HL),%11000000 ; Write #N$C0 to draw two pixels on the right-hand UDG to
+                         ; complete the line.
+ $6A42 POP AF            ; Restore the animation counter from the stack.
+; Decide whether to scroll the middle (blue) strip. This only happens
+; when the lowest two counter bits are zero so the conveyor effect moves
+; slowly.
+ $6A43 AND %00000011     ; Keep only bits 0-1.
+ $6A45 JR NZ,$6A69       ; Jump to #R$6A69 if the bits aren’t both zero (skip
+                         ; scrolling).
+; Scroll the middle (blue) strip right by one character line to keep the
+; mothership interior "machinery" moving.
+; .
+; #PUSHS #POKES$6A45,$00;$6A46,$00 #SIM(start=$696A,stop=$6A22)
+; #UDGTABLE(default,centre,centre)
+;   { =h Frame | =h Output }
+;   #FOR$00,$02""x"
+;     { #N(x+$01) | #SIM(start=$6A23,stop=$6A70)#SCR$02{$70,$90,$120,$10}(conveyor-x*) }
+;   ""
+; TABLE# #POPS
+; .
+; Which looks like this when animated:
+; #UDGTABLE { #UDGARRAY#(#ANIMATE$0F,$02(conveyor)) } TABLE#
+ $6A47 LD HL,$4837       ; #REGhl=#N$4837 (upper source row).
+ $6A4A LD DE,$4838       ; #REGde=#N$4838 (destination one line below).
+ $6A4D LD B,$08          ; Set a line counter in #REGb (#N$08 lines in a UDG).
+@label=Handler_Mothership_ScrollLoop
+*$6A4F PUSH BC           ; Stash the line counter on the stack.
+ $6A50 LD A,(DE)         ; #REGa=*#REGde.
+ $6A51 PUSH HL           ; {Stash #REGhl and #REGde on the stack.
+ $6A52 PUSH DE           ; }
+ $6A53 LD BC,$0011       ; {Copy #N($0011,$04,$04) bytes right-to-left (scroll left by one
+ $6A56 LDDR              ; character).}
+ $6A58 LD (DE),A         ; Write #REGa to *#REGde.
+ $6A59 POP DE            ; {Restore #REGde and #REGhl from the stack.
+ $6A5A POP HL            ; }
+ $6A5B INC H             ; Increment #REGh by one.
+ $6A5C INC D             ; Increment #REGd by one.
+ $6A5D POP BC            ; Restore the line counter from the stack.
+ $6A5E DJNZ $6A4F        ; Decrease the line counter by one and loop back to #R$6A4F until the
+                         ; counter is zero.
+; Finish the scroll by copying the bottom line back to the top so the
+; conveyor appears continuous.
+ $6A60 LD D,$59          ; #REGd=#N$59.
+ $6A62 LD H,D            ; #REGh=#REGd.
+ $6A63 LD C,$11          ; #REGc=#N$11.
+ $6A65 LD A,(DE)         ; #REGa=*#REGde.
+ $6A66 LDDR              ; LDDR.
+ $6A68 LD (DE),A         ; Write #REGa to *#REGde.
+; Update mothership animation state.
+@label=Handler_Mothership_UpdateCounter
+*$6A69 LD HL,$66D4       ; #REGhl=#R$66D4.
+ $6A6C LD A,(HL)         ; Fetch the animation counter.
+ $6A6D INC (HL)          ; Increment *#R$66D4 by one.
+; Display the mothership alien.
+ $6A6E AND %00001111     ; {Only animate the mothership alien every 16th frame (when bits 0-3
+ $6A70 JR NZ,$6A99       ; are all zero); otherwise skip to bullet processing (#R$6A99).
+                         ; }
+; Select one of the two alien frames (2×2 sprite) based on bit 4 of the
+; counter and draw it to the screen.
+ $6A72 BIT 4,(HL)        ; Test bit 4 of the animation counter to choose the
+                         ; frame.
+; Default to: #UDGTABLE { #UDGS$02,$02(mothership-alien-01)(
+;   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
 ;   udg
 ; ) } TABLE#
-@label=Handler_Mothership
-c$6A23 LD DE,$40CF   ; #REGde=#N$40CF (screen buffer location).
- $6A26 PUSH DE       ; Stash #REGde on the stack.
- $6A27 LD HL,$6541   ; #REGhl=#R$6541.
- $6A2A LD BC,$0232   ; Set to print #N$02 characters in #COLOUR$32.
- $6A2D CALL $677B    ; Call #R$677B.
- $6A30 POP HL        ; Restore #REGhl from the stack.
- $6A31 LD A,($66D4)  ; #REGa=*#R$66D4.
- $6A34 PUSH AF       ; Stash #REGaf on the stack.
- $6A35 SRA A         ; Shift #REGa right (with carry).
- $6A37 AND %00000111 ; Keep only bits 0-2.
- $6A39 XOR %00000111 ; Flip bits 0-2.
- $6A3B ADD A,H       ; #REGa+=#REGh.
- $6A3C LD H,A        ; #REGh=#REGa.
- $6A3D LD (HL),$03   ; Write #COLOUR$03 to *#REGhl.
- $6A3F INC HL        ; Increment #REGhl by one.
- $6A40 LD (HL),$C0   ; Write #COLOUR$C0 to *#REGhl.
- $6A42 POP AF        ; Restore #REGaf from the stack.
- $6A43 AND %00000011 ; Keep only bits 0-1.
- $6A45 JR NZ,$6A69   ; Jump to #R$6A69 if #REGhl is not equal to #N$00.
- $6A47 LD HL,$4837   ; #REGhl=#N$4837 (screen buffer location).
- $6A4A LD DE,$4838   ; #REGde=#N$4838 (screen buffer location).
- $6A4D LD B,$08      ; #REGb=#N$08.
-@label=Handler_Mothership_ScrollLoop
-*$6A4F PUSH BC       ; Stash #REGbc on the stack.
- $6A50 LD A,(DE)     ; #REGa=*#REGde.
- $6A51 PUSH HL       ; {Stash #REGhl and #REGde on the stack.
- $6A52 PUSH DE       ; }
- $6A53 LD BC,$0011   ; #REGbc=#N($0011,$04,$04).
- $6A56 LDDR          ; LDDR.
- $6A58 LD (DE),A     ; Write #REGa to *#REGde.
- $6A59 POP DE        ; {Restore #REGde and #REGhl from the stack.
- $6A5A POP HL        ; }
- $6A5B INC H         ; Increment #REGh by one.
- $6A5C INC D         ; Increment #REGd by one.
- $6A5D POP BC        ; Restore #REGbc from the stack.
- $6A5E DJNZ $6A4F    ; Decrease counter by one and loop back to #R$6A4F until
-                     ; counter is zero.
- $6A60 LD D,$59      ; #REGd=#N$59.
- $6A62 LD H,D        ; #REGh=#REGd.
- $6A63 LD C,$11      ; #REGc=#N$11.
- $6A65 LD A,(DE)     ; #REGa=*#REGde.
- $6A66 LDDR          ; LDDR.
- $6A68 LD (DE),A     ; Write #REGa to *#REGde.
-; Update mothership animation counter.
-@label=Handler_Mothership_UpdateCounter
-*$6A69 LD HL,$66D4   ; #REGhl=#R$66D4.
- $6A6C LD A,(HL)     ; Fetch the counter and store it in #REGa.
- $6A6D INC (HL)      ; Increment *#R$66D4 by one.
- $6A6E AND %00001111 ; {Only animate the alien every 16th frame (when bits 0-3 are all
- $6A70 JR NZ,$6A99   ; zero) else jump to #R$6A99.}
-; Draw the mothership alien in one of its two frames. Note; it is a 2x2
-; sprite.
-; .
-; This is the 16th frame, now toggle between the two frames of the alien
-; sprite.
- $6A72 BIT 4,(HL)    ; Test bit 4 of the counter.
- $6A74 LD HL,$5FD4   ; #REGhl=#R$5FD4.
- $6A77 JR Z,$6A7C    ; Jump to #R$6A7C if bit 4 isn't set.
- $6A79 LD HL,$5FF4   ; #REGhl=#R$5FF4.
+ $6A74 LD HL,$5FD4       ; #REGhl=#R$5FD4.
+ $6A77 JR Z,$6A7C        ; Jump to #R$6A7C if bit 4 is clear.
+; Else use: #UDGTABLE { #UDGS$02,$02(mothership-alien-02)(
+;   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+;   udg
+; ) } TABLE#
+ $6A79 LD HL,$5FF4       ; #REGhl=#R$5FF4.
 @label=Handler_Mothership_DrawAlien
-*$6A7C LD DE,$40EF   ; #REGde=#N$40EF (screen buffer location).
- $6A7F LD B,$02      ; Set a counter in #REGb for #N$02 rows.
+*$6A7C LD DE,$40EF       ; #REGde=#N$40EF (top-left screen cell for the alien).
+ $6A7F LD B,$02          ; Set a counter in #REGb for #N$02 rows.
 @label=Handler_Mothership_RowLoop
-*$6A81 PUSH BC       ; Stash the row counter on the stack.
- $6A82 LD B,$02      ; Set a counter in #REGb for #N$02 columns.
+*$6A81 PUSH BC           ; Stash the row counter on the stack.
+ $6A82 LD B,$02          ; Set a counter in #REGb for #N$02 columns.
 @label=Handler_Mothership_ColumnLoop
-*$6A84 PUSH BC       ; {Stash the column counter and screen buffer pointer on
- $6A85 PUSH DE       ; the stack.}
- $6A86 LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+*$6A84 PUSH BC           ; {Stash the column counter and screen buffer pointer
+ $6A85 PUSH DE           ; on the stack.}
+ $6A86 LD B,$08          ; Set a line counter in #REGb (#N$08 lines in a UDG).
 @label=Handler_Mothership_LineLoop
-*$6A88 LD A,(HL)     ; {Copy the UDG data to the screen buffer.
- $6A89 LD (DE),A     ; }
- $6A8A INC D         ; Move down one pixel line in the screen buffer.
- $6A8B INC HL        ; Move to the next UDG graphic data byte.
- $6A8C DJNZ $6A88    ; Decrease the line counter by one and loop back to #R$6A88 until all
-                     ; #N$08 lines of the UDG character have been drawn.
- $6A8E POP DE        ; Restore the original screen buffer pointer from the
-                     ; stack.
- $6A8F INC DE        ; Move right one character block.
- $6A90 POP BC        ; Restore the column counter from the stack.
- $6A91 DJNZ $6A84    ; Decrease the column counter by one and loop back to #R$6A84 until
-                     ; both UDGs have been drawn in this row.
- $6A93 LD DE,$480F   ; #REGde=#N$480F (screen buffer location).
- $6A96 POP BC        ; Restore the row counter from the stack.
- $6A97 DJNZ $6A81    ; Decrease the row counter by one and loop back to #R$6A81 until both
-                     ; rows have finished being drawn and the alien is complete.
+*$6A88 LD A,(HL)         ; {Copy the UDG data to the screen buffer.
+ $6A89 LD (DE),A         ; }
+ $6A8A INC D             ; Move down one pixel line in the screen buffer.
+ $6A8B INC HL            ; Move to the next UDG graphic data byte.
+ $6A8C DJNZ $6A88        ; Decrease the line counter by one and loop back to #R$6A88 until all
+                         ; #N$08 lines of the UDG character have been drawn.
+ $6A8E POP DE            ; Restore the original screen buffer pointer from the
+                         ; stack.
+ $6A8F INC DE            ; Move right one character block.
+ $6A90 POP BC            ; Restore the column counter from the stack.
+ $6A91 DJNZ $6A84        ; Decrease the column counter by one and loop back to #R$6A84 until
+                         ; both UDGs have been drawn in this row.
+ $6A93 LD DE,$480F       ; #REGde=#N$480F (screen buffer location).
+ $6A96 POP BC            ; Restore the row counter from the stack.
+ $6A97 DJNZ $6A81        ; Decrease the row counter by one and loop back to #R$6A81 until both
+                         ; rows have finished being drawn and the alien is complete.
+; Handle the two mothership bullets (fire only when the player bullet
+; limiter #R$6695 is zero).
+; .
+; See #POKE#mothership-not-fire(Mothership Alien Doesn't Fire).
 @label=Handler_Mothership_ProcessBullets
-*$6A99 LD A,($6695)  ; {Return if *#R$6695 is not zero.
- $6A9C OR A          ;
- $6A9D RET NZ        ; }
- $6A9E LD HL,$0003   ; #REGhl=#N($0003,$04,$04).
+*$6A99 LD A,($6695)      ; {Return if *#R$6695 is not zero.
+ $6A9C OR A              ;
+ $6A9D RET NZ            ; }
+ $6A9E LD HL,$0003       ; #REGhl=#N($0003,$04,$04).
 @label=Handler_Mothership_BulletLoop
-*$6AA1 PUSH HL       ; Stash #REGhl on the stack.
- $6AA2 PUSH HL       ; {#REGix=#REGhl (using the stack).
- $6AA3 POP IX        ; }
- $6AA5 LD BC,$66BA   ; {Multiply #REGhl by #N$02 and add #R$66BA.
- $6AA8 ADD HL,HL     ;
- $6AA9 ADD HL,BC     ; }
- $6AAA PUSH HL       ; Stash #REGhl on the stack.
- $6AAB LD E,(HL)     ; #REGe=*#REGhl.
- $6AAC INC HL        ; Increment #REGhl by one.
- $6AAD LD D,(HL)     ; #REGd=*#REGhl.
- $6AAE LD A,D        ; #REGa=#REGd.
- $6AAF EX DE,HL      ; Exchange the #REGde and #REGhl registers.
- $6AB0 OR A          ; {Jump to #R$6AC9 if #REGa is not zero.
- $6AB1 JR NZ,$6AC9   ; }
- $6AB3 CALL $670E    ; Call #R$670E.
- $6AB6 AND %00001111 ; Keep only bits 0-3.
- $6AB8 OR A          ; {Jump to #R$6AC0 if #REGa is not zero.
- $6AB9 JR NZ,$6AC0   ; }
- $6ABB LD HL,$594F   ; #REGhl=#N$594F (attribute buffer location).
- $6ABE JR $6AF2      ; Jump to #R$6AF2.
-*$6AC0 CP $03        ; {Jump to #R$6B25 if #REGa is not equal to #N$03.
- $6AC2 JR NZ,$6B25   ; }
- $6AC4 LD HL,$5950   ; #REGhl=#N$5950 (attribute buffer location).
- $6AC7 JR $6AF2      ; Jump to #R$6AF2.
-; Update active bullet position.
+*$6AA1 PUSH HL           ; Stash #REGhl on the stack.
+ $6AA2 PUSH HL           ; {#REGix=#REGhl (using the stack).
+ $6AA3 POP IX            ; }
+ $6AA5 LD BC,$66BA       ; {Multiply #REGhl by #N$02 and add #R$66BA.
+ $6AA8 ADD HL,HL         ;
+ $6AA9 ADD HL,BC         ; }
+ $6AAA PUSH HL           ; Stash #REGhl on the stack.
+ $6AAB LD E,(HL)         ; #REGe=*#REGhl.
+ $6AAC INC HL            ; Increment #REGhl by one.
+ $6AAD LD D,(HL)         ; #REGd=*#REGhl.
+ $6AAE LD A,D            ; #REGa=#REGd.
+ $6AAF EX DE,HL          ; Exchange the #REGde and #REGhl registers.
+ $6AB0 OR A              ; {Jump to #R$6AC9 if the bullet slot is active.
+ $6AB1 JR NZ,$6AC9       ; }
+ $6AB3 CALL $670E        ; Call #R$670E.
+ $6AB6 AND %00001111     ; Keep only bits 0-3.
+ $6AB8 OR A              ; {Jump to #R$6AC0 if #REGa is not zero.
+ $6AB9 JR NZ,$6AC0       ; }
+ $6ABB LD HL,$594F       ; #REGhl=#N$594F (attribute buffer location).
+ $6ABE JR $6AF2          ; Jump to #R$6AF2.
+; Only fire if the random nibble equals #N$03, otherwise skip the slot.
+*$6AC0 CP $03            ; {Jump to #R$6B25 if #REGa is not equal to #N$03.
+ $6AC2 JR NZ,$6B25       ; }
+ $6AC4 LD HL,$5950       ; #REGhl=#N$5950 (attribute buffer location).
+ $6AC7 JR $6AF2          ; Jump to #R$6AF2.
+; Update an active bullet by erasing its old sprite and moving it down.
 @label=Handler_Mothership_BulletActive
-*$6AC9 LD A,(HL)     ; #REGa=*#REGhl.
- $6ACA AND %01000111 ; Keep only bits 0-2, 6.
- $6ACC CP $06        ; {Jump to #R$6AE0 if #REGa is not equal to #N$06.
- $6ACE JR NZ,$6AE0   ; }
- $6AD0 LD A,(HL)     ; #REGa=*#REGhl.
- $6AD1 AND %11111000 ; Keep only bits 3-7.
- $6AD3 LD (HL),A     ; Write #REGa to *#REGhl.
- $6AD4 PUSH HL       ; Stash #REGhl on the stack.
- $6AD5 CALL $6704    ; Call #R$6704.
- $6AD8 LD B,$08      ; #REGb=#N$08.
- $6ADA XOR A         ; {Write #N$00 to *#REGhl.
-*$6ADB LD (HL),A     ; }
- $6ADC INC H         ; Increment #REGh by one.
- $6ADD DJNZ $6ADB    ; Decrease counter by one and loop back to #R$6ADB until
-                     ; counter is zero.
- $6ADF POP HL        ; Restore #REGhl from the stack.
-*$6AE0 LD BC,$0020   ; {#REGhl+=#N($0020,$04,$04).
- $6AE3 ADD HL,BC     ; }
- $6AE4 PUSH HL       ; Stash #REGhl on the stack.
- $6AE5 LD BC,$5AFF   ; #REGbc=#N$5AFF (attribute buffer location).
- $6AE8 AND A         ; {#REGhl-=#REGbc.
- $6AE9 SBC HL,BC     ; }
- $6AEB POP HL        ; Restore #REGhl from the stack.
- $6AEC JR C,$6AF2    ; Jump to #R$6AF2 if #REGh is less than #REGa.
+*$6AC9 LD A,(HL)         ; #REGa=*#REGhl.
+ $6ACA AND %01000111     ; Keep only bits 0-2, 6.
+ $6ACC CP $06            ; {Jump to #R$6AE0 if #REGa is not equal to #N$06.
+ $6ACE JR NZ,$6AE0       ; }
+ $6AD0 LD A,(HL)         ; #REGa=*#REGhl.
+ $6AD1 AND %11111000     ; Keep only bits 3-7.
+ $6AD3 LD (HL),A         ; Write #REGa to *#REGhl.
+ $6AD4 PUSH HL           ; Stash #REGhl on the stack.
+ $6AD5 CALL $6704        ; Call #R$6704.
+ $6AD8 LD B,$08          ; #REGb=#N$08.
+ $6ADA XOR A             ; {Write #N$00 to *#REGhl.
+*$6ADB LD (HL),A         ; }
+ $6ADC INC H             ; Increment #REGh by one.
+ $6ADD DJNZ $6ADB        ; Decrease counter by one and loop back to #R$6ADB
+                         ; until counter is zero.
+ $6ADF POP HL            ; Restore #REGhl from the stack.
+*$6AE0 LD BC,$0020       ; {#REGhl+=#N($0020,$04,$04).
+ $6AE3 ADD HL,BC         ; }
+ $6AE4 PUSH HL           ; Stash #REGhl on the stack.
+ $6AE5 LD BC,$5AFF       ; #REGbc=#N$5AFF (attribute buffer location).
+ $6AE8 AND A             ; {#REGhl-=#REGbc.
+ $6AE9 SBC HL,BC         ; }
+ $6AEB POP HL            ; Restore #REGhl from the stack.
+ $6AEC JR C,$6AF2        ; Jump to #R$6AF2 if #REGh is less than #REGa.
 @label=Handler_Mothership_DeactivateBullet
-*$6AEE LD H,$00      ; #REGh=#N$00.
- $6AF0 JR $6B25      ; Jump to #R$6B25.
+*$6AEE LD H,$00          ; #REGh=#N$00.
+ $6AF0 JR $6B25          ; Jump to #R$6B25.
 @label=Mothership_Bullet_Collision
-*$6AF2 LD A,(HL)     ; {Jump to #R$6B25 if *#REGhl is equal to #INK$02.
- $6AF3 CP $02        ;
- $6AF5 JR Z,$6B25    ; }
- $6AF7 CP $46        ; {Jump to #R$6B05 if *#REGhl is not equal to #COLOUR$46.
- $6AF9 JR NZ,$6B05   ; }
- $6AFB LD A,($6693)  ; {Jump to #R$6AEE if *#R$6693 is active.
- $6AFE OR A          ;
- $6AFF JR NZ,$6AEE   ; }
- $6B01 LD (HL),$06   ; Write #INK$06 to *#REGhl.
- $6B03 JR $6B0D      ; Jump to #R$6B0D.
+*$6AF2 LD A,(HL)         ; {Jump to #R$6B25 if *#REGhl is equal to #INK$02.
+ $6AF3 CP $02            ;
+ $6AF5 JR Z,$6B25        ; }
+ $6AF7 CP $46            ; {Jump to #R$6B05 if *#REGhl is not equal to
+ $6AF9 JR NZ,$6B05       ; #COLOUR$46.}
+ $6AFB LD A,($6693)      ; {Jump to #R$6AEE if *#R$6693 is active.
+ $6AFE OR A              ;
+ $6AFF JR NZ,$6AEE       ; }
+ $6B01 LD (HL),$06       ; Write #INK$06 to *#REGhl.
+ $6B03 JR $6B0D          ; Jump to #R$6B0D.
 @label=Handler_Mothership_CheckGround
-*$6B05 AND %00000111 ; Keep only bits 0-2.
- $6B07 JR NZ,$6AEE   ; Jump to #R$6AEE if #REGa is not equal to #REGa.
- $6B09 LD A,(HL)     ; #REGa=*#REGhl.
- $6B0A ADD A,$06     ; #REGa+=#N$06.
- $6B0C LD (HL),A     ; Write #REGa to *#REGhl.
+*$6B05 AND %00000111     ; Keep only bits 0-2.
+ $6B07 JR NZ,$6AEE       ; Jump to #R$6AEE if #REGa is not equal to #REGa.
+ $6B09 LD A,(HL)         ; #REGa=*#REGhl.
+ $6B0A ADD A,$06         ; #REGa+=#N$06.
+ $6B0C LD (HL),A         ; Write #REGa to *#REGhl.
 @label=Handler_Mothership_DrawBullet
-*$6B0D PUSH HL       ; Stash #REGhl on the stack.
- $6B0E CALL $6704    ; Call #R$6704.
- $6B11 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
- $6B12 LD BC,$6026   ; #REGbc=#R$6026.
- $6B15 PUSH IX       ; {#REGhl=#REGix (using the stack).
- $6B17 POP HL        ; }
- $6B18 ADD HL,HL     ; {Multiply #REGhl by #N$08.
- $6B19 ADD HL,HL     ;
- $6B1A ADD HL,HL     ; }
- $6B1B ADD HL,BC     ; #REGhl+=#REGbc.
- $6B1C LD B,$08      ; Set a line counter in #REGb (#N$08 lines in a UDG).
+*$6B0D PUSH HL           ; Stash #REGhl on the stack.
+ $6B0E CALL $6704        ; Call #R$6704.
+ $6B11 EX DE,HL          ; Exchange the #REGde and #REGhl registers.
+ $6B12 LD BC,$6026       ; #REGbc=#R$6026.
+ $6B15 PUSH IX           ; {#REGhl=#REGix (using the stack).
+ $6B17 POP HL            ; }
+ $6B18 ADD HL,HL         ; {Multiply #REGhl by #N$08.
+ $6B19 ADD HL,HL         ;
+ $6B1A ADD HL,HL         ; }
+ $6B1B ADD HL,BC         ; #REGhl+=#REGbc.
+ $6B1C LD B,$08          ; Set a line counter in #REGb (#N$08 lines in a UDG).
 @label=Handler_Mothership_BulletDrawLoop
-*$6B1E LD A,(HL)     ; {Copy the UDG data to the screen buffer.
- $6B1F LD (DE),A     ; }
- $6B20 INC D         ; Move down one pixel line in the screen buffer.
- $6B21 INC HL        ; Move to the next UDG graphic data byte.
- $6B22 DJNZ $6B1E    ; Decrease the line counter by one and loop back to #R$6B1E until all
-                     ; #N$08 lines of the UDG character have been drawn.
- $6B24 POP HL        ; Restore the attribute position from the stack.
+*$6B1E LD A,(HL)         ; {Copy the UDG data to the screen buffer.
+ $6B1F LD (DE),A         ; }
+ $6B20 INC D             ; Move down one pixel line in the screen buffer.
+ $6B21 INC HL            ; Move to the next UDG graphic data byte.
+ $6B22 DJNZ $6B1E        ; Decrease the line counter by one and loop back to #R$6B1E until all
+                         ; #N$08 lines of the UDG character have been drawn.
+ $6B24 POP HL            ; Restore the attribute position from the stack.
 @label=Handler_Mothership_SaveBulletPosition
-*$6B25 EX DE,HL      ; Exchange the #REGde and #REGhl registers.
- $6B26 POP HL        ; Restore the bullet position table from the stack.
- $6B27 LD (HL),E     ; {Save the current bullet position to the table.
- $6B28 INC HL        ;
- $6B29 LD (HL),D     ;
- $6B2A INC HL        ; }
- $6B2B POP HL        ; Restore the bullet index from the stack.
- $6B2C DEC L         ; Decrease the bullet index by one.
- $6B2D JP NZ,$6AA1   ; Jump back to #R$6AA1 until there are no more bullets left to
-                     ; process.
- $6B30 RET           ; Return.
+*$6B25 EX DE,HL          ; Exchange the #REGde and #REGhl registers.
+ $6B26 POP HL            ; Restore the bullet position table from the stack.
+ $6B27 LD (HL),E         ; {Save the current bullet position to the table.
+ $6B28 INC HL            ;
+ $6B29 LD (HL),D         ;
+ $6B2A INC HL            ; }
+ $6B2B POP HL            ; Restore the bullet index from the stack.
+ $6B2C DEC L             ; Decrease the bullet index by one.
+ $6B2D JP NZ,$6AA1       ; Jump back to #R$6AA1 until there are no more bullets left to
+                         ; process.
+ $6B30 RET               ; Return.
 
 ; Fill Screen With UDG
 ;
@@ -5032,8 +5080,7 @@ c$6F43 POP AF        ; Restore the player position from the stack.
  $6F4F LD A,($66ED)  ; Load the low byte of the player position from #R$66ED into
                      ; #REGl.
 ; Set up the screen position and animate the ship graphic by shifting
-; pixels left. This entry point is used both when at the edge and when not at
-; the edge.
+; pixels left.
 @label=MoveShipLeft_Animate
 *$6F52 LD L,A        ; Load #REGl with the low byte of the player position.
  $6F53 LD B,$02      ; Set a height counter in #REGb for #N$02 rows (the ship

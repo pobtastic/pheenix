@@ -971,10 +971,11 @@ c $68A1 Print Asterisk
 N $68A8 Point to an asterisk in the ZX Spectrum font UDG data.
   $68A8,$03 #HTML(#REGde=<a rel="noopener nofollow" href="https://skoolkit.ca/disassemblies/rom/hex/asm/3D00.html#3D50">CHARSET+#N$50</a>.)
   $68AB,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
+@ $68AD label=Print_Asterisk_Loop
   $68AD,$02 Copy the UDG data to the screen buffer.
   $68AF,$01 Move down one pixel line in the screen buffer.
   $68B0,$01 Move to the next UDG graphic data byte.
-  $68B1,$02 Decrease the line counter by one and loop back to #R$6962 until all
+  $68B1,$02 Decrease the line counter by one and loop back to #R$68AD until all
 . #N$08 lines of the UDG character have been drawn.
   $68B3,$04 Restore #REGhl, #REGde, #REGbc and #REGaf from the stack.
   $68B7,$01 Return.
@@ -1083,7 +1084,8 @@ N $690A Action a delay between the frames.
   $6911,$02 Jump back to #R$690E until the outer loop counter is zero.
 N $6913 Process the next frame loop (or pass through when it's completed).
   $6913,$02 Restore the attribute byte and frame counter from the stack.
-  $6915,$02 Decrease counter by one and loop back to #R$68D5 until counter is zero.
+  $6915,$02 Decrease the frame counter by one and loop back to #R$68D5 until
+. the counter is zero.
 N $6917 Action a delay between the iterations.
   $6917,$03 Set an iteration delay counter in #REGbc to #N($0100,$04,$04)*#N$32
 . loops.
@@ -1309,70 +1311,106 @@ N $6A19 #UDGTABLE {
 
 c $6A23 Handler: Mothership
 @ $6A23 label=Handler_Mothership
+D $6A23 Renders and animates the mothership plasma thing, the rotating strip,
+. the mothership alien and handles the bullets.
 N $6A23 Prints the top part of the alien mothership:
-. #UDGTABLE { #UDGS$02,$01(mothership-05)(
-.   #UDG($6153+$08*(#PEEK(#PC+$x)),$32)(*udg)
-.   udg
-. ) } TABLE#
-  $6A23,$03 #REGde=#N$40CF (screen buffer location).
-  $6A26,$01 Stash #REGde on the stack.
-  $6A27,$03 #REGhl=#R$6541.
-  $6A2A,$03 Set to print #N$02 characters in #COLOUR$32.
+. #PUSHS #UDGTABLE(default,centre,centre) { =h Frame | =h Output }
+.   #FOR$00,$0F""x"
+.     { #N(x+$01) | #SIM(start=$6A23,stop=$6A70)#SCR$04{$01E0,$C0,$40,$20}(ripple-x*) }
+.   ""
+. TABLE#
+. #POPS
+N $6A23 Which looks like this when animated:
+. #UDGTABLE { #UDGARRAY#(#ANIMATE$04,$0F(ripple)) } TABLE#
+  $6A23,$03 #REGde=#N$40CF (left-hand UDG screen buffer target).
+  $6A26,$01 Stash this destination address on the stack.
+  $6A27,$03 #REGhl=#R$6541 (UDG graphics).
+  $6A2A,$03 Configure the text routine to print the two UDG characters in
+. #COLOUR$32.
   $6A2D,$03 Call #R$677B.
-  $6A30,$01 Restore #REGhl from the stack.
-  $6A31,$03 #REGa=*#R$66D4.
-  $6A34,$01 Stash #REGaf on the stack.
+  $6A30,$01 Restore the original screen pointer from the stack.
+N $6A31 Apply a rippling graphic effect between the UDG tiles to imply
+. charging plasma energy (timed from #R$66D4).
+  $6A31,$03 #REGa=*#R$66D4 (current ripple phase).
+  $6A34,$01 Stash the animation counter on the stack.
   $6A35,$02 Shift #REGa right (with carry).
   $6A37,$02,b$01 Keep only bits 0-2.
   $6A39,$02,b$01 Flip bits 0-2.
-  $6A3B,$01 #REGa+=#REGh.
-  $6A3C,$01 #REGh=#REGa.
-  $6A3D,$02 Write #COLOUR$03 to *#REGhl.
-  $6A3F,$01 Increment #REGhl by one.
-  $6A40,$02 Write #COLOUR$C0 to *#REGhl.
-  $6A42,$01 Restore #REGaf from the stack.
+  $6A3B,$02 Add the result to #REGh.
+N $6A3D Draw the "line" between the two ... masts (?) obviously it's hard to
+. tell exactly what this is supposed to represent - but I've always thought
+. it's a tesla coil type thing.
+  $6A3D,$02,b$01 Write #N$03 to draw two pixels on the left-hand UDG.
+  $6A3F,$01 Move to the next position.
+  $6A40,$02,b$01 Write #N$C0 to draw two pixels on the right-hand UDG to
+. complete the line.
+  $6A42,$01 Restore the animation counter from the stack.
+N $6A43 Decide whether to scroll the middle (blue) strip. This only happens
+. when the lowest two counter bits are zero so the conveyor effect moves
+. slowly.
   $6A43,$02,b$01 Keep only bits 0-1.
-  $6A45,$02 Jump to #R$6A69 if #REGhl is not equal to #N$00.
-  $6A47,$03 #REGhl=#N$4837 (screen buffer location).
-  $6A4A,$03 #REGde=#N$4838 (screen buffer location).
-  $6A4D,$02 #REGb=#N$08.
+  $6A45,$02 Jump to #R$6A69 if the bits aren’t both zero (skip scrolling).
+N $6A47 Scroll the middle (blue) strip right by one character line to keep the
+. mothership interior "machinery" moving.
+N $6A47 #PUSHS #POKES$6A45,$00;$6A46,$00 #SIM(start=$696A,stop=$6A22)
+. #UDGTABLE(default,centre,centre)
+.   { =h Frame | =h Output }
+.   #FOR$00,$02""x"
+.     { #N(x+$01) | #SIM(start=$6A23,stop=$6A70)#SCR$02{$70,$90,$120,$10}(conveyor-x*) }
+.   ""
+. TABLE# #POPS
+N $6A47 Which looks like this when animated:
+. #UDGTABLE { #UDGARRAY#(#ANIMATE$0F,$02(conveyor)) } TABLE#
+  $6A47,$03 #REGhl=#N$4837 (upper source row).
+  $6A4A,$03 #REGde=#N$4838 (destination one line below).
+  $6A4D,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
 @ $6A4F label=Handler_Mothership_ScrollLoop
-  $6A4F,$01 Stash #REGbc on the stack.
+  $6A4F,$01 Stash the line counter on the stack.
   $6A50,$01 #REGa=*#REGde.
   $6A51,$02 Stash #REGhl and #REGde on the stack.
-  $6A53,$03 #REGbc=#N($0011,$04,$04).
-  $6A56,$02 LDDR.
+  $6A53,$05 Copy #N($0011,$04,$04) bytes right-to-left (scroll left by one
+. character).
   $6A58,$01 Write #REGa to *#REGde.
   $6A59,$02 Restore #REGde and #REGhl from the stack.
   $6A5B,$01 Increment #REGh by one.
   $6A5C,$01 Increment #REGd by one.
-  $6A5D,$01 Restore #REGbc from the stack.
-  $6A5E,$02 Decrease counter by one and loop back to #R$6A4F until counter is zero.
+  $6A5D,$01 Restore the line counter from the stack.
+  $6A5E,$02 Decrease the line counter by one and loop back to #R$6A4F until the
+. counter is zero.
+N $6A60 Finish the scroll by copying the bottom line back to the top so the
+. conveyor appears continuous.
   $6A60,$02 #REGd=#N$59.
   $6A62,$01 #REGh=#REGd.
   $6A63,$02 #REGc=#N$11.
   $6A65,$01 #REGa=*#REGde.
   $6A66,$02 LDDR.
   $6A68,$01 Write #REGa to *#REGde.
-N $6A69 Update mothership animation counter.
+N $6A69 Update mothership animation state.
 @ $6A69 label=Handler_Mothership_UpdateCounter
   $6A69,$03 #REGhl=#R$66D4.
-  $6A6C,$01 Fetch the counter and store it in #REGa.
+  $6A6C,$01 Fetch the animation counter.
   $6A6D,$01 Increment *#R$66D4 by one.
-M $6A6E,$04 Only animate the alien every 16th frame (when bits 0-3 are all
-. zero) else jump to #R$6A99.
-  $6A6E,$02,b$01 Keep only bits 0-3.
-  $6A70,$02 Jump to #R$6A99 unless the result is zero.
-N $6A72 Draw the mothership alien in one of its two frames. Note; it is a 2x2
-. sprite.
-N $6A72 This is the 16th frame, now toggle between the two frames of the alien
-. sprite.
-  $6A72,$02 Test bit 4 of the counter.
+N $6A6E Display the mothership alien.
+M $6A6E,$04 Only animate the mothership alien every 16th frame (when bits 0-3
+. are all zero); otherwise skip to bullet processing (#R$6A99).
+  $6A6E,$02,b$01 Mask off bits 0-3.
+  $6A70,$02 Jump to #R$6A99 unless the result is zero (not the 16th frame).
+N $6A72 Select one of the two alien frames (2×2 sprite) based on bit 4 of the
+. counter and draw it to the screen.
+  $6A72,$02 Test bit 4 of the animation counter to choose the frame.
+N $6A74 Default to: #UDGTABLE { #UDGS$02,$02(mothership-alien-01)(
+.   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+.   udg
+. ) } TABLE#
   $6A74,$03 #REGhl=#R$5FD4.
-  $6A77,$02 Jump to #R$6A7C if bit 4 isn't set.
+  $6A77,$02 Jump to #R$6A7C if bit 4 is clear.
+N $6A79 Else use: #UDGTABLE { #UDGS$02,$02(mothership-alien-02)(
+.   #UDG(#PC+$08*($02*$y+$x),#MAP($y)($44,1:$42))(*udg)
+.   udg
+. ) } TABLE#
   $6A79,$03 #REGhl=#R$5FF4.
 @ $6A7C label=Handler_Mothership_DrawAlien
-  $6A7C,$03 #REGde=#N$40EF (screen buffer location).
+  $6A7C,$03 #REGde=#N$40EF (top-left screen cell for the alien).
   $6A7F,$02 Set a counter in #REGb for #N$02 rows.
 @ $6A81 label=Handler_Mothership_RowLoop
   $6A81,$01 Stash the row counter on the stack.
@@ -1396,6 +1434,9 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
   $6A97,$02 Decrease the row counter by one and loop back to #R$6A81 until both
 . rows have finished being drawn and the alien is complete.
 @ $6A99 label=Handler_Mothership_ProcessBullets
+N $6A99 Handle the two mothership bullets (fire only when the player bullet
+. limiter #R$6695 is zero).
+N $6A99 See #POKE#mothership-not-fire(Mothership Alien Doesn't Fire).
   $6A99,$05 Return if *#R$6695 is not zero.
   $6A9E,$03 #REGhl=#N($0003,$04,$04).
 @ $6AA1 label=Handler_Mothership_BulletLoop
@@ -1408,17 +1449,17 @@ N $6A72 This is the 16th frame, now toggle between the two frames of the alien
   $6AAD,$01 #REGd=*#REGhl.
   $6AAE,$01 #REGa=#REGd.
   $6AAF,$01 Exchange the #REGde and #REGhl registers.
-  $6AB0,$03 Jump to #R$6AC9 if #REGa is not zero.
+  $6AB0,$03 Jump to #R$6AC9 if the bullet slot is active.
   $6AB3,$03 Call #R$670E.
   $6AB6,$02,b$01 Keep only bits 0-3.
   $6AB8,$03 Jump to #R$6AC0 if #REGa is not zero.
   $6ABB,$03 #REGhl=#N$594F (attribute buffer location).
   $6ABE,$02 Jump to #R$6AF2.
-
+N $6AC0 Only fire if the random nibble equals #N$03, otherwise skip the slot.
   $6AC0,$04 Jump to #R$6B25 if #REGa is not equal to #N$03.
   $6AC4,$03 #REGhl=#N$5950 (attribute buffer location).
   $6AC7,$02 Jump to #R$6AF2.
-N $6AC9 Update active bullet position.
+N $6AC9 Update an active bullet by erasing its old sprite and moving it down.
 @ $6AC9 label=Handler_Mothership_BulletActive
   $6AC9,$01 #REGa=*#REGhl.
   $6ACA,$02,b$01 Keep only bits 0-2, 6.
@@ -2110,8 +2151,7 @@ N $6F4F The ship is at the left edge, so load the player position to prepare
 . #REGl.
 @ $6F52 label=MoveShipLeft_Animate
 N $6F52 Set up the screen position and animate the ship graphic by shifting
-. pixels left. This entry point is used both when at the edge and when not at
-. the edge.
+. pixels left.
   $6F52,$01 Load #REGl with the low byte of the player position.
   $6F53,$02 Set a height counter in #REGb for #N$02 rows (the ship height).
 @ $6F55 label=MoveShipLeft_RowLoop

@@ -31,6 +31,20 @@ Just RETurn immediately from the alien subroutine.
   </tbody>
 </table>
 
+[Poke:mothership-not-fire:Mothership Alien Doesn't Fire]
+POKE #R$7B67(#N$7B67),#N$C9
+
+Just RETurn immediately from the mothership alien bullet subroutine.
+
+<table>
+  <tbody>
+    <tr>
+      <td class="address-1">#R$6A9D(#N$6A9D)</td>
+      <td class="instruction">RET</td>
+    </tr>
+  </tbody>
+</table>
+
 [Poke:Immunity]
 POKE #R$6CB7(#N$6CB8),#N$00
 
