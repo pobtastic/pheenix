@@ -1,33 +1,33 @@
-; Copyright 2025 Paul Maddern (paul@arcadegeek.co.uk)
+; Copyright 2026 Paul Maddern (paul@arcadegeek.co.uk)
 
 [Audio:intro:Intro Theme]
 
-#AUDIO(intro.wav)(#INCLUDE(Intro))
+#AUDIO0(intro.wav)(#INCLUDE(Intro))
 
 [Audio:Bonus]
 
-#AUDIO(bonus.wav)(#INCLUDE(Bonus))
+#AUDIO0(bonus.wav)(#INCLUDE(Bonus))
 
 [Audio:Bullets]
 
-#AUDIO(bullets.wav)(#INCLUDE(Bullets))
+#AUDIO0(bullets.wav)(#INCLUDE(Bullets))
 
 [Audio:Death]
 
-#AUDIO(death.wav)(#INCLUDE(Death))
+#AUDIO0(death.wav)(#INCLUDE(Death))
 
 [Audio:Explosions]
-#AUDIO(explosion-01.wav)(#INCLUDE(Explosion01))
-#AUDIO(explosion-02.wav)(#INCLUDE(Explosion02))
+#AUDIO0(explosion-01.wav)(#INCLUDE(Explosion01))
+#AUDIO0(explosion-02.wav)(#INCLUDE(Explosion02))
 
 [Audio:Shield]
 
-#AUDIO(shield.wav)(#INCLUDE(Shield))
+#AUDIO0(shield.wav)(#INCLUDE(Shield))
 
 [Audio:ship-explosion:Ship Explosion]
 
-#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion))
+#AUDIO0(ship-explosion.wav)(#INCLUDE(ShipExplosion))
 
 [Audio:WingHit]
 
-#AUDIO(wing-hit.wav)(#INCLUDE(WingHit))
+#AUDIO0(wing-hit.wav)(#INCLUDE(WingHit))

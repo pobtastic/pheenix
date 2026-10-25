@@ -1,5 +1,5 @@
 
-; Copyright 2025 Paul Maddern (paul@arcadegeek.co.uk)
+; Copyright 2026 Paul Maddern (paul@arcadegeek.co.uk)
 
 [Poke:infinite-lives:Infinite Lives]
 POKE #R$72BF(#N$72BF),#N$00

@@ -1,7 +1,7 @@
-@rom
 @start
-@expand=#DEF(#POKE #LINK:Pokes)
-@expand=#DEF(#ANIMATE(delay,count=$50)(name=$a)*$name-1,$delay;#FOR$02,$count||x|$name-x|;||($name-animation))
+@rom
+@expand=#DEF(#POKE()(anchor,text) #LINK(Pokes#$anchor)($text))
+@expand=#DEF(#ANIMATE(delay,count=$50)(name=$a)#FRAMES#(($name-1,$delay;#FOR$02,$count||x|$name-x|;||))($name-animation))
 @set-handle-unsupported-macros=1
 
 ; Loading Screen
@@ -228,898 +228,9 @@ b$4000 DEFB $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,
  $5AC0 DEFB $07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07 ;
  $5AE0 DEFB $07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07 ; }
 
-; Data block at 5B00
-b$5B00 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B08 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B10 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B18 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B20 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B28 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B30 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B38 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B40 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B48 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B50 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B58 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B60 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B68 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B70 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B78 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B80 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B88 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B90 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5B98 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BA0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BA8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BB0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BB8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BC0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BC8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BD0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BD8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BE0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BE8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BF0 DEFB $00,$00,$00,$00,$00,$00,$00,$00
- $5BF8 DEFB $00,$00,$00,$00,$00,$00,$00,$00
+i$5B00
 
-; Routine at 5C00
-c$5C00 RST $38       ;
- $5C01 NOP           ;
- $5C02 NOP           ;
- $5C03 NOP           ;
- $5C04 RST $38       ;
- $5C05 NOP           ;
- $5C06 INC HL        ;
- $5C07 DEC C         ;
- $5C08 DEC C         ;
- $5C09 INC HL        ;
- $5C0A DEC B         ;
- $5C0B NOP           ;
- $5C0C NOP           ;
- $5C0D NOP           ;
- $5C0E DJNZ $5C1A    ;
- $5C10 LD BC,$0600   ;
- $5C13 NOP           ;
- $5C14 DEC BC        ;
- $5C15 NOP           ;
- $5C16 LD BC,$0100   ;
- $5C19 NOP           ;
-*$5C1A LD B,$00      ;
- $5C1C DJNZ $5C1E    ;
-*$5C1E NOP           ;
- $5C1F NOP           ;
- $5C20 NOP           ;
- $5C21 NOP           ;
- $5C22 NOP           ;
- $5C23 NOP           ;
- $5C24 NOP           ;
- $5C25 NOP           ;
- $5C26 NOP           ;
- $5C27 NOP           ;
- $5C28 NOP           ;
- $5C29 NOP           ;
- $5C2A NOP           ;
- $5C2B NOP           ;
- $5C2C NOP           ;
- $5C2D NOP           ;
- $5C2E NOP           ;
- $5C2F NOP           ;
- $5C30 NOP           ;
- $5C31 NOP           ;
- $5C32 NOP           ;
- $5C33 NOP           ;
- $5C34 NOP           ;
- $5C35 NOP           ;
- $5C36 NOP           ;
- $5C37 INC A         ;
- $5C38 LD B,B        ;
- $5C39 NOP           ;
- $5C3A RST $38       ;
- $5C3B CALL $B100    ;
- $5C3E LD E,A        ;
- $5C3F NOP           ;
- $5C40 NOP           ;
- $5C41 NOP           ;
- $5C42 NOP           ;
- $5C43 NOP           ;
- $5C44 RST $38       ;
- $5C45 LD B,$00      ;
- $5C47 LD (BC),A     ;
- $5C48 RLCA          ;
- $5C49 NOP           ;
- $5C4A NOP           ;
- $5C4B AND B         ;
- $5C4C LD E,L        ;
- $5C4D NOP           ;
- $5C4E NOP           ;
- $5C4F OR (HL)       ;
- $5C50 LD E,H        ;
- $5C51 CP E          ;
- $5C52 LD E,H        ;
- $5C53 BIT 3,H       ;
- $5C55 AND B         ;
- $5C56 LD E,L        ;
- $5C57 JP Z,$A15C    ;
- $5C5A LD E,L        ;
- $5C5B RET NC        ;
- $5C5C LD E,L        ;
- $5C5D SBC A,A       ;
- $5C5E LD E,L        ;
- $5C5F JP Z,$D200    ;
- $5C62 LD E,L        ;
- $5C63 JP NC,$D25D   ;
- $5C66 LD E,L        ;
- $5C67 DEC L         ;
- $5C68 SUB D         ;
- $5C69 LD E,H        ;
- $5C6A NOP           ;
- $5C6B NOP           ;
- $5C6C NOP           ;
- $5C6D NOP           ;
- $5C6E NOP           ;
- $5C6F NOP           ;
- $5C70 NOP           ;
- $5C71 NOP           ;
- $5C72 NOP           ;
- $5C73 NOP           ;
- $5C74 OR (HL)       ;
- $5C75 LD A,(DE)     ;
- $5C76 NOP           ;
- $5C77 NOP           ;
- $5C78 LD B,D        ;
- $5C79 LD DE,$5800   ;
- $5C7C RST $38       ;
- $5C7D NOP           ;
- $5C7E NOP           ;
- $5C7F LD HL,$5B00   ;
- $5C82 LD HL,$E017   ;
- $5C85 LD C,B        ;
- $5C86 RET PO        ;
- $5C87 LD D,B        ;
- $5C88 LD HL,$2109   ;
- $5C8B RLA           ;
- $5C8C INC BC        ;
- $5C8D NOP           ;
- $5C8E NOP           ;
- $5C8F NOP           ;
- $5C90 NOP           ;
- $5C91 NOP           ;
- $5C92 NOP           ;
- $5C93 NOP           ;
- $5C94 NOP           ;
- $5C95 NOP           ;
- $5C96 NOP           ;
- $5C97 NOP           ;
- $5C98 NOP           ;
- $5C99 NOP           ;
- $5C9A NOP           ;
- $5C9B NOP           ;
- $5C9C NOP           ;
- $5C9D NOP           ;
- $5C9E NOP           ;
- $5C9F NOP           ;
- $5CA0 NOP           ;
- $5CA1 NOP           ;
- $5CA2 NOP           ;
- $5CA3 NOP           ;
- $5CA4 NOP           ;
- $5CA5 NOP           ;
- $5CA6 NOP           ;
- $5CA7 NOP           ;
- $5CA8 NOP           ;
- $5CA9 NOP           ;
- $5CAA NOP           ;
- $5CAB NOP           ;
- $5CAC NOP           ;
- $5CAD NOP           ;
- $5CAE NOP           ;
- $5CAF NOP           ;
- $5CB0 NOP           ;
- $5CB1 NOP           ;
- $5CB2 OR H          ;
- $5CB3 LD E,A        ;
- $5CB4 RST $38       ;
- $5CB5 RST $38       ;
- $5CB6 CALL P,$A809  ;
- $5CB9 DJNZ $5D06    ;
- $5CBB CALL P,$C409  ;
- $5CBE DEC D         ;
- $5CBF LD D,E        ;
- $5CC0 ADD A,C       ;
- $5CC1 RRCA          ;
- $5CC2 CALL NZ,$5215 ;
- $5CC5 CALL P,$C409  ;
- $5CC8 DEC D         ;
- $5CC9 LD D,B        ;
- $5CCA ADD A,B       ;
- $5CCB NOP           ;
- $5CCC LD BC,$000D   ;
- $5CCF DEFB $FD      ;
- $5CD0 LD ($3534),A  ;
- $5CD3 JR NC,$5D05   ;
- $5CD5 LD C,$00      ;
- $5CD7 NOP           ;
- $5CD8 OR H          ;
- $5CD9 LD E,A        ;
- $5CDA NOP           ;
- $5CDB DEC C         ;
- $5CDC NOP           ;
- $5CDD LD (BC),A     ;
- $5CDE DEC E         ;
- $5CDF NOP           ;
- $5CE0 EXX           ;
- $5CE1 JR NC,$5CF1   ;
- $5CE3 NOP           ;
- $5CE4 NOP           ;
- $5CE5 NOP           ;
- $5CE6 NOP           ;
- $5CE7 NOP           ;
- $5CE8 LD A,($30DA)  ;
- $5CEB LD C,$00      ;
- $5CED NOP           ;
- $5CEE NOP           ;
- $5CEF NOP           ;
- $5CF0 NOP           ;
-*$5CF1 LD A,($30E7)  ;
- $5CF4 LD C,$00      ;
- $5CF6 NOP           ;
- $5CF7 NOP           ;
- $5CF8 NOP           ;
- $5CF9 NOP           ;
- $5CFA LD A,($0DFB)  ;
- $5CFD NOP           ;
- $5CFE INC BC        ;
- $5CFF LD E,E        ;
- $5D00 NOP           ;
- $5D01 PUSH AF       ;
- $5D02 XOR H         ;
- $5D03 JR C,$5D13    ;
-*$5D05 NOP           ;
-*$5D06 NOP           ;
- $5D07 EX AF,AF'     ;
- $5D08 NOP           ;
- $5D09 NOP           ;
- $5D0A INC L         ;
- $5D0B SCF           ;
- $5D0C LD C,$00      ;
- $5D0E NOP           ;
- $5D0F RLCA          ;
- $5D10 NOP           ;
- $5D11 NOP           ;
- $5D12 DEC SP        ;
-*$5D13 LD ($0510),HL ;
- $5D16 INC DE        ;
- $5D17 LD BC,$4850   ;
- $5D1A LD B,L        ;
- $5D1B LD B,L        ;
- $5D1C LD C,(HL)     ;
- $5D1D LD C,C        ;
- $5D1E LD E,B        ;
- $5D1F JR NZ,$5D8A   ;
- $5D21 LD (HL),E     ;
- $5D22 JR NZ,$5D90   ;
- $5D24 LD L,A        ;
- $5D25 LD H,C        ;
- $5D26 LD H,H        ;
- $5D27 LD L,C        ;
- $5D28 LD L,(HL)     ;
- $5D29 LD H,A        ;
- $5D2A LD ($AC3B),HL ;
- $5D2D LD SP,$0E30   ;
- $5D30 NOP           ;
- $5D31 NOP           ;
- $5D32 LD A,(BC)     ;
- $5D33 NOP           ;
- $5D34 NOP           ;
- $5D35 INC L         ;
- $5D36 ADD HL,SP     ;
- $5D37 LD C,$00      ;
- $5D39 NOP           ;
- $5D3A ADD HL,BC     ;
- $5D3B NOP           ;
- $5D3C NOP           ;
- $5D3D DEC SP        ;
- $5D3E LD ($0013),HL ;
- $5D41 DJNZ $5D49    ;
- $5D43 LD DE,$1202   ;
- $5D46 LD BC,$5020   ;
-*$5D49 LD L,H        ;
- $5D4A LD H,L        ;
- $5D4B LD H,C        ;
- $5D4C LD (HL),E     ;
- $5D4D LD H,L        ;
- $5D4E JR NZ,$5DA7   ;
- $5D50 LD H,C        ;
- $5D51 LD L,C        ;
- $5D52 LD (HL),H     ;
- $5D53 JR NZ,$5D67   ;
- $5D55 NOP           ;
- $5D56 LD DE,$1007   ;
- $5D59 NOP           ;
- $5D5A LD ($000D),HL ;
- $5D5D INC B         ;
- $5D5E DEC D         ;
- $5D5F NOP           ;
- $5D60 CALL P,$3332  ;
- $5D63 LD (HL),$35   ;
- $5D65 ADD HL,SP     ;
- $5D66 LD C,$00      ;
- $5D68 NOP           ;
- $5D69 LD L,E        ;
- $5D6A LD E,H        ;
- $5D6B NOP           ;
- $5D6C INC L         ;
- $5D6D JR NC,$5D7D   ;
- $5D6F NOP           ;
- $5D70 NOP           ;
- $5D71 NOP           ;
- $5D72 NOP           ;
- $5D73 NOP           ;
- $5D74 DEC C         ;
- $5D75 NOP           ;
- $5D76 DEC B         ;
- $5D77 DJNZ $5D79    ;
-*$5D79 RST $28       ;
- $5D7A LD ($AF22),HL ;
-*$5D7D LD ($3534),A  ;
- $5D80 SCF           ;
- $5D81 LD (HL),$0E   ;
- $5D83 NOP           ;
- $5D84 NOP           ;
- $5D85 CALL NC,$005F ;
- $5D88 DEC C         ;
- $5D89 NOP           ;
-*$5D8A LD B,$13      ;
- $5D8C NOP           ;
- $5D8D RST $28       ;
- $5D8E LD ($AF22),HL ;
- $5D91 LD A,($C0F9)  ;
- $5D94 INC SP        ;
- $5D95 JR NC,$5DC8   ;
- $5D97 LD ($0E31),A  ;
- $5D9A NOP           ;
- $5D9B NOP           ;
- $5D9C SBC A,C       ;
- $5D9D LD (HL),L     ;
- $5D9E NOP           ;
- $5D9F DEC C         ;
- $5DA0 ADD A,B       ;
- $5DA1 DEFB $FD      ;
- $5DA2 LD ($3534),A  ;
- $5DA5 JR NC,$5DD7   ;
-*$5DA7 LD C,$00      ;
- $5DA9 NOP           ;
- $5DAA OR H          ;
- $5DAB LD E,A        ;
- $5DAC NOP           ;
- $5DAD LD A,($22F8)  ;
- $5DB0 LD D,B        ;
- $5DB1 LD C,B        ;
- $5DB2 LD B,L        ;
- $5DB3 LD B,L        ;
- $5DB4 LD C,(HL)     ;
- $5DB5 LD C,C        ;
- $5DB6 LD E,B        ;
- $5DB7 LD ($32AF),HL ;
- $5DBA INC SP        ;
- $5DBB DEC (HL)      ;
- $5DBC DEC (HL)      ;
- $5DBD LD ($000E),A  ;
- $5DC0 NOP           ;
- $5DC1 NOP           ;
- $5DC2 LD E,H        ;
- $5DC3 NOP           ;
- $5DC4 INC L         ;
- $5DC5 DEC (HL)      ;
- $5DC6 DEC (HL)      ;
- $5DC7 JR NC,$5DD7   ;
- $5DC9 NOP           ;
- $5DCA NOP           ;
- $5DCB LD H,$02      ;
- $5DCD NOP           ;
- $5DCE LD A,($0DF7)  ;
- $5DD1 ADD A,B       ;
- $5DD2 NOP           ;
- $5DD3 NOP           ;
- $5DD4 SBC A,C       ;
- $5DD5 LD (HL),L     ;
- $5DD6 NOP           ;
-*$5DD7 JR NZ,$5DF9   ;
- $5DD9 JR NZ,$5DFB   ;
- $5DDB JR NZ,$5DFD   ;
- $5DDD NOP           ;
- $5DDE NOP           ;
- $5DDF NOP           ;
- $5DE0 NOP           ;
- $5DE1 NOP           ;
- $5DE2 ADD A,B       ;
- $5DE3 INC BC        ;
- $5DE4 LD (HL),B     ;
- $5DE5 INC SP        ;
- $5DE6 JR NZ,$5E08   ;
- $5DE8 JR NZ,$5E0A   ;
- $5DEA JR NZ,$5E0C   ;
- $5DEC JR NZ,$5E0E   ;
- $5DEE LD (BC),A     ;
- $5DEF NOP           ;
- $5DF0 LD A,B        ;
- $5DF1 LD E,H        ;
- $5DF2 LD (HL),B     ;
- $5DF3 ADD A,B       ;
- $5DF4 NOP           ;
- $5DF5 NOP           ;
- $5DF6 NOP           ;
- $5DF7 NOP           ;
- $5DF8 NOP           ;
-*$5DF9 NOP           ;
- $5DFA NOP           ;
-*$5DFB NOP           ;
- $5DFC NOP           ;
-*$5DFD NOP           ;
- $5DFE NOP           ;
- $5DFF NOP           ;
- $5E00 NOP           ;
- $5E01 NOP           ;
- $5E02 NOP           ;
- $5E03 NOP           ;
- $5E04 NOP           ;
- $5E05 NOP           ;
- $5E06 NOP           ;
- $5E07 NOP           ;
-*$5E08 NOP           ;
- $5E09 NOP           ;
-*$5E0A NOP           ;
- $5E0B NOP           ;
-*$5E0C NOP           ;
- $5E0D NOP           ;
-*$5E0E NOP           ;
- $5E0F NOP           ;
- $5E10 NOP           ;
- $5E11 NOP           ;
- $5E12 NOP           ;
- $5E13 NOP           ;
- $5E14 NOP           ;
- $5E15 NOP           ;
- $5E16 NOP           ;
- $5E17 NOP           ;
- $5E18 NOP           ;
- $5E19 NOP           ;
- $5E1A NOP           ;
- $5E1B NOP           ;
- $5E1C NOP           ;
- $5E1D NOP           ;
- $5E1E NOP           ;
- $5E1F NOP           ;
- $5E20 NOP           ;
- $5E21 NOP           ;
- $5E22 NOP           ;
- $5E23 NOP           ;
- $5E24 NOP           ;
- $5E25 NOP           ;
- $5E26 NOP           ;
- $5E27 NOP           ;
- $5E28 NOP           ;
- $5E29 NOP           ;
- $5E2A NOP           ;
- $5E2B NOP           ;
- $5E2C NOP           ;
- $5E2D NOP           ;
- $5E2E NOP           ;
- $5E2F NOP           ;
- $5E30 NOP           ;
- $5E31 NOP           ;
- $5E32 NOP           ;
- $5E33 NOP           ;
- $5E34 NOP           ;
- $5E35 NOP           ;
- $5E36 NOP           ;
- $5E37 NOP           ;
- $5E38 NOP           ;
- $5E39 NOP           ;
- $5E3A NOP           ;
- $5E3B NOP           ;
- $5E3C NOP           ;
- $5E3D NOP           ;
- $5E3E NOP           ;
- $5E3F NOP           ;
- $5E40 NOP           ;
- $5E41 NOP           ;
- $5E42 NOP           ;
- $5E43 NOP           ;
- $5E44 NOP           ;
- $5E45 NOP           ;
- $5E46 NOP           ;
- $5E47 NOP           ;
- $5E48 NOP           ;
- $5E49 NOP           ;
- $5E4A NOP           ;
- $5E4B NOP           ;
- $5E4C NOP           ;
- $5E4D NOP           ;
- $5E4E NOP           ;
- $5E4F NOP           ;
- $5E50 NOP           ;
- $5E51 NOP           ;
- $5E52 NOP           ;
- $5E53 NOP           ;
- $5E54 NOP           ;
- $5E55 NOP           ;
- $5E56 NOP           ;
- $5E57 NOP           ;
- $5E58 NOP           ;
- $5E59 NOP           ;
- $5E5A NOP           ;
- $5E5B NOP           ;
- $5E5C NOP           ;
- $5E5D NOP           ;
- $5E5E NOP           ;
- $5E5F NOP           ;
- $5E60 NOP           ;
- $5E61 NOP           ;
- $5E62 NOP           ;
- $5E63 NOP           ;
- $5E64 NOP           ;
- $5E65 NOP           ;
- $5E66 NOP           ;
- $5E67 NOP           ;
- $5E68 NOP           ;
- $5E69 NOP           ;
- $5E6A NOP           ;
- $5E6B NOP           ;
- $5E6C NOP           ;
- $5E6D NOP           ;
- $5E6E NOP           ;
- $5E6F NOP           ;
- $5E70 NOP           ;
- $5E71 NOP           ;
- $5E72 NOP           ;
- $5E73 NOP           ;
- $5E74 NOP           ;
- $5E75 NOP           ;
- $5E76 NOP           ;
- $5E77 NOP           ;
- $5E78 NOP           ;
- $5E79 NOP           ;
- $5E7A NOP           ;
- $5E7B NOP           ;
- $5E7C NOP           ;
- $5E7D NOP           ;
- $5E7E NOP           ;
- $5E7F NOP           ;
- $5E80 NOP           ;
- $5E81 NOP           ;
- $5E82 NOP           ;
- $5E83 NOP           ;
- $5E84 NOP           ;
- $5E85 NOP           ;
- $5E86 NOP           ;
- $5E87 NOP           ;
- $5E88 NOP           ;
- $5E89 NOP           ;
- $5E8A NOP           ;
- $5E8B NOP           ;
- $5E8C NOP           ;
- $5E8D NOP           ;
- $5E8E NOP           ;
- $5E8F NOP           ;
- $5E90 NOP           ;
- $5E91 NOP           ;
- $5E92 NOP           ;
- $5E93 NOP           ;
- $5E94 NOP           ;
- $5E95 NOP           ;
- $5E96 NOP           ;
- $5E97 NOP           ;
- $5E98 NOP           ;
- $5E99 NOP           ;
- $5E9A NOP           ;
- $5E9B NOP           ;
- $5E9C NOP           ;
- $5E9D NOP           ;
- $5E9E NOP           ;
- $5E9F NOP           ;
- $5EA0 NOP           ;
- $5EA1 NOP           ;
- $5EA2 NOP           ;
- $5EA3 NOP           ;
- $5EA4 NOP           ;
- $5EA5 NOP           ;
- $5EA6 NOP           ;
- $5EA7 NOP           ;
- $5EA8 NOP           ;
- $5EA9 NOP           ;
- $5EAA NOP           ;
- $5EAB NOP           ;
- $5EAC NOP           ;
- $5EAD NOP           ;
- $5EAE NOP           ;
- $5EAF NOP           ;
- $5EB0 NOP           ;
- $5EB1 NOP           ;
- $5EB2 NOP           ;
- $5EB3 NOP           ;
- $5EB4 NOP           ;
- $5EB5 NOP           ;
- $5EB6 NOP           ;
- $5EB7 NOP           ;
- $5EB8 NOP           ;
- $5EB9 NOP           ;
- $5EBA NOP           ;
- $5EBB NOP           ;
- $5EBC NOP           ;
- $5EBD NOP           ;
- $5EBE NOP           ;
- $5EBF NOP           ;
- $5EC0 NOP           ;
- $5EC1 NOP           ;
- $5EC2 NOP           ;
- $5EC3 NOP           ;
- $5EC4 NOP           ;
- $5EC5 NOP           ;
- $5EC6 NOP           ;
- $5EC7 NOP           ;
- $5EC8 NOP           ;
- $5EC9 NOP           ;
- $5ECA NOP           ;
- $5ECB NOP           ;
- $5ECC NOP           ;
- $5ECD NOP           ;
- $5ECE NOP           ;
- $5ECF NOP           ;
- $5ED0 NOP           ;
- $5ED1 NOP           ;
- $5ED2 NOP           ;
- $5ED3 NOP           ;
- $5ED4 NOP           ;
- $5ED5 NOP           ;
- $5ED6 NOP           ;
- $5ED7 NOP           ;
- $5ED8 NOP           ;
- $5ED9 NOP           ;
- $5EDA NOP           ;
- $5EDB NOP           ;
- $5EDC NOP           ;
- $5EDD NOP           ;
- $5EDE NOP           ;
- $5EDF NOP           ;
- $5EE0 NOP           ;
- $5EE1 NOP           ;
- $5EE2 NOP           ;
- $5EE3 NOP           ;
- $5EE4 NOP           ;
- $5EE5 NOP           ;
- $5EE6 NOP           ;
- $5EE7 NOP           ;
- $5EE8 NOP           ;
- $5EE9 NOP           ;
- $5EEA NOP           ;
- $5EEB NOP           ;
- $5EEC NOP           ;
- $5EED NOP           ;
- $5EEE NOP           ;
- $5EEF NOP           ;
- $5EF0 NOP           ;
- $5EF1 NOP           ;
- $5EF2 NOP           ;
- $5EF3 NOP           ;
- $5EF4 NOP           ;
- $5EF5 NOP           ;
- $5EF6 NOP           ;
- $5EF7 NOP           ;
- $5EF8 NOP           ;
- $5EF9 NOP           ;
- $5EFA NOP           ;
- $5EFB NOP           ;
- $5EFC NOP           ;
- $5EFD NOP           ;
- $5EFE NOP           ;
- $5EFF NOP           ;
- $5F00 NOP           ;
- $5F01 NOP           ;
- $5F02 NOP           ;
- $5F03 NOP           ;
- $5F04 NOP           ;
- $5F05 NOP           ;
- $5F06 NOP           ;
- $5F07 NOP           ;
- $5F08 NOP           ;
- $5F09 NOP           ;
- $5F0A NOP           ;
- $5F0B NOP           ;
- $5F0C NOP           ;
- $5F0D NOP           ;
- $5F0E NOP           ;
- $5F0F NOP           ;
- $5F10 NOP           ;
- $5F11 NOP           ;
- $5F12 NOP           ;
- $5F13 NOP           ;
- $5F14 NOP           ;
- $5F15 NOP           ;
- $5F16 NOP           ;
- $5F17 NOP           ;
- $5F18 NOP           ;
- $5F19 NOP           ;
- $5F1A NOP           ;
- $5F1B NOP           ;
- $5F1C NOP           ;
- $5F1D NOP           ;
- $5F1E NOP           ;
- $5F1F NOP           ;
- $5F20 NOP           ;
- $5F21 NOP           ;
- $5F22 NOP           ;
- $5F23 NOP           ;
- $5F24 NOP           ;
- $5F25 NOP           ;
- $5F26 NOP           ;
- $5F27 NOP           ;
- $5F28 NOP           ;
- $5F29 NOP           ;
- $5F2A NOP           ;
- $5F2B NOP           ;
- $5F2C NOP           ;
- $5F2D NOP           ;
- $5F2E NOP           ;
- $5F2F NOP           ;
- $5F30 NOP           ;
- $5F31 NOP           ;
- $5F32 NOP           ;
- $5F33 NOP           ;
- $5F34 NOP           ;
- $5F35 NOP           ;
- $5F36 NOP           ;
- $5F37 NOP           ;
- $5F38 NOP           ;
- $5F39 NOP           ;
- $5F3A NOP           ;
- $5F3B NOP           ;
- $5F3C NOP           ;
- $5F3D NOP           ;
- $5F3E NOP           ;
- $5F3F NOP           ;
- $5F40 NOP           ;
- $5F41 NOP           ;
- $5F42 NOP           ;
- $5F43 NOP           ;
- $5F44 NOP           ;
- $5F45 NOP           ;
- $5F46 NOP           ;
- $5F47 NOP           ;
- $5F48 NOP           ;
- $5F49 NOP           ;
- $5F4A NOP           ;
- $5F4B NOP           ;
- $5F4C NOP           ;
- $5F4D NOP           ;
- $5F4E NOP           ;
- $5F4F NOP           ;
- $5F50 NOP           ;
- $5F51 NOP           ;
- $5F52 NOP           ;
- $5F53 NOP           ;
- $5F54 NOP           ;
- $5F55 NOP           ;
- $5F56 NOP           ;
- $5F57 NOP           ;
- $5F58 NOP           ;
- $5F59 NOP           ;
- $5F5A NOP           ;
- $5F5B NOP           ;
- $5F5C NOP           ;
- $5F5D NOP           ;
- $5F5E NOP           ;
- $5F5F NOP           ;
- $5F60 NOP           ;
- $5F61 NOP           ;
- $5F62 NOP           ;
- $5F63 NOP           ;
- $5F64 NOP           ;
- $5F65 NOP           ;
- $5F66 NOP           ;
- $5F67 NOP           ;
- $5F68 NOP           ;
- $5F69 NOP           ;
- $5F6A NOP           ;
- $5F6B NOP           ;
- $5F6C NOP           ;
- $5F6D NOP           ;
- $5F6E NOP           ;
- $5F6F NOP           ;
- $5F70 NOP           ;
- $5F71 NOP           ;
- $5F72 NOP           ;
- $5F73 NOP           ;
- $5F74 NOP           ;
- $5F75 NOP           ;
- $5F76 NOP           ;
- $5F77 NOP           ;
- $5F78 NOP           ;
- $5F79 NOP           ;
- $5F7A NOP           ;
- $5F7B NOP           ;
- $5F7C NOP           ;
- $5F7D NOP           ;
- $5F7E NOP           ;
- $5F7F NOP           ;
- $5F80 NOP           ;
- $5F81 NOP           ;
- $5F82 NOP           ;
- $5F83 NOP           ;
- $5F84 NOP           ;
- $5F85 NOP           ;
- $5F86 NOP           ;
- $5F87 NOP           ;
- $5F88 NOP           ;
- $5F89 NOP           ;
- $5F8A NOP           ;
- $5F8B NOP           ;
- $5F8C NOP           ;
- $5F8D NOP           ;
- $5F8E NOP           ;
- $5F8F IN A,($02)    ;
- $5F91 LD C,L        ;
- $5F92 NOP           ;
- $5F93 DI            ;
- $5F94 DEC C         ;
- $5F95 OR A          ;
- $5F96 DEC L         ;
- $5F97 JP NC,$CD5D   ;
- $5F9A LD E,L        ;
- $5F9B SBC A,C       ;
- $5F9C LD (HL),L     ;
- $5F9D DEC HL        ;
- $5F9E DEC L         ;
- $5F9F LD H,L        ;
- $5FA0 INC SP        ;
- $5FA1 NOP           ;
- $5FA2 NOP           ;
- $5FA3 DEFB $ED,$10  ;
- $5FA5 DEC C         ;
- $5FA6 NOP           ;
- $5FA7 ADD HL,BC     ;
- $5FA8 NOP           ;
- $5FA9 ADD A,L       ;
- $5FAA INC E         ;
- $5FAB DJNZ $5FC9    ;
- $5FAD LD D,D        ;
- $5FAE DEC DE        ;
- $5FAF HALT          ;
- $5FB0 DEC DE        ;
- $5FB1 INC BC        ;
- $5FB2 INC DE        ;
- $5FB3 NOP           ;
- $5FB4 LD A,$00      ;
- $5FB6 NOP           ;
- $5FB7 NOP           ;
- $5FB8 NOP           ;
- $5FB9 NOP           ;
- $5FBA NOP           ;
- $5FBB NOP           ;
- $5FBC NOP           ;
- $5FBD NOP           ;
- $5FBE NOP           ;
- $5FBF NOP           ;
- $5FC0 NOP           ;
- $5FC1 NOP           ;
- $5FC2 NOP           ;
- $5FC3 NOP           ;
- $5FC4 NOP           ;
- $5FC5 NOP           ;
- $5FC6 NOP           ;
- $5FC7 NOP           ;
- $5FC8 NOP           ;
-*$5FC9 NOP           ;
- $5FCA NOP           ;
- $5FCB NOP           ;
- $5FCC NOP           ;
- $5FCD NOP           ;
- $5FCE NOP           ;
- $5FCF NOP           ;
- $5FD0 NOP           ;
- $5FD1 NOP           ;
- $5FD2 NOP           ;
- $5FD3 NOP           ;
+i$5C00
 
 ; Graphics: Mothership Alien
 ;
@@ -1225,8 +336,8 @@ b$6026 DEFB %00010000 ; {#UDGTABLE { #UDG(#PC,$42) } TABLE#
  $602C DEFB %10010010 ;
  $602D DEFB %10111010 ; }
 
-; Graphics: Bullets
-@label=Graphics_Bullets_01
+; Graphics: Alien Bullets
+@label=Graphics_AlienBullets_01
 b$602E DEFB %01100000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $602F DEFB %01100000 ;
  $6030 DEFB %01100011 ;
@@ -1235,7 +346,7 @@ b$602E DEFB %01100000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $6033 DEFB %00011000 ;
  $6034 DEFB %00011000 ;
  $6035 DEFB %00011000 ; }
-@label=Graphics_Bullets_02
+@label=Graphics_AlienBullets_02
  $6036 DEFB %00000000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $6037 DEFB %00000000 ;
  $6038 DEFB %00000000 ;
@@ -1244,7 +355,7 @@ b$602E DEFB %01100000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $603B DEFB %00011000 ;
  $603C DEFB %00011000 ;
  $603D DEFB %00000000 ; }
-@label=Graphics_Bullets_03
+@label=Graphics_AlienBullets_03
  $603E DEFB %00000000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $603F DEFB %01100000 ;
  $6040 DEFB %01100000 ;
@@ -1253,8 +364,10 @@ b$602E DEFB %01100000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $6043 DEFB %00000110 ;
  $6044 DEFB %00000110 ;
  $6045 DEFB %00000000 ; }
-@label=Graphics_Bullets_04
- $6046 DEFB %00000000 ; {#UDGTABLE { #UDG(#PC,$45) } TABLE#
+
+; Graphics: Player Bullets
+@label=Graphics_PlayerBullets
+b$6046 DEFB %00000000 ; {#UDGTABLE { #UDG(#PC,$45) } TABLE#
  $6047 DEFB %00001000 ;
  $6048 DEFB %00010000 ;
  $6049 DEFB %00001000 ;
@@ -1263,7 +376,7 @@ b$602E DEFB %01100000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $604C DEFB %00010000 ;
  $604D DEFB %00000000 ; }
 
-; Graphics: Ship
+; Graphics: Player Ship
 ;
 ; .
 ;
@@ -1273,7 +386,7 @@ b$602E DEFB %01100000 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
 ;   #UDG(#PC+$08*($02*$y+$x),$46)(*udg)
 ;   udg
 ; ) } TABLE#
-@label=Graphics_Ship
+@label=Graphics_PlayerShip
 b$604E DEFB %00000001 ; {#UDGTABLE { #UDG(#PC,$46) } TABLE#
  $604F DEFB %00000001 ;
  $6050 DEFB %00000011 ;
@@ -2433,61 +1546,63 @@ t$645E DEFM "press S to start" ; "#STR#(#PC,$04,$10)".
 
 ; Messaging: Game Over
 @label=Messaging_GameOver
-t$646E DEFM "GAMEOVER" ; #FONT#(:(#STR(#PC,$03,$08)))$6253,attr=$06(game-over)
+t$646E DEFM "GAMEOVER" ; #FONT#($6253,attr=$06,chars=0(#STR(#PC,$03,$08)))(game-over)
 
 ; Messaging: Instructions
 ;
 ; Used by the routine at #R$6B99.
 @label=Messaging_Instructions
-t$6476 DEFM "INSTRUCTIONS"         ; #FONT#(:(#STR(#PC,$03,$0C)))$6253,attr=$06(instructions)
+t$6476 DEFM "INSTRUCTIONS"         ; #FONT#($6253,attr=$06,chars=0(#STR(#PC,$03,$0C)))(instructions)
 @label=Messaging_Left
- $6482 DEFM "LEFT    - CAPS SHIFT" ; #FONT#(:(#STR(#PC,$03,$14)))$6253,attr=$43(left)
+ $6482 DEFM "LEFT    - CAPS SHIFT" ; #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$14)))(left)
 @label=Messaging_Right
- $6496 DEFM "RIGHT   - Z"          ; #FONT#(:(#STR(#PC,$03,$0B)))$6253,attr=$43(right)
+ $6496 DEFM "RIGHT   - Z"          ; #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$0B)))(right)
 @label=Messaging_Fire
- $64A1 DEFM "FIRE    - SPACE"      ; #FONT#(:(#STR(#PC,$03,$0F)))$6253,attr=$43(fire)
+ $64A1 DEFM "FIRE    - SPACE"      ; #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$0F)))(fire)
 @label=Messaging_Barrier
- $64B0 DEFM "BARRIER - ENTER"      ; #FONT#(:(#STR(#PC,$03,$0F)))$6253,attr=$43(barrier)
+ $64B0 DEFM "BARRIER - ENTER"      ; #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$0F)))(barrier)
 @label=Messaging_Level
- $64BF DEFM "SELECT LEVEL   1-5"   ; #FONT#(:(#STR(#PC,$03,$12)))$6253,attr=$07(level)
+ $64BF DEFM "SELECT LEVEL   1-5"   ; #FONT#($6253,attr=$07,chars=0(#STR(#PC,$03,$12)))(level)
 
 ; Messaging: "Select Joystick Or Keys"
 ;
 ; Used by the routine at #R$6B4F.
 @label=Messaging_SelectJoystickOrKeys
-t$64D1 DEFM "SELECT JOYSTICK OR KEYS" ; #FONT#(:(#STR(#PC,$03,$17)))$6253,attr=$06(joystick-or-keys)
+t$64D1 DEFM "SELECT JOYSTICK OR KEYS" ; #FONT#($6253,attr=$06,chars=0(#STR(#PC,$03,$17)))(joystick-or-keys)
 @label=Messaging_KempstonJoystick
- $64E8 DEFM "K - Kempston stick"      ; #FONT#(:(#STR(#PC,$03,$12)))$3D00,attr=$03(kempston-joystick)
+ $64E8 DEFM "K - Kempston stick"      ; #FONT#($3D00,attr=$03,chars=0(#STR(#PC,$03,$12)))(kempston-joystick)
 @label=Messaging_AGFJoystick
- $64FA DEFM "A - AGF stick"           ; #FONT#(:(#STR(#PC,$03,$0D)))$3D00,attr=$03(agf-joystick)
+ $64FA DEFM "A - AGF stick"           ; #FONT#($3D00,attr=$03,chars=0(#STR(#PC,$03,$0D)))(agf-joystick)
 @label=Messaging_Keyboard
- $6507 DEFM "B - keyboard"            ; #FONT#(:(#STR(#PC,$03,$0C)))$3D00,attr=$03(keyboard)
- $6513 DEFM $00
+ $6507 DEFM "B - keyboard"            ; #FONT#($3D00,attr=$03,chars=0(#STR(#PC,$03,$0C)))(keyboard)
+
+; Unused
+u$6513 DEFB $00
 
 ; Messaging: Header
 @label=Messaging_Score
-t$6514 DEFM "000000" ; #FONT#(:(#STR($6514,$03,$06)))$6253,attr=$06(player-score)
+t$6514 DEFM "000000" ; #FONT#($6253,attr=$06,chars=0(#STR($6514,$03,$06)))(player-score)
 @label=Messaging_Header_HighScore
- $651A DEFM "HIGH "  ; #FONT#(:(#STR($651A,$03,$0B)))$6253,attr=$06(high-score)
+ $651A DEFM "HIGH "  ; #FONT#($6253,attr=$06,chars=0(#STR($651A,$03,$0B)))(high-score)
 ; This isn't separate, it's part of the above.
 @label=Messaging_HighScore
- $651F DEFM "000000" ; #FONT#(:(#STR($651F,$03,$06)))$6253,attr=$06(player-high-score)
+ $651F DEFM "000000" ; #FONT#($6253,attr=$06,chars=0(#STR($651F,$03,$06)))(player-high-score)
 @label=Messaging_Header_Level
- $6525 DEFM " L"     ; #FONT#(:(#STR($6525,$03,$03)))$6253,attr=$44(level-in-game)
+ $6525 DEFM " L"     ; #FONT#($6253,attr=$44,chars=0(#STR($6525,$03,$03)))(level-in-game)
 ; This isn't separate, it's part of the above.
 @label=Messaging_Header_LevelNumber
- $6527 DEFM "1"      ; #FONT#(:(#STR($6527,$03,$01)))$6253,attr=$44(level-number)
+ $6527 DEFM "1"      ; #FONT#($6253,attr=$44,chars=0(#STR($6527,$03,$01)))(level-number)
 
 ; Score Buffer
 @label=ScoreBuffer
-g$6528 DEFB $30
- $6529 DEFB $30
- $652A DEFB $30
+g$6528 DEFB $30      ; "#CHR(#PEEK(#PC))".
+ $6529 DEFB $30      ; "#CHR(#PEEK(#PC))".
+ $652A DEFB $30      ; "#CHR(#PEEK(#PC))".
 @label=BonusScoreBuffer
- $652B DEFB $30
- $652C DEFB $30
- $652D DEFB $30
- $652E DEFB $30
+ $652B DEFB $30      ; "#CHR(#PEEK(#PC))".
+ $652C DEFB $30      ; "#CHR(#PEEK(#PC))".
+ $652D DEFB $30      ; "#CHR(#PEEK(#PC))".
+ $652E DEFB $30      ; "#CHR(#PEEK(#PC))".
 
 ; Table: Explosion UDGs
 ;
@@ -2873,9 +1988,9 @@ g$6675 DEFB $3B,$22,$F9,$E4,$B7,$A6,$75,$68
 ;
 ; Used by the routine at #R$75B7.
 @label=Pheenix_Colour_01
-g$667D DEFB $43
+g$667D DEFB $43      ; #COLOUR(#PEEK(#PC)).
 @label=Pheenix_Colour_02
- $667E DEFB $06
+ $667E DEFB $06      ; INK:#INK(#PEEK(#PC)).
 
 ; Alien Count
 ;
@@ -3350,12 +2465,12 @@ c$67B6 LD A,($66F3)  ; {Jump to #R$67C3 if *#R$66F3 is not active.
 ; } TABLE# #POPS
 @label=PrintHeader
 c$67F6 CALL $67A9    ; Call #R$67A9.
-; Prints "#FONT#(:(#STR($651A,$03,$0B)))$6253,attr=$06(high-score)".
+; Prints "#FONT#($6253,attr=$06,chars=0(#STR($651A,$03,$0B)))(high-score)".
  $67F9 DEC C         ; Set the print attribute to #INK$06.
  $67FA LD B,$0B      ; Set #REGb for printing #N$0B characters.
  $67FC LD E,$12      ; Update the screen buffer printing position to #N$4012.
  $67FE CALL $676F    ; Call #R$676F.
-; Prints "#FONT#(:(#STR($6525,$03,$03)))$6253,attr=$44(header-level)".
+; Prints "#FONT#($6253,attr=$44,chars=0(#STR($6525,$03,$03)))(header-level)".
  $6801 LD BC,$0344   ; Set #REGb for printing #N$03 characters and the print attribute to
                      ; #COLOUR$44.
  $6804 LD E,$1D      ; Update the screen buffer printing position to #N$401D.
@@ -3595,7 +2710,7 @@ c$68A1 PUSH AF       ; {Stash #REGaf, #REGbc, #REGde and #REGhl on the stack.
 ; TABLE# #POPS
 ; .
 ; Which create the following animation:
-; #UDGTABLE { #UDGARRAY#(#ANIMATE$08,$17(transition)) } TABLE#
+; #UDGTABLE { #ANIMATE$08,$17(transition) } TABLE#
 @label=TransitionEffect
 c$68B8 LD B,$02      ; Set an iteration counter in #REGb for #N$02 animations.
 @label=TransitionEffect_Loop
@@ -4006,7 +3121,7 @@ c$696A LD HL,$6538   ; {Call #R$677B using #R$6538; printing #N$02 characters in
 ; #POPS
 ; .
 ; Which looks like this when animated:
-; #UDGTABLE { #UDGARRAY#(#ANIMATE$04,$0F(ripple)) } TABLE#
+; #UDGTABLE { #ANIMATE$04,$0F(ripple) } TABLE#
 @label=Handler_Mothership
 c$6A23 LD DE,$40CF       ; #REGde=#N$40CF (left-hand UDG screen buffer target).
  $6A26 PUSH DE           ; Stash this destination address on the stack.
@@ -4050,7 +3165,7 @@ c$6A23 LD DE,$40CF       ; #REGde=#N$40CF (left-hand UDG screen buffer target).
 ; TABLE# #POPS
 ; .
 ; Which looks like this when animated:
-; #UDGTABLE { #UDGARRAY#(#ANIMATE$0F,$02(conveyor)) } TABLE#
+; #UDGTABLE { #ANIMATE$0F,$02(conveyor) } TABLE#
  $6A47 LD HL,$4837       ; #REGhl=#N$4837 (upper source row).
  $6A4A LD DE,$4838       ; #REGde=#N$4838 (destination one line below).
  $6A4D LD B,$08          ; Set a line counter in #REGb (#N$08 lines in a UDG).
@@ -4131,7 +3246,7 @@ c$6A23 LD DE,$40CF       ; #REGde=#N$40CF (left-hand UDG screen buffer target).
 ; Handle the two mothership bullets (fire only when the player bullet
 ; limiter #R$6695 is zero).
 ; .
-; See #POKE#mothership-not-fire(Mothership Alien Doesn't Fire).
+; See #POKE(mothership-not-fire,Mothership Alien Doesn't Fire).
 @label=Handler_Mothership_ProcessBullets
 *$6A99 LD A,($6695)      ; {Return if *#R$6695 is not zero.
  $6A9C OR A              ;
@@ -4437,7 +3552,7 @@ b$6C0D DEFB $00,$00,$00,$00,$00,$00
 ;
 ; See #R$74A4.
 ; .
-; #HTML(#AUDIO(intro.wav)(#INCLUDE(Intro)))
+; #HTML(#AUDIO0(intro.wav)(#INCLUDE(Intro)))
 @label=Table_MusicData
 g$6C13 DEFB $84,$01,$64
  $6C16 DEFB $84,$01,$64
@@ -4507,7 +3622,7 @@ c$6C9D LD A,($6693)  ; {Return if #R$6693 is active.
  $6CB1 JR Z,$6CBF    ; (player ship).}
  $6CB3 CP $07        ; {Skip this position if the attribute is #COLOUR$07 (white/
  $6CB5 JR Z,$6CBF    ; background).}
-; See #POKE#immunity(Immunity).
+; See #POKE(immunity,Immunity).
 ; .
 ; Collision detected - trigger player death.
  $6CB7 LD A,$01      ; {Set #R$66A4 to #N$01.
@@ -4591,12 +3706,12 @@ c$6CEE LD HL,$66A4   ; {Jump to #R$6DCF if *#R$66A4 is zero.
  $6D11 OR A          ;
  $6D12 JR NZ,$6D29   ; }
  $6D14 PUSH HL       ; Stash #REGhl on the stack.
-; Prints #FONT#(:(#STR($646E,$03,$04)))$3D00,attr=$45(game)
+; Prints #FONT#($3D00,attr=$45,chars=0(#STR($646E,$03,$04)))(game)
  $6D15 LD HL,$646E   ; #REGhl=#R$646E.
  $6D18 LD DE,$48CB   ; #REGde=#N$48CB (screen buffer location).
  $6D1B LD BC,$0445   ; Set to print #N$04 characters in #COLOUR$45.
  $6D1E CALL $676F    ; Call #R$676F.
-; Prints #FONT#(:(#STR($6472,$03,$04)))$3D00,attr=$45(over)
+; Prints #FONT#($3D00,attr=$45,chars=0(#STR($6472,$03,$04)))(over)
  $6D21 LD E,$D1      ; Update the screen buffer address.
  $6D23 LD B,$04      ; Set to print #N$04 characters.
  $6D25 CALL $676F    ; Call #R$676F.
@@ -4695,7 +3810,7 @@ c$6CEE LD HL,$66A4   ; {Jump to #R$6DCF if *#R$66A4 is zero.
  $6DB1 LD A,($66A5)  ; #REGa=*#R$66A5.
  $6DB4 AND %00000011 ; Keep only bits 0-1.
  $6DB6 JP NZ,$7030   ; Jump to #R$7030 if the result is not equal to zero.
-; #HTML(#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
+; #HTML(#AUDIO0(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
  $6DB9 LD B,$08      ; Set sound loop counter to #N$08.
 @label=GameOver_SoundLoop
 *$6DBB LD A,B        ; {Copy the sound loop counter into #REGa and add #N$19.
@@ -4798,7 +3913,7 @@ c$6DCF CALL $6C9D    ; Call #R$6C9D.
  $6E2B JR NZ,$6E40   ; }
 ; Play an iteration of the shield sound effect.
 ; .
-; #HTML(#AUDIO(shield.wav)(#INCLUDE(Shield)))
+; #HTML(#AUDIO0(shield.wav)(#INCLUDE(Shield)))
  $6E2D LD A,($6694)  ; #REGa=*#R$6694.
  $6E30 AND %00000111 ; {Calculate the sound pitch: #N($00DE,$04,$04) +
  $6E32 ADD A,A       ; ((*#R$6694 & #N$07) × #N$04).
@@ -5417,7 +4532,7 @@ c$7030 LD HL,$6695   ; #REGhl=#R$6695.
  $7098 OR A          ;
  $7099 JR NZ,$70B8   ; }
  $709B PUSH DE       ; Stash the bullet position on the stack.
-; #HTML(#AUDIO(bullets.wav)(#INCLUDE(Bullets)))
+; #HTML(#AUDIO0(bullets.wav)(#INCLUDE(Bullets)))
  $709C LD B,$16      ; Set a counter in #REGb for #N$16 sound iterations.
  $709E LD HL,$0052   ; Set the initial sound pitch to #N($0052,$04,$04).
 @label=PlayerBullets_SoundLoop
@@ -5456,11 +4571,11 @@ c$7030 LD HL,$6695   ; #REGhl=#R$6695.
  $70C7 CALL $6704    ; Call #R$6704.
  $70CA SET 2,H       ; Set bit 2 of #REGh.
  $70CC PUSH HL       ; Stash #REGhl on the stack.
- $70CD LD A,($66A6)  ; #REGa=*#R$66A6.
- $70D0 OR A          ; Set the bits from #REGa.
- $70D1 LD B,A        ; #REGb=#REGa.
+ $70CD LD A,($66A6)  ; {#REGa=*#R$66A6.
+ $70D0 OR A          ; }
+ $70D1 LD B,A        ; Copy *#R$66A6 into #REGb.
  $70D2 LD A,$01      ; #REGa=#N$01.
- $70D4 JR Z,$70DA    ; Jump to #R$70DA if #REGhl is equal to #REGa.
+ $70D4 JR Z,$70DA    ; Jump to #R$70DA if #R$66A6 is zero (from above).
 @label=PlayerBullets_FindSlot_Loop
 *$70D6 SLA A         ; Shift #REGa left (with carry).
  $70D8 DJNZ $70D6    ; Decrease counter by one and loop back to #R$70D6 until
@@ -5697,7 +4812,7 @@ c$71BE LD A,($66F1)  ; {Jump to #R$71EC if bit 1 of *#R$66F1 is not set, so phas
 *$71D1 LD A,($66F3)  ; {Return if *#R$66F3 is active.
  $71D4 OR A          ;
  $71D5 RET NZ        ; }
-; #HTML(#AUDIO(wing-hit.wav)(#INCLUDE(WingHit)))
+; #HTML(#AUDIO0(wing-hit.wav)(#INCLUDE(WingHit)))
  $71D6 LD B,$18      ; Set a counter #REGb for #N$18 loops.
  $71D8 LD HL,$0122   ; Set the initial pitch to #N($0122,$04,$04).
 @label=WingHitSound_Loop
@@ -5912,7 +5027,7 @@ c$7254 LD A,($66A4)  ; {Jump to #R$730D if *#R$66A4 is not #N$02 ("explosion
  $72BA LD (HL),$CE   ; }
 ; Handle "spending a life".
  $72BC LD HL,$66F0   ; #REGhl=#R$66F0.
-; See #POKE#infinite-lives(Infinite Lives).
+; See #POKE(infinite-lives,Infinite Lives).
  $72BF DEC (HL)      ; Decrease #R$66F0 by one.
  $72C0 LD A,(HL)     ; {Jump to #R$72C9 if *#R$66F0 indicates the player still has lives
  $72C1 OR A          ; left.
@@ -6168,7 +5283,7 @@ c$730D LD A,($66A4)  ; {Return if *#R$66A4 is equal to #N$01.
 ; .
 ; Note this sample is the whole thing, obviously it loops round.
 ; .
-; #AUDIO(bonus.wav)(#INCLUDE(Bonus))
+; #AUDIO0(bonus.wav)(#INCLUDE(Bonus))
  $73C7 POP HL        ; Restore #REGhl from the stack.
  $73C8 PUSH HL       ; Stash #REGhl on the stack.
  $73C9 LD A,L        ; #REGa=#REGl.
@@ -6413,7 +5528,7 @@ c$740C LD HL,$6680   ; {Clear #N($006C,$04,$04) bytes from #R$6680 onwards.
 ; TABLE# #POPS
 ; .
 ; Which create the following animation:
-; #UDGTABLE { #UDGARRAY#(#ANIMATE$10,$2E(game-intro)) } TABLE#
+; #UDGTABLE { #ANIMATE$10,$2E(game-intro) } TABLE#
 @label=GameIntro
 c$74A4 CALL $6720    ; Call #R$6720.
 ; Don't bother with the animation if this is the demo mode.
@@ -6606,6 +5721,8 @@ c$7564 CALL $66F7    ; Call #R$66F7.
 @label=Messaging_HiThere
 t$7592 DEFM "HiThere"
 
+@org
+@assemble=2
 ; Game Entry Point
 @label=GameEntryPoint
 c$7599 DI            ; Disable interrupts.
@@ -7338,7 +6455,7 @@ c$79B2 LD A,($6695)  ; {Return if bit 0 of *#R$6695 is not set.
  $79D8 JR Z,$79F8    ; }
 ; Play explosion sound #N$01.
 ; .
-; #HTML(#AUDIO(explosion-01.wav)(#INCLUDE(Explosion01)))
+; #HTML(#AUDIO0(explosion-01.wav)(#INCLUDE(Explosion01)))
  $79DA LD A,(HL)     ; {#REGde=*#REGhl*#N$08.
  $79DB ADD A,A       ;
  $79DC ADD A,A       ;
@@ -7367,7 +6484,7 @@ c$79B2 LD A,($6695)  ; {Return if bit 0 of *#R$6695 is not set.
 *$79F8 LD A,(HL)     ; {Jump to #R$7A1F if the explosion type is not #N$01.
  $79F9 CP $01        ;
  $79FB JR NZ,$7A1F   ; }
-; #HTML(#AUDIO(explosion-02.wav)(#INCLUDE(Explosion02)))
+; #HTML(#AUDIO0(explosion-02.wav)(#INCLUDE(Explosion02)))
  $79FD LD B,$12      ; Set a counter in #REGb for #N$12 explosion sound loops.
  $79FF LD HL,$0064   ; Set the initial pitch to #N($0064,$04,$04).
 @label=AlienExplosions_Sound_02_Loop
@@ -7610,7 +6727,7 @@ c$79B2 LD A,($6695)  ; {Return if bit 0 of *#R$6695 is not set.
 ;
 ; .
 ;
-; See #POKE#aliens-not-fire(Aliens Don't Fire).
+; See #POKE(aliens-not-fire,Aliens Don't Fire).
 @label=Handler_Aliens
 c$7B67 LD A,($6691)  ; {Return if *#R$6691 is zero.
  $7B6A OR A          ;
@@ -7799,7 +6916,7 @@ c$7B67 LD A,($6691)  ; {Return if *#R$6691 is zero.
 ;   #FOR$01,$08||x|#SIM(start=$7D3F,stop=$7D68,bc=x)
 ;     #SCR$02(*title-screen-x)#PLOT(0,0,0)(title-screen-x)
 ;   ||
-;   #UDGARRAY#(#ANIMATE$0A,$08(title-screen))
+;   #ANIMATE$0A,$08(title-screen)
 ; } TABLE# #POPS
 @label=TitleScreen
 c$7C82 DI            ; Disable interrupts.
@@ -7860,29 +6977,29 @@ c$7C82 DI            ; Disable interrupts.
  $7CC2 LD (HL),A     ; {Write the attribute to the bottom two blocks.
  $7CC3 INC HL        ;
  $7CC4 LD (HL),A     ; }
-; Prints #FONT#(:(#STR($6435,$03,$09)))$6253,attr=$05(megadodo)
+; Prints #FONT#($6253,attr=$05,chars=0(#STR($6435,$03,$09)))(megadodo)
  $7CC5 LD HL,$6435   ; #REGhl=#R$6435.
  $7CC8 LD DE,$40A7   ; #REGde=#N$40A7 (screen buffer location).
  $7CCB LD BC,$0905   ; Set to print #N$09 characters in #INK$05.
  $7CCE CALL $676F    ; Call #R$676F.
-; Prints #FONT#(:(#STR($643E,$03,$08)))$6253,attr=$05(software)
+; Prints #FONT#($6253,attr=$05,chars=0(#STR($643E,$03,$08)))(software)
  $7CD1 LD B,$08      ; Printing #N$08 characters.
  $7CD3 LD E,$B1      ; Update the screen buffer address.
  $7CD5 CALL $676F    ; Call #R$676F.
-; Prints #FONT#(:(#STR($642B,$03,$08)))$3D00,attr=$43(presents)
+; Prints #FONT#($3D00,attr=$43,chars=0(#STR($642B,$03,$08)))(presents)
  $7CD8 LD HL,$642B   ; #REGhl=#R$642B.
  $7CDB LD DE,$40EC   ; #REGde=#N$40EC (screen buffer location).
  $7CDE LD BC,$0843   ; Set to print #N$08 characters in #COLOUR$43.
  $7CE1 CALL $6775    ; Call #R$6775.
-; Prints #FONT#(:(@#STR($6434,$03,$17)))$3D00,attr=$42(megadodo-software)
+; Prints #FONT#($3D00,attr=$42,chars=0(@#STR($6434,$03,$17)))(megadodo-software)
  $7CE4 LD DE,$5023   ; #REGde=#N$5023 (screen buffer location).
  $7CE7 LD BC,$1842   ; Set to print #N$18 characters in #COLOUR$42.
  $7CEA CALL $6775    ; Call #R$6775.
-; Prints #FONT#(:(#STR($644B,$03,$13)))$3D00,attr=$04(written-by)
+; Prints #FONT#($3D00,attr=$04,chars=0(#STR($644B,$03,$13)))(written-by)
  $7CED LD E,$66      ; Update the screen buffer address.
  $7CEF LD BC,$1304   ; Set to print #N$13 characters in #INK$04.
  $7CF2 CALL $6775    ; Call #R$6775.
-; Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
+; Prints #FONT#($3D00,attr=$07,chars=0(#STR($645E,$03,$10)))(s-to-start)
  $7CF5 LD E,$E7      ; Update the screen buffer address.
  $7CF7 LD BC,$1007   ; Set to print #N$10 characters in #INK$07.
  $7CFA CALL $6775    ; Call #R$6775.
@@ -8008,7 +7125,7 @@ c$7C82 DI            ; Disable interrupts.
  $7D9A INC A         ; Increment #REGa by one.
 *$7D9B LD C,A        ; #REGc=#REGa.
  $7D9C LD B,$10      ; Set #REGb to print #N$10 characters.
-; Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
+; Prints #FONT#($3D00,attr=$07,chars=0(#STR($645E,$03,$10)))(s-to-start)
  $7D9E LD HL,$645E   ; #REGhl=#R$645E.
  $7DA1 LD DE,$4027   ; #REGde=#N$4027 (screen buffer location).
  $7DA4 CALL $6775    ; Call #R$6775.
@@ -8068,40 +7185,57 @@ c$7DD9 CALL $6B4F    ; Call #R$6B4F.
  $7E08 OR A          ;
  $7E09 JR Z,$7DF3    ; }
 ; *#R$66F5 is active, start the "Game Over" process.
- $7E0B LD D,$08      ; #REGd=#N$08.
-*$7E0D LD BC,$0000   ; #REGbc=#N($0000,$04,$04).
-*$7E10 DJNZ $7E10    ; Decrease counter by one and loop back to #R$7E10 until
-                     ; counter is zero.
+ $7E0B LD D,$08      ; Set an outer loop counter in #REGd for #N$08 loops.
+@label=GameOver_PauseOuterLoop
+*$7E0D LD BC,$0000   ; Set an inner counter in #REGbc of #N($0000,$04,$04) (#N$10000, as
+                     ; it decreases by one in the loop).
+@label=GameOver_PauseInnerLoop
+*$7E10 DJNZ $7E10    ; Decrease the counter in #REGb by one and loop back to #R$7E10 until
+                     ; the counter is zero.
  $7E12 DEC C         ; Decrease #REGc by one.
- $7E13 JR NZ,$7E10   ; Jump to #R$7E10 until #REGc is zero.
- $7E15 DEC D         ; Decrease #REGd by one.
- $7E16 JR NZ,$7E0D   ; Jump to #R$7E0D if #REGd is not equal to #REGa.
+ $7E13 JR NZ,$7E10   ; Jump back to #R$7E10 until #REGc is zero.
+ $7E15 DEC D         ; Decrease the outer loop counter by one.
+ $7E16 JR NZ,$7E0D   ; Jump back to #R$7E0D until the outer loop is zero.
+; Did the player achieve a new high score?
  $7E18 LD HL,$6514   ; #REGhl=#R$6514.
  $7E1B LD DE,$651F   ; #REGde=#R$651F.
- $7E1E LD B,$06      ; #REGb=#N$06.
- $7E20 PUSH HL       ; {Stash #REGhl and #REGde on the stack.
+ $7E1E LD B,$06      ; Set a length counter in #REGb for #N$06 score digits to
+                     ; compare.
+ $7E20 PUSH HL       ; {Stash the score and highscore pointers on the stack.
  $7E21 PUSH DE       ; }
-*$7E22 LD A,(DE)     ; {Jump to #R$7E2A if *#REGde is equal to *#REGhl.
- $7E23 CP (HL)       ;
+@label=CompareScoreDigit
+*$7E22 LD A,(DE)     ; {Jump to #R$7E2A if the players score digit is equal to the same
+ $7E23 CP (HL)       ; digit of the highscore.
  $7E24 JR Z,$7E2A    ; }
- $7E26 JR C,$7E31    ; Jump to #R$7E31 if *#REGde is less than *#REGhl.
+ $7E26 JR C,$7E31    ; Jump to #R$7E31 if the players score digit is less than the same
+                     ; digit of the highscore.
  $7E28 JR $7E2E      ; Jump to #R$7E2E.
-*$7E2A INC DE        ; Increment #REGde by one.
- $7E2B INC HL        ; Increment #REGhl by one.
- $7E2C DJNZ $7E22    ; Decrease counter by one and loop back to #R$7E22 until
-                     ; counter is zero.
-*$7E2E POP DE        ; Restore #REGde from the stack.
+; Move to the next digits of the score/ highscore.
+@label=CheckNextScoreDigit
+*$7E2A INC DE        ; Move to the next digit of the score.
+ $7E2B INC HL        ; Move to the next digit of the highscore.
+ $7E2C DJNZ $7E22    ; Decrease counter by one and loop back to #R$7E22 until all digits
+                     ; of the scores have been compared.
+; If we got here then the scores are the same so don't do anything/ treat
+; this as though the score was less than the highscore and move on and reset.
+@label=ScoresAreBothEqual
+*$7E2E POP DE        ; Restore the highscore pointer from the stack.
  $7E2F JR $7E39      ; Jump to #R$7E39.
-*$7E31 POP DE        ; {Restore #REGde and #REGhl from the stack.
- $7E32 POP HL        ; }
- $7E33 PUSH HL       ; Stash #REGhl on the stack.
- $7E34 LD BC,$0006   ; #REGbc=#N($0006,$04,$04).
- $7E37 LDIR          ; LDIR.
-*$7E39 POP HL        ; Restore #REGhl from the stack.
- $7E3A LD DE,$6515   ; #REGde=#R$6514(#N$6515).
+; A new highscore has been achieved, so overwrite the current highscore.
+@label=SetHighScore
+*$7E31 POP DE        ; {Restore the score and highscore pointers from the
+ $7E32 POP HL        ; stack.}
+ $7E33 PUSH HL       ; Stash the highscore pointer on the stack.
+ $7E34 LD BC,$0006   ; {Copy #N($0006,$04,$04) bytes from the players score over to the
+ $7E37 LDIR          ; highscore messaging buffer.}
+; Reset the players score to "000000".
+@label=Reset_ScoreMessaging
+*$7E39 POP HL        ; Restore the score pointer from the stack.
+ $7E3A LD DE,$6515   ; Point the target (#REGde) to the second digit of the players score:
+                     ; #R$6514(#N$6515).
  $7E3D LD (HL),$30   ; Write ASCII #N$30 ("#CHR$30") to *#REGhl.
- $7E3F LD BC,$0005   ; #REGbc=#N($0005,$04,$04).
- $7E42 LDIR          ; LDIR.
+ $7E3F LD BC,$0005   ; {Copy the "0" across the rest of the #N($0005,$04,$04) bytes of the
+ $7E42 LDIR          ; score.}
  $7E44 JP $7C82      ; Jump to #R$7C82.
 
 ; Input: "S" To Start

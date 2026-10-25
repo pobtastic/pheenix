@@ -1,3 +1,5 @@
+; Copyright 2026 Paul Maddern (paul@arcadegeek.co.uk)
+
 ;
 ; SkoolKit ref file for Pheenix
 ;
@@ -14,7 +16,7 @@ GameDir=pheenix
 [Game]
 Game=Pheenix
 Logo=#CLS$46#SIM(start=$7CFD,stop=$7D3D)#SCR$02{$00,$80,$1F0,$80}(/images/logo)
-Copyright=&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.
+Copyright=&copy; 1983 Megadodo Software<br />&copy; 2026 ArcadeGeek LTD.
 Repository=https://github.com/pobtastic/pheenix/
 LinkInternalOperands=1
 AddressAnchor={address#IF({base}==16)(:04x)}

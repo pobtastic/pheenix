@@ -1,3 +1,4 @@
+# Copyright 2026 Paul Maddern (paul@arcadegeek.co.uk)
 import art
 import sys
 import os
@@ -28,7 +29,7 @@ def run_skool2asm():
 def run_skool2html():
     options = "-c Config/InitModule={}:publish -d {}/build/html".format(SKOOLKIT_TOOLS, PHEENIX_HOME)
     art.tprint("Pheenix")
-    hex = '-H -c Config/GameDir=pheenix --var pub=2'
-    dec = '-D -c Config/GameDir=pheenix/dec --var pub=4'
+    hex = '-H --ini ListRefs=2 -c Config/GameDir=pheenix --var pub=2'
+    dec = '-D --ini ListRefs=2 -c Config/GameDir=pheenix/dec --var pub=4'
     skool2html.main(options.split() + hex.split() + sys.argv[1:] + [PHEENIX_SKOOL])
     skool2html.main(options.split() + dec.split() + sys.argv[1:] + [PHEENIX_SKOOL])

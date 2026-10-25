@@ -1,12 +1,12 @@
-; Copyright Megadodo Software 1983, 2025 ArcadeGeek LTD.
+; Copyright Megadodo Software 1983, 2026 ArcadeGeek LTD.
 ; NOTE: Disassembly is Work-In-Progress.
 ; Label naming is loosely based on Action_ActionName_SubAction
 ; e.g. Print_HighScore_Loop.
 
 > $4000 @rom
 > $4000 @start
-> $4000 @expand=#DEF(#POKE #LINK:Pokes)
-> $4000 @expand=#DEF(#ANIMATE(delay,count=$50)(name=$a)*$name-1,$delay;#FOR$02,$count||x|$name-x|;||($name-animation))
+> $4000 @expand=#DEF(#POKE()(anchor,text) #LINK(Pokes#$anchor)($text))
+> $4000 @expand=#DEF(#ANIMATE(delay,count=$50)(name=$a)#FRAMES#(($name-1,$delay;#FOR$02,$count||x|$name-x|;||))($name-animation))
 > $4000 @set-handle-unsupported-macros=1
 b $4000 Loading Screen
 D $4000 #UDGTABLE { =h Pheenix Loading Screen. } { #SCR$02(loading) } TABLE#
@@ -14,9 +14,8 @@ D $4000 #UDGTABLE { =h Pheenix Loading Screen. } { #SCR$02(loading) } TABLE#
   $4000,$1800,$20 Pixels.
   $5800,$0300,$20 Attributes.
 
-b $5B00
-
-c $5C00
+i $5B00
+i $5C00
 
 b $5FD4 Graphics: Mothership Alien
 @ $5FD4 label=Graphics_MothershipAlien_01
@@ -50,18 +49,20 @@ b $6026 Graphics: Lives Icon
 @ $6026 label=Graphics_LivesIcon
   $6026,$08,b$01 #UDGTABLE { #UDG(#PC,$42) } TABLE#
 
-b $602E Graphics: Bullets
-@ $602E label=Graphics_Bullets_01
+b $602E Graphics: Alien Bullets
+@ $602E label=Graphics_AlienBullets_01
   $602E,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
-@ $6036 label=Graphics_Bullets_02
+@ $6036 label=Graphics_AlienBullets_02
   $6036,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
-@ $603E label=Graphics_Bullets_03
+@ $603E label=Graphics_AlienBullets_03
   $603E,$08,b$01 #UDGTABLE { #UDG(#PC,$46) } TABLE#
-@ $6046 label=Graphics_Bullets_04
+
+b $6046 Graphics: Player Bullets
+@ $6046 label=Graphics_PlayerBullets
   $6046,$08,b$01 #UDGTABLE { #UDG(#PC,$45) } TABLE#
 
-b $604E Graphics: Ship
-@ $604E label=Graphics_Ship
+b $604E Graphics: Player Ship
+@ $604E label=Graphics_PlayerShip
 N $604E #UDGTABLE { #UDGS$02,$02(ship)(
 .   #UDG(#PC+$08*($02*$y+$x),$46)(*udg)
 .   udg
@@ -262,52 +263,56 @@ t $645E Messaging: "press S to start"
 
 t $646E Messaging: Game Over
 @ $646E label=Messaging_GameOver
-  $646E,$08 #FONT#(:(#STR(#PC,$03,$08)))$6253,attr=$06(game-over)
+  $646E,$08 #FONT#($6253,attr=$06,chars=0(#STR(#PC,$03,$08)))(game-over)
 
 t $6476 Messaging: Instructions
 @ $6476 label=Messaging_Instructions
 D $6476 Used by the routine at #R$6B99.
-  $6476,$0C #FONT#(:(#STR(#PC,$03,$0C)))$6253,attr=$06(instructions)
+  $6476,$0C #FONT#($6253,attr=$06,chars=0(#STR(#PC,$03,$0C)))(instructions)
 @ $6482 label=Messaging_Left
-  $6482,$14 #FONT#(:(#STR(#PC,$03,$14)))$6253,attr=$43(left)
+  $6482,$14 #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$14)))(left)
 @ $6496 label=Messaging_Right
-  $6496,$0B #FONT#(:(#STR(#PC,$03,$0B)))$6253,attr=$43(right)
+  $6496,$0B #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$0B)))(right)
 @ $64A1 label=Messaging_Fire
-  $64A1,$0F #FONT#(:(#STR(#PC,$03,$0F)))$6253,attr=$43(fire)
+  $64A1,$0F #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$0F)))(fire)
 @ $64B0 label=Messaging_Barrier
-  $64B0,$0F #FONT#(:(#STR(#PC,$03,$0F)))$6253,attr=$43(barrier)
+  $64B0,$0F #FONT#($6253,attr=$43,chars=0(#STR(#PC,$03,$0F)))(barrier)
 @ $64BF label=Messaging_Level
-  $64BF,$12 #FONT#(:(#STR(#PC,$03,$12)))$6253,attr=$07(level)
+  $64BF,$12 #FONT#($6253,attr=$07,chars=0(#STR(#PC,$03,$12)))(level)
 
 t $64D1 Messaging: "Select Joystick Or Keys"
 @ $64D1 label=Messaging_SelectJoystickOrKeys
 D $64D1 Used by the routine at #R$6B4F.
-  $64D1,$17 #FONT#(:(#STR(#PC,$03,$17)))$6253,attr=$06(joystick-or-keys)
+  $64D1,$17 #FONT#($6253,attr=$06,chars=0(#STR(#PC,$03,$17)))(joystick-or-keys)
 @ $64E8 label=Messaging_KempstonJoystick
-  $64E8,$12 #FONT#(:(#STR(#PC,$03,$12)))$3D00,attr=$03(kempston-joystick)
+  $64E8,$12 #FONT#($3D00,attr=$03,chars=0(#STR(#PC,$03,$12)))(kempston-joystick)
 @ $64FA label=Messaging_AGFJoystick
-  $64FA,$0D #FONT#(:(#STR(#PC,$03,$0D)))$3D00,attr=$03(agf-joystick)
+  $64FA,$0D #FONT#($3D00,attr=$03,chars=0(#STR(#PC,$03,$0D)))(agf-joystick)
 @ $6507 label=Messaging_Keyboard
-  $6507,$0C #FONT#(:(#STR(#PC,$03,$0C)))$3D00,attr=$03(keyboard)
+  $6507,$0C #FONT#($3D00,attr=$03,chars=0(#STR(#PC,$03,$0C)))(keyboard)
+
+u $6513
+B $6513,$01
 
 t $6514 Messaging: Header
 @ $6514 label=Messaging_Score
-  $6514,$06 #FONT#(:(#STR($6514,$03,$06)))$6253,attr=$06(player-score)
+  $6514,$06 #FONT#($6253,attr=$06,chars=0(#STR($6514,$03,$06)))(player-score)
 @ $651A label=Messaging_Header_HighScore
-  $651A,$05 #FONT#(:(#STR($651A,$03,$0B)))$6253,attr=$06(high-score)
+  $651A,$05 #FONT#($6253,attr=$06,chars=0(#STR($651A,$03,$0B)))(high-score)
 N $651F This isn't separate, it's part of the above.
 @ $651F label=Messaging_HighScore
-  $651F,$06 #FONT#(:(#STR($651F,$03,$06)))$6253,attr=$06(player-high-score)
+  $651F,$06 #FONT#($6253,attr=$06,chars=0(#STR($651F,$03,$06)))(player-high-score)
 @ $6525 label=Messaging_Header_Level
-  $6525,$02 #FONT#(:(#STR($6525,$03,$03)))$6253,attr=$44(level-in-game)
+  $6525,$02 #FONT#($6253,attr=$44,chars=0(#STR($6525,$03,$03)))(level-in-game)
 N $6527 This isn't separate, it's part of the above.
 @ $6527 label=Messaging_Header_LevelNumber
-  $6527,$01 #FONT#(:(#STR($6527,$03,$01)))$6253,attr=$44(level-number)
+  $6527,$01 #FONT#($6253,attr=$44,chars=0(#STR($6527,$03,$01)))(level-number)
 
 g $6528 Score Buffer
 @ $6528 label=ScoreBuffer
 @ $652B label=BonusScoreBuffer
-B $6528,$06,$01
+B $6528,$01 "#CHR(#PEEK(#PC))".
+L $6528,$01,$07
 
 g $652F Table: Explosion UDGs
 @ $652F label=Table_ExplosionUDGs_01
@@ -468,9 +473,9 @@ g $6675
 g $667D Pheenix Colours
 @ $667D label=Pheenix_Colour_01
 D $667D Used by the routine at #R$75B7.
-B $667D,$01
+B $667D,$01 #COLOUR(#PEEK(#PC)).
 @ $667E label=Pheenix_Colour_02
-B $667E,$01
+B $667E,$01 INK:#INK(#PEEK(#PC)).
 
 g $667F Alien Count
 @ $667F label=AlienCount
@@ -818,12 +823,12 @@ D $67F6 #PUSHS #UDGTABLE {
 .   #SIM(start=$67F6,stop=$681B)#SCR$02{$00,$00,$200,$10}(header)
 . } TABLE# #POPS
   $67F6,$03 Call #R$67A9.
-N $67F9 Prints "#FONT#(:(#STR($651A,$03,$0B)))$6253,attr=$06(high-score)".
+N $67F9 Prints "#FONT#($6253,attr=$06,chars=0(#STR($651A,$03,$0B)))(high-score)".
   $67F9,$01 Set the print attribute to #INK$06.
   $67FA,$02 Set #REGb for printing #N$0B characters.
   $67FC,$02 Update the screen buffer printing position to #N$4012.
   $67FE,$03 Call #R$676F.
-N $6801 Prints "#FONT#(:(#STR($6525,$03,$03)))$6253,attr=$44(header-level)".
+N $6801 Prints "#FONT#($6253,attr=$44,chars=0(#STR($6525,$03,$03)))(header-level)".
   $6801,$03 Set #REGb for printing #N$03 characters and the print attribute to
 . #COLOUR$44.
   $6804,$02 Update the screen buffer printing position to #N$401D.
@@ -1002,7 +1007,7 @@ N $68B8 Demonstrating the transition using #COLOUR$43:
 .  ""
 . TABLE# #POPS
 N $68B8 Which create the following animation:
-. #UDGTABLE { #UDGARRAY#(#ANIMATE$08,$17(transition)) } TABLE#
+. #UDGTABLE { #ANIMATE$08,$17(transition) } TABLE#
   $68B8,$02 Set an iteration counter in #REGb for #N$02 animations.
 @ $68BA label=TransitionEffect_Loop
   $68BA,$01 Stash the iteration counter on the stack.
@@ -1321,7 +1326,7 @@ N $6A23 Prints the top part of the alien mothership:
 . TABLE#
 . #POPS
 N $6A23 Which looks like this when animated:
-. #UDGTABLE { #UDGARRAY#(#ANIMATE$04,$0F(ripple)) } TABLE#
+. #UDGTABLE { #ANIMATE$04,$0F(ripple) } TABLE#
   $6A23,$03 #REGde=#N$40CF (left-hand UDG screen buffer target).
   $6A26,$01 Stash this destination address on the stack.
   $6A27,$03 #REGhl=#R$6541 (UDG graphics).
@@ -1360,7 +1365,7 @@ N $6A47 #PUSHS #POKES$6A45,$00;$6A46,$00 #SIM(start=$696A,stop=$6A22)
 .   ""
 . TABLE# #POPS
 N $6A47 Which looks like this when animated:
-. #UDGTABLE { #UDGARRAY#(#ANIMATE$0F,$02(conveyor)) } TABLE#
+. #UDGTABLE { #ANIMATE$0F,$02(conveyor) } TABLE#
   $6A47,$03 #REGhl=#N$4837 (upper source row).
   $6A4A,$03 #REGde=#N$4838 (destination one line below).
   $6A4D,$02 Set a line counter in #REGb (#N$08 lines in a UDG).
@@ -1436,7 +1441,7 @@ N $6A79 Else use: #UDGTABLE { #UDGS$02,$02(mothership-alien-02)(
 @ $6A99 label=Handler_Mothership_ProcessBullets
 N $6A99 Handle the two mothership bullets (fire only when the player bullet
 . limiter #R$6695 is zero).
-N $6A99 See #POKE#mothership-not-fire(Mothership Alien Doesn't Fire).
+N $6A99 See #POKE(mothership-not-fire,Mothership Alien Doesn't Fire).
   $6A99,$05 Return if *#R$6695 is not zero.
   $6A9E,$03 #REGhl=#N($0003,$04,$04).
 @ $6AA1 label=Handler_Mothership_BulletLoop
@@ -1669,7 +1674,7 @@ g $6C13 Table: Music Data
 @ $6C13 label=Table_MusicData
 D $6C13 See #R$74A4.
 .
-. #HTML(#AUDIO(intro.wav)(#INCLUDE(Intro)))
+. #HTML(#AUDIO0(intro.wav)(#INCLUDE(Intro)))
 B $6C13,$03
 L $6C13,$03,$2E
 
@@ -1687,7 +1692,7 @@ c $6C9D Check Collision
   $6CAF,$04 Skip this position if the attribute is #COLOUR$46 (player ship).
   $6CB3,$04 Skip this position if the attribute is #COLOUR$07 (white/
 . background).
-N $6CB7 See #POKE#immunity(Immunity).
+N $6CB7 See #POKE(immunity,Immunity).
 N $6CB7 Collision detected - trigger player death.
   $6CB7,$05 Set #R$66A4 to #N$01.
   $6CBC,$02 Discard the saved positions from the stack.
@@ -1747,12 +1752,12 @@ N $6D00 Handles the "Game Over" state.
   $6D07,$07 Jump to #R$6D29 if *#R$66F0 is not equal to #N$01.
   $6D0E,$06 Jump to #R$6D29 if *#R$66F3 is active.
   $6D14,$01 Stash #REGhl on the stack.
-N $6D15 Prints #FONT#(:(#STR($646E,$03,$04)))$3D00,attr=$45(game)
+N $6D15 Prints #FONT#($3D00,attr=$45,chars=0(#STR($646E,$03,$04)))(game)
   $6D15,$03 #REGhl=#R$646E.
   $6D18,$03 #REGde=#N$48CB (screen buffer location).
   $6D1B,$03 Set to print #N$04 characters in #COLOUR$45.
   $6D1E,$03 Call #R$676F.
-N $6D21 Prints #FONT#(:(#STR($6472,$03,$04)))$3D00,attr=$45(over)
+N $6D21 Prints #FONT#($3D00,attr=$45,chars=0(#STR($6472,$03,$04)))(over)
   $6D21,$02 Update the screen buffer address.
   $6D23,$02 Set to print #N$04 characters.
   $6D25,$03 Call #R$676F.
@@ -1838,7 +1843,7 @@ N $6D29 Animate the explosion effect.
   $6DB1,$03 #REGa=*#R$66A5.
   $6DB4,$02,b$01 Keep only bits 0-1.
   $6DB6,$03 Jump to #R$7030 if the result is not equal to zero.
-N $6DB9 #HTML(#AUDIO(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
+N $6DB9 #HTML(#AUDIO0(ship-explosion.wav)(#INCLUDE(ShipExplosion)))
   $6DB9,$02 Set sound loop counter to #N$08.
 @ $6DBB label=GameOver_SoundLoop
   $6DBB,$03 Copy the sound loop counter into #REGa and add #N$19.
@@ -1920,7 +1925,7 @@ N $6E20 Play a sound when the shield is active (but not in demo mode).
   $6E20,$07 Jump to #R$6EF8 if *#R$6693 is not active.
   $6E27,$06 Jump to #R$6E40 if *#R$66F3 is active.
 N $6E2D Play an iteration of the shield sound effect.
-N $6E2D #HTML(#AUDIO(shield.wav)(#INCLUDE(Shield)))
+N $6E2D #HTML(#AUDIO0(shield.wav)(#INCLUDE(Shield)))
   $6E2D,$03 #REGa=*#R$6694.
   $6E30,$02,b$01 Keep only bits 0-2.
   $6E32,$02 Multiply by #N$04.
@@ -2420,7 +2425,7 @@ N $708D Is the fire button state unchanged since the last time this routine
 N $7095 Skip playing the firing sound if this is the demo mode.
   $7095,$06 Jump to #R$70B8 if *#R$66F3 is active.
   $709B,$01 Stash the bullet position on the stack.
-N $709C #HTML(#AUDIO(bullets.wav)(#INCLUDE(Bullets)))
+N $709C #HTML(#AUDIO0(bullets.wav)(#INCLUDE(Bullets)))
   $709C,$02 Set a counter in #REGb for #N$16 sound iterations.
   $709E,$03 Set the initial sound pitch to #N($0052,$04,$04).
 @ $70A1 label=PlayerBullets_SoundLoop
@@ -2447,11 +2452,10 @@ N $70C5 The bullet position isn't already occupied, so colour this attribute
   $70C7,$03 Call #R$6704.
   $70CA,$02 Set bit 2 of #REGh.
   $70CC,$01 Stash #REGhl on the stack.
-  $70CD,$03 #REGa=*#R$66A6.
-  $70D0,$01 Set the bits from #REGa.
-  $70D1,$01 #REGb=#REGa.
+  $70CD,$04 #REGa=*#R$66A6.
+  $70D1,$01 Copy *#R$66A6 into #REGb.
   $70D2,$02 #REGa=#N$01.
-  $70D4,$02 Jump to #R$70DA if #REGhl is equal to #REGa.
+  $70D4,$02 Jump to #R$70DA if #R$66A6 is zero (from above).
 @ $70D6 label=PlayerBullets_FindSlot_Loop
   $70D6,$02 Shift #REGa left (with carry).
   $70D8,$02 Decrease counter by one and loop back to #R$70D6 until counter is zero.
@@ -2641,7 +2645,7 @@ N $71CE Return if the bullet is just passing over background.
 N $71D1 Play a sound when the Pheenix wings are hit (but not in demo mode).
 @ $71D1 label=PlayWingHitSound
   $71D1,$05 Return if *#R$66F3 is active.
-N $71D6 #HTML(#AUDIO(wing-hit.wav)(#INCLUDE(WingHit)))
+N $71D6 #HTML(#AUDIO0(wing-hit.wav)(#INCLUDE(WingHit)))
   $71D6,$02 Set a counter #REGb for #N$18 loops.
   $71D8,$03 Set the initial pitch to #N($0122,$04,$04).
 @ $71DB label=WingHitSound_Loop
@@ -2810,7 +2814,7 @@ N $72B7 Reset player position.
   $72B7,$05 Write #N$CE to *#R$66ED.
 N $72BC Handle "spending a life".
   $72BC,$03 #REGhl=#R$66F0.
-N $72BF See #POKE#infinite-lives(Infinite Lives).
+N $72BF See #POKE(infinite-lives,Infinite Lives).
   $72BF,$01 Decrease #R$66F0 by one.
   $72C0,$04 Jump to #R$72C9 if *#R$66F0 indicates the player still has lives
 . left.
@@ -3023,7 +3027,7 @@ N $73BE Increase the frame dimensions.
 N $73C7 Play a sound effect for the animation.
 N $73C7 Note this sample is the whole thing, obviously it loops round.
 .
-. #AUDIO(bonus.wav)(#INCLUDE(Bonus))
+. #AUDIO0(bonus.wav)(#INCLUDE(Bonus))
   $73C7,$01 Restore #REGhl from the stack.
   $73C8,$01 Stash #REGhl on the stack.
   $73C9,$01 #REGa=#REGl.
@@ -3211,7 +3215,7 @@ N $74A4 Note; the example output below is run using the actual game code and so
 .  { #FOR$2C,$2E(x,#SIM(start=$74B9,stop=$7555)#SCR$01(game-intro-x*), | ) }
 . TABLE# #POPS
 N $74A4 Which create the following animation:
-. #UDGTABLE { #UDGARRAY#(#ANIMATE$10,$2E(game-intro)) } TABLE#
+. #UDGTABLE { #ANIMATE$10,$2E(game-intro) } TABLE#
   $74A4,$03 Call #R$6720.
 N $74A7 Don't bother with the animation if this is the demo mode.
   $74A7,$05 Return if *#R$66F3 is active.
@@ -3908,7 +3912,7 @@ N $79D3 Play the explosion sound effect based on the current phase.
   $79D8,$02 Jump to #R$79F8 if the result is zero.
 M $79D3,$07 Jump to #R$79F8 if bit 1 of *#R$66F1 is not zero.
 N $79DA Play explosion sound #N$01.
-N $79DA #HTML(#AUDIO(explosion-01.wav)(#INCLUDE(Explosion01)))
+N $79DA #HTML(#AUDIO0(explosion-01.wav)(#INCLUDE(Explosion01)))
   $79DA,$07 #REGde=*#REGhl*#N$08.
   $79E1,$04 #REGhl=#N($00F2,$04,$04)+#REGde.
   $79E5,$02 #REGb=#N$03.
@@ -3925,7 +3929,7 @@ N $79DA #HTML(#AUDIO(explosion-01.wav)(#INCLUDE(Explosion01)))
 N $79F8 Play explosion sound #N$02.
 @ $79F8 label=AlienExplosions_Sound_02
   $79F8,$05 Jump to #R$7A1F if the explosion type is not #N$01.
-N $79FD #HTML(#AUDIO(explosion-02.wav)(#INCLUDE(Explosion02)))
+N $79FD #HTML(#AUDIO0(explosion-02.wav)(#INCLUDE(Explosion02)))
   $79FD,$02 Set a counter in #REGb for #N$12 explosion sound loops.
   $79FF,$03 Set the initial pitch to #N($0064,$04,$04).
 @ $7A02 label=AlienExplosions_Sound_02_Loop
@@ -4112,7 +4116,7 @@ N $7B5F Move to the next explosion slot.
 
 c $7B67 Handler: Aliens
 @ $7B67 label=Handler_Aliens
-N $7B67 See #POKE#aliens-not-fire(Aliens Don't Fire).
+N $7B67 See #POKE(aliens-not-fire,Aliens Don't Fire).
   $7B67,$05 Return if *#R$6691 is zero.
   $7B6C,$05 Return if *#R$6695 is not zero.
   $7B71,$03 #REGhl=#R$66A7.
@@ -4251,7 +4255,7 @@ D $7C82 #PUSHS #UDGTABLE {
 .   #FOR$01,$08||x|#SIM(start=$7D3F,stop=$7D68,bc=x)
 .     #SCR$02(*title-screen-x)#PLOT(0,0,0)(title-screen-x)
 .   ||
-.   #UDGARRAY#(#ANIMATE$0A,$08(title-screen))
+.   #ANIMATE$0A,$08(title-screen)
 . } TABLE# #POPS
   $7C82,$01 Disable interrupts.
   $7C83,$03 Set border to #INK$00.
@@ -4298,29 +4302,29 @@ N $7CB9 Colour the MegaDodo graphic.
   $7CBB,$05 Write #COLOUR$04 to the top two blocks.
   $7CC0,$02 Update the attribute buffer positioning.
   $7CC2,$03 Write the attribute to the bottom two blocks.
-N $7CC5 Prints #FONT#(:(#STR($6435,$03,$09)))$6253,attr=$05(megadodo)
+N $7CC5 Prints #FONT#($6253,attr=$05,chars=0(#STR($6435,$03,$09)))(megadodo)
   $7CC5,$03 #REGhl=#R$6435.
   $7CC8,$03 #REGde=#N$40A7 (screen buffer location).
   $7CCB,$03 Set to print #N$09 characters in #INK$05.
   $7CCE,$03 Call #R$676F.
-N $7CD1 Prints #FONT#(:(#STR($643E,$03,$08)))$6253,attr=$05(software)
+N $7CD1 Prints #FONT#($6253,attr=$05,chars=0(#STR($643E,$03,$08)))(software)
   $7CD1,$02 Printing #N$08 characters.
   $7CD3,$02 Update the screen buffer address.
   $7CD5,$03 Call #R$676F.
-N $7CD8 Prints #FONT#(:(#STR($642B,$03,$08)))$3D00,attr=$43(presents)
+N $7CD8 Prints #FONT#($3D00,attr=$43,chars=0(#STR($642B,$03,$08)))(presents)
   $7CD8,$03 #REGhl=#R$642B.
   $7CDB,$03 #REGde=#N$40EC (screen buffer location).
   $7CDE,$03 Set to print #N$08 characters in #COLOUR$43.
   $7CE1,$03 Call #R$6775.
-N $7CE4 Prints #FONT#(:(@#STR($6434,$03,$17)))$3D00,attr=$42(megadodo-software)
+N $7CE4 Prints #FONT#($3D00,attr=$42,chars=0(@#STR($6434,$03,$17)))(megadodo-software)
   $7CE4,$03 #REGde=#N$5023 (screen buffer location).
   $7CE7,$03 Set to print #N$18 characters in #COLOUR$42.
   $7CEA,$03 Call #R$6775.
-N $7CED Prints #FONT#(:(#STR($644B,$03,$13)))$3D00,attr=$04(written-by)
+N $7CED Prints #FONT#($3D00,attr=$04,chars=0(#STR($644B,$03,$13)))(written-by)
   $7CED,$02 Update the screen buffer address.
   $7CEF,$03 Set to print #N$13 characters in #INK$04.
   $7CF2,$03 Call #R$6775.
-N $7CF5 Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
+N $7CF5 Prints #FONT#($3D00,attr=$07,chars=0(#STR($645E,$03,$10)))(s-to-start)
   $7CF5,$02 Update the screen buffer address.
   $7CF7,$03 Set to print #N$10 characters in #INK$07.
   $7CFA,$03 Call #R$6775.
@@ -4420,7 +4424,7 @@ N $7D7E Set the level text in the header.
   $7D9A,$01 Increment #REGa by one.
   $7D9B,$01 #REGc=#REGa.
   $7D9C,$02 Set #REGb to print #N$10 characters.
-N $7D9E Prints #FONT#(:(#STR($645E,$03,$10)))$3D00,attr=$07(s-to-start)
+N $7D9E Prints #FONT#($3D00,attr=$07,chars=0(#STR($645E,$03,$10)))(s-to-start)
   $7D9E,$03 #REGhl=#R$645E.
   $7DA1,$03 #REGde=#N$4027 (screen buffer location).
   $7DA4,$03 Call #R$6775.
@@ -4463,36 +4467,53 @@ N $7DEC Set the players starting life count.
   $7E02,$03 Call #R$6890.
   $7E05,$06 Jump back to #R$7DF3 unless *#R$66F5 is active.
 N $7E0B *#R$66F5 is active, start the "Game Over" process.
-  $7E0B,$02 #REGd=#N$08.
-  $7E0D,$03 #REGbc=#N($0000,$04,$04).
-  $7E10,$02 Decrease counter by one and loop back to #R$7E10 until counter is zero.
+  $7E0B,$02 Set an outer loop counter in #REGd for #N$08 loops.
+@ $7E0D label=GameOver_PauseOuterLoop
+  $7E0D,$03 Set an inner counter in #REGbc of #N($0000,$04,$04) (#N$10000, as
+. it decreases by one in the loop).
+@ $7E10 label=GameOver_PauseInnerLoop
+  $7E10,$02 Decrease the counter in #REGb by one and loop back to #R$7E10 until
+. the counter is zero.
   $7E12,$01 Decrease #REGc by one.
-  $7E13,$02 Jump to #R$7E10 until #REGc is zero.
-  $7E15,$01 Decrease #REGd by one.
-  $7E16,$02 Jump to #R$7E0D if #REGd is not equal to #REGa.
+  $7E13,$02 Jump back to #R$7E10 until #REGc is zero.
+  $7E15,$01 Decrease the outer loop counter by one.
+  $7E16,$02 Jump back to #R$7E0D until the outer loop is zero.
+N $7E18 Did the player achieve a new high score?
   $7E18,$03 #REGhl=#R$6514.
   $7E1B,$03 #REGde=#R$651F.
-  $7E1E,$02 #REGb=#N$06.
-  $7E20,$02 Stash #REGhl and #REGde on the stack.
-  $7E22,$04 Jump to #R$7E2A if *#REGde is equal to *#REGhl.
-  $7E26,$02 Jump to #R$7E31 if *#REGde is less than *#REGhl.
+  $7E1E,$02 Set a length counter in #REGb for #N$06 score digits to compare.
+  $7E20,$02 Stash the score and highscore pointers on the stack.
+@ $7E22 label=CompareScoreDigit
+  $7E22,$04 Jump to #R$7E2A if the players score digit is equal to the same
+. digit of the highscore.
+  $7E26,$02 Jump to #R$7E31 if the players score digit is less than the same
+. digit of the highscore.
   $7E28,$02 Jump to #R$7E2E.
-
-  $7E2A,$01 Increment #REGde by one.
-  $7E2B,$01 Increment #REGhl by one.
-  $7E2C,$02 Decrease counter by one and loop back to #R$7E22 until counter is zero.
-  $7E2E,$01 Restore #REGde from the stack.
+N $7E2A Move to the next digits of the score/ highscore.
+@ $7E2A label=CheckNextScoreDigit
+  $7E2A,$01 Move to the next digit of the score.
+  $7E2B,$01 Move to the next digit of the highscore.
+  $7E2C,$02 Decrease counter by one and loop back to #R$7E22 until all digits
+. of the scores have been compared.
+N $7E2E If we got here then the scores are the same so don't do anything/ treat
+. this as though the score was less than the highscore and move on and reset.
+@ $7E2E label=ScoresAreBothEqual
+  $7E2E,$01 Restore the highscore pointer from the stack.
   $7E2F,$02 Jump to #R$7E39.
-
-  $7E31,$02 Restore #REGde and #REGhl from the stack.
-  $7E33,$01 Stash #REGhl on the stack.
-  $7E34,$03 #REGbc=#N($0006,$04,$04).
-  $7E37,$02 LDIR.
-  $7E39,$01 Restore #REGhl from the stack.
-  $7E3A,$03 #REGde=#R$6514(#N$6515).
+N $7E31 A new highscore has been achieved, so overwrite the current highscore.
+@ $7E31 label=SetHighScore
+  $7E31,$02 Restore the score and highscore pointers from the stack.
+  $7E33,$01 Stash the highscore pointer on the stack.
+  $7E34,$05 Copy #N($0006,$04,$04) bytes from the players score over to the
+. highscore messaging buffer.
+N $7E39 Reset the players score to "000000".
+@ $7E39 label=Reset_ScoreMessaging
+  $7E39,$01 Restore the score pointer from the stack.
+  $7E3A,$03 Point the target (#REGde) to the second digit of the players score:
+. #R$6514(#N$6515).
   $7E3D,$02 Write ASCII #N$30 ("#CHR$30") to *#REGhl.
-  $7E3F,$03 #REGbc=#N($0005,$04,$04).
-  $7E42,$02 LDIR.
+  $7E3F,$05 Copy the "0" across the rest of the #N($0005,$04,$04) bytes of the
+. score.
   $7E44,$03 Jump to #R$7C82.
 
 c $7E47 Input: "S" To Start
