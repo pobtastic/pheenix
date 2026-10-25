@@ -204,19 +204,19 @@ Set the players starting life count.
 <td class="asm-label"></td>
 <td class="address-1"><span id="32267"></span>32267</td>
 <td class="instruction">LD D,8</td>
-<td class="comment-1" rowspan="1"><span class="register">D</span>=8.</td>
+<td class="comment-1" rowspan="1">Set an outer loop counter in <span class="register">D</span> for 8 loops.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_0</td>
+<td class="asm-label">GameOver_PauseOuterLoop</td>
 <td class="address-2"><span id="32269"></span>32269</td>
 <td class="instruction">LD BC,0</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0000.</td>
+<td class="comment-1" rowspan="1">Set an inner counter in <span class="register">BC</span> of 0000 (65536 as it decreases by one in the loop).</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_1</td>
+<td class="asm-label">GameOver_PauseInnerLoop</td>
 <td class="address-2"><span id="32272"></span>32272</td>
-<td class="instruction">DJNZ <a href="32217.html#32272">StartGame_1</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="32217.html#32272">StartGame_1</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="32217.html#32272">GameOver_PauseInnerLoop</a></td>
+<td class="comment-1" rowspan="1">Decrease the counter in <span class="register">B</span> by one and loop back to <a href="32217.html#32272">GameOver_PauseInnerLoop</a> until the counter is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -227,20 +227,30 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32275"></span>32275</td>
-<td class="instruction">JR NZ,<a href="32217.html#32272">StartGame_1</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32272">StartGame_1</a> until <span class="register">C</span> is zero.</td>
+<td class="instruction">JR NZ,<a href="32217.html#32272">GameOver_PauseInnerLoop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="32217.html#32272">GameOver_PauseInnerLoop</a> until <span class="register">C</span> is zero.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32277"></span>32277</td>
 <td class="instruction">DEC D</td>
-<td class="comment-1" rowspan="1">Decrease <span class="register">D</span> by one.</td>
+<td class="comment-1" rowspan="1">Decrease the outer loop counter by one.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32278"></span>32278</td>
-<td class="instruction">JR NZ,<a href="32217.html#32269">StartGame_0</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32269">StartGame_0</a> if <span class="register">D</span> is not equal to <span class="register">A</span>.</td>
+<td class="instruction">JR NZ,<a href="32217.html#32269">GameOver_PauseOuterLoop</a></td>
+<td class="comment-1" rowspan="1">Jump back to <a href="32217.html#32269">GameOver_PauseOuterLoop</a> until the outer loop is zero.</td>
+</tr>
+<tr>
+<td class="routine-comment" colspan="5">
+<span id="32280"></span>
+<div class="comments">
+<div class="paragraph">
+Did the player achieve a new high score?
+</div>
+</div>
+</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -258,13 +268,13 @@ Set the players starting life count.
 <td class="asm-label"></td>
 <td class="address-1"><span id="32286"></span>32286</td>
 <td class="instruction">LD B,6</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=6.</td>
+<td class="comment-1" rowspan="1">Set a length counter in <span class="register">B</span> for 6 score digits to compare.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32288"></span>32288</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="2">Stash <span class="register">HL</span> and <span class="register">DE</span> on the stack.</td>
+<td class="comment-1" rowspan="2">Stash the score and highscore pointers on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -272,10 +282,10 @@ Set the players starting life count.
 <td class="instruction">PUSH DE</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_2</td>
+<td class="asm-label">CompareScoreDigit</td>
 <td class="address-2"><span id="32290"></span>32290</td>
 <td class="instruction">LD A,(DE)</td>
-<td class="comment-1" rowspan="3">Jump to <a href="32217.html#32298">StartGame_3</a> if *<span class="register">DE</span> is equal to *<span class="register">HL</span>.</td>
+<td class="comment-1" rowspan="3">Jump to <a href="32217.html#32298">CheckNextScoreDigit</a> if the players score digit is equal to the same digit of the highscore.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -285,55 +295,85 @@ Set the players starting life count.
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32292"></span>32292</td>
-<td class="instruction">JR Z,<a href="32217.html#32298">StartGame_3</a></td>
+<td class="instruction">JR Z,<a href="32217.html#32298">CheckNextScoreDigit</a></td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32294"></span>32294</td>
-<td class="instruction">JR C,<a href="32217.html#32305">StartGame_5</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32305">StartGame_5</a> if *<span class="register">DE</span> is less than *<span class="register">HL</span>.</td>
+<td class="instruction">JR C,<a href="32217.html#32305">SetHighScore</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32305">SetHighScore</a> if the players score digit is less than the same digit of the highscore.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32296"></span>32296</td>
-<td class="instruction">JR <a href="32217.html#32302">StartGame_4</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32302">StartGame_4</a>.</td>
+<td class="instruction">JR <a href="32217.html#32302">ScoresAreBothEqual</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32302">ScoresAreBothEqual</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_3</td>
+<td class="routine-comment" colspan="5">
+<span id="32298"></span>
+<div class="comments">
+<div class="paragraph">
+Move to the next digits of the score/ highscore.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">CheckNextScoreDigit</td>
 <td class="address-2"><span id="32298"></span>32298</td>
 <td class="instruction">INC DE</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">DE</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next digit of the score.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32299"></span>32299</td>
 <td class="instruction">INC HL</td>
-<td class="comment-1" rowspan="1">Increment <span class="register">HL</span> by one.</td>
+<td class="comment-1" rowspan="1">Move to the next digit of the highscore.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32300"></span>32300</td>
-<td class="instruction">DJNZ <a href="32217.html#32290">StartGame_2</a></td>
-<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="32217.html#32290">StartGame_2</a> until counter is zero.</td>
+<td class="instruction">DJNZ <a href="32217.html#32290">CompareScoreDigit</a></td>
+<td class="comment-1" rowspan="1">Decrease counter by one and loop back to <a href="32217.html#32290">CompareScoreDigit</a> until all digits of the scores have been compared.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_4</td>
+<td class="routine-comment" colspan="5">
+<span id="32302"></span>
+<div class="comments">
+<div class="paragraph">
+If we got here then the scores are the same so don't do anything/ treat this as though the score was less than the highscore and move on and reset.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">ScoresAreBothEqual</td>
 <td class="address-2"><span id="32302"></span>32302</td>
 <td class="instruction">POP DE</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">DE</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the highscore pointer from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32303"></span>32303</td>
-<td class="instruction">JR <a href="32217.html#32313">StartGame_6</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32313">StartGame_6</a>.</td>
+<td class="instruction">JR <a href="32217.html#32313">Reset_ScoreMessaging</a></td>
+<td class="comment-1" rowspan="1">Jump to <a href="32217.html#32313">Reset_ScoreMessaging</a>.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_5</td>
+<td class="routine-comment" colspan="5">
+<span id="32305"></span>
+<div class="comments">
+<div class="paragraph">
+A new highscore has been achieved, so overwrite the current highscore.
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">SetHighScore</td>
 <td class="address-2"><span id="32305"></span>32305</td>
 <td class="instruction">POP DE</td>
-<td class="comment-1" rowspan="2">Restore <span class="register">DE</span> and <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="2">Restore the score and highscore pointers from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -344,31 +384,40 @@ Set the players starting life count.
 <td class="asm-label"></td>
 <td class="address-1"><span id="32307"></span>32307</td>
 <td class="instruction">PUSH HL</td>
-<td class="comment-1" rowspan="1">Stash <span class="register">HL</span> on the stack.</td>
+<td class="comment-1" rowspan="1">Stash the highscore pointer on the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32308"></span>32308</td>
 <td class="instruction">LD BC,6</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0006.</td>
+<td class="comment-1" rowspan="2">Copy 0006 bytes from the players score over to the highscore messaging buffer.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32311"></span>32311</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
-<td class="asm-label">StartGame_6</td>
+<td class="routine-comment" colspan="5">
+<span id="32313"></span>
+<div class="comments">
+<div class="paragraph">
+Reset the players score to "000000".
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<td class="asm-label">Reset_ScoreMessaging</td>
 <td class="address-2"><span id="32313"></span>32313</td>
 <td class="instruction">POP HL</td>
-<td class="comment-1" rowspan="1">Restore <span class="register">HL</span> from the stack.</td>
+<td class="comment-1" rowspan="1">Restore the score pointer from the stack.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32314"></span>32314</td>
 <td class="instruction">LD DE,25877</td>
-<td class="comment-1" rowspan="1"><span class="register">DE</span>=<a href="25876.html">25877</a>.</td>
+<td class="comment-1" rowspan="1">Point the target (<span class="register">DE</span>) to the second digit of the players score: <a href="25876.html">25877</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -380,13 +429,12 @@ Set the players starting life count.
 <td class="asm-label"></td>
 <td class="address-1"><span id="32319"></span>32319</td>
 <td class="instruction">LD BC,5</td>
-<td class="comment-1" rowspan="1"><span class="register">BC</span>=0005.</td>
+<td class="comment-1" rowspan="2">Copy the "0" across the rest of the 0005 bytes of the score.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="32322"></span>32322</td>
 <td class="instruction">LDIR</td>
-<td class="comment-1" rowspan="1">LDIR.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -408,8 +456,8 @@ Next: <a href="32327.html">32327</a>
 </table>
 <footer>
 <div class="release"></div>
-<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
-<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="copyright">&copy; 1983 Megadodo Software<br />&copy; 2026 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 10.1.</div>
 <div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
 <div><a href="../../asm/7DD9.html">Switch to hexadecimal</a>.</div>
 </footer>

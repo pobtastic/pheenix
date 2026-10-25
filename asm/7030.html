@@ -748,19 +748,18 @@ PAPER:BLACK (BRIGHT) to the bullet attribute buffer position.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70cd"></span>70CD</td>
 <td class="instruction">LD A,($66A6)</td>
-<td class="comment-1" rowspan="1"><span class="register">A</span>=*<a href="66A6.html">MovementAnimationFrameCounter</a>.</td>
+<td class="comment-1" rowspan="2"><span class="register">A</span>=*<a href="66A6.html">MovementAnimationFrameCounter</a>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70d0"></span>70D0</td>
 <td class="instruction">OR A</td>
-<td class="comment-1" rowspan="1">Set the bits from <span class="register">A</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70d1"></span>70D1</td>
 <td class="instruction">LD B,A</td>
-<td class="comment-1" rowspan="1"><span class="register">B</span>=<span class="register">A</span>.</td>
+<td class="comment-1" rowspan="1">Copy *<a href="66A6.html">MovementAnimationFrameCounter</a> into <span class="register">B</span>.</td>
 </tr>
 <tr>
 <td class="asm-label"></td>
@@ -772,7 +771,7 @@ PAPER:BLACK (BRIGHT) to the bullet attribute buffer position.</td>
 <td class="asm-label"></td>
 <td class="address-1"><span id="70d4"></span>70D4</td>
 <td class="instruction">JR Z,<a href="7030.html#70da">PlayerBullets_Store</a></td>
-<td class="comment-1" rowspan="1">Jump to <a href="7030.html#70da">PlayerBullets_Store</a> if <span class="register">HL</span> is equal to <span class="register">A</span>.</td>
+<td class="comment-1" rowspan="1">Jump to <a href="7030.html#70da">PlayerBullets_Store</a> if <a href="66A6.html">MovementAnimationFrameCounter</a> is zero (from above).</td>
 </tr>
 <tr>
 <td class="asm-label">PlayerBullets_FindSlot_Loop</td>
@@ -1343,8 +1342,8 @@ Next: <a href="7159.html">7159</a>
 </table>
 <footer>
 <div class="release"></div>
-<div class="copyright">&copy; 1983 Megadodo Software &copy; 2025 ArcadeGeek LTD.</div>
-<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 9.6.</div>
+<div class="copyright">&copy; 1983 Megadodo Software<br />&copy; 2026 ArcadeGeek LTD.</div>
+<div class="created">Created using <a href="https://skoolkit.ca">SkoolKit</a> 10.1.</div>
 <div class="repository">Link to <a rel="noopener nofollow" href="https://github.com/pobtastic/pheenix/">Source code</a>.</div>
 <div><a href="../dec/asm/28720.html">Switch to decimal</a>.</div>
 </footer>
