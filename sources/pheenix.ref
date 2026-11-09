@@ -18,6 +18,9 @@ Game=Pheenix
 Logo=#CLS$46#SIM(start=$7CFD,stop=$7D3D)#SCR$02{$00,$80,$1F0,$80}(/images/logo)
 Copyright=&copy; 1983 Megadodo Software<br />&copy; 2026 ArcadeGeek LTD.
 Repository=https://github.com/pobtastic/pheenix/
+Canonical=https://skoolkit.arcadegeek.co.uk/pheenix/
+GameIndexUrl=https://skoolkit.arcadegeek.co.uk/pheenix/
+OgImage=https://skoolkit.arcadegeek.co.uk/pheenix/images/logo.png
 LinkInternalOperands=1
 AddressAnchor={address#IF({base}==16)(:04x)}
 
